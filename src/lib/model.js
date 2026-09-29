@@ -1,9 +1,12 @@
 export const today = () => new Date().toLocaleDateString('en-CA');
 export const plans = [
-  {id:'free',name:'GRÁTIS',price:0,tier:0,features:['3 exercícios introdutórios','Registro de peso','Chat e vídeos bloqueados']},
-  {id:'start',name:'START',price:600,tier:1,features:['Treinos completos','Imagens e instruções','Assistente guiado e grupo VIP']},
-  {id:'pro',name:'PRO',price:1200,tier:2,features:['Tudo do START','Videoaulas','2 mentorias por mês']},
-  {id:'premium',name:'PREMIUM',price:1800,tier:3,features:['Tudo do PRO','Treino personalizado','Suporte prioritário']}
+  {id:'free',name:'FREE',price:0,tier:0,description:'Comece com o essencial.',features:['Exercícios básicos','Registro de peso e progresso','Calendário e metas gerais']},
+  {id:'start',name:'START',price:600,tier:1,description:'Mais variedade para manter a consistência.',features:['Tudo do FREE','Programas completos de 30 dias','Imagens e instruções','Assistente guiado']},
+  {id:'pro',name:'PRO',price:1200,tier:2,description:'Conteúdo guiado e alimentação.',features:['Tudo do START','Vídeos e aulas','Plano alimentar educativo','2 mentorias por mês']},
+  {id:'premium',name:'PREMIUM',price:1800,tier:3,description:'Acompanhamento mais próximo.',features:['Tudo do PRO','Treino personalizado','Chat com coach','Grupo VIP e certificados']}
+];
+export const planMatrix = [
+  ['Exercícios básicos','free'],['Registro de progresso','free'],['Programas de 30 dias','start'],['Vídeos e aulas','pro'],['Alimentação educativa','pro'],['Mentoria e chat com coach','premium'],['Grupo VIP privado','premium'],['Certificados','premium']
 ];
 export const modalities = ['Musculação','Ganho de massa','Bulking','Definição','Emagrecimento','Treino em casa','Karatê','Futsal','Natação'].map((name,i)=>({id:String(i+1),name,description:['Força com técnica e consistência','Progressão gradual de cargas','Construa sua base de força','Treino e hábitos sustentáveis','Movimento para sua rotina','Com ou sem equipamento','Base, kihon, kata e mobilidade','Passe, agilidade e condicionamento','Respiração e técnica na água'][i]}));
 export const demoExercises = [
@@ -13,10 +16,10 @@ export const demoExercises = [
  {id:'4',name:'Supino com halteres',category:'Peito',equipment:'Halteres',sets:4,reps:'10–12',rest_seconds:90,min_tier:1,description:'Use uma carga confortável e um banco estável. Peça ao coach para conferir sua técnica.'}
 ];
 export const demo = () => ({
- profiles:[{id:'demo',full_name:'Visitante',role:'client',goal:'Condicionamento',height:null}],
- plans,modalities,exercises:demoExercises,workouts:[{id:'base',title:'Fundamentos de força',description:'Sequência introdutória • exemplo editável',min_tier:0}],
+  profiles:[{id:'demo',full_name:'Visitante',role:'client',goal:'Condicionamento',height:null,onboarding_completed:false}],
+  plans,modalities,exercises:demoExercises,workouts:[{id:'base',title:'Fundamentos de força · Dia 1',description:'Plano FREE • sequência introdutória de 30 dias',min_tier:0}],
  workout_exercises:demoExercises.slice(0,3).map((e,i)=>({id:String(i),workout_id:'base',exercise_id:e.id,sort_order:i})),
- training_logs:[],progress_measurements:[],content:[],subscriptions:[],payments:[],notifications:[],calendar_events:[],mentorship_bookings:[],progress_photos:[],messages:[],settings:[{id:'platform',name:'JL TRAINER ARMADURA',whatsapp:'258868787572',coach_name:'Seu coach',coach_bio:'Adicione apresentação e certificações no painel administrativo.',vip_link:null}],account_requests:[]
+  training_logs:[],progress_measurements:[],content:[],subscriptions:[],payments:[],notifications:[],calendar_events:[],mentorship_bookings:[],progress_photos:[],messages:[],settings:[{id:'platform',name:'JL TRAINER ARMADURA',whatsapp:'258868787572',coach_name:'Seu coach',coach_bio:'Adicione apresentação e certificações no painel administrativo.',vip_link:null}],account_requests:[]
 });
 export function activePlan(data,userId,now=new Date()) {
  const sub=data.subscriptions.find(s=>s.user_id===userId&&s.status==='active'&&new Date(s.started_at)<=now&&new Date(s.expires_at)>now);

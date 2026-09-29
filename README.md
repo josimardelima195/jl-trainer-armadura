@@ -10,6 +10,10 @@ PWA fitness premium para cliente, coach e administração. A interface segue o c
 - Cliente não consegue alterar role, plano, vencimento ou pagamento pelo navegador.
 - RLS separa dados próprios e dados da equipe.
 - Uploads usam Storage privado e caminhos por usuário.
+- Após o primeiro acesso, o onboarding recolhe peso, altura, objetivo e modalidade, calculando IMC estimado, meta de água e meta inicial de movimento.
+- No celular e em janelas pequenas, o menu de três linhas abre todas as áreas da versão desktop, incluindo modalidades, calendário, ranking, cardio e gestão.
+- A página de planos compara benefícios com ✓/× e aceita referência e foto de comprovativo para confirmação manual por M-Pesa/e-Mola/transferência via WhatsApp `868787572`.
+- Há páginas-base para ranking e corrida/cardio; a ligação real a mapas, localização e desafios com câmera depende das chaves, consentimentos e backend específicos.
 - Chat START/PRO/PREMIUM é guiado e persistido; a rota para IA futura fica no servidor (`guided_chat`), sem API key no frontend.
 - Prévia sem Supabase existe apenas para verificar layout; ela exibe um aviso e não representa dados de produção.
 
@@ -48,7 +52,7 @@ VITE_SUPABASE_ANON_KEY=SUA_CHAVE_ANON
 ### 3. Supabase
 
 1. Crie o projeto.
-2. No SQL Editor, execute uma vez `supabase/migrations/001_initial.sql`.
+2. No SQL Editor, execute `supabase/migrations/001_initial.sql` e depois `supabase/migrations/002_onboarding_progress.sql`.
 3. Em Authentication → URL Configuration, adicione o domínio local e o domínio da Vercel.
 4. Confirme o email de uma conta criada para testar.
 5. Para criar o primeiro administrador, crie uma conta normal e, no SQL Editor, altere somente o papel da conta escolhida:
