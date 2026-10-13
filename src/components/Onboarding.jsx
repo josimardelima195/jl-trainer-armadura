@@ -3,12 +3,54 @@ import {useStore} from '../lib/store';
 import {Field} from './UI';
 
 const goals=['Emagrecimento','Ganho de massa','Performance','Condicionamento','Saúde e mobilidade'];
+const equipmentOptions=['Sem equipamento','Halteres','Elásticos','Academia completa'];
+const dayOptions=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+
+function bmiLabel(value){
+  if(value<18.5)return 'Abaixo da referência';
+  if(value<25)return 'Faixa de referência';
+  if(value<30)return 'Acima da referência';
+  return 'Faixa elevada';
+}
+
 export default function Onboarding(){
-  const {profile,data,userId,mutate,busy}=useStore();
+  const {profile,data,userId,mutate,busy,error}=useStore();
   const [step,setStep]=useState(1);
-  const [form,setForm]=useState({weight:profile.initial_weight||profile.current_weight||'',height:profile.height||'',goal:profile.goal||'Condicionamento',modality:profile.modality||data.modalities[0]?.name||'Musculação'});
-  const metrics=useMemo(()=>{const weight=Number(form.weight),height=Number(form.height)/100; if(!weight||!height)return null; const bmi=weight/(height*height); const water=Math.round(weight*35); const weekly=form.goal==='Emagrecimento'?150:form.goal==='Ganho de massa'?3*2:150; return {bmi:bmi.toFixed(1),water,weekly};},[form]);
+  const [localError,setLocalError]=useState('');
+  const [form,setForm]=useState({
+    weight:profile.initial_weight||profile.current_weight||'',
+    height:profile.height||'',
+    goal:profile.goal||'Condicionamento',
+    modality:profile.modality||data.modalities[0]?.name||'Musculação',
+    equipment:profile.equipment_preference||'Sem equipamento',
+    time:profile.preferred_training_time?.slice(0,5)||'18:00',
+    days:Array.isArray(profile.training_days)&&profile.training_days.length?profile.training_days:['Seg','Qua','Sex']
+  });
+  const metrics=useMemo(()=>{
+    const weight=Number(form.weight),height=Number(form.height)/100;
+    if(!weight||!height)return null;
+    const bmi=weight/(height*height);
+    const water=Math.round(weight*35);
+    return {bmi:bmi.toFixed(1),water,weekly:150,label:bmiLabel(bmi)};
+  },[form.weight,form.height]);
   const update=e=>setForm({...form,[e.target.name]:e.target.value});
-  async function save(e){e.preventDefault(); const ok=await mutate('profiles',{initial_weight:Number(form.weight),current_weight:Number(form.weight),height:Number(form.height),goal:form.goal,modality:form.modality,onboarding_completed:true,water_goal_ml:metrics?.water||null,bmi:metrics?.bmi?Number(metrics.bmi):null},userId); if(ok) setStep(3);}
-  return <div className="onboarding-backdrop"><section className="onboarding-card" aria-labelledby="onboarding-title"><div className="onboarding-progress"><span className={step>=1?'active':''}>1 · Dados</span><span className={step>=2?'active':''}>2 · Objetivo</span><span className={step>=3?'active':''}>3 · Pronto</span></div>{step===1&&<><p className="eyebrow">PERSONALIZE SUA JORNADA</p><h1 id="onboarding-title">Vamos montar sua armadura</h1><p className="muted">Use medidas atuais. Você poderá editar tudo no seu perfil depois.</p><form className="panel-form" onSubmit={e=>{e.preventDefault();setStep(2)}}><div className="form-grid"><Field label="Peso atual (kg)" name="weight" type="number" min="20" max="400" step="0.1" required value={form.weight} onChange={update}/><Field label="Altura (cm)" name="height" type="number" min="100" max="250" required value={form.height} onChange={update}/></div><button className="primary">Continuar →</button></form></>}{step===2&&<><p className="eyebrow">SEU PLANO COMEÇA COM UMA DIREÇÃO</p><h1 id="onboarding-title">Qual é o seu foco?</h1><form className="panel-form" onSubmit={save}><label>Objetivo<select name="goal" value={form.goal} onChange={update}>{goals.map(x=><option key={x}>{x}</option>)}</select></label><label>Modalidade principal<select name="modality" value={form.modality} onChange={update}>{data.modalities.map(x=><option key={x.id}>{x.name}</option>)}</select></label>{metrics&&<div className="onboarding-metrics"><div><span>IMC estimado</span><b>{metrics.bmi}</b><small>referência inicial, não diagnóstico</small></div><div><span>Água diária sugerida</span><b>{(metrics.water/1000).toFixed(1)} L</b><small>ajuste ao clima e atividade</small></div><div><span>Meta de movimento</span><b>{metrics.weekly} min</b><small>por semana, progressivamente</small></div></div>}<div className="onboarding-actions"><button type="button" className="outline" onClick={()=>setStep(1)}>← Voltar</button><button className="primary" disabled={busy}>{busy?'Salvando…':'Salvar e começar →'}</button></div></form></>}{step===3&&<><div className="onboarding-success">✓</div><p className="eyebrow">TUDO PRONTO</p><h1 id="onboarding-title">Seu programa está preparado</h1><p className="muted">A modalidade <b>{form.modality}</b> agora aparece primeiro para você. Explore o plano FREE e evolua quando quiser.</p><button className="primary" onClick={()=>window.location.reload()}>Entrar na minha jornada →</button></>}</section></div>;
+  const toggleDay=day=>setForm(f=>({...f,days:f.days.includes(day)?f.days.filter(x=>x!==day):[...f.days,day]}));
+  async function save(e){
+    e.preventDefault();
+    setLocalError('');
+    if(!form.days.length){setLocalError('Escolha pelo menos um dia para treinar.');return;}
+    const ok=await mutate('profiles',{
+      initial_weight:Number(form.weight),current_weight:Number(form.weight),height:Number(form.height),
+      goal:form.goal,modality:form.modality,onboarding_completed:true,
+      water_goal_ml:metrics?.water||null,bmi:metrics?.bmi?Number(metrics.bmi):null,
+      equipment_preference:form.equipment,preferred_training_time:form.time||null,training_days:form.days
+    },userId);
+    if(ok)setStep(3); else setLocalError('Não foi possível guardar os dados. Aguarde um momento e tente novamente.');
+  }
+  return <div className="onboarding-backdrop"><section className="onboarding-card" aria-labelledby="onboarding-title">
+    <div className="onboarding-progress"><span className={step>=1?'active':''}>1 · Dados</span><span className={step>=2?'active':''}>2 · Objetivo</span><span className={step>=3?'active':''}>3 · Pronto</span></div>
+    {step===1&&<><p className="eyebrow">PERSONALIZE SUA JORNADA</p><h1 id="onboarding-title">Vamos montar sua armadura</h1><p className="muted">Use medidas atuais. Você poderá editar tudo no seu perfil depois.</p><form className="panel-form" onSubmit={e=>{e.preventDefault();setLocalError('');setStep(2)}}><div className="form-grid"><Field label="Peso atual (kg)" name="weight" type="number" min="20" max="400" step="0.1" required value={form.weight} onChange={update}/><Field label="Altura (cm)" name="height" type="number" min="100" max="250" required value={form.height} onChange={update}/></div><button className="primary">Continuar →</button></form></>}
+    {step===2&&<><p className="eyebrow">SEU PLANO COMEÇA COM UMA DIREÇÃO</p><h1 id="onboarding-title">Qual é o seu foco?</h1><form className="panel-form" onSubmit={save}><label>Objetivo<select name="goal" value={form.goal} onChange={update}>{goals.map(x=><option key={x}>{x}</option>)}</select></label><label>Modalidade principal<select name="modality" value={form.modality} onChange={update}>{data.modalities.map(x=><option key={x.id}>{x.name}</option>)}</select></label><div className="form-grid"><label>Equipamento disponível<select name="equipment" value={form.equipment} onChange={update}>{equipmentOptions.map(x=><option key={x}>{x}</option>)}</select></label><Field label="Horário preferido" name="time" type="time" value={form.time} onChange={update}/></div><fieldset className="day-picker"><legend>Dias preferidos</legend><div>{dayOptions.map(day=><label key={day} className="checkbox"><input type="checkbox" checked={form.days.includes(day)} onChange={()=>toggleDay(day)}/>{day}</label>)}</div></fieldset>{metrics&&<div className="onboarding-metrics"><div><span>IMC estimado</span><b>{metrics.bmi}</b><small>{metrics.label} · não é diagnóstico</small></div><div><span>Água diária sugerida</span><b>{(metrics.water/1000).toFixed(1)} L</b><small>peso × 35 ml; ajuste ao clima e atividade</small></div><div><span>Meta de movimento</span><b>{metrics.weekly} min</b><small>meta semanal inicial progressiva</small></div></div>}{(localError||error)&&<p className="error" role="alert">{localError||error}</p>}<div className="onboarding-actions"><button type="button" className="outline" onClick={()=>setStep(1)}>← Voltar</button><button className="primary" disabled={busy}>{busy?'Salvando…':'Salvar e ver planos →'}</button></div></form></>}
+    {step===3&&<><div className="onboarding-success">✓</div><p className="eyebrow">TUDO PRONTO</p><h1 id="onboarding-title">Seu programa está preparado</h1><p className="muted">A modalidade <b>{form.modality}</b> foi guardada. Agora você pode começar no FREE ou escolher um plano pago.</p><button className="primary" onClick={()=>{location.hash='planos';window.location.reload()}}>Entrar na minha jornada →</button></>}
+  </section></div>;
 }
