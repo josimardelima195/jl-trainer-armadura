@@ -25,7 +25,7 @@ export const demoExercises = [
 {id:'12',name:'Kata já aprendido no dojo',category:'Karaté',equipment:'Sem equipamento',sets:3,reps:'1–3 repetições',rest_seconds:90,min_tier:3,description:'Use a forma confirmada pelo instrutor da sua linhagem.'}
 ];
 export const demo = () => ({
-  profiles:[{id:'demo',full_name:'Visitante',role:'client',goal:'Condicionamento',height:null,onboarding_completed:false}],
+  profiles:[{id:'demo',full_name:'Visitante',role:'client',goal:'Condicionamento',height:170,current_weight:70,age:30,training_level:'beginner',onboarding_completed:false}],
   plans,modalities,exercises:demoExercises,workouts:[{id:'base',title:'Em casa · Sem equipamento · Corpo inteiro',description:'Plano FREE • sequência introdutória de 30 dias',min_tier:0},{id:'base-gym',title:'Ginásio · Força inicial',description:'Máquinas e halteres • plano START',min_tier:1}],
  workout_exercises:[...demoExercises.slice(0,3).map((e,i)=>({id:String(i),workout_id:'base',exercise_id:e.id,sort_order:i})),...demoExercises.slice(6,9).map((e,i)=>({id:`gym-${i}`,workout_id:'base-gym',exercise_id:e.id,sort_order:i}))],
   training_logs:[],progress_measurements:[],content:[],subscriptions:[],payments:[],notifications:[],calendar_events:[],mentorship_bookings:[],progress_photos:[],messages:[],settings:[{id:'platform',name:'JL TRAINER ARMADURA',whatsapp:'258868787572',coach_name:'Seu coach',coach_bio:'Adicione apresentação e certificações no painel administrativo.',vip_link:null}],account_requests:[],cardio_sessions:[],exercise_battles:[]
@@ -41,4 +41,3 @@ export function stats(logs,measurements,now=new Date()) {
  let streak=0; while(dates.has(cursor.toLocaleDateString('en-CA'))){streak++;cursor.setDate(cursor.getDate()-1);}
  return {total:logs.length,month:logs.filter(l=>new Date(l.completed_at).getMonth()===now.getMonth()&&new Date(l.completed_at).getFullYear()===now.getFullYear()).length,streak,current:sorted.at(-1)?.weight??null,delta:sorted.length>1?sorted.at(-1).weight-sorted[0].weight:null};
 }
-
