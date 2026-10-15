@@ -26,8 +26,8 @@ export const demoExercises = [
 ];
 export const demo = () => ({
   profiles:[{id:'demo',full_name:'Visitante',role:'client',goal:'Condicionamento',height:null,onboarding_completed:false}],
-  plans,modalities,exercises:demoExercises,workouts:[{id:'base',title:'Fundamentos de força · Dia 1',description:'Plano FREE • sequência introdutória de 30 dias',min_tier:0}],
- workout_exercises:demoExercises.slice(0,3).map((e,i)=>({id:String(i),workout_id:'base',exercise_id:e.id,sort_order:i})),
+  plans,modalities,exercises:demoExercises,workouts:[{id:'base',title:'Em casa · Sem equipamento · Corpo inteiro',description:'Plano FREE • sequência introdutória de 30 dias',min_tier:0},{id:'base-gym',title:'Ginásio · Força inicial',description:'Máquinas e halteres • plano START',min_tier:1}],
+ workout_exercises:[...demoExercises.slice(0,3).map((e,i)=>({id:String(i),workout_id:'base',exercise_id:e.id,sort_order:i})),...demoExercises.slice(6,9).map((e,i)=>({id:`gym-${i}`,workout_id:'base-gym',exercise_id:e.id,sort_order:i}))],
   training_logs:[],progress_measurements:[],content:[],subscriptions:[],payments:[],notifications:[],calendar_events:[],mentorship_bookings:[],progress_photos:[],messages:[],settings:[{id:'platform',name:'JL TRAINER ARMADURA',whatsapp:'258868787572',coach_name:'Seu coach',coach_bio:'Adicione apresentação e certificações no painel administrativo.',vip_link:null}],account_requests:[],cardio_sessions:[],exercise_battles:[]
 });
 export function activePlan(data,userId,now=new Date()) {
