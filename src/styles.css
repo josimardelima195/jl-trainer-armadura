@@ -25,3 +25,11 @@ body{overflow-x:hidden;}
 .exercise-preview-image{min-height:220px;}
 
 .exercise-media-empty{display:grid;place-items:center;padding:20px;color:var(--muted);text-align:center;border:1px dashed #6a5127;font-size:12px;}
+.catalog-item{margin-bottom:10px;}
+.catalog-body{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start;padding-top:12px;}
+.catalog-gif{width:120px;height:120px;object-fit:cover;border-radius:10px;background:#222;}
+.catalog-body ol{padding-left:20px;font-size:12px;line-height:1.5;color:#c9c5cc;}
+.catalog-body .outline{margin-top:8px;}
+@media(max-width:520px){.catalog-body{grid-template-columns:1fr;}.catalog-gif{width:100%;height:180px;object-fit:contain;}}
+
+.library-note{color:var(--muted);font-size:12px;line-height:1.5;margin:-10px 0 16px;}
