@@ -33,3 +33,11 @@ body{overflow-x:hidden;}
 @media(max-width:520px){.catalog-body{grid-template-columns:1fr;}.catalog-gif{width:100%;height:180px;object-fit:contain;}}
 
 .library-note{color:var(--muted);font-size:12px;line-height:1.5;margin:-10px 0 16px;}
+.exercise-showcase{margin:0 0 22px;padding:18px;border:1px solid #594522;border-radius:16px;background:linear-gradient(120deg,#211b11,#151518);}
+.exercise-showcase h2{margin:5px 0;font:700 20px 'Space Grotesk';}
+.exercise-showcase p{color:var(--muted);font-size:12px;margin:0 0 14px;}
+.showcase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.showcase-card{display:flex;flex-direction:column;gap:6px;text-align:left;background:#1b1917;border:1px solid #493a25;border-radius:11px;padding:8px;color:#fff;cursor:pointer;}
+.showcase-card img{width:100%;height:110px;object-fit:cover;border-radius:8px;background:#25211a;}
+.showcase-card b{font-size:11px;line-height:1.2}.showcase-card small{font-size:9px;color:var(--muted);}
+@media(max-width:700px){.showcase-grid{grid-template-columns:repeat(2,1fr)}.showcase-card img{height:120px}}
