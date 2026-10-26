@@ -4,7 +4,10 @@ const goalWords={
  musculacao:['barbell','dumbbell','cable','machine','press','row','curl','squat','deadlift','lunge','pulldown'],
  cardio:['cardio','run','jump','burpee','mountain','step','rope','jack','sprint'],
  casa:['bodyweight','push','plank','crunch','sit up','lunge','squat','bridge','stretch'],
- condicionamento:['bodyweight','cardio','push','squat','lunge','plank','row']
+ condicionamento:['bodyweight','cardio','push','squat','lunge','plank','row'],
+ futsal:['sprint','agility','lateral','jump','calf','run','lunge','squat','plyometric'],
+ karate:['kick','punch','karate','martial','hip','mobility','plank','lunge'],
+ natacao:['swim','stroke','kick','lat','shoulder','core','mobility']
 };
 const split=['Peito e tríceps','Costas e bíceps','Pernas e glúteos','Cardio e core','Ombros e mobilidade','Corpo inteiro','Recuperação ativa'];
 const clean=s=>String(s||'').toLowerCase();
