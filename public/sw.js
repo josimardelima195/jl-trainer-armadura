@@ -1,1 +1,27 @@
-const CACHE='jl-trainer-v1'; self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['/','/manifest.json'])))); self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(x=>x||fetch(e.request).then(r=>{const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c));return r}).catch(()=>caches.match('/'))))});
+const CACHE = 'jl-trainer-v2';
+const PRECACHE = ['/', '/manifest.json'];
+
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(PRECACHE)));
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))));
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  const requestUrl = new URL(event.request.url);
+  const isExerciseCatalog = requestUrl.pathname.startsWith('/exercises/');
+  event.respondWith(
+    isExerciseCatalog
+      ? fetch(event.request, { cache: 'no-store' }).catch(() => caches.match(event.request))
+      : caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
+          const copy = response.clone();
+          caches.open(CACHE).then(cache => cache.put(event.request, copy));
+          return response;
+        }).catch(() => caches.match('/')))
+  );
+});
