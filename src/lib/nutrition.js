@@ -1,3 +1,5 @@
+import {modalityKeyFor} from './programs.js';
+
 export const foodLibrary = [
   {name:'Ovos',emoji:'🥚',portion:'2 unidades',kcal:140,protein:12,group:'Proteína'},
   {name:'Queijo fresco',emoji:'🧀',portion:'40 g',kcal:110,protein:7,group:'Proteína'},
@@ -15,33 +17,35 @@ export const foodLibrary = [
   {name:'Couve e tomate',emoji:'🥗',portion:'2 chávenas',kcal:55,protein:3,group:'Vegetais'}
 ];
 
+const mealSets = {
+  emagrecimento: {label:'Emagrecimento',note:'Mais volume de vegetais e proteína, com energia ajustada para redução gradual.',meals:[['Aveia','Ovos','Papaia'],['Iogurte natural','Banana'],['Peixe grelhado','Feijão cozido','Couve e tomate'],['Banana'],['Frango grelhado','Batata-doce','Couve e tomate'],['Peixe grelhado','Couve e tomate']]},
+  definicao: {label:'Definição (cuting)',note:'Proteína distribuída ao longo do dia e carboidrato concentrado perto do treino.',meals:[['Ovos','Aveia','Banana'],['Iogurte natural','Papaia'],['Frango grelhado','Arroz cozido','Couve e tomate'],['Banana','Iogurte natural'],['Peixe grelhado','Batata-doce','Couve e tomate'],['Ovos','Couve e tomate']]},
+  bulking: {label:'Bulking (ganho de massa)',note:'Mais energia e carboidratos para acompanhar treinos de força e recuperação.',meals:[['Aveia','Banana','Ovos','Amendoim'],['Iogurte natural','Amendoim','Banana'],['Arroz cozido','Feijão cozido','Frango grelhado','Abacate'],['Aveia','Banana','Amendoim'],['Frango grelhado','Arroz cozido','Feijão cozido','Abacate'],['Ovos','Batata-doce','Queijo fresco']]},
+  musculacao: {label:'Musculação',note:'Plano equilibrado para força, proteína e recuperação entre sessões.',meals:[['Aveia','Banana','Ovos'],['Iogurte natural','Amendoim'],['Arroz cozido','Feijão cozido','Frango grelhado','Couve e tomate'],['Banana','Aveia'],['Frango grelhado','Batata-doce','Couve e tomate'],['Peixe grelhado','Arroz cozido','Couve e tomate']]},
+  condicionamento: {label:'Condicionamento',note:'Energia distribuída para manter consistência e recuperação.',meals:[['Aveia','Banana','Ovos'],['Iogurte natural','Papaia','Amendoim'],['Arroz cozido','Feijão cozido','Frango grelhado','Couve e tomate'],['Banana','Aveia'],['Ovos','Arroz cozido','Feijão cozido'],['Peixe grelhado','Batata-doce','Couve e tomate']]}
+};
+
 export function nutritionPlan(profile={}) {
   const weight=Number(profile.current_weight)||70, height=Number(profile.height)||170, age=Number(profile.age)||30;
-  const sex=String(profile.sex||'').toLowerCase();
-  const bmr=10*weight+6.25*height-5*age+(sex.includes('fem')?-161:5);
+  const sex=String(profile.sex||'').toLowerCase(), bmr=10*weight+6.25*height-5*age+(sex.includes('fem')?-161:5);
   const activity=String(profile.training_level||'beginner')==='advanced'?1.6:String(profile.training_level||'')==='intermediate'?1.45:1.35;
-  const goal=String(profile.goal||'').toLowerCase();
-  const adjustment=goal.includes('emag')?-350:goal.includes('massa')||goal.includes('bulk')?250:0;
-  const calories=Math.max(1400,Math.round(bmr*activity+adjustment));
-  const waterMl=Math.round(weight*35);
-  const extraWater=goal.includes('emag')||activity>1.4?400:250;
-  const training=String(profile.training_time||'18:00').slice(0,5);
-  const [h,m]=training.split(':').map(Number);
-  const shift=(mins)=>{const d=new Date();d.setHours(h,m+mins,0,0);return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})};
-  const meals=[
-    {time:shift(-480),title:'Pequeno-almoço',items:['Aveia','Banana','Ovos'],note:'Comece com proteína e energia de digestão gradual.'},
-    {time:shift(-300),title:'Lanche da manhã',items:['Iogurte natural','Papaia','Amendoim'],note:'Porção ajustável à fome e rotina.'},
-    {time:shift(-180),title:'Almoço',items:['Arroz cozido','Feijão cozido','Frango grelhado','Couve e tomate'],note:'Combine carboidrato, feijão, proteína e vegetais.'},
-    {time:shift(-75),title:'Pré-treino',items:['Banana','Aveia'],note:'Faça 60–90 minutos antes; reduza a porção se treinar logo.'},
-    {time:training,title:'Treino',items:[],note:'Beba pequenos goles; pare se sentir tontura ou dor.'},
-    {time:shift(75),title:'Pós-treino',items:['Ovos','Arroz cozido','Feijão cozido'],note:'Uma refeição normal com proteína e carboidrato é suficiente para a maioria.'},
-    {time:shift(180),title:'Jantar',items:['Peixe grelhado','Batata-doce','Couve e tomate'],note:'Troque peixe por frango, ovos ou feijão conforme disponibilidade.'}
-  ];
-  return {calories,waterMl:waterMl+extraWater,bmr:Math.round(bmr),meals,training,creatine:'Se um profissional de saúde autorizar: creatina monohidratada costuma ser estudada em 3–5 g/dia. O horário não é mágico; a consistência importa mais. Não usar automaticamente em menores, gravidez, doença renal ou com medicamentos sem avaliação.'};
+  const modality=modalityKeyFor(profile), intensity=String(profile.training_intensity||'moderate');
+  const adjustment={emagrecimento:-350,definicao:-250,bulking:350,musculacao:150,massa:250}[modality] ?? 0;
+  const intensityAdjustment={easy:-80,moderate:0,hard:120}[intensity] || 0;
+  const calories=Math.max(1400,Math.round(bmr*activity+adjustment+intensityAdjustment));
+  const waterMl=Math.round(weight*35), extraWater=modality==='emagrecimento'||intensity==='hard'||activity>1.4?450:250;
+  const training=String(profile.training_time||'18:00').slice(0,5), [h,m]=training.split(':').map(Number);
+  const shift=mins=>{const d=new Date();d.setHours(h,m+mins,0,0);return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});};
+  const set=mealSets[modality] || mealSets.condicionamento;
+  const titles=['Pequeno-almoço','Lanche da manhã','Almoço','Pré-treino','Pós-treino','Jantar'];
+  const notes=['Comece com proteína e energia de digestão gradual.','Porção ajustável à fome e rotina.','Combine carboidrato, proteína e vegetais.','Faça 60–90 minutos antes; ajuste ao seu horário.','Uma refeição normal com proteína e carboidrato apoia a recuperação.','Ajuste a porção conforme fome, rotina e orientação profissional.'];
+  const times=[shift(-480),shift(-300),shift(-180),shift(-75),shift(75),shift(180)];
+  const meals=titles.map((title,index)=>({time:times[index],title,items:set.meals[index],note:notes[index]}));
+  meals.splice(4,0,{time:training,title:'Treino',items:[],note:'Beba pequenos goles; pare se sentir tontura, dor ou mal-estar.'});
+  return {calories,waterMl:waterMl+extraWater,bmr:Math.round(bmr),meals,training,modalityLabel:set.label,modalityNote:set.note,creatine:'Se um profissional de saúde autorizar: creatina monohidratada costuma ser estudada em 3–5 g/dia. O horário não é mágico; a consistência importa mais. Não usar automaticamente em menores, gravidez, doença renal ou com medicamentos sem avaliação.'};
 }
 
-export function estimateWorkoutKcal(profile={},minutes=35,intensity='moderate'){
-  const weight=Number(profile.current_weight)||70;
-  const met=intensity==='hard'?8:intensity==='easy'?3.5:5.5;
+export function estimateWorkoutKcal(profile={},minutes=35,intensity='moderate') {
+  const weight=Number(profile.current_weight)||70, met=intensity==='hard'?8:intensity==='easy'?3.5:5.5;
   return Math.round(met*3.5*weight/200*minutes);
 }
