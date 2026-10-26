@@ -2,7 +2,7 @@ export const today = () => new Date().toLocaleDateString('en-CA');
 export const plans = [
   {id:'free',name:'FREE',price:0,tier:0,description:'Comece com o essencial.',features:['Exercícios básicos','Registro de peso e progresso','Calendário e metas gerais','Ranking global']},
   {id:'start',name:'START',price:600,tier:1,description:'Mais variedade para manter a consistência.',features:['Tudo do FREE','Programas completos de 30 dias','Imagens e instruções','Assistente guiado','Plano de 30 dias por modalidade']},
-  {id:'pro',name:'PRO',price:1200,tier:2,description:'Conteúdo guiado e alimentação.',features:['Tudo do START','Vídeos e aulas','Conteúdos avançados','1 mentoria online com horário marcado','Corrida e estatísticas GPS']},
+  {id:'pro',name:'PRO',price:1200,tier:2,description:'Conteúdo guiado e acompanhamento.',features:['Tudo do START','Vídeos e aulas','Conteúdos avançados','1 mentoria online com horário marcado','Corrida e estatísticas GPS']},
   {id:'premium',name:'PREMIUM',price:1800,tier:3,description:'Acompanhamento mais próximo.',features:['Tudo do PRO','Plano alimentar','2 mentorias online com horário marcado','Avaliação personalizada','Chat com coach','Grupo VIP e certificados']}
 ];
 export const planMatrix = [
