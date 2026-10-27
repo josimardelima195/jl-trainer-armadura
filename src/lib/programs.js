@@ -40,8 +40,8 @@ const daySplit = [
 const modalitySchedules = {
   emagrecimento: ['cardio_core','legs_glutes','full_body','cardio_core','back_biceps','cardio_core','recovery'],
   definicao: ['cardio_core','chest_triceps','back_biceps','legs_glutes','cardio_core','full_body','recovery'],
-  bulking: ['chest_triceps','back_biceps','legs_glutes','shoulders_mobility','legs_glutes','full_body','recovery'],
-  musculacao: ['chest_triceps','back_biceps','legs_glutes','shoulders_mobility','full_body','cardio_core','recovery'],
+  bulking: ['chest_triceps','back_biceps','legs_glutes','shoulders_mobility','cardio_core','full_body','recovery'],
+  musculacao: ['chest_triceps','back_biceps','legs_glutes','shoulders_mobility','cardio_core','full_body','recovery'],
   massa: ['chest_triceps','back_biceps','legs_glutes','shoulders_mobility','legs_glutes','full_body','recovery'],
   casa: ['chest_triceps','legs_glutes','back_biceps','cardio_core','shoulders_mobility','full_body','recovery'],
   condicionamento: ['chest_triceps','back_biceps','legs_glutes','cardio_core','shoulders_mobility','full_body','recovery']
@@ -96,12 +96,25 @@ function focusScore(e,focusKey) {
   return (focus?.groups || []).reduce((score,group) => score + (primaryHasGroup(e,group) ? 8 : hasGroup(e,group) ? 2 : 0),0);
 }
 function goalScore(e,goal) { const text=textFor(e); return (goalWords[goal] || goalWords.condicionamento).reduce((score,word) => score + (text.includes(clean(word)) ? 1 : 0),0); }
+function canonicalExerciseName(value) {
+  return clean(value)
+    .replace(/\([^)]*\)/g,' ')
+    .replace(/\b(back|front|side|rear|pov|view|angle|left|right|alternate|alternating)\b/g,' ')
+    .replace(/\b(on knees|kneeling|standing|seated|lying|floor)\b/g,' ')
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim();
+}
 function uniqueExercises(exercises) {
   const seen=new Set();
-  return exercises.filter(e => { const key=`${clean(e?.name)}|${exerciseEquipmentMode(e)}`; if (!key || seen.has(key)) return false; seen.add(key); return true; });
+  return exercises.filter(e => {
+    const key=canonicalExerciseName(e?.name);
+    if (!key || seen.has(key)) return false;
+    seen.add(key); return true;
+  });
 }
-function rankedForDay(exercises,focusKey,goal,day) {
-  return [...exercises].sort((a,b) => { const scoreA=focusScore(a,focusKey)*100+goalScore(a,goal)*3+(a.image_path ? 1 : 0); const scoreB=focusScore(b,focusKey)*100+goalScore(b,goal)*3+(b.image_path ? 1 : 0); return scoreB-scoreA || String(a.name || '').localeCompare(String(b.name || ''),'pt-BR'); }).map((exercise,index,list) => list[(index+((day-1)*2))%list.length]);
+function rankedForDay(exercises,focusKey,goal,day,requestedMode='all') {
+  const machineBoost=focusKey==='legs_glutes' && requestedMode==='equipment' ? ['machine','smith','trenó','leg press','hack squat','extensão','flexora','curl'].reduce((score,word)=>score+(clean(exercises?.[0]?.name).includes(word)?1:0),0) : 0;
+  return [...exercises].sort((a,b) => { const scoreA=focusScore(a,focusKey)*100+goalScore(a,goal)*3+(a.image_path ? 1 : 0)+(focusKey==='legs_glutes'&&requestedMode==='equipment'&&/machine|smith|sled|leg press|hack squat|leg extension|leg curl|calf/i.test(`${a.name} ${a.equipment}`)?25:0); const scoreB=focusScore(b,focusKey)*100+goalScore(b,goal)*3+(b.image_path ? 1 : 0)+(focusKey==='legs_glutes'&&requestedMode==='equipment'&&/machine|smith|sled|leg press|hack squat|leg extension|leg curl|calf/i.test(`${b.name} ${b.equipment}`)?25:0); return scoreB-scoreA || String(a.name || '').localeCompare(String(b.name || ''),'pt-BR'); }).map((exercise,index,list) => list[(index+((day-1)*2))%list.length]);
 }
 function rotatePick(list,count,day) { if (!list.length) return []; if (list.length <= count) return list; const start=((day-1)*2)%list.length; return Array.from({length:count},(_,index) => list[(start+index)%list.length]); }
 
@@ -120,7 +133,7 @@ export function build30DayPlan(exercises=[],goal='condicionamento',level='beginn
   return Array.from({length:30},(_,index) => {
     const day=index+1, focus=focusForDay(day,modality), isRecovery=focus.key === 'recovery';
     const exact=filtered.filter(e => exerciseMatchesFocus(e,focus.key));
-    const ranked=rankedForDay(exact,focus.key,modality,day);
+    const ranked=rankedForDay(exact,focus.key,modality,day,requestedMode);
     const selected=rotatePick(ranked,isRecovery ? Math.min(3,ranked.length) : requestedCount,day);
     const isRunDay=modality === 'emagrecimento' && runningDays.has(day);
     return {day,title:`Dia ${day} · ${focus.label}`,focus:focus.label,focus_key:focus.key,groups:focus.groups,level,intensity,rest:isRecovery,equipment_mode:requestedMode,isRunDay,sessionLabel:isRunDay?'Corrida guiada · meta de 4 km':'Treino específico da modalidade',exercises:selected.map((e,order) => ({...e,sets:isRecovery ? 2 : intensity === 'hard' ? 4 : intensity === 'easy' ? 2 : 3,reps:isRecovery ? '20–30 min' : intensity === 'hard' ? '10–15' : intensity === 'easy' ? '8–10' : '8–12',day_number:day,sort_order:order}))};
