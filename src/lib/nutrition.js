@@ -40,7 +40,7 @@ export function nutritionPlan(profile={}) {
   const titles=['Pequeno-almoço','Lanche da manhã','Almoço','Pré-treino','Pós-treino','Jantar'];
   const notes=['Comece com proteína e energia de digestão gradual.','Porção ajustável à fome e rotina.','Combine carboidrato, proteína e vegetais.','Faça 60–90 minutos antes; ajuste ao seu horário.','Uma refeição normal com proteína e carboidrato apoia a recuperação.','Ajuste a porção conforme fome, rotina e orientação profissional.'];
   const times=[shift(-480),shift(-300),shift(-180),shift(-75),shift(75),shift(180)];
-  const meals=titles.map((title,index)=>({time:times[index],title,items:set.meals[index],note:notes[index]}));
+  const meals=titles.map((title,index)=>{const items=set.meals[index];const foods=items.map(name=>foodLibrary.find(f=>f.name===name)).filter(Boolean);return {time:times[index],title,items,note:notes[index],kcal:foods.reduce((sum,f)=>sum+f.kcal,0),protein:foods.reduce((sum,f)=>sum+f.protein,0),recipe:index===0?'Misture e cozinhe até ficar cremoso.':index===2?'Monte o prato com metade de vegetais, proteína e carboidrato.':index===3?'Combine os itens e deixe pronto 60–90 minutos antes do treino.':'Prepare de forma simples, sem fritura e com hidratação.'}});
   meals.splice(4,0,{time:training,title:'Treino',items:[],note:'Beba pequenos goles; pare se sentir tontura, dor ou mal-estar.'});
   return {calories,waterMl:waterMl+extraWater,bmr:Math.round(bmr),meals,training,modalityLabel:set.label,modalityNote:set.note,creatine:'Se um profissional de saúde autorizar: creatina monohidratada costuma ser estudada em 3–5 g/dia. O horário não é mágico; a consistência importa mais. Não usar automaticamente em menores, gravidez, doença renal ou com medicamentos sem avaliação.'};
 }

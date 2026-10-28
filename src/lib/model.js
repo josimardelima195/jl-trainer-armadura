@@ -37,8 +37,10 @@ export function activePlan(data,userId,now=new Date()) {
 }
 export function stats(logs,measurements,now=new Date()) {
  const sorted=[...measurements].sort((a,b)=>a.measured_at.localeCompare(b.measured_at));
- const dates=new Set(logs.map(l=>new Date(l.completed_at).toLocaleDateString('en-CA')));
+ const dayKey=l=>new Date(l.completed_at).toLocaleDateString('en-CA');
+ const dates=new Set(logs.map(dayKey));
  let cursor=new Date(now); if(!dates.has(cursor.toLocaleDateString('en-CA'))) cursor.setDate(cursor.getDate()-1);
  let streak=0; while(dates.has(cursor.toLocaleDateString('en-CA'))){streak++;cursor.setDate(cursor.getDate()-1);}
- return {total:logs.length,month:logs.filter(l=>new Date(l.completed_at).getMonth()===now.getMonth()&&new Date(l.completed_at).getFullYear()===now.getFullYear()).length,streak,current:sorted.at(-1)?.weight??null,delta:sorted.length>1?sorted.at(-1).weight-sorted[0].weight:null};
+ const monthKeys=new Set(logs.filter(l=>{const d=new Date(l.completed_at);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()}).map(dayKey));
+ return {total:dates.size,month:monthKeys.size,streak,current:sorted.at(-1)?.weight??null,delta:sorted.length>1?sorted.at(-1).weight-sorted[0].weight:null};
 }
