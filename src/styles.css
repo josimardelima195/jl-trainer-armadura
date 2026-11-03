@@ -49,3 +49,8 @@ html,body,#root{min-height:100%;overflow-x:hidden}@media(max-width:900px){aside.
 .exercise-gif-showcase img,.exercise-gif-detail img,.exercise-gif-guided img{content-visibility:auto}
 
 /* Atualização 03/11: temas, tutorial e alimentação visual */
+
+/* Alimentação: imagens pequenas e estáveis, como na versão anterior */
+.food-chip{grid-template-columns:34px 1fr;min-width:0;overflow:hidden;align-items:center}.food-chip img{display:block;width:34px!important;height:34px!important;max-width:34px!important;max-height:34px!important;object-fit:cover;border-radius:7px;grid-row:span 2}.food-chip>div{min-width:0}.food-chip b,.food-chip small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.theme-switcher{min-width:max-content;padding:4px 6px;gap:5px}.theme-label{font-size:9px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);padding:0 3px}.theme-switcher button{width:29px;height:29px}.theme-switcher button.active{outline:2px solid color-mix(in srgb,var(--gold) 65%,transparent);outline-offset:1px}.theme-settings{scroll-margin-top:90px}@media(max-width:700px){.food-chips{grid-template-columns:1fr 1fr}.food-chip{grid-template-columns:34px 1fr!important}.food-chip img{width:34px!important;height:34px!important;max-width:34px!important;max-height:34px!important}.theme-label{display:none}.theme-switcher button{width:27px;height:27px}}
+
+.budget-note{grid-column:1/-1;padding:10px 12px;border-left:3px solid var(--gold);border-radius:7px;background:color-mix(in srgb,var(--gold) 8%,var(--panel));font-size:10px;color:var(--muted);line-height:1.45}.budget-note b{color:var(--gold2)}

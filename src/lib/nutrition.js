@@ -17,6 +17,22 @@ export const foodLibrary = [
   {name:'Couve e tomate',image:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=240&q=80',emoji:'🥗',portion:'2 chávenas',kcal:55,protein:3,group:'Vegetais'}
 ];
 
+const affordableVariants = {
+  0: [['Aveia','Ovos','Banana'],['Iogurte natural','Papaia'],['Arroz cozido','Feijão cozido','Frango grelhado','Couve e tomate'],['Banana'],['Batata-doce','Ovos','Couve e tomate'],['Feijão cozido','Arroz cozido','Ovos']],
+  1: [['Ovos','Aveia','Papaia'],['Banana','Amendoim'],['Frango grelhado','Arroz cozido','Feijão cozido'],['Iogurte natural'],['Peixe grelhado','Batata-doce','Couve e tomate'],['Ovos','Arroz cozido','Couve e tomate']],
+  2: [['Aveia','Banana','Amendoim'],['Ovos','Papaia'],['Peixe grelhado','Arroz cozido','Couve e tomate'],['Banana'],['Frango grelhado','Feijão cozido','Batata-doce'],['Iogurte natural','Aveia']],
+  3: [['Ovos','Queijo fresco','Banana'],['Aveia','Iogurte natural'],['Arroz cozido','Feijão cozido','Frango grelhado','Abacate'],['Papaia','Amendoim'],['Peixe grelhado','Batata-doce','Couve e tomate'],['Ovos','Feijão cozido']],
+  4: [['Aveia','Ovos','Amendoim'],['Banana','Iogurte natural'],['Frango grelhado','Arroz cozido','Couve e tomate'],['Papaia'],['Ovos','Batata-doce','Feijão cozido'],['Peixe grelhado','Arroz cozido','Couve e tomate']]
+};
+const modalityOffsets={emagrecimento:0,definicao:1,bulking:2,musculacao:3,condicionamento:4};
+const budgetSubstitutions={
+  emagrecimento:['Priorize feijão, ovos, aveia, banana e hortaliças da época; compre peixe e frango em promoção.'],
+  definicao:['Use ovos e feijão como alternativas acessíveis de proteína e mantenha arroz, aveia e batata-doce em porções ajustadas.'],
+  bulking:['Para reduzir custos, combine arroz e feijão, ovos, aveia, amendoim e leite/iogurte; distribua a proteína ao longo do dia.'],
+  musculacao:['Base econômica: arroz e feijão, ovos, aveia, frango e hortaliças locais; varie peixe quando o orçamento permitir.'],
+  condicionamento:['Monte a base com alimentos locais, sazonais e pouco processados; troque carnes caras por ovos e feijão quando necessário.']
+};
+
 const mealSets = {
   emagrecimento: {label:'Emagrecimento',note:'Mais volume de vegetais e proteína, com energia ajustada para redução gradual.',meals:[['Aveia','Ovos','Papaia'],['Iogurte natural','Banana'],['Peixe grelhado','Feijão cozido','Couve e tomate'],['Banana'],['Frango grelhado','Batata-doce','Couve e tomate'],['Peixe grelhado','Couve e tomate']]},
   definicao: {label:'Definição (cuting)',note:'Proteína distribuída ao longo do dia e carboidrato concentrado perto do treino.',meals:[['Ovos','Aveia','Banana'],['Iogurte natural','Papaia'],['Frango grelhado','Arroz cozido','Couve e tomate'],['Banana','Iogurte natural'],['Peixe grelhado','Batata-doce','Couve e tomate'],['Ovos','Couve e tomate']]},
@@ -37,12 +53,15 @@ export function nutritionPlan(profile={}) {
   const training=String(profile.training_time||'18:00').slice(0,5), [h,m]=training.split(':').map(Number);
   const shift=mins=>{const d=new Date();d.setHours(h,m+mins,0,0);return d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});};
   const set=mealSets[modality] || mealSets.condicionamento;
+  const dayNumber=Math.min(30,Math.max(1,Number(profile.nutrition_day)||1));
+  const cycle=(dayNumber-1)%5;
+  const menu=cycle===0 ? set.meals : affordableVariants[(cycle+(modalityOffsets[modality]||0))%5];
   const titles=['Pequeno-almoço','Lanche da manhã','Almoço','Pré-treino','Pós-treino','Jantar'];
   const notes=['Comece com proteína e energia de digestão gradual.','Porção ajustável à fome e rotina.','Combine carboidrato, proteína e vegetais.','Faça 60–90 minutos antes; ajuste ao seu horário.','Uma refeição normal com proteína e carboidrato apoia a recuperação.','Ajuste a porção conforme fome, rotina e orientação profissional.'];
   const times=[shift(-480),shift(-300),shift(-180),shift(-75),shift(75),shift(180)];
-  const meals=titles.map((title,index)=>{const items=set.meals[index];const foods=items.map(name=>foodLibrary.find(f=>f.name===name)).filter(Boolean);return {time:times[index],title,items,note:notes[index],kcal:foods.reduce((sum,f)=>sum+f.kcal,0),protein:foods.reduce((sum,f)=>sum+f.protein,0),recipe:index===0?'Misture e cozinhe até ficar cremoso.':index===2?'Monte o prato com metade de vegetais, proteína e carboidrato.':index===3?'Combine os itens e deixe pronto 60–90 minutos antes do treino.':'Prepare de forma simples, sem fritura e com hidratação.'}});
+  const meals=titles.map((title,index)=>{const items=(menu && menu[index]) || set.meals[index];const foods=items.map(name=>foodLibrary.find(f=>f.name===name)).filter(Boolean);return {time:times[index],title,items,note:notes[index],kcal:foods.reduce((sum,f)=>sum+f.kcal,0),protein:foods.reduce((sum,f)=>sum+f.protein,0),recipe:index===0?'Misture e cozinhe até ficar cremoso.':index===2?'Monte o prato com metade de vegetais, proteína e carboidrato.':index===3?'Combine os itens e deixe pronto 60–90 minutos antes do treino.':'Prepare de forma simples, sem fritura e com hidratação.'}});
   meals.splice(4,0,{time:training,title:'Treino',items:[],note:'Beba pequenos goles; pare se sentir tontura, dor ou mal-estar.'});
-  return {calories,waterMl:waterMl+extraWater,bmr:Math.round(bmr),meals,training,modalityLabel:set.label,modalityNote:set.note,creatine:'Se um profissional de saúde autorizar: creatina monohidratada costuma ser estudada em 3–5 g/dia. O horário não é mágico; a consistência importa mais. Não usar automaticamente em menores, gravidez, doença renal ou com medicamentos sem avaliação.'};
+  return {dayNumber,cycle,budgetNote:budgetSubstitutions[modality]||budgetSubstitutions.condicionamento,calories,waterMl:waterMl+extraWater,bmr:Math.round(bmr),meals,training,modalityLabel:set.label,modalityNote:set.note,creatine:'Se um profissional de saúde autorizar: creatina monohidratada costuma ser estudada em 3–5 g/dia. O horário não é mágico; a consistência importa mais. Não usar automaticamente em menores, gravidez, doença renal ou com medicamentos sem avaliação.'};
 }
 
 export function estimateWorkoutKcal(profile={},minutes=35,intensity='moderate') {
