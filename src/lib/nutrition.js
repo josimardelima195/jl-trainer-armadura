@@ -1,20 +1,20 @@
 import {modalityKeyFor} from './programs.js';
 
 export const foodLibrary = [
-  {name:'Ovos',emoji:'🥚',portion:'2 unidades',kcal:140,protein:12,group:'Proteína'},
-  {name:'Queijo fresco',emoji:'🧀',portion:'40 g',kcal:110,protein:7,group:'Proteína'},
-  {name:'Arroz cozido',emoji:'🍚',portion:'1 chávena',kcal:205,protein:4,group:'Carboidrato'},
-  {name:'Feijão cozido',emoji:'🫘',portion:'1 concha',kcal:180,protein:12,group:'Proteína e fibra'},
-  {name:'Frango grelhado',emoji:'🍗',portion:'120 g',kcal:200,protein:37,group:'Proteína'},
-  {name:'Peixe grelhado',emoji:'🐟',portion:'150 g',kcal:220,protein:32,group:'Proteína'},
-  {name:'Batata-doce',emoji:'🍠',portion:'1 média',kcal:180,protein:4,group:'Carboidrato'},
-  {name:'Aveia',emoji:'🥣',portion:'40 g',kcal:150,protein:5,group:'Carboidrato e fibra'},
-  {name:'Banana',emoji:'🍌',portion:'1 unidade',kcal:105,protein:1,group:'Fruta'},
-  {name:'Papaia',emoji:'🍈',portion:'1 chávena',kcal:60,protein:1,group:'Fruta'},
-  {name:'Amendoim',emoji:'🥜',portion:'25 g',kcal:145,protein:6,group:'Gordura e proteína'},
-  {name:'Iogurte natural',emoji:'🥛',portion:'170 g',kcal:110,protein:9,group:'Proteína'},
-  {name:'Abacate',emoji:'🥑',portion:'1/2 unidade',kcal:160,protein:2,group:'Gordura saudável'},
-  {name:'Couve e tomate',emoji:'🥗',portion:'2 chávenas',kcal:55,protein:3,group:'Vegetais'}
+  {name:'Ovos',image:'https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&w=240&q=80',emoji:'🥚',portion:'2 unidades',kcal:140,protein:12,group:'Proteína'},
+  {name:'Queijo fresco',image:'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=240&q=80',emoji:'🧀',portion:'40 g',kcal:110,protein:7,group:'Proteína'},
+  {name:'Arroz cozido',image:'https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=240&q=80',emoji:'🍚',portion:'1 chávena',kcal:205,protein:4,group:'Carboidrato'},
+  {name:'Feijão cozido',image:'https://images.unsplash.com/photo-1551462147-ff29053bfc14?auto=format&fit=crop&w=240&q=80',emoji:'🫘',portion:'1 concha',kcal:180,protein:12,group:'Proteína e fibra'},
+  {name:'Frango grelhado',image:'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=240&q=80',emoji:'🍗',portion:'120 g',kcal:200,protein:37,group:'Proteína'},
+  {name:'Peixe grelhado',image:'https://images.unsplash.com/photo-1544943910-4c1dc44aab44?auto=format&fit=crop&w=240&q=80',emoji:'🐟',portion:'150 g',kcal:220,protein:32,group:'Proteína'},
+  {name:'Batata-doce',image:'https://images.unsplash.com/photo-1596097635121-14b63a7d7b8c?auto=format&fit=crop&w=240&q=80',emoji:'🍠',portion:'1 média',kcal:180,protein:4,group:'Carboidrato'},
+  {name:'Aveia',image:'https://images.unsplash.com/photo-1517673400267-0251440c45dc?auto=format&fit=crop&w=240&q=80',emoji:'🥣',portion:'40 g',kcal:150,protein:5,group:'Carboidrato e fibra'},
+  {name:'Banana',image:'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=240&q=80',emoji:'🍌',portion:'1 unidade',kcal:105,protein:1,group:'Fruta'},
+  {name:'Papaia',image:'https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=240&q=80',emoji:'🍈',portion:'1 chávena',kcal:60,protein:1,group:'Fruta'},
+  {name:'Amendoim',image:'https://images.unsplash.com/photo-1567892737950-30c4db37cd89?auto=format&fit=crop&w=240&q=80',emoji:'🥜',portion:'25 g',kcal:145,protein:6,group:'Gordura e proteína'},
+  {name:'Iogurte natural',image:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=240&q=80',emoji:'🥛',portion:'170 g',kcal:110,protein:9,group:'Proteína'},
+  {name:'Abacate',image:'https://images.unsplash.com/photo-1519162808019-7de1683fa2ad?auto=format&fit=crop&w=240&q=80',emoji:'🥑',portion:'1/2 unidade',kcal:160,protein:2,group:'Gordura saudável'},
+  {name:'Couve e tomate',image:'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=240&q=80',emoji:'🥗',portion:'2 chávenas',kcal:55,protein:3,group:'Vegetais'}
 ];
 
 const mealSets = {
