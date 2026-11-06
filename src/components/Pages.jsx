@@ -2327,22 +2327,11 @@ export function Assistant({ plan, go }) {
   );
 }
 
-const foodPhotoFallbacks = {
-  Banana:
-    "https://images.unsplash.com/photo-1569762404585-44498eb64d07?auto=format&fit=crop&w=640&q=80",
-  "Frango grelhado":
-    "https://images.unsplash.com/photo-1572424117831-005b5e9b3ae4?auto=format&fit=crop&w=640&q=80",
-  "Arroz cozido": "/assets/food/feijao-cozido.jpg",
-  "Couve e tomate": "/assets/food/matapa.jpg",
-  "Iogurte natural": "/assets/food/aveia-simples.jpg",
-  "Carne magra":
-    "https://images.unsplash.com/photo-1572424117831-005b5e9b3ae4?auto=format&fit=crop&w=640&q=80",
-};
-const foodPhoto = (food) =>
-  food?.image ||
-  foodPhotoFallbacks[food?.name] ||
-  "/assets/food/aveia-simples.jpg";
-const mealPhoto = (meal) => meal?.image || foodPhoto(meal?.foods?.[0]);
+// Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
+// Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
+const foodPhoto = (food) => food?.image || null;
+const mealPhoto = (meal) =>
+  meal?.foods?.find((food) => foodPhoto(food))?.image || null;
 
 export function Nutrition({ plan }) {
   const { profile } = useStore();
@@ -2402,19 +2391,25 @@ export function Nutrition({ plan }) {
         [meal.title]: alternatives.slice(0, 3),
       }));
   };
-  const mealData = (meal) =>
-    replaced[meal.title]?.length
-      ? {
-          ...meal,
-          foods: replaced[meal.title],
-          items: replaced[meal.title].map((food) => food.name),
-          kcal: replaced[meal.title].reduce((sum, food) => sum + food.kcal, 0),
-          protein: replaced[meal.title].reduce(
-            (sum, food) => sum + food.protein,
-            0,
-          ),
-        }
-      : meal;
+  const mealData = (meal) => {
+    const foods = replaced[meal.title]?.length
+      ? replaced[meal.title]
+      : meal.foods;
+    const sum = (key) =>
+      Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
+    return {
+      ...meal,
+      foods,
+      items: foods.map((food) => food.name),
+      ingredients: foods.map((food) => `${food.name} (${food.portion})`),
+      image: foods.find((food) => foodPhoto(food))?.image || null,
+      kcal: sum("kcal"),
+      protein: sum("protein"),
+      carbs: sum("carbs"),
+      fat: sum("fat"),
+      fiber: sum("fiber"),
+    };
+  };
   return (
     <>
       <Title
@@ -2518,13 +2513,18 @@ export function Nutrition({ plan }) {
               key={`${meal.title}-${i}`}
             >
               <div className="meal-time">{meal.time}</div>
-              <div className="meal-main">
-                <img
-                  className="meal-photo"
-                  src={mealPhoto(meal)}
-                  alt={`Fotografia de ${meal.items.join(", ")}`}
-                  loading="lazy"
-                />
+              <div className={`meal-main ${mealPhoto(meal) ? "has-meal-photo" : "no-meal-photo"}`}>
+                {mealPhoto(meal) && (
+                  <figure className="meal-photo-frame">
+                    <img
+                      className="meal-photo"
+                      src={mealPhoto(meal)}
+                      alt={`Fotografia de ${meal.foods.find((food) => foodPhoto(food))?.name}`}
+                      loading="lazy"
+                    />
+                    <figcaption>Ingrediente principal</figcaption>
+                  </figure>
+                )}
                 <div className="meal-head">
                   <div>
                     <span className="pill">{meal.title}</span>
@@ -2548,12 +2548,19 @@ export function Nutrition({ plan }) {
                 </div>
                 <div className="food-chips">
                   {meal.foods.map((food) => (
-                    <div className="food-chip" key={food.name}>
-                      <img
-                        src={foodPhoto(food)}
-                        alt={`Fotografia de ${food.name}`}
-                        loading="lazy"
-                      />
+                    <div
+                      className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`}
+                      key={food.name}
+                    >
+                      {foodPhoto(food) && (
+                        <span className="food-chip-media">
+                          <img
+                            src={foodPhoto(food)}
+                            alt={`Fotografia de ${food.name}`}
+                            loading="lazy"
+                          />
+                        </span>
+                      )}
                       <div>
                         <b>{food.name}</b>
                         <small>
