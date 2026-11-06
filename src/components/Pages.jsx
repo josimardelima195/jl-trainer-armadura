@@ -2330,8 +2330,6 @@ export function Assistant({ plan, go }) {
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
 const foodPhoto = (food) => food?.image || null;
-const mealPhoto = (meal) =>
-  meal?.foods?.find((food) => foodPhoto(food))?.image || null;
 
 export function Nutrition({ plan }) {
   const { profile } = useStore();
@@ -2502,6 +2500,7 @@ export function Nutrition({ plan }) {
           <small>gorduras alvo</small>
         </div>
       </div>
+      <section className="training-schedule-card"><div><span className="eyebrow">HORÁRIO PERSONALIZADO</span><b>Treino previsto às {n.training || profile.training_time || "18:00"}</b><p>O pré-treino aparece cerca de 75 minutos antes e o pós-treino cerca de 75 minutos depois. Este horário vem do seu cadastro e pode ser alterado no Perfil.</p></div><button type="button" className="outline" onClick={() => { location.hash = "perfil"; }}>Alterar horário</button></section>
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),
@@ -2513,18 +2512,7 @@ export function Nutrition({ plan }) {
               key={`${meal.title}-${i}`}
             >
               <div className="meal-time">{meal.time}</div>
-              <div className={`meal-main ${mealPhoto(meal) ? "has-meal-photo" : "no-meal-photo"}`}>
-                {mealPhoto(meal) && (
-                  <figure className="meal-photo-frame">
-                    <img
-                      className="meal-photo"
-                      src={mealPhoto(meal)}
-                      alt={`Fotografia de ${meal.foods.find((food) => foodPhoto(food))?.name}`}
-                      loading="lazy"
-                    />
-                    <figcaption>Ingrediente principal</figcaption>
-                  </figure>
-                )}
+              <div className="meal-main">
                 <div className="meal-head">
                   <div>
                     <span className="pill">{meal.title}</span>

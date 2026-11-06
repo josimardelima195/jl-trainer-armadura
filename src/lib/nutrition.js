@@ -1073,7 +1073,7 @@ export function nutritionPlan(profile = {}) {
     });
   const targetScale = objective.portion * (calories / (base || calories));
   const titles = ["Pequeno-almoço", "Lanche da manhã", "Almoço", "Jantar"];
-  const mealTimes = [at(7, 30), at(10, 0), at(12, 30), at(20, 0)];
+  const mealTimes = [at(7, 30), at(10, 0), at(12, 30), shift(120)];
   const meals = day.map((items, index) => {
     const foods = adaptItems(items)
       .map((name) => byName[name])
