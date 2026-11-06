@@ -1,0 +1,184 @@
+{
+  "images": [
+    {
+      "path": "/assets/food/aveia-simples.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/batata-doce-assada.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/caril-amendoim.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/catalog/avocado.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:A half cut avocado in West Bengal, India, photographed on December 3, 2023.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:A%20half%20cut%20avocado%20in%20West%20Bengal%2C%20India%2C%20photographed%20on%20December%203%2C%202023.jpg",
+      "author": "Billjones94",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+    },
+    {
+      "path": "/assets/food/catalog/carapau.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Chicharro asado con bilbaína.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Chicharro%20asado%20con%20bilba%C3%ADna.jpg",
+      "author": "Valdavia",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "path": "/assets/food/catalog/cowpea.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:\"Red Red\" wrapped in Katemfe leaves (Thaumatococcus daniellii).jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:%22Red%20Red%22%20wrapped%20in%20Katemfe%20leaves%20(Thaumatococcus%20daniellii).jpg",
+      "author": "Mwintirew",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/fish-curry.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Betki fish kalia, a fish curry dish popular in West Bengal, India, photographed on December 28, 2023.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Betki%20fish%20kalia%2C%20a%20fish%20curry%20dish%20popular%20in%20West%20Bengal%2C%20India%2C%20photographed%20on%20December%2028%2C%202023.jpg",
+      "author": "Billjones94",
+      "license": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+    },
+    {
+      "path": "/assets/food/catalog/guava.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:GUAVA FRUIT.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:GUAVA%20FRUIT.jpg",
+      "author": "GTSPACE",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/lentils.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Baati बाटी 01.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Baati%20%E0%A4%AC%E0%A4%BE%E0%A4%9F%E0%A5%80%2001.jpg",
+      "author": "Poojilsharma07",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/peanut-chicken.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Chicken, Rice & Peanut Sauce at Nong's Khao Man Gai, Portland, Oregon, 2025.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Chicken%2C%20Rice%20%26%20Peanut%20Sauce%20at%20Nong%27s%20Khao%20Man%20Gai%2C%20Portland%2C%20Oregon%2C%202025.jpg",
+      "author": "Another Believer",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/pineapple.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Pineapple Chunks.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Pineapple%20Chunks.jpg",
+      "author": "Gaurav Dhwaj Khadka",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/pumpkin.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Cooked Pumpkin.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cooked%20Pumpkin.jpg",
+      "author": "Shark2025",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/sardine.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:2014 03 19 397 Eingelegte Fische.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:2014%2003%2019%20397%20Eingelegte%20Fische.jpg",
+      "author": "Friedrich Haag",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/tilapia.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Grilled Tilapia - Winneba.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Grilled%20Tilapia%20-%20Winneba.jpg",
+      "author": "Noahalorwu",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "path": "/assets/food/catalog/watermelon.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Grilled watermelon.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Grilled%20watermelon.JPG",
+      "author": "Glane23",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "path": "/assets/food/esparguete-atum.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/feijao-cozido.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/leite-copo.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/matapa.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/ovos-cozidos.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/peixe-grelhado.jpg",
+      "source_type": "existing_project_asset"
+    },
+    {
+      "path": "/assets/food/reference-crops/banana.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/reference-crops/carrot.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/reference-crops/laranja.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/reference-crops/maca.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/reference-crops/mamao.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/reference-crops/rice.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/reference-crops/spaghetti.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    }
+  ],
+  "commercial_use_note": "Commons permite uso comercial conforme a licença de cada ficheiro, com atribuição quando exigida. Os recortes da referência são material fornecido pelo utilizador e não são apresentados como fotografias stock de terceiros."
+}

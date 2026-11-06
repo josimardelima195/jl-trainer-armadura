@@ -27,6 +27,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
+    image: "/assets/food/reference-crops/banana.webp",
   },
   {
     id: "eggs",
@@ -138,6 +139,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Carboidrato",
     emoji: "🍚",
+    image: "/assets/food/reference-crops/rice.webp",
   },
   {
     id: "sweet-potato",
@@ -175,6 +177,7 @@ export const foodLibrary = [
     fiber: 5,
     group: "Carboidrato",
     emoji: "🍝",
+    image: "/assets/food/reference-crops/spaghetti.webp",
   },
   {
     id: "whole-bread",
@@ -224,6 +227,7 @@ export const foodLibrary = [
     fiber: 9,
     group: "Proteína e fibra",
     emoji: "🫘",
+    image: "/assets/food/catalog/cowpea.webp",
   },
   {
     id: "peanut",
@@ -248,6 +252,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Gordura saudável",
     emoji: "🥑",
+    image: "/assets/food/catalog/avocado.webp",
   },
   {
     id: "papaya",
@@ -260,6 +265,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍊",
+    image: "/assets/food/reference-crops/mamao.webp",
   },
   {
     id: "orange",
@@ -272,6 +278,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
+    image: "/assets/food/reference-crops/laranja.webp",
   },
   {
     id: "mango",
@@ -296,6 +303,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍎",
+    image: "/assets/food/reference-crops/maca.webp",
   },
   {
     id: "strawberry",
@@ -332,6 +340,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🎃",
+    image: "/assets/food/catalog/pumpkin.webp",
   },
   {
     id: "matapa",
@@ -382,6 +391,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
+    image: "/assets/food/catalog/sardine.webp",
   },
   {
     id: "fish-curry",
@@ -394,6 +404,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Prato moçambicano",
     emoji: "🐟",
+    image: "/assets/food/catalog/fish-curry.webp",
   },
   {
     id: "peanut-curry",
@@ -446,6 +457,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Prato moçambicano",
     emoji: "🍗",
+    image: "/assets/food/catalog/peanut-chicken.webp",
   },
   {
     id: "boiled-potato-salad",
@@ -470,6 +482,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
+    image: "/assets/food/catalog/carapau.webp",
   },
   {
     id: "tilapia",
@@ -482,6 +495,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
+    image: "/assets/food/catalog/tilapia.webp",
   },
   {
     id: "lentils",
@@ -494,6 +508,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Proteína e fibra",
     emoji: "🫘",
+    image: "/assets/food/catalog/lentils.webp",
   },
   {
     id: "potato",
@@ -530,6 +545,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Fruta",
     emoji: "🍍",
+    image: "/assets/food/catalog/pineapple.webp",
   },
   {
     id: "watermelon",
@@ -542,6 +558,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Fruta",
     emoji: "🍉",
+    image: "/assets/food/catalog/watermelon.webp",
   },
   {
     id: "guava",
@@ -554,6 +571,7 @@ export const foodLibrary = [
     fiber: 5,
     group: "Fruta",
     emoji: "🍐",
+    image: "/assets/food/catalog/guava.webp",
   },
   {
     id: "lettuce",
@@ -578,6 +596,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🥕",
+    image: "/assets/food/reference-crops/carrot.webp",
   },
   {
     id: "okra",
@@ -956,7 +975,9 @@ function objectiveMenu(modality, day) {
   };
   const pool = swaps[modality] || swaps.condicionamento;
   const selected = pool[(day - 1) % pool.length];
-  if (modality !== "condicionamento") base[2] = selected;
+  // Mantém os almoços específicos da modalidade, mas preserva a rotação do
+  // calendário de 30 dias em vez de repetir apenas quatro pratos.
+  if (modality !== "condicionamento" && day % 3 === 0) base[2] = selected;
   return base;
 }
 export function nutritionPlan(profile = {}) {
