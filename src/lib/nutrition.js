@@ -329,6 +329,56 @@ export const foodLibrary = [
     fiber: 4,
     group: "Vegetais",
     emoji: "🥬",
+    image: "/assets/food/reference-crops/couve-tomate.webp",
+  },
+  {
+    id: "cabbage",
+    name: "Couve",
+    portion: "1 chávena",
+    kcal: 33,
+    protein: 2,
+    carbs: 7,
+    fat: 0,
+    fiber: 3,
+    group: "Vegetais",
+    emoji: "🥬",
+    image: "/assets/food/reference-crops/couve-tomate.webp",
+  },
+  {
+    id: "tomato",
+    name: "Tomate",
+    portion: "1 unidade",
+    kcal: 22,
+    protein: 1,
+    carbs: 5,
+    fat: 0,
+    fiber: 1,
+    group: "Vegetais",
+    emoji: "🍅",
+  },
+  {
+    id: "lettuce",
+    name: "Alface",
+    portion: "1 chávena",
+    kcal: 15,
+    protein: 1,
+    carbs: 3,
+    fat: 0,
+    fiber: 1,
+    group: "Vegetais",
+    emoji: "🥬",
+  },
+  {
+    id: "cucumber",
+    name: "Pepino",
+    portion: "1/2 unidade",
+    kcal: 16,
+    protein: 1,
+    carbs: 4,
+    fat: 0,
+    fiber: 1,
+    group: "Vegetais",
+    emoji: "🥒",
   },
   {
     id: "pumpkin",
@@ -655,13 +705,14 @@ const recipeImages = {
 const ingredientAliases = [
   [/aveia/i, "Aveia"], [/banana/i, "Banana"], [/ovo/i, "Ovos"],
   [/iogurte/i, "Iogurte natural"], [/leite/i, "Leite"], [/queijo/i, "Queijo fresco"],
-  [/frango/i, "Frango grelhado"], [/peixe/i, "Peixe grelhado"], [/tilapia/i, "Tilápia grelhada"], [/carapau/i, "Carapau grelhado"],
+  [/frango/i, "Frango grelhado"], [/peixe/i, "Peixe grelhado"], [/til[aá]pia/i, "Tilápia grelhada"], [/carapau/i, "Carapau grelhado"],
   [/atum/i, "Atum"], [/sardinha/i, "Sardinha"], [/cabrito|vaca|carne/i, "Carne magra"],
-  [/arroz/i, "Arroz cozido"], [/batata-doce/i, "Batata-doce"], [/batata/i, "Batata cozida"], [/mandioca/i, "Mandioca"],
+  [/arroz/i, "Arroz cozido"], [/batata-doce/i, "Batata-doce"], [/batata(?!-doce)/i, "Batata cozida"], [/mandioca/i, "Mandioca"],
   [/esparguete|massa/i, "Massa integral"], [/p[aã]o/i, "Pão integral"], [/xima|farinha de milho/i, "Xima"],
   [/feij[aã]o/i, "Feijão cozido"], [/amendoim/i, "Amendoim"], [/abacate/i, "Abacate"],
   [/papaia/i, "Papaia"], [/laranja/i, "Laranja"], [/manga/i, "Manga"], [/anan[aá]s/i, "Ananás"],
-  [/ab[oó]bora/i, "Abóbora"], [/cenoura/i, "Cenoura"], [/couve|alface|tomate|pepino|salada/i, "Couve e tomate"],
+  [/ab[oó]bora/i, "Abóbora"], [/cenoura/i, "Cenoura"], [/couve/i, "Couve"], [/tomate/i, "Tomate"],
+  [/alface/i, "Alface"], [/pepino/i, "Pepino"], [/salada/i, "Couve e tomate"],
 ];
 function foodNamesFromIngredients(text, fallback = []) {
   const source = String(text || "");
@@ -1151,10 +1202,10 @@ export function nutritionPlan(profile = {}) {
             ?.name ||
           name
         );
-      return preferred.length && !preferred.includes(name)
-        ? preferred.find((value) => byName[value]?.group === original.group) ||
-            name
-        : name;
+      // As preferências podem filtrar alimentos proibidos, mas não devem
+      // substituir a banana por laranja (ou outro alimento) numa receita
+      // que já foi definida para o dia.
+      return name;
     });
   const targetScale = objective.portion * (calories / (base || calories));
   const shiftForMeal = (row) => {

@@ -2367,6 +2367,7 @@ export function Nutrition({ plan }) {
       profile.training_intensity || "moderate",
     ),
     [shoppingDays, setShoppingDays] = useState(30),
+    [shoppingOpen, setShoppingOpen] = useState(false),
     [consumed, setConsumed] = useState(() => {
       try {
         return JSON.parse(localStorage.getItem(consumedStorageKey) || "[]");
@@ -2532,31 +2533,27 @@ export function Nutrition({ plan }) {
         </div>
       </div>
       <section className="training-schedule-card"><div><span className="eyebrow">HORÁRIO PERSONALIZADO</span><b>Treino previsto às {n.training || profile.training_time || "18:00"}</b><p>O pré-treino aparece cerca de 75 minutos antes e o pós-treino cerca de 75 minutos depois. Este horário vem do seu cadastro e pode ser alterado no Perfil.</p></div><button type="button" className="outline" onClick={() => { location.hash = "perfil"; }}>Alterar horário</button></section>
-      <section className="shopping-card">
-        <div className="section-head">
-          <div>
-            <span className="eyebrow">COMPRAS CALCULADAS</span>
-            <h2>Lista para {profile.household_size || profile.people_count || 1} pessoa(s)</h2>
-            <p>Quantidades somadas das refeições da modalidade escolhida, multiplicadas pelo número de pessoas.</p>
-          </div>
-          <label className="shopping-period">
-            Período
-            <select value={shoppingDays} onChange={(e) => setShoppingDays(Number(e.target.value))}>
-              <option value="7">7 dias</option>
-              <option value="14">14 dias</option>
-              <option value="30">30 dias</option>
-            </select>
-          </label>
+      <button type="button" className="shopping-fab" onClick={() => setShoppingOpen(true)}>
+        <span className="shopping-fab-icon">🛒</span>
+        <span><b>Lista de compras</b><small>{shoppingList.length} itens calculados para {shoppingDays} dias</small></span>
+        <strong>›</strong>
+      </button>
+      {shoppingOpen && (
+        <div className="shopping-layer" role="dialog" aria-modal="true" aria-label="Lista de compras">
+          <button type="button" className="shopping-overlay" aria-label="Fechar lista de compras" onClick={() => setShoppingOpen(false)} />
+          <aside className="shopping-drawer">
+            <div className="shopping-drawer-head">
+              <div><span className="eyebrow">COMPRAS CALCULADAS</span><h2>O que comprar</h2><p>{profile.household_size || profile.people_count || 1} pessoa(s) · {shoppingList.length} itens</p></div>
+              <button type="button" className="icon-btn" onClick={() => setShoppingOpen(false)} aria-label="Fechar">×</button>
+            </div>
+            <label className="shopping-period">Período<select value={shoppingDays} onChange={(e) => setShoppingDays(Number(e.target.value))}><option value="7">7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></label>
+            <p className="shopping-drawer-note">Quantidades calculadas a partir das refeições da modalidade atual e multiplicadas pelo número de pessoas.</p>
+            <div className="shopping-list">
+              {shoppingList.map((item) => <label className="shopping-item" key={`${item.name}-${item.unit}`}><input type="checkbox" /><span><b>{item.name}</b><small>{item.display}</small></span></label>)}
+            </div>
+          </aside>
         </div>
-        <div className="shopping-list">
-          {shoppingList.map((item) => (
-            <label className="shopping-item" key={`${item.name}-${item.unit}`}>
-              <input type="checkbox" />
-              <span><b>{item.name}</b><small>{item.display}</small></span>
-            </label>
-          ))}
-        </div>
-      </section>
+      )}
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),
