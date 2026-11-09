@@ -649,11 +649,28 @@ const recipeImages = {
   R01: "/assets/food/recipes/R01.webp",
   R02: "/assets/food/recipes/R02.webp",
   R09: "/assets/food/recipes/R09.webp",
-  R13: "/assets/food/recipes/R13.webp",
-  R17: "/assets/food/matapa.jpg",
   R19: "/assets/food/recipes/R19.webp",
   R27: "/assets/food/recipes/R27.webp",
 };
+const ingredientAliases = [
+  [/aveia/i, "Aveia"], [/banana/i, "Banana"], [/ovo/i, "Ovos"],
+  [/iogurte/i, "Iogurte natural"], [/leite/i, "Leite"], [/queijo/i, "Queijo fresco"],
+  [/frango/i, "Frango grelhado"], [/peixe/i, "Peixe grelhado"], [/tilapia/i, "Tilápia grelhada"], [/carapau/i, "Carapau grelhado"],
+  [/atum/i, "Atum"], [/sardinha/i, "Sardinha"], [/cabrito|vaca|carne/i, "Carne magra"],
+  [/arroz/i, "Arroz cozido"], [/batata-doce/i, "Batata-doce"], [/batata/i, "Batata cozida"], [/mandioca/i, "Mandioca"],
+  [/esparguete|massa/i, "Massa integral"], [/p[aã]o/i, "Pão integral"], [/xima|farinha de milho/i, "Xima"],
+  [/feij[aã]o/i, "Feijão cozido"], [/amendoim/i, "Amendoim"], [/abacate/i, "Abacate"],
+  [/papaia/i, "Papaia"], [/laranja/i, "Laranja"], [/manga/i, "Manga"], [/anan[aá]s/i, "Ananás"],
+  [/ab[oó]bora/i, "Abóbora"], [/cenoura/i, "Cenoura"], [/couve|alface|tomate|pepino|salada/i, "Couve e tomate"],
+];
+function foodNamesFromIngredients(text, fallback = []) {
+  const source = String(text || "");
+  const names = ingredientAliases
+    .filter(([pattern]) => pattern.test(source))
+    .map(([, name]) => name)
+    .filter((name) => byName[name]);
+  return Array.from(new Set(names.length ? names : fallback));
+}
 function workbookKeyFor(modality) {
   return modality === "definicao" ? "cutting" : modality === "musculacao" ? "manutencao" : modality;
 }
@@ -1110,7 +1127,9 @@ export function nutritionPlan(profile = {}) {
     .map((value) => value.trim())
     .filter((name) => byName[name]);
   const allergy = String(
-    profile.allergies || profile.dietary_restrictions || "",
+    [profile.allergies, profile.dietary_restrictions, profile.foods_to_avoid, profile.food_dislikes]
+      .filter(Boolean)
+      .join(","),
   ).toLowerCase();
   const adaptItems = (items) =>
     items.map((name) => {
@@ -1156,10 +1175,12 @@ export function nutritionPlan(profile = {}) {
     emoji: "🍽️",
   };
   const meals = day.map((row) => {
-    const ingredientNames = adaptItems(recipeFoodNames[row.recipeId] || []);
+    const ingredientNames = adaptItems(
+      foodNamesFromIngredients(row.ingredients, recipeFoodNames[row.recipeId] || []),
+    );
     const foods = ingredientNames.map(safeFood).map((food) => scaleFood(food, targetScale));
     const sum = (key) => Math.round(foods.reduce((a, f) => a + (f[key] || 0), 0));
-    const recipeImage = recipeImages[row.recipeId] || foods.find((food) => food.image)?.image || null;
+    const recipeImage = recipeImages[row.recipeId] || null;
     return {
       time: shiftForMeal(row),
       title: row.meal,
@@ -1219,6 +1240,59 @@ export function nutritionPlan(profile = {}) {
         : "Creatina monohidratada é opcional. A referência informativa frequentemente estudada para adultos saudáveis é 3–5 g/dia, sem calcular dose pelo peso e sem substituir avaliação profissional.",
   };
 }
+
+const shoppingName = (value) => String(value || "")
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/\([^)]*\)/g, "")
+  .replace(/\b(cru|cozido|cozida|media|medio|medios|escorrido|opcional)\b/g, "")
+  .replace(/\s+/g, " ")
+  .trim();
+
+function parseIngredientLine(line, people) {
+  return String(line || "")
+    .split(/[;·]/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map((part) => {
+      const byName = part.match(/^(.*?)(?:\s+)(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|un|unidade|unidades|ovos?|media|medio)?$/i);
+      const byQuantity = part.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|un|unidade|unidades|ovos?)?\s+(.*)$/i);
+      const match = byName || byQuantity;
+      if (!match) return { name: part, quantity: people, unit: "porções" };
+      const firstIsName = Boolean(byName);
+      const quantity = Number(String(firstIsName ? match[2] : match[1]).replace(",", ".")) * people;
+      const rawUnit = String(firstIsName ? match[3] || "un" : match[2] || "un").toLowerCase();
+      return {
+        name: String(firstIsName ? match[1] : match[3]).replace(/\s+/g, " ").trim(),
+        quantity,
+        unit: rawUnit === "ovos" || rawUnit === "ovo" ? "un" : rawUnit,
+      };
+    });
+}
+
+export function buildShoppingList(profile = {}, days = 30) {
+  const people = Math.min(12, Math.max(1, Number(profile.household_size || profile.people_count) || 1));
+  const totalDays = Math.min(30, Math.max(1, Number(days) || 30));
+  const modality = modalityKeyFor(profile);
+  const plan = workbookMealPlans[workbookKeyFor(modality)] || workbookMealPlans.emagrecimento;
+  const totals = new Map();
+  for (let day = 1; day <= totalDays; day += 1) {
+    for (const row of plan[day] || []) {
+      for (const ingredient of parseIngredientLine(row.ingredients, people)) {
+        const key = `${shoppingName(ingredient.name)}|${ingredient.unit}`;
+        const current = totals.get(key) || { name: ingredient.name, quantity: 0, unit: ingredient.unit };
+        current.quantity += ingredient.quantity;
+        totals.set(key, current);
+      }
+    }
+  }
+  return Array.from(totals.values())
+    .filter((item) => item.name && item.quantity > 0)
+    .map((item) => ({ ...item, quantity: Math.round(item.quantity * 10) / 10, display: `${Math.round(item.quantity * 10) / 10} ${item.unit}` }))
+    .sort((a, b) => a.name.localeCompare(b.name, "pt"));
+}
+
 export function estimateWorkoutKcal(
   profile = {},
   minutes = 35,
@@ -1242,4 +1316,3 @@ export function foodSubstitutions(name) {
     Object.entries(groups).find(([group]) => key.includes(group))?.[1] || []
   );
 }
-

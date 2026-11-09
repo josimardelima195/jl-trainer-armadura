@@ -18,6 +18,7 @@ import {
 import {
   foodLibrary,
   nutritionPlan,
+  buildShoppingList,
   estimateWorkoutKcal,
   supplementCatalog,
   foodSubstitutions,
@@ -1265,6 +1266,9 @@ export function Profile({ theme, onThemeChange }) {
               {
                 ...f,
                 height: f.height ? Number(f.height) : null,
+                household_size: f.household_size ? Number(f.household_size) : 1,
+                training_frequency: f.training_frequency ? Number(f.training_frequency) : 3,
+                food_dislikes: f.foods_to_avoid || "",
                 training_days: Array.from(
                   e.currentTarget.elements.training_days?.selectedOptions || [],
                 ).map((o) => o.value),
@@ -1361,6 +1365,8 @@ export function Profile({ theme, onThemeChange }) {
                 "Bulking (ganho de massa)",
                 "Definição (cuting)",
                 "Emagrecimento",
+                "Recomposição corporal",
+                "Manutenção de peso",
                 "Condicionamento",
               ].map((x) => (
                 <option key={x}>{x}</option>
@@ -1477,6 +1483,22 @@ export function Profile({ theme, onThemeChange }) {
             max="240"
             defaultValue={profile.training_duration || 45}
           />
+          <Field
+            label="Frequência de treino (dias/semana)"
+            name="training_frequency"
+            type="number"
+            min="1"
+            max="7"
+            defaultValue={profile.training_frequency || profile.training_days_count || 3}
+          />
+          <Field
+            label="Pessoas para quem preparar o plano"
+            name="household_size"
+            type="number"
+            min="1"
+            max="12"
+            defaultValue={profile.household_size || profile.people_count || 1}
+          />
           <label>
             Local principal de treino
             <select
@@ -1508,6 +1530,11 @@ export function Profile({ theme, onThemeChange }) {
             label="Alimentos e pratos disponíveis"
             name="available_foods"
             defaultValue={profile.available_foods || ""}
+          />
+          <Field
+            label="Alimentos que não consome"
+            name="foods_to_avoid"
+            defaultValue={profile.foods_to_avoid || profile.food_dislikes || ""}
           />
           <label className="profile-wide-field">
             Preferências e pratos locais
@@ -2339,6 +2366,7 @@ export function Nutrition({ plan }) {
     [intensity, setIntensity] = useState(
       profile.training_intensity || "moderate",
     ),
+    [shoppingDays, setShoppingDays] = useState(30),
     [consumed, setConsumed] = useState(() => {
       try {
         return JSON.parse(localStorage.getItem(consumedStorageKey) || "[]");
@@ -2373,6 +2401,7 @@ export function Nutrition({ plan }) {
       nutrition_day: Number(day),
     }),
     kcal = estimateWorkoutKcal(profile, 35, intensity),
+    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays),
     allowed = (plan?.tier || 0) >= 3;
   const markConsumed = (key) =>
     setConsumed((list) =>
@@ -2402,7 +2431,7 @@ export function Nutrition({ plan }) {
       ingredients: meal.ingredients?.length
         ? meal.ingredients
         : foods.map((food) => `${food.name} (${food.portion})`),
-      image: meal.image || foods.find((food) => foodPhoto(food))?.image || null,
+      image: meal.image || null,
       kcal: sum("kcal"),
       protein: sum("protein"),
       carbs: sum("carbs"),
@@ -2503,6 +2532,31 @@ export function Nutrition({ plan }) {
         </div>
       </div>
       <section className="training-schedule-card"><div><span className="eyebrow">HORÁRIO PERSONALIZADO</span><b>Treino previsto às {n.training || profile.training_time || "18:00"}</b><p>O pré-treino aparece cerca de 75 minutos antes e o pós-treino cerca de 75 minutos depois. Este horário vem do seu cadastro e pode ser alterado no Perfil.</p></div><button type="button" className="outline" onClick={() => { location.hash = "perfil"; }}>Alterar horário</button></section>
+      <section className="shopping-card">
+        <div className="section-head">
+          <div>
+            <span className="eyebrow">COMPRAS CALCULADAS</span>
+            <h2>Lista para {profile.household_size || profile.people_count || 1} pessoa(s)</h2>
+            <p>Quantidades somadas das refeições da modalidade escolhida, multiplicadas pelo número de pessoas.</p>
+          </div>
+          <label className="shopping-period">
+            Período
+            <select value={shoppingDays} onChange={(e) => setShoppingDays(Number(e.target.value))}>
+              <option value="7">7 dias</option>
+              <option value="14">14 dias</option>
+              <option value="30">30 dias</option>
+            </select>
+          </label>
+        </div>
+        <div className="shopping-list">
+          {shoppingList.map((item) => (
+            <label className="shopping-item" key={`${item.name}-${item.unit}`}>
+              <input type="checkbox" />
+              <span><b>{item.name}</b><small>{item.display}</small></span>
+            </label>
+          ))}
+        </div>
+      </section>
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),
