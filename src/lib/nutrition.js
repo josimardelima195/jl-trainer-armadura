@@ -1,4 +1,5 @@
 import { modalityKeyFor } from "./programs.js";
+import { workbookMealPlans } from "./workbookMeals.js";
 
 // Valores de referência aproximados por porção indicada. São estimativas educativas,
 // não prescrição clínica. Imagens só são usadas quando correspondem ao alimento.
@@ -612,6 +613,50 @@ export const foodLibrary = [
   },
 ];
 const byName = Object.fromEntries(foodLibrary.map((food) => [food.name, food]));
+const recipeFoodNames = {
+  R01: ["Aveia", "Banana", "Leite"],
+  R02: ["Ovos", "Pão integral"],
+  R03: ["Xima", "Leite", "Papaia"],
+  R04: ["Iogurte natural", "Aveia", "Ananás"],
+  R05: ["Aveia", "Banana", "Ovos", "Leite"],
+  R06: ["Pão integral", "Queijo fresco", "Laranja"],
+  R07: ["Batata-doce", "Ovos"],
+  R08: ["Iogurte natural", "Manga", "Amendoim"],
+  R09: ["Frango grelhado", "Arroz cozido", "Couve e tomate", "Cenoura"],
+  R10: ["Carapau grelhado", "Xima", "Couve e tomate"],
+  R11: ["Carne magra", "Mandioca", "Couve e tomate"],
+  R12: ["Feijão cozido", "Arroz cozido", "Ovos", "Couve e tomate"],
+  R13: ["Massa integral", "Frango grelhado", "Couve e tomate", "Cenoura"],
+  R14: ["Peixe grelhado", "Batata-doce", "Couve e tomate"],
+  R15: ["Carne magra", "Pão integral", "Batata cozida", "Couve e tomate"],
+  R16: ["Carne magra", "Arroz cozido", "Couve e tomate"],
+  R17: ["Matapa", "Peixe grelhado", "Xima"],
+  R18: ["Mucapata", "Peixe grelhado", "Couve e tomate"],
+  R19: ["Frango grelhado", "Arroz cozido", "Couve e tomate"],
+  R20: ["Atum", "Batata cozida", "Ovos", "Couve e tomate"],
+  R21: ["Feijão cozido", "Frango grelhado", "Abóbora", "Cenoura"],
+  R22: ["Ovos", "Queijo fresco", "Couve e tomate", "Pão integral"],
+  R23: ["Pão integral", "Atum", "Couve e tomate"],
+  R24: ["Banana", "Amendoim", "Leite"],
+  R25: ["Laranja", "Queijo fresco"],
+  R26: ["Papaia", "Iogurte natural"],
+  R27: ["Ovos", "Pão integral"],
+  R28: ["Leite", "Banana", "Aveia"],
+  R29: ["Frango grelhado", "Abacate", "Couve e tomate", "Pão integral"],
+  R30: ["Peixe grelhado", "Mandioca", "Cenoura", "Couve e tomate"],
+};
+const recipeImages = {
+  R01: "/assets/food/recipes/R01.webp",
+  R02: "/assets/food/recipes/R02.webp",
+  R09: "/assets/food/recipes/R09.webp",
+  R13: "/assets/food/recipes/R13.webp",
+  R17: "/assets/food/matapa.jpg",
+  R19: "/assets/food/recipes/R19.webp",
+  R27: "/assets/food/recipes/R27.webp",
+};
+function workbookKeyFor(modality) {
+  return modality === "definicao" ? "cutting" : modality === "musculacao" ? "manutencao" : modality;
+}
 export const supplementCatalog = [
   {
     id: "npl-creatine-monohydrate",
@@ -1041,7 +1086,7 @@ export function nutritionPlan(profile = {}) {
       30,
       Math.max(1, Number(profile.nutrition_day) || 1),
     ),
-    day = objectiveMenu(modality, dayNumber),
+    day = workbookMealPlans[workbookKeyFor(modality)]?.[dayNumber] || workbookMealPlans.emagrecimento[dayNumber],
     training = String(profile.training_time || "18:00").slice(0, 5),
     [h, m] = training.split(":").map(Number);
   const at = (hour, minute = 0) => {
@@ -1093,78 +1138,49 @@ export function nutritionPlan(profile = {}) {
         : name;
     });
   const targetScale = objective.portion * (calories / (base || calories));
-  const titles = ["Pequeno-almoço", "Lanche da manhã", "Almoço", "Jantar"];
-  const mealTimes = [at(7, 30), at(10, 0), at(12, 30), shift(120)];
-  const meals = day.map((items, index) => {
-    const foods = adaptItems(items)
-      .map((name) => byName[name])
-      .filter(Boolean)
-      .map((food) => scaleFood(food, targetScale));
-    const sum = (key) =>
-      Math.round(foods.reduce((a, f) => a + (f[key] || 0), 0));
+  const shiftForMeal = (row) => {
+    if (String(row.meal).toLowerCase().includes("pré-treino")) return shift(-90);
+    if (String(row.meal).toLowerCase().includes("pós-treino")) return shift(75);
+    return row.time;
+  };
+  const safeFood = (name) => byName[name] || {
+    id: `recipe-${String(name).toLowerCase().replace(/\s+/g, "-")}`,
+    name,
+    portion: "porção da receita",
+    kcal: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+    fiber: 0,
+    group: "Ingrediente da receita",
+    emoji: "🍽️",
+  };
+  const meals = day.map((row) => {
+    const ingredientNames = adaptItems(recipeFoodNames[row.recipeId] || []);
+    const foods = ingredientNames.map(safeFood).map((food) => scaleFood(food, targetScale));
+    const sum = (key) => Math.round(foods.reduce((a, f) => a + (f[key] || 0), 0));
+    const recipeImage = recipeImages[row.recipeId] || foods.find((food) => food.image)?.image || null;
     return {
-      time: mealTimes[index],
-      title: titles[index],
-      items: foods.map((f) => f.name),
+      time: shiftForMeal(row),
+      title: row.meal,
+      recipeName: row.recipe,
+      recipeId: row.recipeId,
+      items: [row.recipe],
       foods,
-      image: foods.find((f) => f.image)?.image || null,
-      ingredients: foods.map((f) => `${f.name} (${f.portion})`),
-      purpose:
-        index === 0
-          ? "Fornecer energia e proteína para começar o dia."
-          : index === 1
-            ? "Manter energia e evitar longos períodos sem comer."
-            : index === 2
-              ? "Combinar proteína, carboidrato e fibras no almoço."
-              : "Apoiar recuperação e saciedade.",
-      preparation:
-        index === 2
-          ? "Ajuste ao horário e tolerância; não faça uma refeição pesada imediatamente antes de correr."
-          : preferred.length
-            ? "Priorizamos alimentos que indicou como acessíveis e habituais."
-            : "Combine proteína, carboidrato e alimentos locais conforme o seu objetivo.",
+      image: recipeImage,
+      ingredients: [row.ingredients],
+      purpose: row.purpose,
+      preparation: row.preparation,
+      adjustment: row.adjustment,
+      recipe: row.preparation,
       kcal: sum("kcal"),
       protein: sum("protein"),
       carbs: sum("carbs"),
       fat: sum("fat"),
       fiber: sum("fiber"),
-      recipe:
-        index === 0
-          ? "Cozinhe ou misture sem fritura; ajuste a textura e a porção."
-          : index === 1
-            ? "Prepare com pouco óleo e mantenha vegetais no prato."
-            : "Prepare de forma simples, com água suficiente e sem substituir refeição por suplemento.",
     };
   });
-  const preFood = adaptItems(["Banana"])[0];
-  const postFoods = adaptItems(["Iogurte natural", "Banana"]);
-  const pre = {
-    time: shift(-75),
-    title: "Pré-treino",
-    items: [preFood],
-    foods: [scaleFood(byName[preFood], targetScale)],
-    note: "Opção leve quando necessário; ajuste à digestão e à duração do treino.",
-    kcal: Math.round(105 * targetScale),
-    protein: Math.round(targetScale),
-    carbs: Math.round(27 * targetScale),
-    fat: 0,
-    fiber: Math.round(3 * targetScale),
-    recipe: "Consuma apenas se tolerado.",
-  };
-  const post = {
-    time: shift(75),
-    title: "Pós-treino",
-    items: postFoods,
-    foods: postFoods.map((name) => scaleFood(byName[name], targetScale)),
-    note: "Proteína e carboidrato podem ser obtidos por alimentos comuns; whey é opcional.",
-    kcal: Math.round(215 * targetScale),
-    protein: Math.round(10 * targetScale),
-    carbs: Math.round(39 * targetScale),
-    fat: Math.round(3 * targetScale),
-    fiber: Math.round(3 * targetScale),
-    recipe: "Misture ou consuma separadamente.",
-  };
-  const finalMeals = [meals[0], meals[1], meals[2], pre, post, meals[3]];
+  const finalMeals = meals;
   const resistanceFocused = ["musculacao", "bulking", "definicao"].includes(modality);
   const supplementAdvice = age < 18
     ? { show: false, title: "Suplementos", detail: "Para menores, o aplicativo não recomenda suplementos automaticamente. Fale com um profissional qualificado e com o responsável." }

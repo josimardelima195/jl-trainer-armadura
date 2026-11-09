@@ -2398,9 +2398,11 @@ export function Nutrition({ plan }) {
     return {
       ...meal,
       foods,
-      items: foods.map((food) => food.name),
-      ingredients: foods.map((food) => `${food.name} (${food.portion})`),
-      image: foods.find((food) => foodPhoto(food))?.image || null,
+      items: meal.recipeName ? [meal.recipeName] : foods.map((food) => food.name),
+      ingredients: meal.ingredients?.length
+        ? meal.ingredients
+        : foods.map((food) => `${food.name} (${food.portion})`),
+      image: meal.image || foods.find((food) => foodPhoto(food))?.image || null,
       kcal: sum("kcal"),
       protein: sum("protein"),
       carbs: sum("carbs"),
@@ -2514,8 +2516,19 @@ export function Nutrition({ plan }) {
               <div className="meal-time">{meal.time}</div>
               <div className="meal-main">
                 <div className="meal-head">
+                  {meal.image && (
+                    <img
+                      className="meal-recipe-thumb"
+                      src={meal.image}
+                      alt={`Fotografia de ${meal.recipeName || meal.title}`}
+                      loading="lazy"
+                    />
+                  )}
                   <div>
                     <span className="pill">{meal.title}</span>
+                    {meal.recipeName && (
+                      <strong className="meal-recipe-name">{meal.recipeName}</strong>
+                    )}
                     <p>{meal.purpose || meal.note}</p>
                     <small className="meal-recipe">
                       <b>Preparação:</b> {meal.preparation || meal.recipe}
@@ -2694,4 +2707,3 @@ export function Nutrition({ plan }) {
     </>
   );
 }
-

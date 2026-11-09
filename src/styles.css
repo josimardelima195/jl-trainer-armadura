@@ -77,3 +77,10 @@ html,body,#root{min-height:100%;overflow-x:hidden}@media(max-width:900px){aside.
 @media(max-width:800px){.shell aside.open~main{pointer-events:auto}}
 .training-schedule-card{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 12px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 45%,var(--line));border-radius:14px;background:linear-gradient(110deg,color-mix(in srgb,var(--gold) 10%,var(--panel2)),var(--panel))}.training-schedule-card b{display:block;margin-top:5px;color:var(--gold2);font:600 16px 'Space Grotesk'}.training-schedule-card p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.4}.training-schedule-card button{white-space:nowrap}@media(max-width:700px){.training-schedule-card{display:grid}.training-schedule-card button{width:100%}}
 .training-schedule-card{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 12px;padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 45%,var(--line));border-radius:14px;background:linear-gradient(110deg,color-mix(in srgb,var(--gold) 10%,var(--panel2)),var(--panel))}.training-schedule-card b{display:block;margin-top:5px;color:var(--gold2);font:600 16px 'Space Grotesk'}.training-schedule-card p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.4}.training-schedule-card button{white-space:nowrap}@media(max-width:700px){.training-schedule-card{display:grid}.training-schedule-card button{width:100%}}
+
+/* Receitas da planilha: miniatura compacta, sem painel de imagem grande. */
+.meal-head{display:flex;align-items:flex-start;gap:12px}
+.meal-recipe-thumb{width:78px;height:64px;flex:0 0 78px;object-fit:cover;border-radius:12px;border:1px solid var(--line,rgba(255,255,255,.12));background:var(--surface-2,#202629)}
+.meal-recipe-name{display:block;margin-top:8px;color:var(--text,#f3f1eb);font-size:.96rem;line-height:1.25}
+.meal-recipe{display:block}
+@media(max-width:600px){.meal-recipe-thumb{width:68px;height:58px;flex-basis:68px}.meal-head{gap:9px}}
