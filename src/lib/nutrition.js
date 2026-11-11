@@ -15,7 +15,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato e fibra",
     emoji: "🥣",
-    image: "/assets/food/aveia-simples.jpg",
+    image: "/assets/food/recipes/R01.webp",
   },
   {
     id: "banana",
@@ -28,7 +28,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
-    image: "/assets/food/reference-crops/banana.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Banana_fruit.jpeg/960px-Banana_fruit.jpeg",
   },
   {
     id: "eggs",
@@ -67,6 +67,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Plain_Yogurt.jpg/960px-Plain_Yogurt.jpg",
   },
   {
     id: "fresh-cheese",
@@ -79,6 +80,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🧀",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Cottagecheese200px.jpg/960px-Cottagecheese200px.jpg",
   },
   {
     id: "chicken",
@@ -91,6 +93,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🍗",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilled_chicken_meat.jpg",
   },
   {
     id: "fish",
@@ -116,6 +119,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥩",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilling_beef_meat.jpg",
   },
   {
     id: "tuna",
@@ -128,6 +132,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Filete_de_at%C3%BAn.jpg",
   },
   {
     id: "rice",
@@ -166,6 +171,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Boiled_cassava_roots.jpg",
   },
   {
     id: "pasta",
@@ -191,6 +197,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato",
     emoji: "🍞",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Whole_wheat_bread.jpg/960px-Whole_wheat_bread.jpg",
   },
   {
     id: "xima",
@@ -203,6 +210,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🍚",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
   },
   {
     id: "beans",
@@ -228,7 +236,7 @@ export const foodLibrary = [
     fiber: 9,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "/assets/food/catalog/cowpea.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Blackeye_Peas.JPG/960px-Blackeye_Peas.JPG",
   },
   {
     id: "peanut",
@@ -241,6 +249,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Gordura e proteína",
     emoji: "🥜",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Peanuts_in_a_bowl.jpg",
   },
   {
     id: "avocado",
@@ -265,8 +274,8 @@ export const foodLibrary = [
     fat: 0,
     fiber: 3,
     group: "Fruta",
-    emoji: "🍊",
-    image: "/assets/food/reference-crops/mamao.webp",
+    emoji: "🍈",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Papaya_fruit.jpg/640px-Papaya_fruit.jpg",
   },
   {
     id: "orange",
@@ -279,7 +288,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
-    image: "/assets/food/reference-crops/laranja.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Orange_fruit.jpeg/640px-Orange_fruit.jpeg",
   },
   {
     id: "mango",
@@ -292,6 +301,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🥭",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/A_beautiful_ripen_mango_fruit.jpg/960px-A_beautiful_ripen_mango_fruit.jpg",
   },
   {
     id: "apple",
@@ -304,7 +314,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍎",
-    image: "/assets/food/reference-crops/maca.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Apples_fruit.jpg/960px-Apples_fruit.jpg",
   },
   {
     id: "strawberry",
@@ -317,6 +327,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍓",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Strawberry_fruit.jpg",
   },
   {
     id: "greens",
@@ -355,6 +366,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🍅",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "lettuce",
@@ -367,6 +379,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥬",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fresh_lettuce.jpg/500px-Fresh_lettuce.jpg",
   },
   {
     id: "cucumber",
@@ -379,6 +392,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥒",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "pumpkin",
@@ -430,6 +444,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Prato moçambicano",
     emoji: "🍗",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg/960px-Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
   },
   {
     id: "sardine",
@@ -482,7 +497,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍝",
-    image: "/assets/food/esparguete-atum.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tuna_pasta_salad.jpg/500px-Tuna_pasta_salad.jpg",
     imageSource: "Fotografia pesquisada de esparguete com atum e tomate",
   },
   {
@@ -496,6 +511,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍲",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Chicken_stew_with_mixed_vegetables.jpg/960px-Chicken_stew_with_mixed_vegetables.jpg",
   },
   {
     id: "chicken-peanut",
@@ -521,6 +537,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Prato simples",
     emoji: "🥔",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
   },
   {
     id: "carapau",
@@ -559,7 +576,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "/assets/food/catalog/lentils.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Bowl_of_lentil_soup_with_green_and_red_lentils.jpg/960px-Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
   },
   {
     id: "potato",
@@ -572,6 +589,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
   },
   {
     id: "corn-porridge",
@@ -584,6 +602,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🥣",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
   },
   {
     id: "pineapple",
@@ -609,7 +628,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Fruta",
     emoji: "🍉",
-    image: "/assets/food/catalog/watermelon.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Fresh_watermelon_slices.jpg/960px-Fresh_watermelon_slices.jpg",
   },
   {
     id: "guava",
@@ -621,11 +640,11 @@ export const foodLibrary = [
     fat: 1,
     fiber: 5,
     group: "Fruta",
-    emoji: "🍐",
+    emoji: "🟢",
     image: "/assets/food/catalog/guava.webp",
   },
   {
-    id: "lettuce",
+    id: "lettuce-cucumber",
     name: "Alface e pepino",
     portion: "2 chávenas",
     kcal: 35,
@@ -635,6 +654,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Vegetais",
     emoji: "🥬",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Cucumber_lettuce_tomato_and_onion_salad.jpg",
   },
   {
     id: "carrot",
@@ -660,6 +680,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🥬",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Okra.jpg",
   },
 ];
 const byName = Object.fromEntries(foodLibrary.map((food) => [food.name, food]));
@@ -698,8 +719,7 @@ const recipeFoodNames = {
 const recipeImages = {
   R01: "/assets/food/recipes/R01.webp",
   R02: "/assets/food/recipes/R02.webp",
-  R09: "/assets/food/recipes/R09.webp",
-  R19: "/assets/food/recipes/R19.webp",
+    R19: "/assets/food/recipes/R19.webp",
   R27: "/assets/food/recipes/R27.webp",
 };
 const ingredientAliases = [
@@ -740,7 +760,14 @@ function foodNamesFromIngredients(text, fallback = []) {
   return unique.length ? unique : Array.from(new Set(fallback));
 }
 function workbookKeyFor(modality) {
-  return modality === "definicao" ? "cutting" : modality === "musculacao" ? "manutencao" : modality;
+  if (modality === "definicao") return "cutting";
+  if (modality === "musculacao") return "manutencao";
+  if (modality === "massa") return "bulking";
+  if (["futsal", "karate", "natacao", "condicionamento", "casa"].includes(modality))
+    return "manutencao";
+  return ["emagrecimento", "bulking", "cutting", "manutencao"].includes(modality)
+    ? modality
+    : "manutencao";
 }
 export const supplementCatalog = [
   {
@@ -1256,7 +1283,7 @@ export function nutritionPlan(profile = {}) {
       recipeId: row.recipeId,
       items: [row.recipe],
       foods,
-      image: recipeImage,
+      image: recipeImage || foods.find((food) => food.image)?.image || null,
       ingredients: [row.ingredients],
       purpose: row.purpose,
       preparation: row.preparation,

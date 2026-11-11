@@ -2357,38 +2357,7 @@ export function Assistant({ plan, go }) {
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
-const FOOD_PHOTO_BY_ID = {
-  oats: "/assets/food/aveia-simples.jpg",
-  banana: "/assets/food/reference-crops/banana.webp",
-  eggs: "/assets/food/ovos-cozidos.jpg",
-  milk: "/assets/food/leite-copo.jpg",
-  fish: "/assets/food/peixe-grelhado.jpg",
-  rice: "/assets/food/reference-crops/rice.webp",
-  "sweet-potato": "/assets/food/batata-doce-assada.jpg",
-  pasta: "/assets/food/reference-crops/spaghetti.webp",
-  beans: "/assets/food/feijao-cozido.jpg",
-  cowpea: "/assets/food/catalog/cowpea.webp",
-  avocado: "/assets/food/catalog/avocado.webp",
-  papaya: "/assets/food/reference-crops/mamao.webp",
-  orange: "/assets/food/reference-crops/laranja.webp",
-  apple: "/assets/food/reference-crops/maca.webp",
-  greens: "/assets/food/reference-crops/couve-tomate.webp",
-  pumpkin: "/assets/food/catalog/pumpkin.webp",
-  matapa: "/assets/food/matapa.jpg",
-  sardine: "/assets/food/catalog/sardine.webp",
-  "fish-curry": "/assets/food/catalog/fish-curry.webp",
-  "peanut-curry": "/assets/food/caril-amendoim.jpg",
-  "spaghetti-tuna": "/assets/food/esparguete-atum.jpg",
-  "chicken-peanut": "/assets/food/catalog/peanut-chicken.webp",
-  carapau: "/assets/food/catalog/carapau.webp",
-  tilapia: "/assets/food/catalog/tilapia.webp",
-  lentils: "/assets/food/catalog/lentils.webp",
-  pineapple: "/assets/food/catalog/pineapple.webp",
-  watermelon: "/assets/food/catalog/watermelon.webp",
-  guava: "/assets/food/catalog/guava.webp",
-  carrot: "/assets/food/reference-crops/carrot.webp",
-};
-const foodPhoto = (food) => FOOD_PHOTO_BY_ID[food?.id] || null;
+const foodPhoto = (food) => food?.image || null;
 
 export function Nutrition({ plan }) {
   const { profile } = useStore();
@@ -2400,6 +2369,9 @@ export function Nutrition({ plan }) {
     ),
     [shoppingDays, setShoppingDays] = useState(30),
     [shoppingOpen, setShoppingOpen] = useState(false),
+    [nutritionView, setNutritionView] = useState("plan"),
+    [foodSearch, setFoodSearch] = useState(""),
+    [foodGroup, setFoodGroup] = useState("Todos"),
     [consumed, setConsumed] = useState(() => {
       try {
         return JSON.parse(localStorage.getItem(consumedStorageKey) || "[]");
@@ -2436,6 +2408,13 @@ export function Nutrition({ plan }) {
     kcal = estimateWorkoutKcal(profile, 35, intensity),
     shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays),
     allowed = (plan?.tier || 0) >= 3;
+  const foodGroups = ["Todos", ...new Set(foodLibrary.map((food) => food.group))];
+  const visibleFoodLibrary = foodLibrary.filter((food) => {
+    const matchesSearch = food.name.toLowerCase().includes(foodSearch.toLowerCase());
+    const matchesGroup = foodGroup === "Todos" || food.group === foodGroup;
+    return matchesSearch && matchesGroup;
+  });
+  const completedMeals = n.meals.filter((meal) => consumed.includes(`${day}-${meal.title}`)).length;
   const markConsumed = (key) =>
     setConsumed((list) =>
       list.includes(key) ? list.filter((item) => item !== key) : [...list, key],
@@ -2464,7 +2443,7 @@ export function Nutrition({ plan }) {
       ingredients: meal.ingredients?.length
         ? meal.ingredients
         : foods.map((food) => `${food.name} (${food.portion})`),
-      image: meal.image || null,
+      image: meal.image || foods.find((food) => foodPhoto(food))?.image || null,
       kcal: sum("kcal"),
       protein: sum("protein"),
       carbs: sum("carbs"),
@@ -2501,6 +2480,65 @@ export function Nutrition({ plan }) {
           </span>
         </div>
       </div>
+      <nav className="nutrition-tabs" aria-label="Secções da alimentação">
+        <button type="button" className={nutritionView === "plan" ? "active" : ""} onClick={() => setNutritionView("plan")}>
+          <span>01</span> Plano de 30 dias
+        </button>
+        <button type="button" className={nutritionView === "foods" ? "active" : ""} onClick={() => setNutritionView("foods")}>
+          <span>02</span> Alimentos
+        </button>
+        <button type="button" className="nutrition-shopping-tab" onClick={() => setShoppingOpen(true)}>
+          <span>03</span> Lista de compras
+        </button>
+      </nav>
+      {nutritionView === "foods" ? (
+        <section className="food-library-section">
+          <div className="food-library-heading">
+            <div>
+              <span className="eyebrow">BIBLIOTECA VISUAL</span>
+              <h2>Conheça os alimentos</h2>
+              <p>Fotografias associadas ao alimento correto, com porções e valores estimados.</p>
+            </div>
+            <strong>{visibleFoodLibrary.length} <small>itens</small></strong>
+          </div>
+          <label className="food-library-search">
+            <span>Pesquisar alimento</span>
+            <input type="search" value={foodSearch} onChange={(event) => setFoodSearch(event.target.value)} placeholder="Ex.: banana, frango, batata-doce..." />
+          </label>
+          <div className="food-library-filters">
+            {foodGroups.map((group) => (
+              <button type="button" key={group} className={foodGroup === group ? "active" : ""} onClick={() => setFoodGroup(group)}>{group}</button>
+            ))}
+          </div>
+          <div className="food-library-grid">
+            {visibleFoodLibrary.map((food) => (
+              <article className="food-library-card" key={food.id}>
+                <div className="food-library-image" data-emoji={food.emoji || "🍽️"}>
+                  {foodPhoto(food) ? (
+                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} />
+                  ) : (
+                    <span aria-hidden="true">{food.emoji || "🍽️"}</span>
+                  )}
+                </div>
+                <div className="food-library-copy">
+                  <span className="food-library-group">{food.group}</span>
+                  <b>{food.name}</b>
+                  <small>{food.portion}</small>
+                  <div className="food-library-kcal">{food.kcal} kcal <span>por porção</span></div>
+                  <div className="food-library-macros">
+                    <span><b>{food.protein}g</b> proteína</span>
+                    <span><b>{food.carbs}g</b> carboidratos</span>
+                    <span><b>{food.fat}g</b> gordura</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          {!visibleFoodLibrary.length && <Empty>Nenhum alimento encontrado. Tente outra pesquisa.</Empty>}
+          <p className="nutrition-disclaimer">Valores nutricionais aproximados por porção. As imagens externas precisam de ligação à internet; quando uma fotografia não carrega, o aplicativo mostra um ícone de substituição em vez de uma fotografia errada.</p>
+        </section>
+      ) : (
+        <>
       <section className="nutrition-calendar">
         <div className="section-head">
           <div>
@@ -2525,6 +2563,14 @@ export function Nutrition({ plan }) {
           ))}
         </div>
         <p className="nutrition-calendar-note">Selecione um dos 30 dias para consultar as refeições, porções e horários previstos para a sua rotina.</p>
+      </section>
+      <section className="meal-progress-strip">
+        <div>
+          <span className="eyebrow">CONSISTÊNCIA DIÁRIA</span>
+          <b>{completedMeals} de {n.meals.length} refeições concluídas</b>
+        </div>
+        <strong>{n.meals.length ? Math.round((completedMeals / n.meals.length) * 100) : 0}%</strong>
+        <div className="meal-progress-track"><i style={{ width: `${n.meals.length ? (completedMeals / n.meals.length) * 100 : 0}%` }} /></div>
       </section>
       <div className="nutrition-controls">
         <label>
@@ -2795,6 +2841,8 @@ export function Nutrition({ plan }) {
         individualmente. Objetivos de emagrecimento, cutting, bulking e
         suplementos não são prescrição médica.
       </p>
+        </>
+      )}
     </>
   );
 }

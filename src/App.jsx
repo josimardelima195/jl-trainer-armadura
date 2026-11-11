@@ -31,7 +31,7 @@ import {
 } from "./components/Pages";
 import Admin from "./components/Admin";
 import { useLanguage, uiText } from "./lib/i18n";
-import { foodLibrary } from "./lib/nutrition";
+import { nutritionPlan } from "./lib/nutrition";
 function WelcomeTutorial({ onClose, go }) {
   const [step, setStep] = useState(0);
   const items = [
@@ -466,20 +466,35 @@ export default function App() {
     measures = data.progress_measurements.filter((x) => x.user_id === userId),
     metrics = stats(logs, measures),
     settings = data.settings[0] || {};
-  const initialWeight =
-    Number(profile.initial_weight) || Number(measures[0]?.weight) || null;
-  const startDate = new Date(profile.created_at || Date.now());
-  const daysSinceStart = Math.max(
-    0,
-    Math.floor((Date.now() - startDate.getTime()) / 86400000) + 1,
-  );
-  const plannedDays = Math.min(
-    30,
-    Math.ceil(
-      (daysSinceStart / 7) * (Number(profile.training_days_count) || 3),
-    ),
-  );
-  const missedWorkouts = Math.max(0, plannedDays - metrics.total);
+  const homeNutrition = nutritionPlan(profile);
+  const currentMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+  const upcomingMeal = homeNutrition.meals?.find((meal) => {
+    const match = String(meal.time || "").match(/(\d{1,2}):(\d{2})/);
+    return match && Number(match[1]) * 60 + Number(match[2]) >= currentMinutes;
+  }) || homeNutrition.meals?.[0] || null;
+  const weekActivity = Array.from({ length: 7 }, (_, index) => {
+    const today = new Date();
+    const mondayOffset = (today.getDay() + 6) % 7;
+    const date = new Date(today);
+    date.setDate(today.getDate() - mondayOffset + index);
+    const key = date.toLocaleDateString("en-CA");
+    return {
+      label: ["SEG", "TER", "QUA", "QUI", "SEX", "SÁB", "DOM"][index],
+      count: logs.filter((entry) => new Date(entry.completed_at).toLocaleDateString("en-CA") === key).length,
+      today: key === today.toLocaleDateString("en-CA"),
+    };
+  });
+  const weekMax = Math.max(1, ...weekActivity.map((item) => item.count));
+  const dailyQuotes = [
+    "A consistência transforma pequenos esforços em resultados duradouros.",
+    "O treino de hoje é um investimento na sua saúde de amanhã.",
+    "Não precisa ser perfeito. Precisa continuar.",
+    "Respeite o seu ritmo e mantenha o compromisso com a sua evolução.",
+    "Cada refeição equilibrada também faz parte do treino.",
+    "A sua melhor competição é com a pessoa que era ontem.",
+    "Descanse, alimente-se bem e volte mais forte.",
+  ];
+  const dailyQuote = dailyQuotes[(new Date().getDate() - 1) % dailyQuotes.length];
   const go = (id) => {
     setTab(id);
     location.hash = id;
@@ -763,7 +778,7 @@ export default function App() {
                       <div className="hero-copy">
                         <p className="eyebrow">SUA JORNADA COMEÇA AQUI</p>
                         <h1>
-                          Olá, <span>{profile.full_name.split(" ")[0]}</span>
+                          Olá, <span>{(profile.full_name || "atleta").split(" ")[0]}</span>
                         </h1>
                         <p className="muted">
                           Seu treino. Sua evolução. Sua armadura.
@@ -786,52 +801,54 @@ export default function App() {
                         </div>
                       </div>
                     </section>
-                    <div className="grid stats">
-                      <Stat
-                        label="Plano atual"
-                        value={plan.name}
-                        detail={
-                          subscription
-                            ? `Válido até ${new Date(subscription.expires_at).toLocaleDateString()}`
-                            : "Comece no seu ritmo"
-                        }
-                      />
-                      <Stat
-                        label="Treinos realizados"
-                        value={metrics.total}
-                        detail={`${metrics.month} neste mês`}
-                      />
-                      <Stat
-                        label="Peso inicial"
-                        value={
-                          initialWeight === null ? "—" : `${initialWeight} kg`
-                        }
-                        detail="Registado no início"
-                      />
-                      <Stat
-                        label="Peso atual"
-                        value={
-                          metrics.current === null
-                            ? "—"
-                            : `${metrics.current} kg`
-                        }
-                        detail="Último registro"
-                      />
-                      <Stat
-                        label="Treinos em falta"
-                        value={missedWorkouts}
-                        detail="Dias previstos ainda não registados"
-                      />
-                      <Stat
-                        label="Variação de peso"
-                        value={
-                          metrics.delta === null
-                            ? "—"
-                            : `${metrics.delta.toFixed(1)} kg`
-                        }
-                        detail="Entre primeiro e último registro"
-                      />
+                    <div className="grid stats home-stats">
+                      <Stat label="Treinos concluídos" value={metrics.total} detail={`${metrics.month} neste mês`} />
+                      <Stat label="Sequência atual" value={`${metrics.streak} dias`} detail="Dias consecutivos registados" />
+                      <Stat label="Peso atual" value={metrics.current === null ? "—" : `${metrics.current} kg`} detail={metrics.delta === null ? "Registe uma medida" : `${metrics.delta > 0 ? "+" : ""}${metrics.delta.toFixed(1)} kg desde o primeiro registo`} />
+                      <Stat label="Meta de energia" value={homeNutrition.calories ? `${homeNutrition.calories} kcal` : "—"} detail={homeNutrition.incomplete ? "Estimativa provisória" : "Meta diária estimada"} />
                     </div>
+                    <section className="home-focus-grid">
+                      <article className="home-focus-card home-next-meal">
+                        <div className="home-focus-image" data-emoji="🥗">
+                          {upcomingMeal?.image ? <img src={upcomingMeal.image} alt={`Refeição: ${upcomingMeal.recipeName || upcomingMeal.title}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} /> : <span>🥗</span>}
+                        </div>
+                        <div className="home-focus-copy">
+                          <span className="eyebrow">PRÓXIMA REFEIÇÃO · {upcomingMeal?.time || "PLANO DIÁRIO"}</span>
+                          <h3>{upcomingMeal?.recipeName || "O seu plano alimentar"}</h3>
+                          <p>{upcomingMeal ? `${upcomingMeal.kcal || 0} kcal estimadas · ${upcomingMeal.title}` : "Complete o perfil para personalizar as refeições."}</p>
+                          <button className="text-btn" onClick={() => go("nutricao")}>Abrir alimentação <ArrowUpRight size={15} /></button>
+                        </div>
+                      </article>
+                      <article className="home-focus-card home-water-card">
+                        <span className="home-focus-icon">💧</span>
+                        <span className="eyebrow">HIDRATAÇÃO DE HOJE</span>
+                        <strong>{homeNutrition.waterMl ? `${(homeNutrition.waterMl / 1000).toFixed(1)} L` : "—"}</strong>
+                        <p>Meta estimada de água, ajustada ao seu perfil e à atividade.</p>
+                        <button className="outline" onClick={() => go("nutricao")}>Registar água</button>
+                      </article>
+                      <article className="home-focus-card home-motivation-card">
+                        <span className="eyebrow">LEMBRETE DO DIA</span>
+                        <h3>Continue a construir a sua armadura.</h3>
+                        <p>“{dailyQuote}”</p>
+                        <button className="text-btn" onClick={() => go("progresso")}>Ver a minha evolução <ArrowUpRight size={15} /></button>
+                      </article>
+                    </section>
+                    <section className="home-week-card">
+                      <div className="home-week-heading">
+                        <div><span className="eyebrow">ATIVIDADE REGISTADA</span><h2>Sua semana</h2></div>
+                        <strong>{weekActivity.reduce((sum, item) => sum + item.count, 0)} <small>treinos</small></strong>
+                      </div>
+                      <div className="home-week-chart">
+                        {weekActivity.map((item) => (
+                          <div className={`home-week-day ${item.today ? "today" : ""}`} key={item.label}>
+                            <div className="home-week-bar"><i style={{ height: `${item.count ? Math.max(12, (item.count / weekMax) * 100) : 4}%` }} /></div>
+                            <span>{item.label}</span>
+                            <small>{item.count || "—"}</small>
+                          </div>
+                        ))}
+                      </div>
+                      {!weekActivity.some((item) => item.count > 0) && <p className="home-week-empty">Os treinos que registar vão aparecer aqui. Comece com uma sessão e acompanhe a sua consistência.</p>}
+                    </section>
                     <div className="home-progress-callout">
                       <div>
                         <span className="eyebrow">ACOMPANHE A MUDANÇA</span>
