@@ -127,6 +127,13 @@
       "path": "/assets/food/reference-crops/spaghetti.webp",
       "source_type": "user_reference_crop",
       "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
+    },
+    {
+      "path": "/assets/food/recipes/R01.webp",
+      "food_name": "Papa de aveia com fruta",
+      "source_type": "project_recipe_photo",
+      "status": "active",
+      "note": "Fotografia de receita já presente no repositório; usada como imagem da aveia para não utilizar o ficheiro com marca de água."
     }
   ],
   "commercial_use_note": "Cada fotografia externa tem a sua licença e atribuição registadas em remote_images. Respeitar a licença individual, incluindo atribuição e share-alike quando aplicável.",
@@ -433,6 +440,26 @@
       "author": "Daderot",
       "license": "CC0 1.0",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "potato",
+      "food_name": "Batata cozida",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Salad_of_boiled_eggs,_potatoes,_and_peas,_served_cold_with_tomatoes,_vinegar_carrot,_olive_oil,_black_pepper,_and_garlic_sea_salt_-_Massachusetts.jpg",
+      "author": "Daderot",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "note": "Fotografia representativa de batata cozida em salada, não de batata isolada."
+    },
+    {
+      "food_id": "corn-porridge",
+      "food_name": "Papa de milho / Xima",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Ugali_20251129_163844.jpg",
+      "author": "Josefito123",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "note": "Ugali de milho usado como referência visual para xima/papa de milho."
     }
   ],
   "image_loading_note": "As fotografias externas são carregadas sob demanda. Se uma fonte estiver indisponível, a interface apresenta um ícone de fallback e não reutiliza uma fotografia de outro alimento."
