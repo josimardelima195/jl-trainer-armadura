@@ -31,7 +31,7 @@ import {
 } from "./components/Pages";
 import Admin from "./components/Admin";
 import { useLanguage, uiText } from "./lib/i18n";
-import { nutritionPlan } from "./lib/nutrition";
+import { foodLibrary, nutritionPlan } from "./lib/nutrition";
 function WelcomeTutorial({ onClose, go }) {
   const [step, setStep] = useState(0);
   const items = [
