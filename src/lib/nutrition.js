@@ -28,7 +28,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
-    image: "/assets/food/reference-crops/banana.webp",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Banana_fruit.jpeg",
   },
   {
     id: "eggs",
@@ -67,6 +67,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Plain_Yogurt.jpg",
   },
   {
     id: "fresh-cheese",
@@ -91,6 +92,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🍗",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilled_chicken_meat.jpg",
   },
   {
     id: "fish",
@@ -116,6 +118,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥩",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilled_Steak.jpg",
   },
   {
     id: "tuna",
@@ -128,6 +131,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tuna_Sinigang.jpg",
   },
   {
     id: "rice",
@@ -166,6 +170,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Boiled_cassava_roots.jpg",
   },
   {
     id: "pasta",
@@ -203,6 +208,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🍚",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
   },
   {
     id: "beans",
@@ -228,7 +234,7 @@ export const foodLibrary = [
     fiber: 9,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "/assets/food/catalog/cowpea.webp",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Blackeye_Peas.JPG",
   },
   {
     id: "peanut",
@@ -241,6 +247,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Gordura e proteína",
     emoji: "🥜",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Peanuts_in_a_bowl.jpg",
   },
   {
     id: "avocado",
@@ -265,8 +272,8 @@ export const foodLibrary = [
     fat: 0,
     fiber: 3,
     group: "Fruta",
-    emoji: "🍊",
-    image: "/assets/food/reference-crops/mamao.webp",
+    emoji: "🍈",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Papaya_ripe.jpg",
   },
   {
     id: "orange",
@@ -279,7 +286,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
-    image: "/assets/food/reference-crops/laranja.webp",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Orange-Fruit-Pieces.jpg",
   },
   {
     id: "mango",
@@ -292,6 +299,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🥭",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/A_beautiful_ripen_mango_fruit.jpg",
   },
   {
     id: "apple",
@@ -304,7 +312,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍎",
-    image: "/assets/food/reference-crops/maca.webp",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Apples_fruit.jpg",
   },
   {
     id: "strawberry",
@@ -355,6 +363,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🍅",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "lettuce",
@@ -379,6 +388,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥒",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "pumpkin",
@@ -559,7 +569,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "/assets/food/catalog/lentils.webp",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
   },
   {
     id: "potato",
@@ -609,7 +619,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Fruta",
     emoji: "🍉",
-    image: "/assets/food/catalog/watermelon.webp",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_watermelon_slices.jpg",
   },
   {
     id: "guava",
@@ -621,11 +631,11 @@ export const foodLibrary = [
     fat: 1,
     fiber: 5,
     group: "Fruta",
-    emoji: "🍐",
+    emoji: "🟢",
     image: "/assets/food/catalog/guava.webp",
   },
   {
-    id: "lettuce",
+    id: "lettuce-cucumber",
     name: "Alface e pepino",
     portion: "2 chávenas",
     kcal: 35,
@@ -698,8 +708,7 @@ const recipeFoodNames = {
 const recipeImages = {
   R01: "/assets/food/recipes/R01.webp",
   R02: "/assets/food/recipes/R02.webp",
-  R09: "/assets/food/recipes/R09.webp",
-  R19: "/assets/food/recipes/R19.webp",
+    R19: "/assets/food/recipes/R19.webp",
   R27: "/assets/food/recipes/R27.webp",
 };
 const ingredientAliases = [
@@ -740,7 +749,14 @@ function foodNamesFromIngredients(text, fallback = []) {
   return unique.length ? unique : Array.from(new Set(fallback));
 }
 function workbookKeyFor(modality) {
-  return modality === "definicao" ? "cutting" : modality === "musculacao" ? "manutencao" : modality;
+  if (modality === "definicao") return "cutting";
+  if (modality === "musculacao") return "manutencao";
+  if (modality === "massa") return "bulking";
+  if (["futsal", "karate", "natacao", "condicionamento", "casa"].includes(modality))
+    return "manutencao";
+  return ["emagrecimento", "bulking", "cutting", "manutencao"].includes(modality)
+    ? modality
+    : "manutencao";
 }
 export const supplementCatalog = [
   {
@@ -1256,7 +1272,7 @@ export function nutritionPlan(profile = {}) {
       recipeId: row.recipeId,
       items: [row.recipe],
       foods,
-      image: recipeImage,
+      image: recipeImage || foods.find((food) => food.image)?.image || null,
       ingredients: [row.ingredients],
       purpose: row.purpose,
       preparation: row.preparation,
