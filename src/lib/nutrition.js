@@ -15,7 +15,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato e fibra",
     emoji: "🥣",
-    image: "/assets/food/aveia-simples.jpg",
+    image: "/assets/food/recipes/R01.webp",
   },
   {
     id: "banana",
@@ -28,7 +28,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Banana_fruit.jpeg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Banana_fruit.jpeg/960px-Banana_fruit.jpeg",
   },
   {
     id: "eggs",
@@ -67,7 +67,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Plain_Yogurt.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Plain_Yogurt.jpg/640px-Plain_Yogurt.jpg",
   },
   {
     id: "fresh-cheese",
@@ -80,7 +80,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🧀",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Cottagecheese200px.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Cottagecheese200px.jpg/960px-Cottagecheese200px.jpg",
   },
   {
     id: "chicken",
@@ -236,7 +236,7 @@ export const foodLibrary = [
     fiber: 9,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Blackeye_Peas.JPG",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Blackeye_Peas.JPG/960px-Blackeye_Peas.JPG",
   },
   {
     id: "peanut",
@@ -275,7 +275,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍈",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Papaya_ripe.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Papaya_fruit.jpg/640px-Papaya_fruit.jpg",
   },
   {
     id: "orange",
@@ -288,7 +288,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Orange-Fruit-Pieces.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Orange_fruit.jpeg/640px-Orange_fruit.jpeg",
   },
   {
     id: "mango",
@@ -301,7 +301,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🥭",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/A_beautiful_ripen_mango_fruit.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/A_beautiful_ripen_mango_fruit.jpg/960px-A_beautiful_ripen_mango_fruit.jpg",
   },
   {
     id: "apple",
@@ -314,7 +314,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍎",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Apples_fruit.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Apples_fruit.jpg/960px-Apples_fruit.jpg",
   },
   {
     id: "strawberry",
@@ -366,7 +366,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🍅",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Tomatoes_and_Cucumber.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "lettuce",
@@ -379,7 +379,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥬",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_lettuce.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fresh_lettuce.jpg/500px-Fresh_lettuce.jpg",
   },
   {
     id: "cucumber",
@@ -392,7 +392,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥒",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Tomatoes_and_Cucumber.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "pumpkin",
@@ -444,7 +444,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Prato moçambicano",
     emoji: "🍗",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg/960px-Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
   },
   {
     id: "sardine",
@@ -497,7 +497,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍝",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tuna_pasta_salad.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tuna_pasta_salad.jpg/500px-Tuna_pasta_salad.jpg",
     imageSource: "Fotografia pesquisada de esparguete com atum e tomate",
   },
   {
@@ -511,7 +511,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍲",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Chicken_stew_with_mixed_vegetables.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Chicken_stew_with_mixed_vegetables.jpg/960px-Chicken_stew_with_mixed_vegetables.jpg",
   },
   {
     id: "chicken-peanut",
@@ -537,7 +537,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Prato simples",
     emoji: "🥔",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
   },
   {
     id: "carapau",
@@ -576,7 +576,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Bowl_of_lentil_soup_with_green_and_red_lentils.jpg/960px-Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
   },
   {
     id: "potato",
@@ -628,7 +628,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Fruta",
     emoji: "🍉",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_watermelon_slices.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Fresh_watermelon_slices.jpg/960px-Fresh_watermelon_slices.jpg",
   },
   {
     id: "guava",
