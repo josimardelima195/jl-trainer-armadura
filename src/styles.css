@@ -96,3 +96,246 @@ html,body,#root{min-height:100%;overflow-x:hidden}@media(max-width:900px){aside.
 .shopping-fab{width:100%;display:flex;align-items:center;gap:12px;margin:18px 0;padding:13px 16px;border:1px solid color-mix(in srgb,var(--accent,#d9ab4b) 42%,transparent);border-radius:16px;background:linear-gradient(110deg,color-mix(in srgb,var(--accent,#d9ab4b) 15%,var(--surface,#202528)),var(--surface,#202528));color:var(--text,#f5f2e8);text-align:left;cursor:pointer;box-shadow:0 12px 28px rgba(0,0,0,.14)}
 .shopping-fab:hover{transform:translateY(-1px)}.shopping-fab-icon{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--accent,#d9ab4b) 22%,transparent);font-size:1.15rem}.shopping-fab span:nth-child(2){display:grid;gap:2px;flex:1}.shopping-fab small{color:var(--muted,#aab3af);font-size:.76rem}.shopping-fab>strong{font-size:1.6rem;color:var(--accent,#d9ab4b)}
 .shopping-layer{position:fixed;inset:0;z-index:1000;display:flex;justify-content:flex-end}.shopping-overlay{position:absolute;inset:0;border:0;background:rgba(0,0,0,.48);backdrop-filter:blur(2px);cursor:pointer}.shopping-drawer{position:relative;width:min(460px,94vw);height:100%;overflow:auto;padding:24px;background:var(--bg,#171b1d);border-left:1px solid var(--line,rgba(255,255,255,.12));box-shadow:-18px 0 45px rgba(0,0,0,.32);animation:shopping-in .2s ease-out}.shopping-drawer-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.shopping-drawer h2{margin:.25rem 0}.shopping-drawer p{color:var(--muted,#aab3af);font-size:.86rem}.shopping-drawer-note{padding:11px 12px;border-radius:12px;background:var(--surface,#202528);border:1px solid var(--line,rgba(255,255,255,.1))}.shopping-drawer .shopping-list{grid-template-columns:1fr;margin-top:16px}.shopping-drawer .shopping-period{margin-bottom:14px}.icon-btn{width:36px;height:36px;border:1px solid var(--line,rgba(255,255,255,.14));border-radius:10px;background:transparent;color:var(--text,#f5f2e8);font-size:1.4rem;cursor:pointer}@keyframes shopping-in{from{transform:translateX(18px);opacity:.6}to{transform:translateX(0);opacity:1}}
+
+
+/* =========================================================
+   JL TRAINER ARMADURA — PREMIUM REDESIGN 2026
+   Visual refresh only: keeps the existing routes and themes.
+   ========================================================= */
+:root{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.shell{min-height:100vh;background:var(--bg);isolation:isolate}
+.shell aside{width:264px;padding:28px 16px 22px;background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 94%,#000 6%),var(--bg));border-right:1px solid var(--line);box-shadow:14px 0 42px rgba(0,0,0,.12);gap:7px;z-index:30}
+.brand{padding:4px 10px 30px;gap:12px}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,color-mix(in srgb,var(--gold) 18%,var(--panel)),var(--panel));box-shadow:0 8px 22px color-mix(in srgb,var(--gold) 12%,transparent);font-size:15px}
+.brand b{font-size:13px;letter-spacing:1.8px}
+.brand span{font-size:9px;letter-spacing:3.4px}
+.side-label{padding:20px 12px 8px;font-size:9px;letter-spacing:2px}
+.side-btn{min-height:46px;padding:11px 13px;border:1px solid transparent;border-radius:13px;color:var(--muted);font-size:12px;font-weight:600;transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease}
+.side-btn svg{flex:none;opacity:.82}
+.side-btn:hover{transform:translateX(2px);background:color-mix(in srgb,var(--gold) 8%,var(--panel));color:var(--text)}
+.side-btn.active{background:linear-gradient(100deg,color-mix(in srgb,var(--gold) 15%,var(--panel)),var(--panel));border-color:color-mix(in srgb,var(--gold) 28%,var(--line));color:var(--gold2);box-shadow:inset 3px 0 var(--gold),0 8px 20px rgba(0,0,0,.08)}
+main{margin-left:264px;width:calc(100% - 264px);min-height:100vh;background:var(--bg);padding-bottom:48px}
+header{position:sticky;top:0;z-index:25;height:78px;padding:0 clamp(20px,3vw,48px);background:color-mix(in srgb,var(--bg) 84%,transparent);border-bottom:1px solid color-mix(in srgb,var(--line) 76%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.search{height:42px;width:min(360px,38vw);border-radius:13px;background:color-mix(in srgb,var(--panel) 90%,transparent);border-color:var(--line);padding:10px 14px}
+.search:focus-within{border-color:color-mix(in srgb,var(--gold) 58%,var(--line));box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 12%,transparent)}
+.header-actions{gap:14px}
+.avatar{width:38px;height:38px;border:2px solid color-mix(in srgb,var(--gold) 50%,var(--line));box-shadow:0 5px 16px rgba(0,0,0,.18)}
+.page{width:100%;max-width:1380px;margin:0 auto;padding:34px clamp(20px,3.2vw,48px) 70px}
+.page-title{align-items:center;margin:0 0 26px;gap:16px}
+.page-title h1{font-size:clamp(25px,2.4vw,34px);line-height:1.12;letter-spacing:-.8px}
+.eyebrow,.side-label{font-weight:800;letter-spacing:2px}
+.muted{line-height:1.55}
+.hero{position:relative;isolation:isolate;overflow:hidden;min-height:248px;padding:clamp(26px,3.5vw,42px);border-radius:26px;border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));background:radial-gradient(circle at 84% 16%,color-mix(in srgb,var(--gold) 28%,transparent),transparent 30%),linear-gradient(118deg,color-mix(in srgb,var(--panel2) 92%,var(--gold) 8%),var(--panel));box-shadow:0 22px 55px rgba(0,0,0,.16)}
+.hero::after{content:"";position:absolute;z-index:-1;width:330px;height:330px;right:-90px;bottom:-205px;border:1px solid color-mix(in srgb,var(--gold) 26%,transparent);border-radius:50%;box-shadow:0 0 0 26px color-mix(in srgb,var(--gold) 4%,transparent),0 0 0 54px color-mix(in srgb,var(--gold) 3%,transparent)}
+.hero-copy{max-width:680px;position:relative;z-index:1}
+.hero h1{font-size:clamp(30px,3.3vw,43px);line-height:1.08;letter-spacing:-1.2px}
+.hero h1 span{font-size:inherit;color:var(--gold2)}
+.hero .muted{max-width:510px;font-size:13px}
+.hero-stat{width:132px;height:132px;flex:none;border-width:1px;background:color-mix(in srgb,var(--panel) 52%,transparent);box-shadow:inset 0 0 26px color-mix(in srgb,var(--gold) 8%,transparent),0 12px 35px rgba(0,0,0,.12)}
+.hero-stat strong{font-size:34px}
+.primary{min-height:44px;padding:12px 18px;border-radius:12px;background:linear-gradient(135deg,var(--gold2),var(--gold));box-shadow:0 8px 20px color-mix(in srgb,var(--gold) 16%,transparent);transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+.primary:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 12px 24px color-mix(in srgb,var(--gold) 22%,transparent)}
+.outline{min-height:42px;border-radius:12px;border-color:color-mix(in srgb,var(--gold) 34%,var(--line));background:color-mix(in srgb,var(--panel) 88%,transparent);transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.outline:hover{background:color-mix(in srgb,var(--gold) 9%,var(--panel));border-color:var(--gold);transform:translateY(-1px)}
+.stats{gap:14px;margin:18px 0 34px}
+.stat{position:relative;overflow:hidden;min-height:116px;padding:19px;border-radius:18px;background:linear-gradient(145deg,var(--panel2),var(--panel));border-color:var(--line);box-shadow:0 10px 25px rgba(0,0,0,.07);transition:transform .18s ease,border-color .18s ease}
+.stat::after{content:"";position:absolute;width:90px;height:90px;right:-44px;top:-46px;border-radius:50%;background:color-mix(in srgb,var(--gold) 9%,transparent)}
+.stat:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gold) 35%,var(--line))}
+.stat span{font-size:11px;letter-spacing:.2px}
+.stat strong{font-size:27px;letter-spacing:-.7px}
+.section-head{margin:32px 0 16px;align-items:center}
+.section-head h2{font-size:clamp(18px,2vw,22px);letter-spacing:-.35px}
+.text-btn{font-weight:700}
+.today-card,.progress-card,.calendar-card,.admin-panel,.profile-card,.nutrition-card,.plan-card,.meal-card,.exercise-detail,.nutrition-calendar,.hydration-card{border-radius:18px;box-shadow:0 12px 30px rgba(0,0,0,.07)}
+.today-card{padding:20px;border-color:var(--line);background:linear-gradient(120deg,var(--panel2),var(--panel))}
+.today-icon{border-radius:15px;background:color-mix(in srgb,var(--gold) 13%,var(--panel));}
+.today-info h3{font-size:18px}
+.modalities{gap:14px}
+.mod-card,.video-card,.plan-card{border-radius:17px;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.mod-card{padding:19px;background:linear-gradient(145deg,var(--panel2),var(--panel));}
+.mod-card:hover,.video-card:hover,.plan-card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--gold) 42%,var(--line));box-shadow:0 16px 32px rgba(0,0,0,.12)}
+.video-card{overflow:hidden}
+.video-thumb{height:155px}
+.video-body{padding:17px}
+.workout-banner,.achievement-hero,.nutrition-hero,.coach-card{border-radius:22px;box-shadow:0 18px 40px rgba(0,0,0,.1)}
+.workout-banner{padding:28px;background:radial-gradient(circle at 88% 20%,color-mix(in srgb,var(--gold) 17%,transparent),transparent 32%),linear-gradient(120deg,var(--panel2),var(--panel))}
+.workout-banner h2,.achievement-hero h2{font-size:clamp(21px,2.3vw,27px)}
+.exercise-list{display:grid;gap:9px}
+.exercise{border:1px solid var(--line)!important;border-radius:15px!important;background:linear-gradient(110deg,var(--panel2),var(--panel));padding:14px 16px;transition:border-color .18s ease,transform .18s ease}
+.exercise:hover{border-color:color-mix(in srgb,var(--gold) 36%,var(--line))!important;transform:translateY(-1px)}
+.exercise-thumb{width:54px;height:54px;flex:none;border-radius:13px;background:color-mix(in srgb,var(--gold) 10%,var(--panel))}
+.exercise-info h3{font-size:14px}
+.check{width:30px;height:30px;flex:none}
+.progress-card,.calendar-card,.admin-panel{padding:22px;background:linear-gradient(145deg,var(--panel2),var(--panel))}
+.calendar-head{gap:24px}
+.calendar-head button{width:36px;height:36px;border-radius:11px;background:var(--panel2);font-size:20px}
+.days div{height:52px;border:1px solid transparent;transition:background .15s ease,border-color .15s ease}
+.days div.today{border-color:color-mix(in srgb,var(--gold) 42%,var(--line));background:color-mix(in srgb,var(--gold) 18%,var(--panel));color:var(--gold2);font-weight:800}
+.events{gap:9px}
+.event{border-radius:12px;padding:14px 15px;background:var(--panel2)}
+.profile-card{padding:24px;background:linear-gradient(120deg,var(--panel2),var(--panel));border-color:var(--line)}
+.profile-avatar{width:88px;height:88px;border:3px solid color-mix(in srgb,var(--gold) 35%,var(--line))}
+.details>div,.measure-grid>div{border:1px solid var(--line);border-radius:13px;background:var(--panel2)}
+.coach-card{padding:28px;background:radial-gradient(circle at 10% 0,color-mix(in srgb,var(--gold) 12%,transparent),transparent 35%),linear-gradient(120deg,var(--panel2),var(--panel));border-color:var(--line)}
+.coach-avatar{border:3px solid color-mix(in srgb,var(--gold) 45%,var(--line));box-shadow:0 10px 24px rgba(0,0,0,.14)}
+.admin-panel{padding:22px}
+.client-row{padding:14px 0}
+.quick-action{min-height:46px;border-radius:12px;background:var(--panel2);transition:border-color .15s ease,background .15s ease}
+.quick-action:hover{border-color:color-mix(in srgb,var(--gold) 42%,var(--line));background:color-mix(in srgb,var(--gold) 7%,var(--panel2))}
+.panel-form{padding:22px;border-radius:18px;background:linear-gradient(145deg,var(--panel2),var(--panel))}
+input,textarea,select{accent-color:var(--gold)}
+.panel-form input,.panel-form textarea,.panel-form select,.auth-box input,.chat-input input,.filter-row select,.nutrition-controls select{min-height:44px;border-radius:12px;background:var(--panel2);border-color:var(--line);color:var(--text);padding:11px 13px}
+.panel-form input:focus,.panel-form textarea:focus,.auth-box input:focus,.chat-input input:focus,.nutrition-controls select:focus{outline:2px solid color-mix(in srgb,var(--gold) 55%,transparent);outline-offset:1px}
+.filter-row{gap:14px}
+.plan-grid{gap:15px}
+.plan-card{padding:22px;background:linear-gradient(145deg,var(--panel2),var(--panel))}
+.plan-card.featured{border-color:var(--gold);box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 25%,transparent),0 16px 32px rgba(0,0,0,.1)}
+.badge{border-radius:16px}
+.chat-shell{border-radius:20px;box-shadow:0 18px 42px rgba(0,0,0,.1)}
+.chat-head{background:linear-gradient(110deg,var(--panel2),var(--panel))}
+.chat-messages{background:color-mix(in srgb,var(--bg) 85%,var(--panel))}
+.chat-bubble{border-radius:16px 16px 16px 5px}
+.chat-row.user .chat-bubble{border-radius:16px 16px 5px 16px}
+.auth-page{background:var(--bg)}
+.auth-art{position:relative;overflow:hidden;background:radial-gradient(circle at 22% 38%,color-mix(in srgb,var(--gold) 24%,transparent),transparent 42%),linear-gradient(140deg,var(--panel2),var(--bg))}
+.auth-art::after{content:"";position:absolute;width:420px;height:420px;right:-160px;bottom:-210px;border:1px solid color-mix(in srgb,var(--gold) 22%,transparent);border-radius:50%;box-shadow:0 0 0 34px color-mix(in srgb,var(--gold) 4%,transparent),0 0 0 70px color-mix(in srgb,var(--gold) 3%,transparent)}
+.auth-box{max-width:490px;padding:clamp(28px,4vw,54px)}
+.auth-box h2{font-size:30px;letter-spacing:-.7px}
+.auth-box form{gap:15px}
+.auth-box input{min-height:48px}
+.auth-box .primary{min-height:48px}
+.empty{border-radius:16px;background:var(--panel);border-color:var(--line);line-height:1.5}
+.guardian,.demo-banner,.error{border-radius:13px;line-height:1.5}
+.quote{border-radius:0 14px 14px 0;background:color-mix(in srgb,var(--gold) 6%,var(--panel))}
+.nutrition-hero{padding:clamp(22px,3vw,32px);background:radial-gradient(circle at 84% 15%,color-mix(in srgb,var(--gold) 18%,transparent),transparent 34%),linear-gradient(120deg,var(--panel2),var(--panel));border-color:color-mix(in srgb,var(--gold) 28%,var(--line))}
+.nutrition-hero h2{font-size:clamp(22px,2.6vw,29px);letter-spacing:-.5px}
+.nutrition-kcal{width:128px;height:128px;flex:none;background:color-mix(in srgb,var(--panel) 50%,transparent);box-shadow:inset 0 0 20px color-mix(in srgb,var(--gold) 8%,transparent)}
+.nutrition-calendar{margin:18px 0;padding:22px;background:linear-gradient(145deg,var(--panel2),var(--panel));border-color:var(--line)}
+.nutrition-calendar .section-head{margin:0 0 16px}
+.nutrition-day-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:9px}
+.nutrition-day-grid button{display:flex;min-width:0;min-height:62px;flex-direction:column;justify-content:center;align-items:center;gap:3px;padding:8px;border-radius:14px;background:var(--panel);border-color:var(--line);color:var(--muted);font-size:10px;line-height:1.1;transition:transform .16s ease,border-color .16s ease,background .16s ease}
+.nutrition-day-grid button span{font-size:9px;letter-spacing:.7px;text-transform:uppercase;opacity:.7}
+.nutrition-day-grid button strong{font:700 19px 'Space Grotesk';color:var(--text)}
+.nutrition-day-grid button:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gold) 48%,var(--line))}
+.nutrition-day-grid button.selected{background:linear-gradient(145deg,color-mix(in srgb,var(--gold) 25%,var(--panel)),var(--panel));border-color:var(--gold);box-shadow:0 7px 18px color-mix(in srgb,var(--gold) 12%,transparent)}
+.nutrition-day-grid button.selected strong,.nutrition-day-grid button.selected span{color:var(--gold2);opacity:1}
+.nutrition-calendar-note{margin-top:14px;color:var(--muted);font-size:11px;line-height:1.5}
+.nutrition-controls{gap:12px;margin:16px 0 20px}
+.nutrition-stat{min-height:72px;border-radius:14px;background:linear-gradient(145deg,var(--panel2),var(--panel));border-color:var(--line)}
+.nutrition-stat b{font-size:19px}
+.intensity-note{border-radius:12px;padding:12px 14px;background:var(--panel2);border:1px solid var(--line);color:var(--muted);font-size:11px}
+.meal-timeline{gap:14px}
+.meal-card{display:grid;grid-template-columns:72px minmax(0,1fr);gap:17px;padding:20px;background:linear-gradient(145deg,var(--panel2),var(--panel));border-color:var(--line)}
+.meal-card.meal-consumed{border-color:#548d61;background:linear-gradient(145deg,color-mix(in srgb,#3d7c4a 14%,var(--panel2)),var(--panel))}
+.meal-time{width:auto;min-width:0;padding:9px 10px;border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--gold) 10%,var(--panel));font-size:12px;text-align:center}
+.meal-main{min-width:0}
+.meal-head{align-items:center;gap:15px}
+.meal-recipe-thumb{display:block;width:92px;height:92px;flex:none;object-fit:cover;object-position:center;border:1px solid var(--line);border-radius:16px;background:var(--panel2)}
+.meal-recipe-name{display:block;margin-top:9px;font:600 16px 'Space Grotesk';line-height:1.3}
+.meal-head p{margin-top:8px;line-height:1.5}
+.meal-total{display:flex;align-items:baseline;flex-wrap:wrap;gap:7px 14px;margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:color-mix(in srgb,var(--panel) 78%,transparent)}
+.meal-total b{font:700 17px 'Space Grotesk';color:var(--gold2)}
+.meal-total span{font-size:10px;line-height:1.5;color:var(--muted)}
+.meal-ingredients{margin:13px 0;font-size:11px;line-height:1.55}
+.food-chips{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:9px;margin-top:13px}
+.food-chip{display:grid;grid-template-columns:54px minmax(0,1fr)!important;align-items:center;gap:10px;min-height:74px;padding:10px;border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--panel) 84%,transparent);overflow:hidden}
+.food-chip-media,.food-chip-emoji{display:grid;width:54px;height:54px;place-items:center;flex:none;overflow:hidden;border-radius:12px;background:color-mix(in srgb,var(--gold) 9%,var(--panel2))}
+.food-chip-media img,.food-chip img{display:block;width:54px!important;height:54px!important;max-width:54px!important;max-height:54px!important;object-fit:cover;object-position:center;border-radius:12px}
+.food-chip-media.image-fallback::after{content:attr(data-emoji);font-size:25px}
+.food-chip-emoji{font-size:25px}
+.food-chip>div{min-width:0}
+.food-chip b{font-size:11px;white-space:normal;line-height:1.3}
+.food-chip small{display:block;margin-top:4px;color:var(--muted);font-size:9px;line-height:1.35;white-space:normal}
+.meal-actions{gap:9px;margin-top:15px}
+.meal-actions button{min-height:40px;border-radius:11px}
+.hydration-card{padding:22px;background:linear-gradient(145deg,var(--panel2),var(--panel));border-color:var(--line)}
+.hydration-progress{margin-top:14px}
+.training-schedule-card{padding:16px 18px;border-radius:15px}
+.shopping-fab{border:1px solid color-mix(in srgb,var(--gold) 34%,var(--line));border-radius:16px;background:linear-gradient(120deg,color-mix(in srgb,var(--gold) 12%,var(--panel2)),var(--panel));box-shadow:0 12px 26px rgba(0,0,0,.08)}
+.shopping-drawer{background:var(--panel);border-left:1px solid var(--line)}
+.shopping-item{border-radius:11px}
+.theme-switcher{border:1px solid var(--line);border-radius:13px;background:var(--panel);padding:5px}
+.theme-switcher button{border-radius:9px}
+.bottom-nav{border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 -10px 30px rgba(0,0,0,.1)}
+.bottom-nav button{flex:1;min-width:0;justify-content:center;padding:8px 4px;color:var(--muted);font-weight:600;transition:color .15s ease,background .15s ease}
+.bottom-nav button.active{color:var(--gold2);background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.bottom-nav button.active svg{filter:drop-shadow(0 2px 8px color-mix(in srgb,var(--gold) 35%,transparent))}
+:focus-visible{outline:2px solid var(--gold2)!important;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.55}
+@media(max-width:1100px){
+ .shell aside{width:238px}
+ main{margin-left:238px;width:calc(100% - 238px)}
+ .page{padding-left:24px;padding-right:24px}
+ .nutrition-day-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+}
+@media(max-width:900px){
+ .shell aside{width:min(310px,86vw);padding:24px 15px}
+ main{margin-left:0;width:100%;padding-bottom:0}
+ header{height:68px;padding:0 16px}
+ .page{padding:24px 17px calc(94px + env(safe-area-inset-bottom))}
+ .page-title{margin-bottom:20px}
+ .hero{min-height:220px;border-radius:22px}
+ .hero-stat{width:100px;height:100px}
+ .stats{gap:10px;margin:14px 0 26px}
+ .stat{min-height:104px;padding:14px}
+ .stat strong{font-size:23px}
+ .nutrition-day-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+ .nutrition-day-grid button{min-height:58px}
+ .nutrition-controls{grid-template-columns:1fr 1fr}
+ .nutrition-controls>label:first-child{grid-column:1/-1}
+ .meal-card{grid-template-columns:58px minmax(0,1fr);gap:12px;padding:15px}
+ .meal-time{font-size:10px;padding:8px 6px}
+ .food-chips{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .bottom-nav{height:calc(66px + env(safe-area-inset-bottom));padding:4px 5px env(safe-area-inset-bottom);left:0;right:0;bottom:0}
+ .bottom-nav button{font-size:9px;gap:4px}
+ .bottom-nav button svg{width:19px;height:19px}
+ .demo-banner,.error{margin-left:17px;margin-right:17px}
+}
+@media(max-width:560px){
+ .page{padding-left:14px;padding-right:14px}
+ .hero{padding:22px;display:block}
+ .hero h1{font-size:30px}
+ .hero-stat{width:82px;height:82px;margin-top:17px}
+ .hero-stat strong{font-size:23px}
+ .section-head{margin-top:25px}
+ .modalities{gap:9px}
+ .mod-card{padding:14px;min-height:135px}
+ .today-card{padding:15px;gap:11px}
+ .today-progress{gap:8px}
+ .nutrition-hero{padding:19px;gap:12px}
+ .nutrition-kcal{width:82px;height:82px}
+ .nutrition-kcal strong{font-size:19px}
+ .nutrition-kcal span{font-size:8px}
+ .nutrition-calendar{padding:15px}
+ .nutrition-day-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+ .nutrition-day-grid button{min-height:54px;padding:6px 3px}
+ .nutrition-day-grid button strong{font-size:17px}
+ .nutrition-controls{grid-template-columns:1fr 1fr;gap:8px}
+ .nutrition-controls .nutrition-stat{min-height:64px;padding:10px}
+ .meal-card{grid-template-columns:1fr;gap:10px;padding:14px}
+ .meal-time{justify-self:start;min-width:72px}
+ .meal-head{align-items:flex-start}
+ .meal-recipe-thumb{width:76px;height:76px;border-radius:13px}
+ .food-chips{grid-template-columns:1fr 1fr;gap:7px}
+ .food-chip{grid-template-columns:42px minmax(0,1fr)!important;gap:8px;padding:8px;min-height:64px}
+ .food-chip-media,.food-chip-emoji{width:42px;height:42px;border-radius:10px}
+ .food-chip-media img,.food-chip img{width:42px!important;height:42px!important;max-width:42px!important;max-height:42px!important;border-radius:10px}
+ .food-chip b{font-size:10px}
+ .food-chip small{font-size:8px}
+ .meal-actions{display:grid;grid-template-columns:1fr 1fr}
+ .meal-actions button{width:100%;font-size:10px!important;padding:9px 7px}
+ .hydration-card{padding:16px}
+ .calendar-head{gap:10px}
+ .calendar-head h2{font-size:15px}
+ .profile-card{align-items:flex-start;gap:12px;padding:17px}
+ .profile-avatar{width:64px;height:64px}
+ .measure-grid,.details{gap:8px}
+ .coach-card{padding:20px}
+ .auth-art{min-height:250px}
+ .auth-box{padding:26px 18px}
+ .bottom-nav button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}

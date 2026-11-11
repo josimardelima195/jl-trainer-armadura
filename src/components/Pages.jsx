@@ -2356,7 +2356,39 @@ export function Assistant({ plan, go }) {
 
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
-const foodPhoto = (food) => food?.image || null;
+// Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
+const FOOD_PHOTO_BY_ID = {
+  oats: "/assets/food/aveia-simples.jpg",
+  banana: "/assets/food/reference-crops/banana.webp",
+  eggs: "/assets/food/ovos-cozidos.jpg",
+  milk: "/assets/food/leite-copo.jpg",
+  fish: "/assets/food/peixe-grelhado.jpg",
+  rice: "/assets/food/reference-crops/rice.webp",
+  "sweet-potato": "/assets/food/batata-doce-assada.jpg",
+  pasta: "/assets/food/reference-crops/spaghetti.webp",
+  beans: "/assets/food/feijao-cozido.jpg",
+  cowpea: "/assets/food/catalog/cowpea.webp",
+  avocado: "/assets/food/catalog/avocado.webp",
+  papaya: "/assets/food/reference-crops/mamao.webp",
+  orange: "/assets/food/reference-crops/laranja.webp",
+  apple: "/assets/food/reference-crops/maca.webp",
+  greens: "/assets/food/reference-crops/couve-tomate.webp",
+  pumpkin: "/assets/food/catalog/pumpkin.webp",
+  matapa: "/assets/food/matapa.jpg",
+  sardine: "/assets/food/catalog/sardine.webp",
+  "fish-curry": "/assets/food/catalog/fish-curry.webp",
+  "peanut-curry": "/assets/food/caril-amendoim.jpg",
+  "spaghetti-tuna": "/assets/food/esparguete-atum.jpg",
+  "chicken-peanut": "/assets/food/catalog/peanut-chicken.webp",
+  carapau: "/assets/food/catalog/carapau.webp",
+  tilapia: "/assets/food/catalog/tilapia.webp",
+  lentils: "/assets/food/catalog/lentils.webp",
+  pineapple: "/assets/food/catalog/pineapple.webp",
+  watermelon: "/assets/food/catalog/watermelon.webp",
+  guava: "/assets/food/catalog/guava.webp",
+  carrot: "/assets/food/reference-crops/carrot.webp",
+};
+const foodPhoto = (food) => FOOD_PHOTO_BY_ID[food?.id] || null;
 
 export function Nutrition({ plan }) {
   const { profile } = useStore();
@@ -2481,14 +2513,18 @@ export function Nutrition({ plan }) {
           {Array.from({ length: 30 }, (_, i) => (
             <button
               type="button"
-              className={Number(day) === i + 1 ? "selected" : ""}
+              className={`nutrition-day-button ${Number(day) === i + 1 ? "selected" : ""}`}
+              aria-label={`Selecionar dia ${i + 1}`}
+              aria-pressed={Number(day) === i + 1}
               onClick={() => setDay(i + 1)}
               key={i + 1}
             >
-              Dia {i + 1}
+              <span>Dia</span>
+              <strong>{String(i + 1).padStart(2, "0")}</strong>
             </button>
           ))}
         </div>
+        <p className="nutrition-calendar-note">Selecione um dos 30 dias para consultar as refeições, porções e horários previstos para a sua rotina.</p>
       </section>
       <div className="nutrition-controls">
         <label>
@@ -2573,6 +2609,7 @@ export function Nutrition({ plan }) {
                       src={meal.image}
                       alt={`Fotografia de ${meal.recipeName || meal.title}`}
                       loading="lazy"
+                      onError={(event) => { event.currentTarget.style.display = "none"; }}
                     />
                   )}
                   <div>
@@ -2605,13 +2642,16 @@ export function Nutrition({ plan }) {
                       key={food.name}
                     >
                       {foodPhoto(food) && (
-                        <span className="food-chip-media">
+                        <span className="food-chip-media" data-emoji={food.emoji || "🍽️"}>
                           <img
                             src={foodPhoto(food)}
                             alt={`Fotografia de ${food.name}`}
                             loading="lazy"
+                            onError={(event) => event.currentTarget.parentElement.classList.add("image-fallback")}
                           />
                         </span>
+                      ) : (
+                        <span className="food-chip-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>
                       )}
                       <div>
                         <b>{food.name}</b>

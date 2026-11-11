@@ -705,7 +705,7 @@ const recipeImages = {
 const ingredientAliases = [
   [/aveia/i, "Aveia"], [/banana/i, "Banana"], [/ovo/i, "Ovos"],
   [/iogurte/i, "Iogurte natural"], [/leite/i, "Leite"], [/queijo/i, "Queijo fresco"],
-  [/frango/i, "Frango grelhado"], [/peixe/i, "Peixe grelhado"], [/til[aá]pia/i, "Tilápia grelhada"], [/carapau/i, "Carapau grelhado"],
+  [/frango/i, "Frango grelhado"], [/peixe/i, "Peixe grelhado"],
   [/atum/i, "Atum"], [/sardinha/i, "Sardinha"], [/cabrito|vaca|carne/i, "Carne magra"],
   [/arroz/i, "Arroz cozido"], [/batata-doce/i, "Batata-doce"], [/batata(?!-doce)/i, "Batata cozida"], [/mandioca/i, "Mandioca"],
   [/esparguete|massa/i, "Massa integral"], [/p[aã]o/i, "Pão integral"], [/xima|farinha de milho/i, "Xima"],
@@ -715,12 +715,29 @@ const ingredientAliases = [
   [/alface/i, "Alface"], [/pepino/i, "Pepino"], [/salada/i, "Couve e tomate"],
 ];
 function foodNamesFromIngredients(text, fallback = []) {
-  const source = String(text || "");
-  const names = ingredientAliases
+  let source = String(text || "");
+  const names = [];
+  // Termos compostos são resolvidos primeiro para não serem confundidos
+  // com ingredientes genéricos (ex.: feijão-nhemba não é feijão comum).
+  const specificAliases = [
+    [/feij[aã]o[\s-]*nhemba/gi, "Feijão-nhemba"],
+    [/caril de amendoim/gi, "Caril de amendoim"],
+    [/caril de peixe/gi, "Caril de peixe"],
+    [/frango à zambeziana/gi, "Frango à zambeziana"],
+    [/mucapata/gi, "Mucapata"],
+    [/matapa/gi, "Matapa"],
+  ];
+  for (const [pattern, name] of specificAliases) {
+    if (pattern.test(source)) {
+      names.push(name);
+      source = source.replace(pattern, " ");
+    }
+  }
+  const detected = ingredientAliases
     .filter(([pattern]) => pattern.test(source))
-    .map(([, name]) => name)
-    .filter((name) => byName[name]);
-  return Array.from(new Set(names.length ? names : fallback));
+    .map(([, name]) => name);
+  const unique = Array.from(new Set([...names, ...detected].filter((name) => byName[name])));
+  return unique.length ? unique : Array.from(new Set(fallback));
 }
 function workbookKeyFor(modality) {
   return modality === "definicao" ? "cutting" : modality === "musculacao" ? "manutencao" : modality;
