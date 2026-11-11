@@ -2515,7 +2515,7 @@ export function Nutrition({ plan }) {
               <article className="food-library-card" key={food.id}>
                 <div className="food-library-image" data-emoji={food.emoji || "🍽️"}>
                   {foodPhoto(food) ? (
-                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => event.currentTarget.parentElement.classList.add("image-fallback")} />
+                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} />
                   ) : (
                     <span aria-hidden="true">{food.emoji || "🍽️"}</span>
                   )}
