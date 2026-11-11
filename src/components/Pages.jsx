@@ -2641,7 +2641,7 @@ export function Nutrition({ plan }) {
                       className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`}
                       key={food.name}
                     >
-                      {foodPhoto(food) && (
+                      {foodPhoto(food) ? (
                         <span className="food-chip-media" data-emoji={food.emoji || "🍽️"}>
                           <img
                             src={foodPhoto(food)}
