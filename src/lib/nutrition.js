@@ -262,7 +262,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Gordura saudável",
     emoji: "🥑",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Avocado_fruit.jpg/960px-Avocado_fruit.jpg",
+    image: "/assets/food/catalog/avocado.webp",
   },
   {
     id: "papaya",
