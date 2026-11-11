@@ -468,7 +468,7 @@ export default function App() {
     settings = data.settings[0] || {};
   const homeNutrition = nutritionPlan(profile);
   const currentMinutes = new Date().getHours() * 60 + new Date().getMinutes();
-  const upcomingMeal = homeNutrition.meals?.find((meal) => {
+  const upcomingMeal = homeNutrition.incomplete ? null : homeNutrition.meals?.find((meal) => {
     const match = String(meal.time || "").match(/(\d{1,2}):(\d{2})/);
     return match && Number(match[1]) * 60 + Number(match[2]) >= currentMinutes;
   }) || homeNutrition.meals?.[0] || null;
@@ -802,7 +802,7 @@ export default function App() {
                       </div>
                     </section>
                     <div className="grid stats home-stats">
-                      <Stat label="Treinos concluídos" value={metrics.total} detail={`${metrics.month} neste mês`} />
+                      <Stat label="Dias com treino" value={metrics.total} detail={`${metrics.month} neste mês`} />
                       <Stat label="Sequência atual" value={`${metrics.streak} dias`} detail="Dias consecutivos registados" />
                       <Stat label="Peso atual" value={metrics.current === null ? "—" : `${metrics.current} kg`} detail={metrics.delta === null ? "Registe uma medida" : `${metrics.delta > 0 ? "+" : ""}${metrics.delta.toFixed(1)} kg desde o primeiro registo`} />
                       <Stat label="Meta de energia" value={homeNutrition.calories ? `${homeNutrition.calories} kcal` : "—"} detail={homeNutrition.incomplete ? "Estimativa provisória" : "Meta diária estimada"} />
@@ -822,8 +822,8 @@ export default function App() {
                       <article className="home-focus-card home-water-card">
                         <span className="home-focus-icon">💧</span>
                         <span className="eyebrow">HIDRATAÇÃO DE HOJE</span>
-                        <strong>{homeNutrition.waterMl ? `${(homeNutrition.waterMl / 1000).toFixed(1)} L` : "—"}</strong>
-                        <p>Meta estimada de água, ajustada ao seu perfil e à atividade.</p>
+                        <strong>{!homeNutrition.incomplete && homeNutrition.waterMl ? `${(homeNutrition.waterMl / 1000).toFixed(1)} L` : "—"}</strong>
+                        <p>{homeNutrition.incomplete ? "Complete o perfil para calcular a meta de hidratação." : "Meta estimada de água, ajustada ao seu perfil e à atividade."}</p>
                         <button className="outline" onClick={() => go("nutricao")}>Registar água</button>
                       </article>
                       <article className="home-focus-card home-motivation-card">
