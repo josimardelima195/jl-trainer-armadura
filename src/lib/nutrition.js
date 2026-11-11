@@ -119,7 +119,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥩",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilled_Steak.jpg",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilling_beef_meat.jpg",
   },
   {
     id: "tuna",
@@ -537,6 +537,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Prato simples",
     emoji: "🥔",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
   },
   {
     id: "carapau",
