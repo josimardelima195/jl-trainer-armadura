@@ -80,6 +80,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🧀",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Cottagecheese200px.jpg",
   },
   {
     id: "chicken",
@@ -131,7 +132,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tuna_Sinigang.jpg",
+    image: null,
   },
   {
     id: "rice",
@@ -196,6 +197,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato",
     emoji: "🍞",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Whole_wheat_bread.jpg",
   },
   {
     id: "xima",
@@ -260,7 +262,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Gordura saudável",
     emoji: "🥑",
-    image: "/assets/food/catalog/avocado.webp",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Avocado_fruit.jpg/960px-Avocado_fruit.jpg",
   },
   {
     id: "papaya",
@@ -325,6 +327,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍓",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Strawberry_fruit.jpg",
   },
   {
     id: "greens",
@@ -492,7 +495,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍝",
-    image: "/assets/food/esparguete-atum.jpg",
+    image: null,
     imageSource: "Fotografia pesquisada de esparguete com atum e tomate",
   },
   {
@@ -670,6 +673,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🥬",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Okra.jpg",
   },
 ];
 const byName = Object.fromEntries(foodLibrary.map((food) => [food.name, food]));
