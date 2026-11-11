@@ -4,4 +4,4 @@ import Auth from './components/Auth';
 import App from './App';
 import './styles.css';
 createRoot(document.getElementById('root')).render(<Auth><App/></Auth>);
-if('serviceWorker' in navigator && import.meta.env.PROD) navigator.serviceWorker.register('/sw.js?v=5',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
+if('serviceWorker' in navigator && import.meta.env.PROD) navigator.serviceWorker.register('/sw.js?v=6',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{});
