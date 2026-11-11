@@ -31,15 +31,6 @@
       "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
     },
     {
-      "path": "/assets/food/catalog/cowpea.webp",
-      "source_type": "wikimedia_commons",
-      "source_title": "File:\"Red Red\" wrapped in Katemfe leaves (Thaumatococcus daniellii).jpg",
-      "source_url": "https://commons.wikimedia.org/wiki/File:%22Red%20Red%22%20wrapped%20in%20Katemfe%20leaves%20(Thaumatococcus%20daniellii).jpg",
-      "author": "Mwintirew",
-      "license": "CC BY-SA 4.0",
-      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
-    },
-    {
       "path": "/assets/food/catalog/fish-curry.webp",
       "source_type": "wikimedia_commons",
       "source_title": "File:Betki fish kalia, a fish curry dish popular in West Bengal, India, photographed on December 28, 2023.jpg",
@@ -54,15 +45,6 @@
       "source_title": "File:GUAVA FRUIT.jpg",
       "source_url": "https://commons.wikimedia.org/wiki/File:GUAVA%20FRUIT.jpg",
       "author": "GTSPACE",
-      "license": "CC BY-SA 4.0",
-      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
-    },
-    {
-      "path": "/assets/food/catalog/lentils.webp",
-      "source_type": "wikimedia_commons",
-      "source_title": "File:Baati बाटी 01.jpg",
-      "source_url": "https://commons.wikimedia.org/wiki/File:Baati%20%E0%A4%AC%E0%A4%BE%E0%A4%9F%E0%A5%80%2001.jpg",
-      "author": "Poojilsharma07",
       "license": "CC BY-SA 4.0",
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
     },
@@ -112,19 +94,6 @@
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
     },
     {
-      "path": "/assets/food/catalog/watermelon.webp",
-      "source_type": "wikimedia_commons",
-      "source_title": "File:Grilled watermelon.JPG",
-      "source_url": "https://commons.wikimedia.org/wiki/File:Grilled%20watermelon.JPG",
-      "author": "Glane23",
-      "license": "CC BY-SA 3.0",
-      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
-    },
-    {
-      "path": "/assets/food/esparguete-atum.jpg",
-      "source_type": "existing_project_asset"
-    },
-    {
       "path": "/assets/food/feijao-cozido.jpg",
       "source_type": "existing_project_asset"
     },
@@ -145,27 +114,7 @@
       "source_type": "existing_project_asset"
     },
     {
-      "path": "/assets/food/reference-crops/banana.webp",
-      "source_type": "user_reference_crop",
-      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
-    },
-    {
       "path": "/assets/food/reference-crops/carrot.webp",
-      "source_type": "user_reference_crop",
-      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
-    },
-    {
-      "path": "/assets/food/reference-crops/laranja.webp",
-      "source_type": "user_reference_crop",
-      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
-    },
-    {
-      "path": "/assets/food/reference-crops/maca.webp",
-      "source_type": "user_reference_crop",
-      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
-    },
-    {
-      "path": "/assets/food/reference-crops/mamao.webp",
       "source_type": "user_reference_crop",
       "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
     },
@@ -180,5 +129,311 @@
       "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador."
     }
   ],
-  "commercial_use_note": "Commons permite uso comercial conforme a licença de cada ficheiro, com atribuição quando exigida. Os recortes da referência são material fornecido pelo utilizador e não são apresentados como fotografias stock de terceiros."
+  "commercial_use_note": "Cada fotografia externa tem a sua licença e atribuição registadas em remote_images. Respeitar a licença individual, incluindo atribuição e share-alike quando aplicável.",
+  "deprecated_images": [
+    {
+      "path": "/assets/food/catalog/cowpea.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:\"Red Red\" wrapped in Katemfe leaves (Thaumatococcus daniellii).jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:%22Red%20Red%22%20wrapped%20in%20Katemfe%20leaves%20(Thaumatococcus%20daniellii).jpg",
+      "author": "Mwintirew",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "status": "deprecated_not_used",
+      "reason": "Mostra um prato embrulhado, não uma fotografia identificável de feijão-nhemba."
+    },
+    {
+      "path": "/assets/food/catalog/lentils.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Baati बाटी 01.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Baati%20%E0%A4%AC%E0%A4%BE%E0%A4%9F%E0%A5%80%2001.jpg",
+      "author": "Poojilsharma07",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+      "status": "deprecated_not_used",
+      "reason": "Não mostra lentilhas."
+    },
+    {
+      "path": "/assets/food/catalog/watermelon.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Grilled watermelon.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Grilled%20watermelon.JPG",
+      "author": "Glane23",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+      "status": "deprecated_not_used",
+      "reason": "Mostra melancia grelhada, não fruta fresca."
+    },
+    {
+      "path": "/assets/food/esparguete-atum.jpg",
+      "source_type": "existing_project_asset",
+      "status": "deprecated_not_used",
+      "reason": "Mostra massa com carne picada, não esparguete com atum."
+    },
+    {
+      "path": "/assets/food/reference-crops/banana.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador.",
+      "status": "deprecated_not_used",
+      "reason": "O recorte mostra uma laranja."
+    },
+    {
+      "path": "/assets/food/reference-crops/laranja.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador.",
+      "status": "deprecated_not_used",
+      "reason": "O recorte mostra uma pera."
+    },
+    {
+      "path": "/assets/food/reference-crops/maca.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador.",
+      "status": "deprecated_not_used",
+      "reason": "O recorte mostra papaia, não maçã."
+    },
+    {
+      "path": "/assets/food/reference-crops/mamao.webp",
+      "source_type": "user_reference_crop",
+      "source_note": "Recorte individual da imagem de referência fornecida pelo utilizador.",
+      "status": "deprecated_not_used",
+      "reason": "Recorte não fiável para identificar papaia."
+    }
+  ],
+  "remote_images": [
+    {
+      "food_id": "banana",
+      "food_name": "Banana",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Banana_fruit.jpeg/960px-Banana_fruit.jpeg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Banana_fruit.jpeg",
+      "author": "Tshrinivasan",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "food_id": "orange",
+      "food_name": "Laranja",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Orange_fruit.jpeg/640px-Orange_fruit.jpeg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Orange_fruit.jpeg",
+      "author": "Tshrinivasan",
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0"
+    },
+    {
+      "food_id": "papaya",
+      "food_name": "Papaia",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Papaya_fruit.jpg/640px-Papaya_fruit.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Papaya_fruit.jpg",
+      "author": "Fotokannan",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "food_id": "mango",
+      "food_name": "Manga",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/A_beautiful_ripen_mango_fruit.jpg/960px-A_beautiful_ripen_mango_fruit.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:A_beautiful_ripen_mango_fruit.jpg",
+      "author": "Yahuzaishat",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "apple",
+      "food_name": "Maçã",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Apples_fruit.jpg/960px-Apples_fruit.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Apples_fruit.jpg",
+      "author": "safaritravelplus",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "cowpea",
+      "food_name": "Feijão-nhemba",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Blackeye_Peas.JPG/960px-Blackeye_Peas.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Blackeye_Peas.JPG",
+      "author": "Dwight Burdette",
+      "license": "CC BY 3.0",
+      "license_url": "https://creativecommons.org/licenses/by/3.0"
+    },
+    {
+      "food_id": "lentils",
+      "food_name": "Lentilhas",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Bowl_of_lentil_soup_with_green_and_red_lentils.jpg/960px-Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
+      "author": "Whoisjohngalt",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "watermelon",
+      "food_name": "Melancia",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Fresh_watermelon_slices.jpg/960px-Fresh_watermelon_slices.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Fresh_watermelon_slices.jpg",
+      "author": "Aerous",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "chicken",
+      "food_name": "Frango grelhado",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Grilled_chicken_meat.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Grilled_chicken_meat.jpg",
+      "author": "Fatimah Bello",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "cassava",
+      "food_name": "Mandioca cozida",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Boiled_cassava_roots.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Boiled_cassava_roots.jpg",
+      "author": "MEvalyn",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "peanut",
+      "food_name": "Amendoim",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Peanuts_in_a_bowl.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Peanuts_in_a_bowl.jpg",
+      "author": "Itumeleng Kgotla",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "yogurt",
+      "food_name": "Iogurte natural",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Plain_Yogurt.jpg/960px-Plain_Yogurt.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Plain_Yogurt.jpg",
+      "author": "Alabama Extension",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "fresh-cheese",
+      "food_name": "Queijo fresco",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Cottagecheese200px.jpg/960px-Cottagecheese200px.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cottagecheese200px.jpg",
+      "author": "F ASTILY",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "food_id": "beef",
+      "food_name": "Carne bovina magra",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Grilling_beef_meat.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Grilling_beef_meat.jpg",
+      "author": "Jon Sullivan",
+      "license": "Public domain",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "whole-bread",
+      "food_name": "Pão integral",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Whole_wheat_bread.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Whole_wheat_bread.jpg",
+      "author": "E4024",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "strawberry",
+      "food_name": "Morango",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Strawberry_fruit.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Strawberry_fruit.jpg",
+      "author": "Paolo Neo",
+      "license": "Public domain",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "okra",
+      "food_name": "Quiabo",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Okra.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Fresh_Okra.jpg",
+      "author": "Bambi Cia",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "tomato",
+      "food_name": "Tomate",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Fresh_Tomatoes_and_Cucumber.jpg",
+      "author": "IamAnisurrahman",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "cucumber",
+      "food_name": "Pepino",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Fresh_Tomatoes_and_Cucumber.jpg",
+      "author": "IamAnisurrahman",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    },
+    {
+      "food_id": "tuna",
+      "food_name": "Atum",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Filete_de_at%C3%BAn.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Filete_de_at%C3%BAn.jpg",
+      "author": "Spanish4foodies",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0"
+    },
+    {
+      "food_id": "lettuce",
+      "food_name": "Alface",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fresh_lettuce.jpg/500px-Fresh_lettuce.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Fresh_lettuce.jpg",
+      "author": "Hajia Hijjah",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "zambeziana",
+      "food_name": "Frango à zambeziana",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg/960px-Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
+      "author": "Nalikilal",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "spaghetti-tuna",
+      "food_name": "Esparguete com atum",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tuna_pasta_salad.jpg/500px-Tuna_pasta_salad.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Tuna_pasta_salad.jpg",
+      "author": "FotoosVanRobin",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0"
+    },
+    {
+      "food_id": "cozido-caseiro",
+      "food_name": "Cozido caseiro",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Chicken_stew_with_mixed_vegetables.jpg/960px-Chicken_stew_with_mixed_vegetables.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Chicken_stew_with_mixed_vegetables.jpg",
+      "author": "FBenjr123",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "lettuce-cucumber",
+      "food_name": "Alface e pepino",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cucumber_lettuce_tomato_and_onion_salad.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cucumber_lettuce_tomato_and_onion_salad.jpg",
+      "author": "Mathobelah",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0"
+    },
+    {
+      "food_id": "boiled-potato-salad",
+      "food_name": "Salada de batata e ovo",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Salad_of_boiled_eggs,_potatoes,_and_peas,_served_cold_with_tomatoes,_vinegar_carrot,_olive_oil,_black_pepper,_and_garlic_sea_salt_-_Massachusetts.jpg",
+      "author": "Daderot",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+    }
+  ],
+  "image_loading_note": "As fotografias externas são carregadas sob demanda. Se uma fonte estiver indisponível, a interface apresenta um ícone de fallback e não reutiliza uma fotografia de outro alimento."
 }
