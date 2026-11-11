@@ -495,20 +495,6 @@ export default function App() {
     "Descanse, alimente-se bem e volte mais forte.",
   ];
   const dailyQuote = dailyQuotes[(new Date().getDate() - 1) % dailyQuotes.length];
-  const initialWeight =
-    Number(profile.initial_weight) || Number(measures[0]?.weight) || null;
-  const startDate = new Date(profile.created_at || Date.now());
-  const daysSinceStart = Math.max(
-    0,
-    Math.floor((Date.now() - startDate.getTime()) / 86400000) + 1,
-  );
-  const plannedDays = Math.min(
-    30,
-    Math.ceil(
-      (daysSinceStart / 7) * (Number(profile.training_days_count) || 3),
-    ),
-  );
-  const missedWorkouts = Math.max(0, plannedDays - metrics.total);
   const go = (id) => {
     setTab(id);
     location.hash = id;
@@ -863,51 +849,6 @@ export default function App() {
                       </div>
                       {!weekActivity.some((item) => item.count > 0) && <p className="home-week-empty">Os treinos que registar vão aparecer aqui. Comece com uma sessão e acompanhe a sua consistência.</p>}
                     </section>
-                      <Stat
-                        label="Plano atual"
-                        value={plan.name}
-                        detail={
-                          subscription
-                            ? `Válido até ${new Date(subscription.expires_at).toLocaleDateString()}`
-                            : "Comece no seu ritmo"
-                        }
-                      />
-                      <Stat
-                        label="Treinos realizados"
-                        value={metrics.total}
-                        detail={`${metrics.month} neste mês`}
-                      />
-                      <Stat
-                        label="Peso inicial"
-                        value={
-                          initialWeight === null ? "—" : `${initialWeight} kg`
-                        }
-                        detail="Registado no início"
-                      />
-                      <Stat
-                        label="Peso atual"
-                        value={
-                          metrics.current === null
-                            ? "—"
-                            : `${metrics.current} kg`
-                        }
-                        detail="Último registro"
-                      />
-                      <Stat
-                        label="Treinos em falta"
-                        value={missedWorkouts}
-                        detail="Dias previstos ainda não registados"
-                      />
-                      <Stat
-                        label="Variação de peso"
-                        value={
-                          metrics.delta === null
-                            ? "—"
-                            : `${metrics.delta.toFixed(1)} kg`
-                        }
-                        detail="Entre primeiro e último registro"
-                      />
-                    </div>
                     <div className="home-progress-callout">
                       <div>
                         <span className="eyebrow">ACOMPANHE A MUDANÇA</span>
