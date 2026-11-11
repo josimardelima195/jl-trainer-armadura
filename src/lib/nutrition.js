@@ -132,7 +132,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
-    image: null,
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Filete_de_at%C3%BAn.jpg",
   },
   {
     id: "rice",
@@ -379,6 +379,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥬",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_lettuce.jpg",
   },
   {
     id: "cucumber",
@@ -443,6 +444,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Prato moçambicano",
     emoji: "🍗",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
   },
   {
     id: "sardine",
@@ -585,6 +587,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%92%D0%B0%D1%80%D1%91%D0%BD%D1%8B%D0%B9_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%84%D0%B5%D0%BB%D1%8C_%D0%B2_%D1%87%D1%83%D0%B3%D1%83%D0%BD%D0%BD%D0%BE%D0%BC_%D0%B3%D0%BE%D1%80%D1%88%D0%BA%D0%B5.jpg",
   },
   {
     id: "corn-porridge",
@@ -597,6 +600,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🥣",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
   },
   {
     id: "pineapple",
