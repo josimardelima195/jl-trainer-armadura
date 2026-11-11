@@ -810,7 +810,7 @@ export default function App() {
                     <section className="home-focus-grid">
                       <article className="home-focus-card home-next-meal">
                         <div className="home-focus-image" data-emoji="🥗">
-                          {upcomingMeal?.image ? <img src={upcomingMeal.image} alt={`Refeição: ${upcomingMeal.recipeName || upcomingMeal.title}`} loading="lazy" onError={(event) => event.currentTarget.parentElement.classList.add("image-fallback")} /> : <span>🥗</span>}
+                          {upcomingMeal?.image ? <img src={upcomingMeal.image} alt={`Refeição: ${upcomingMeal.recipeName || upcomingMeal.title}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} /> : <span>🥗</span>}
                         </div>
                         <div className="home-focus-copy">
                           <span className="eyebrow">PRÓXIMA REFEIÇÃO · {upcomingMeal?.time || "PLANO DIÁRIO"}</span>
