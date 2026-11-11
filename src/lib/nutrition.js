@@ -589,7 +589,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/%D0%92%D0%B0%D1%80%D1%91%D0%BD%D1%8B%D0%B9_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%84%D0%B5%D0%BB%D1%8C_%D0%B2_%D1%87%D1%83%D0%B3%D1%83%D0%BD%D0%BD%D0%BE%D0%BC_%D0%B3%D0%BE%D1%80%D1%88%D0%BA%D0%B5.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
   },
   {
     id: "corn-porridge",
