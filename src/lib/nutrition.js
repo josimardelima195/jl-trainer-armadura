@@ -497,7 +497,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍝",
-    image: null,
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Tuna_pasta_salad.jpg",
     imageSource: "Fotografia pesquisada de esparguete com atum e tomate",
   },
   {
@@ -511,6 +511,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍲",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Chicken_stew_with_mixed_vegetables.jpg",
   },
   {
     id: "chicken-peanut",
@@ -652,6 +653,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Vegetais",
     emoji: "🥬",
+    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Cucumber_lettuce_tomato_and_onion_salad.jpg",
   },
   {
     id: "carrot",
