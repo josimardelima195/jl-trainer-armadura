@@ -67,7 +67,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Plain_Yogurt.jpg/640px-Plain_Yogurt.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Plain_Yogurt.jpg/960px-Plain_Yogurt.jpg",
   },
   {
     id: "fresh-cheese",
@@ -197,7 +197,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato",
     emoji: "🍞",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Whole_wheat_bread.jpg",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Whole_wheat_bread.jpg/960px-Whole_wheat_bread.jpg",
   },
   {
     id: "xima",
