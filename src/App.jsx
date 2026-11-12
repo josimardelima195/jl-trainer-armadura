@@ -123,11 +123,18 @@ function NutritionOnboarding({ profile, userId, mutate }) {
       training_intensity: profile.training_intensity || "moderate",
       training_duration: profile.training_duration || 45,
       training_location: profile.training_location || "casa",
+      training_days_count: profile.training_days_count || 3,
+      training_level: profile.training_level || "beginner",
+      modality: profile.modality || "Musculação",
+      goal: profile.goal || "Condicionamento",
+      current_weight: profile.current_weight || "",
+      height: profile.height || "",
+      limitations: profile.limitations || "",
       food_budget: profile.food_budget || "medium",
       allergies: profile.allergies || "",
       food_preferences: profile.food_preferences || "",
     });
-  const choices = foodLibrary.filter((food) =>
+  const choices = foodLibrary.filter((food) => Boolean(food.image) &&
     [
       "Aveia",
       "Banana",
@@ -162,6 +169,9 @@ function NutritionOnboarding({ profile, userId, mutate }) {
       "profiles",
       {
         ...form,
+        current_weight: Number(form.current_weight) || profile.current_weight || null,
+        height: Number(form.height) || profile.height || null,
+        training_days_count: Number(form.training_days_count) || 3,
         training_duration: Number(form.training_duration) || 45,
         supplements,
         available_foods: foodMode === "custom" ? foods.join(",") : "",
@@ -238,6 +248,42 @@ function NutritionOnboarding({ profile, userId, mutate }) {
         )}
         {step === 1 && (
           <div className="onboarding-form">
+            <label>
+              Peso atual (kg)
+              <input type="number" min="25" max="300" step="0.1" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} />
+            </label>
+            <label>
+              Altura (cm)
+              <input type="number" min="120" max="230" value={form.height} onChange={(e) => update("height", e.target.value)} />
+            </label>
+            <label>
+              Objetivo principal
+              <select value={form.goal} onChange={(e) => update("goal", e.target.value)}>
+                <option>Emagrecimento</option><option>Bulking (ganho de massa)</option><option>Definição (cutting)</option><option>Condicionamento</option>
+              </select>
+            </label>
+            <label>
+              Modalidade
+              <select value={form.modality} onChange={(e) => update("modality", e.target.value)}>
+                <option>Musculação</option><option>Calistenia</option><option>Karatê</option><option>Futsal</option><option>Natação</option>
+              </select>
+            </label>
+            <label>
+              Experiência
+              <select value={form.training_level} onChange={(e) => update("training_level", e.target.value)}>
+                <option value="beginner">Iniciante</option><option value="intermediate">Intermediário</option><option value="advanced">Avançado</option>
+              </select>
+            </label>
+            <label>
+              Dias disponíveis por semana
+              <select value={form.training_days_count} onChange={(e) => update("training_days_count", Number(e.target.value))}>
+                {[2,3,4,5,6].map((v) => <option key={v} value={v}>{v} dias</option>)}
+              </select>
+            </label>
+            <label className="onboarding-full-label">
+              Lesões ou limitações (opcional)
+              <textarea value={form.limitations} onChange={(e) => update("limitations", e.target.value)} placeholder="Movimentos a evitar ou limitações relevantes." />
+            </label>
             <label>
               Nível de atividade diária
               <select
