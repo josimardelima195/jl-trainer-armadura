@@ -2511,11 +2511,11 @@ export function Nutrition({ plan }) {
             ))}
           </div>
           <div className="food-library-grid">
-            {visibleFoodLibrary.map((food) => (
+            {visibleFoodLibrary.filter((food) => foodPhoto(food)).map((food) => (
               <article className="food-library-card" key={food.id}>
-                <div className="food-library-image" data-emoji={food.emoji || "🍽️"}>
+                <div className="food-library-image">
                   {foodPhoto(food) ? (
-                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} />
+                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.closest(".food-library-card")?.remove(); }} />
                   ) : (
                     <span aria-hidden="true">{food.emoji || "🍽️"}</span>
                   )}
@@ -2682,7 +2682,7 @@ export function Nutrition({ plan }) {
                   {meal.ingredients?.join(" · ") || meal.items.join(" · ")}
                 </div>
                 <div className="food-chips">
-                  {meal.foods.map((food) => (
+                  {meal.foods.filter((food) => foodPhoto(food)).map((food) => (
                     <div
                       className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`}
                       key={food.name}
@@ -2693,7 +2693,7 @@ export function Nutrition({ plan }) {
                             src={foodPhoto(food)}
                             alt={`Fotografia de ${food.name}`}
                             loading="lazy"
-                            onError={(event) => event.currentTarget.parentElement.classList.add("image-fallback")}
+                            onError={(event) => event.currentTarget.closest(".food-chip")?.remove()}
                           />
                         </span>
                       ) : (
