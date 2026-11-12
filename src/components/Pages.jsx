@@ -2516,9 +2516,7 @@ export function Nutrition({ plan }) {
                 <div className="food-library-image">
                   {foodPhoto(food) ? (
                     <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.closest(".food-library-card")?.remove(); }} />
-                  ) : (
-                    
-                  )}
+                  ) : null}
                 </div>
                 <div className="food-library-copy">
                   <span className="food-library-group">{food.group}</span>
@@ -2696,9 +2694,7 @@ export function Nutrition({ plan }) {
                             onError={(event) => event.currentTarget.closest(".food-chip")?.remove()}
                           />
                         </span>
-                      ) : (
-                        
-                      )}
+                      ) : null}
                       <div>
                         <b>{food.name}</b>
                         <small>
