@@ -2427,7 +2427,7 @@ export function Nutrition({ plan }) {
     );
   const replaceMeal = (meal) => {
     const alternatives = meal.foods
-      .flatMap((food) => foodSubstitutions(food.name))
+      .flatMap((food) => foodSubstitutions(food.name, profile))
       .map((name) => foodLibrary.find((food) => food.name === name))
       .filter(Boolean);
     if (alternatives.length)
