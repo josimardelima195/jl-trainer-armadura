@@ -134,7 +134,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
       allergies: profile.allergies || "",
       food_preferences: profile.food_preferences || "",
     });
-  const choices = foodLibrary.filter((food) => Boolean(food.image) && Boolean(food.image) &&
+  const choices = foodLibrary.filter((food) => Boolean(food.image) &&
     [
       "Aveia",
       "Banana",
