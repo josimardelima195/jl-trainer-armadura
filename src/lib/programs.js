@@ -581,8 +581,8 @@ export function buildCalisthenics30DayPlan(profile = {}) {
    sessionType:"sets",sessionLabel:rest?"Recuperação ativa":"Progressão de calistenia",
    progressionNote:week===0?"Aprenda a técnica e encontre uma variante controlada.":week===1?"Aumente repetições apenas se mantiver a técnica.":week===2?"Consolide estabilidade escapular, punhos e core.":"Reduza o volume e revise a qualidade do movimento.",
    skillNote:"Planche é uma habilidade avançada. Este ciclo prepara punhos, ombros, escápulas e core; não garante planche em 30 dias.",
-   exercises:rest?[{id:"cal-rest-"+day,name:"Caminhada leve e mobilidade",category:"Recuperação",equipment:"Sem equipamento",sets:1,reps:"10–20 min",rest_seconds:0,description:"Ritmo confortável e mobilidade sem dor.",image_path:"/assets/exercises/dead-bug.jpg"}]:
-    block.items.map((item,i)=>({id:"cal-"+day+"-"+i,name:item[0],category:"Calistenia",equipment:"Peso corporal / barra baixa / paralelas estáveis",sets:sets,reps:item[1],rest_seconds:item[2],description:item[3],image_path:"/assets/exercises/bodyweight-squat.jpg",day_number:day,sort_order:i}))
+   exercises:rest?[{id:"cal-rest-"+day,name:"Caminhada leve e mobilidade",category:"Recuperação",equipment:"Sem equipamento",sets:1,reps:"10–20 min",rest_seconds:0,description:"Ritmo confortável e mobilidade sem dor.",image_path:null}]:
+    block.items.map((item,i)=>({id:"cal-"+day+"-"+i,name:item[0],category:"Calistenia",equipment:"Peso corporal / barra baixa / paralelas estáveis",sets:sets,reps:item[1],rest_seconds:item[2],description:item[3],image_path:null,day_number:day,sort_order:i}))
   };
  });
 }
