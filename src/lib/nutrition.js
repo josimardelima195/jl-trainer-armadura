@@ -15,7 +15,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato e fibra",
     emoji: "🥣",
-    image: "/assets/food/recipes/R01.webp",
+    image: "/assets/food/aveia-simples.jpg",
   },
   {
     id: "banana",

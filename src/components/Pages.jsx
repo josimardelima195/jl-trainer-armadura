@@ -602,6 +602,12 @@ export function Workouts({ plan }) {
       <div className={`intensity-note intensity-${intensity}`}>
         <b>{intensityLabels[intensity]}</b> · {intensityNotes[intensity]}
       </div>
+      {(today?.progressionNote || today?.skillNote) && (
+        <div className="cal-plan-note">
+          {today.progressionNote && <p><b>Progressão do dia:</b> {today.progressionNote}</p>}
+          {today.skillNote && <p><b>Meta técnica:</b> {today.skillNote}</p>}
+        </div>
+      )}
       <section className="exercise-showcase">
         <div className="showcase-heading">
           <div>
@@ -2511,14 +2517,12 @@ export function Nutrition({ plan }) {
             ))}
           </div>
           <div className="food-library-grid">
-            {visibleFoodLibrary.map((food) => (
+            {visibleFoodLibrary.filter((food) => foodPhoto(food)).map((food) => (
               <article className="food-library-card" key={food.id}>
-                <div className="food-library-image" data-emoji={food.emoji || "🍽️"}>
+                <div className="food-library-image">
                   {foodPhoto(food) ? (
-                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} />
-                  ) : (
-                    <span aria-hidden="true">{food.emoji || "🍽️"}</span>
-                  )}
+                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.closest(".food-library-card")?.remove(); }} />
+                  ) : null}
                 </div>
                 <div className="food-library-copy">
                   <span className="food-library-group">{food.group}</span>
@@ -2682,7 +2686,7 @@ export function Nutrition({ plan }) {
                   {meal.ingredients?.join(" · ") || meal.items.join(" · ")}
                 </div>
                 <div className="food-chips">
-                  {meal.foods.map((food) => (
+                  {meal.foods.filter((food) => foodPhoto(food)).map((food) => (
                     <div
                       className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`}
                       key={food.name}
@@ -2693,12 +2697,10 @@ export function Nutrition({ plan }) {
                             src={foodPhoto(food)}
                             alt={`Fotografia de ${food.name}`}
                             loading="lazy"
-                            onError={(event) => event.currentTarget.parentElement.classList.add("image-fallback")}
+                            onError={(event) => event.currentTarget.closest(".food-chip")?.remove()}
                           />
                         </span>
-                      ) : (
-                        <span className="food-chip-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>
-                      )}
+                      ) : null}
                       <div>
                         <b>{food.name}</b>
                         <small>

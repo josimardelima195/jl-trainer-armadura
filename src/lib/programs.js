@@ -122,6 +122,7 @@ const goalWords = {
   ],
   karate: ["kick", "punch", "martial", "hip", "mobility", "plank", "lunge"],
   natacao: ["swim", "stroke", "kick", "lat", "shoulder", "core", "mobility"],
+  calistenia: ["push", "pull", "bodyweight", "plank", "dip", "hollow", "scapula", "handstand"],
 };
 
 const aliases = {
@@ -260,6 +261,9 @@ const modalitySchedules = {
     "full_body",
     "recovery",
   ],
+  calistenia: ["chest_triceps", "back_biceps", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "recovery"],
+  futsal: ["cardio_core", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "legs_glutes", "recovery"],
+  karate: ["full_body", "cardio_core", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "recovery"],
 };
 const runningDays = new Set([1, 4, 8, 11, 15, 18, 22, 25, 29]);
 const recoveryWords = [
@@ -323,6 +327,7 @@ export function modalityKeyFor(value) {
   if (text.includes("muscul")) return "musculacao";
   if (text.includes("massa")) return "massa";
   if (text.includes("casa")) return "casa";
+  if (text.includes("calisten")) return "calistenia";
   if (text.includes("futsal")) return "futsal";
   if (text.includes("karat")) return "karate";
   if (text.includes("nata")) return "natacao";
@@ -530,6 +535,58 @@ function rotatePick(list, count, day) {
   );
 }
 
+
+const calisthenicsBlocks = [
+ {title:"Fundamentos e controlo",focus:"Técnica e preparação",items:[
+ ["Flexão inclinada","2–3 × 6–10",60,"Mãos numa superfície firme; corpo alinhado."],
+ ["Remada australiana assistida","2–3 × 6–10",75,"Use barra baixa estável e mantenha escápulas controladas."],
+ ["Agachamento livre","2–3 × 10–15",60,"Amplitude confortável, sem dor."],
+ ["Hollow hold regressivo","3 × 10–20 s",45,"Lombar apoiada; encurte a alavanca se arquear."],
+ ["Scapular push-up","2 × 8–12",45,"Movimento controlado das escápulas."]
+ ]},
+ {title:"Força fundamental",focus:"Empurrar, puxar e pernas",items:[
+ ["Flexão adaptada","3 × 6–12",90,"Escolha a variante que permite técnica estável."],
+ ["Remada australiana","3 × 6–10",90,"Sem balanço; use altura adequada."],
+ ["Afundo alternado","3 × 8/lado",75,"Joelho acompanha a direção dos pés."],
+ ["Prancha frontal","3 × 20–35 s",45,"Respire e mantenha alinhamento."],
+ ["Dead bug","2 × 8/lado",45,"Controle a lombar."]
+ ]},
+ {title:"Pré-habilidades",focus:"Estabilidade de ombros e core",items:[
+ ["Pike push-up regressiva","3 × 5–8",90,"Amplitude confortável; não treine com dor."],
+ ["Scapular pull-up assistida","3 × 5–8",90,"Use apoio dos pés se necessário."],
+ ["Frog stand com apoio","3 × 8–15 s",60,"Somente com punhos preparados e espaço livre."],
+ ["L-sit tuck com apoio","3 × 8–12 s",60,"Use paralelas estáveis; não force."],
+ ["Elevação de gémeos","3 × 12–18",45,"Subida e descida controladas."]
+ ]},
+ {title:"Consolidação e descarga",focus:"Técnica, mobilidade e recuperação",items:[
+ ["Flexão técnica","2 × 6–10",90,"Pare com 2–3 repetições em reserva."],
+ ["Remada australiana assistida","2 × 6–10",90,"Sem balanço."],
+ ["Agachamento pausado","2 × 8–12",60,"Pausa curta em amplitude confortável."],
+ ["Hollow hold regressivo","2 × 15–20 s",45,"Sem perder a posição lombar."],
+ ["Mobilidade de punho e ombro","1 × 5–7 min",30,"Movimentos suaves, sem dor."]
+ ]}
+];
+export function buildCalisthenics30DayPlan(profile = {}) {
+ const age=ageFromProfile(profile), level=profile.training_level||"beginner";
+ const beginner=level==="beginner"||level==="iniciante", senior=age>=60;
+ const daysPerWeek=Math.min(6,Math.max(2,Number(profile.training_days_count)||3));
+ return Array.from({length:30},(_,index)=>{
+  const day=index+1, week=Math.min(3,Math.floor((day-1)/8));
+  const rest=day%7===0 || (daysPerWeek<=3 && [2,4,6].includes((day-1)%7));
+  const block=calisthenicsBlocks[week], sets=senior||beginner?2:3;
+  return {
+   day,title:"Dia "+day+" · "+(rest?"Recuperação":block.title),
+   focus:rest?"Mobilidade e recuperação":block.focus,focus_key:rest?"recovery":"full_body",
+   level,intensity:senior||beginner?"easy":"moderate",rest,equipment_mode:"bodyweight",
+   sessionType:"sets",sessionLabel:rest?"Recuperação ativa":"Progressão de calistenia",
+   progressionNote:week===0?"Aprenda a técnica e encontre uma variante controlada.":week===1?"Aumente repetições apenas se mantiver a técnica.":week===2?"Consolide estabilidade escapular, punhos e core.":"Reduza o volume e revise a qualidade do movimento.",
+   skillNote:"Planche é uma habilidade avançada. Este ciclo prepara punhos, ombros, escápulas e core; não garante planche em 30 dias.",
+   exercises:rest?[{id:"cal-rest-"+day,name:"Caminhada leve e mobilidade",category:"Recuperação",equipment:"Sem equipamento",sets:1,reps:"10–20 min",rest_seconds:0,description:"Ritmo confortável e mobilidade sem dor.",image_path:null}]:
+    block.items.map((item,i)=>({id:"cal-"+day+"-"+i,name:item[0],category:"Calistenia",equipment:"Peso corporal / barra baixa / paralelas estáveis",sets:sets,reps:item[1],rest_seconds:item[2],description:item[3],image_path:null,day_number:day,sort_order:i}))
+  };
+ });
+}
+
 export function focusForDay(day, goal = "condicionamento") {
   const schedule =
     modalitySchedules[modalityKeyFor(goal)] ||
@@ -546,9 +603,13 @@ export function build30DayPlan(
   profile = {},
 ) {
   const requestedMode = normalizeEquipmentSelection(equipment);
-  const counts = { easy: 5, moderate: 6, hard: 8 };
-  const requestedCount = counts[intensity] || counts.moderate;
+  const counts = { easy: 4, moderate: 5, hard: 6 };
+  const ageForDose = ageFromProfile(profile);
+  const experienceFactor = level === "advanced" ? 1 : level === "intermediate" ? 0.9 : 0.75;
+  const ageFactor = ageForDose >= 65 ? 0.6 : ageForDose >= 50 ? 0.8 : 1;
+  const requestedCount = Math.max(2, Math.round((counts[intensity] || counts.moderate) * experienceFactor * ageFactor));
   const modality = modalityKeyFor(goal);
+  if (modality === "calistenia") return buildCalisthenics30DayPlan({ ...profile, training_level: level });
   const source = uniqueExercises(exercises).filter(
     (e) => (e?.image_path || e?.gifUrl) && suitableForProfile(e, profile),
   );
