@@ -207,8 +207,6 @@ export default function Auth({ children }) {
                   <button type="button" className="text-btn" onClick={() => setRegisterStep(1)}>← Voltar</button>
                 </>
               )}
-                </>
-              )}
             </>
           )}
           {mode !== "reset" && (
