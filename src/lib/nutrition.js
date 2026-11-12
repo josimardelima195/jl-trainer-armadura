@@ -1398,16 +1398,43 @@ export function estimateWorkoutKcal(
   const met = intensity === "hard" ? 8 : intensity === "easy" ? 3.5 : 5.5;
   return Math.round(((met * 3.5 * weight) / 200) * minutes);
 }
-export function foodSubstitutions(name) {
+export function foodSubstitutions(name, profile = {}) {
   const groups = {
-    frango: ["Peixe grelhado", "Ovos", "Feijão cozido"],
-    peixe: ["Frango grelhado", "Ovos", "Sardinha"],
-    arroz: ["Batata-doce", "Mandioca", "Xima"],
-    iogurte: ["Leite", "Queijo fresco"],
-    fruta: ["Banana", "Papaia", "Laranja", "Maçã"],
+    frango: ["Peixe grelhado", "Ovos", "Sardinha", "Feijão cozido"],
+    peixe: ["Frango grelhado", "Ovos", "Sardinha", "Atum"],
+    carne: ["Frango grelhado", "Peixe grelhado", "Ovos", "Feijão cozido"],
+    ovo: ["Frango grelhado", "Peixe grelhado", "Iogurte natural", "Feijão cozido"],
+    arroz: ["Batata-doce", "Mandioca", "Xima", "Massa integral"],
+    batata: ["Arroz cozido", "Mandioca", "Xima", "Massa integral"],
+    mandioca: ["Arroz cozido", "Batata-doce", "Xima"],
+    xima: ["Arroz cozido", "Batata-doce", "Mandioca"],
+    iogurte: ["Leite", "Queijo fresco", "Ovos"],
+    fruta: ["Banana", "Papaia", "Laranja", "Maçã", "Ananás"],
+    banana: ["Papaia", "Laranja", "Maçã", "Ananás"],
+    laranja: ["Papaia", "Banana", "Maçã", "Ananás"],
+    papaia: ["Banana", "Laranja", "Maçã", "Ananás"],
+    feij: ["Feijão cozido", "Feijão-nhemba", "Lentilhas", "Ovos"],
   };
-  const key = String(name).toLowerCase();
-  return (
-    Object.entries(groups).find(([group]) => key.includes(group))?.[1] || []
-  );
+  const key = String(name || "").toLowerCase();
+  const matched = Object.entries(groups).find(([group]) => key.includes(group));
+  if (!matched) return [];
+  const candidates = matched[1].map((label) => foodLibrary.find((food) => food.name === label))
+    .filter((food) => food && food.image);
+  const original = foodLibrary.find((food) => food.name === name);
+  const goal = String(profile.goal || profile.modality || "").toLowerCase();
+  // Prefer substitutions with a similar role and nearby protein/carbohydrate profile.
+  return candidates.sort((a, b) => {
+    const score = (food) => {
+      const protein = Math.abs((food.protein || 0) - (original?.protein || 0));
+      const carbs = Math.abs((food.carbs || 0) - (original?.carbs || 0));
+      const kcal = (food.kcal || 0) - (original?.kcal || 0);
+      const energyBias = goal.includes("bulking") || goal.includes("massa")
+        ? Math.max(0, -kcal) * 0.08
+        : goal.includes("emag") || goal.includes("cut") || goal.includes("defini")
+          ? Math.max(0, kcal) * 0.08
+          : 0;
+      return protein * 1.2 + carbs * 0.35 + Math.abs(kcal) * 0.06 + energyBias;
+    };
+    return score(a) - score(b);
+  }).slice(0, 4).map((food) => food.name);
 }
