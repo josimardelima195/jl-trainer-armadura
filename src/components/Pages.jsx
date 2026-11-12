@@ -2517,7 +2517,7 @@ export function Nutrition({ plan }) {
                   {foodPhoto(food) ? (
                     <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.closest(".food-library-card")?.remove(); }} />
                   ) : (
-                    <span aria-hidden="true">{food.emoji || "🍽️"}</span>
+                    
                   )}
                 </div>
                 <div className="food-library-copy">
@@ -2697,7 +2697,7 @@ export function Nutrition({ plan }) {
                           />
                         </span>
                       ) : (
-                        <span className="food-chip-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>
+                        
                       )}
                       <div>
                         <b>{food.name}</b>
