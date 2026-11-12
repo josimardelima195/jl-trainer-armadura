@@ -134,7 +134,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
       allergies: profile.allergies || "",
       food_preferences: profile.food_preferences || "",
     });
-  const choices = foodLibrary.filter((food) => Boolean(food.image) &&
+  const choices = foodLibrary.filter((food) => Boolean(food.image) && Boolean(food.image) &&
     [
       "Aveia",
       "Banana",
@@ -393,11 +393,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
                           )
                         }
                       />
-                      {food.image ? (
-                        <img src={food.image} alt="" />
-                      ) : (
-                        <span>{food.emoji}</span>
-                      )}
+                      {food.image && <img src={food.image} alt={food.name} loading="lazy" onError={(event) => event.currentTarget.closest(".food-check")?.remove()} />}
                       <b>{food.name}</b>
                     </label>
                   ))}
