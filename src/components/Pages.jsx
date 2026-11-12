@@ -602,6 +602,12 @@ export function Workouts({ plan }) {
       <div className={`intensity-note intensity-${intensity}`}>
         <b>{intensityLabels[intensity]}</b> · {intensityNotes[intensity]}
       </div>
+      {(today?.progressionNote || today?.skillNote) && (
+        <div className="cal-plan-note">
+          {today.progressionNote && <p><b>Progressão do dia:</b> {today.progressionNote}</p>}
+          {today.skillNote && <p><b>Meta técnica:</b> {today.skillNote}</p>}
+        </div>
+      )}
       <section className="exercise-showcase">
         <div className="showcase-heading">
           <div>
