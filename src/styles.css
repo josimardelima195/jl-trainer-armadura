@@ -449,7 +449,6 @@ header{
   border-radius:16px;background:#242a30;font-size:38px;
 }
 .home-focus-image img{width:100%;height:100%;object-fit:cover;display:block}
-.home-focus-image.image-fallback::after{content:attr(data-emoji);font-size:38px}
 .home-focus-copy{min-width:0}
 .home-focus-copy h3,.home-motivation-card h3{font:700 18px 'Space Grotesk';line-height:1.25;margin:8px 0}
 .home-focus-copy p,.home-focus-card p{color:var(--muted);font-size:12px;line-height:1.55}
@@ -713,3 +712,133 @@ header{
 .food-check img{width:48px;height:48px;object-fit:cover;border-radius:9px}
 .cal-plan-note{padding:12px 14px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;background:var(--panel);color:var(--muted);font-size:11px;line-height:1.5;margin:12px 0}
 @media(max-width:700px){.nutrition-day-grid{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:5px!important}.nutrition-day-grid button{min-height:32px!important}.food-check-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Navegação acessível: painel lateral com scroll real em ecrãs pequenos e grandes. */
+.shell aside{overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-width:thin;scrollbar-color:var(--gold) transparent;max-height:100dvh;-webkit-overflow-scrolling:touch}
+.shell aside .brand,.shell aside .side-label,.shell aside .side-btn,.shell aside .side-bottom{flex-shrink:0}
+.shell aside .side-btn{min-height:48px;padding:13px 14px;font-size:14px;line-height:1.25;touch-action:manipulation;cursor:pointer}
+.shell aside .side-bottom{margin-top:24px}
+.shell aside .side-btn svg{flex:none}
+@media(max-width:800px){
+  .drawer-backdrop{display:block;position:fixed;inset:0;z-index:1198;border:0;background:rgba(3,8,7,.58);padding:0;cursor:pointer}
+  .shell aside{position:fixed;inset:0 auto 0 0;width:min(310px,88vw);height:100dvh;max-height:100dvh;z-index:1199;overflow-y:auto;overflow-x:hidden;padding:22px 14px calc(28px + env(safe-area-inset-bottom));transform:translateX(-105%);transition:transform .22s ease;pointer-events:none;box-shadow:18px 0 50px rgba(0,0,0,.35)}
+  .shell aside.open{transform:translateX(0);pointer-events:auto}
+  .shell aside.open .side-btn{pointer-events:auto}
+  .mobile-menu{display:grid;place-items:center;position:relative;z-index:1201;width:44px;height:44px;flex:none;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--gold2);cursor:pointer}
+  .shell aside.open~main{pointer-events:none}
+  .shell header{gap:10px;padding-left:14px;padding-right:14px}
+}
+@media(min-width:801px){
+  .shell aside{overflow-y:auto;overscroll-behavior-y:contain}
+}
+
+/* O calendário alimentar ocupa uma única linha e pode ser percorrido lateralmente. */
+.nutrition-day-strip{display:flex;align-items:center;gap:7px;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:8px 2px 12px;margin-top:10px;scrollbar-width:thin;scrollbar-color:var(--gold) transparent;overscroll-behavior-x:contain;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.nutrition-day-button{display:grid;place-items:center;flex:0 0 46px;min-width:46px;min-height:44px;padding:0 5px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--muted);font-size:13px;scroll-snap-align:start;cursor:pointer}
+.nutrition-day-button strong{font:700 14px 'Space Grotesk';line-height:1}
+.nutrition-day-button:hover,.nutrition-day-button.selected{border-color:var(--gold2);background:color-mix(in srgb,var(--gold) 17%,var(--panel));color:var(--gold2)}
+@media(max-width:700px){.nutrition-calendar{padding:13px;margin:12px 0}.nutrition-calendar .section-head{margin-bottom:0}.nutrition-day-strip{gap:6px;padding-top:7px;padding-bottom:9px}.nutrition-day-button{flex-basis:42px;min-width:42px;min-height:42px;border-radius:10px}.nutrition-day-button strong{font-size:13px}}
+
+/* A lista de compras é uma janela independente das abas de alimentação. */
+.shopping-layer{z-index:9999;pointer-events:auto}
+.shopping-overlay{z-index:0;pointer-events:auto}
+.shopping-drawer{z-index:1;pointer-events:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.shopping-drawer .shopping-list{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+
+.profile-age-note{margin:-4px 0 14px;color:var(--muted);font-size:12px;line-height:1.45}
+.profile-age-note b{color:var(--gold2)}
+
+.food-credits-link{display:inline-flex;margin-top:4px;color:var(--gold2);font-size:11px;text-decoration:underline;text-underline-offset:3px}
+.food-credits-link:hover{color:var(--text)}
+
+/* Leo acompanha a jornada com movimentos discretos e respeita a preferência por movimento reduzido. */
+.leo-mascot{display:block;overflow:visible;transform-origin:center;animation:leo-float 3.6s ease-in-out infinite}
+.leo-tail{transform-box:fill-box;transform-origin:12% 10%;animation:leo-tail-sway 2.8s ease-in-out infinite}
+.leo-eye{transform-box:fill-box;transform-origin:center;animation:leo-blink 6.2s ease-in-out infinite}
+@keyframes leo-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes leo-tail-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(9deg)}}
+@keyframes leo-blink{0%,45%,48%,100%{transform:scaleY(1)}46%,47%{transform:scaleY(.12)}}
+.leo-reminder-card{display:flex;align-items:center;gap:14px;padding:13px 18px;margin:18px 0;border:1px solid color-mix(in srgb,var(--gold) 36%,var(--line));border-radius:18px;background:linear-gradient(110deg,color-mix(in srgb,var(--gold) 9%,var(--panel)),var(--panel))}
+.leo-reminder-mascot{width:74px;height:74px;flex:0 0 74px;display:grid;place-items:center}
+.leo-reminder-copy{min-width:0;flex:1}
+.leo-reminder-copy .eyebrow{display:block;margin-bottom:5px;color:var(--gold2)}
+.leo-reminder-copy strong{display:block;font:600 14px 'Space Grotesk';line-height:1.4}
+.leo-reminder-copy p{margin:4px 0 0;color:var(--muted);font-size:11px;line-height:1.4}
+.leo-reminder-card .outline{flex:0 0 auto}
+@media(max-width:700px){.leo-reminder-card{gap:8px;padding:10px 11px;border-radius:15px}.leo-reminder-mascot{width:58px;height:58px;flex-basis:58px}.leo-reminder-mascot .leo-mascot{width:58px;height:58px}.leo-reminder-copy strong{font-size:12px}.leo-reminder-copy p{font-size:10px}.leo-reminder-card .outline{font-size:10px;padding:8px 9px}}
+@media(prefers-reduced-motion:reduce){.leo-mascot,.leo-tail,.leo-eye{animation:none!important}}
+
+/* Desafios com prova em vídeo e comunidade. */
+.challenge-card{align-items:flex-start}
+.challenge-card-copy{flex:1;min-width:0}
+.challenge-video-picker{display:flex;flex-direction:column;gap:3px;width:max-content;max-width:100%;margin-top:10px;padding:9px 12px;border:1px dashed var(--gold);border-radius:10px;background:color-mix(in srgb,var(--gold) 7%,var(--panel));cursor:pointer}
+.challenge-video-picker span{font-size:11px;font-weight:700;color:var(--gold2);overflow-wrap:anywhere}
+.challenge-video-picker small{font-size:9px;color:var(--muted)}
+.challenge-video-picker input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden}
+.challenge-proof-status{display:block;margin-top:7px;color:#83c58b;font-size:10px}
+.community-login-note{margin:12px 0;padding:12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:12px}
+.community-feed-card,.community-social-card{margin-top:18px;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.community-feed-card .section-head,.community-social-card .section-head{margin-bottom:14px}
+.community-feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.community-proof-card{min-width:0;padding:10px;border:1px solid var(--line);border-radius:13px;background:var(--panel-2)}
+.community-proof-author{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.community-proof-author>div{display:flex;flex:1;min-width:0;flex-direction:column}
+.community-proof-author b{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.community-proof-author small{font-size:9px;color:var(--muted)}
+.community-proof-author>strong{font-size:11px;color:var(--gold2)}
+.community-proof-card video{display:block;width:100%;max-height:340px;aspect-ratio:9/16;object-fit:cover;background:#080808;border-radius:9px}
+.community-proof-card>p{margin:9px 2px 2px;font-size:11px}
+.community-video-placeholder{display:grid;place-items:center;width:100%;aspect-ratio:9/16;max-height:340px;border-radius:9px;background:var(--panel);color:var(--muted);font-size:11px}
+.community-social-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:18px}
+.community-social-grid .community-social-card{margin-top:0;min-width:0}
+.community-requests{display:grid;gap:8px;padding:11px;margin-bottom:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2)}
+.community-requests>b{font-size:11px;color:var(--gold2)}
+.community-request-row,.community-person-row{display:flex;align-items:center;gap:9px;min-width:0}
+.community-request-row>span,.community-person-row>div{flex:1;min-width:0}
+.community-request-row>span{font-size:11px}
+.community-person-row{padding:9px 0;border-bottom:1px solid var(--line)}
+.community-person-row:last-child{border-bottom:0}
+.community-person-row>div{display:flex;flex-direction:column}
+.community-person-row b{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.community-person-row small{font-size:9px;color:var(--muted)}
+.community-people-list{display:grid;gap:2px;max-height:340px;overflow-y:auto;overscroll-behavior:contain}
+.community-friend-tabs{display:flex;gap:7px;overflow-x:auto;padding:0 0 10px;scrollbar-width:thin}
+.community-friend-tabs button{display:flex;align-items:center;gap:7px;flex:0 0 auto;max-width:170px;padding:7px 9px;border:1px solid var(--line);border-radius:20px;background:var(--panel-2);color:var(--text);font-size:10px}
+.community-friend-tabs button.active{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--panel))}
+.community-friend-tabs button span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.community-friend-tabs .community-avatar{width:24px;height:24px;font-size:9px}
+.community-chat-messages{display:flex;flex-direction:column;gap:8px;min-height:180px;max-height:300px;overflow-y:auto;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);overscroll-behavior:contain}
+.community-chat-message{max-width:86%;padding:8px 10px;border-radius:12px;background:var(--panel);align-self:flex-start}
+.community-chat-message.mine{align-self:flex-end;background:color-mix(in srgb,var(--gold) 16%,var(--panel));border:1px solid color-mix(in srgb,var(--gold) 38%,var(--line))}
+.community-chat-message p{margin:0;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}
+.community-chat-message small{display:block;margin-top:4px;font-size:8px;color:var(--muted);text-align:right}
+.community-chat-compose{display:flex;gap:8px;margin-top:9px;align-items:flex-end}
+.community-chat-compose textarea{flex:1;min-width:0;resize:vertical;min-height:44px}
+.community-chat-compose button{flex:none}
+@media(max-width:760px){.community-social-grid{grid-template-columns:1fr}.community-feed-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.challenge-card{flex-wrap:wrap}.challenge-card>button{margin-left:auto}.community-feed-card,.community-social-card{padding:13px}}
+@media(max-width:430px){.community-feed-grid{grid-template-columns:1fr}.challenge-video-picker{width:100%}.community-request-row{flex-wrap:wrap}.community-request-row>span{min-width:100%}.community-chat-compose{align-items:stretch}.community-chat-compose button{padding:10px}}
+
+.profile-advanced{grid-column:1/-1;margin:8px 0 4px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.profile-advanced>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer;list-style:none}
+.profile-advanced>summary::-webkit-details-marker{display:none}
+.profile-advanced>summary>span:first-child{display:grid;gap:4px}
+.profile-advanced>summary small{font-size:9px;letter-spacing:.12em;color:var(--muted)}
+.profile-advanced>summary b{font-size:14px;color:var(--text)}
+.profile-advanced-hint{padding:7px 11px;border-radius:9px;background:var(--panel-2);color:var(--gold2);font-size:11px;font-weight:700}
+.profile-advanced[open]{padding-bottom:14px}
+.profile-advanced[open] .profile-section-label{margin:8px 16px}
+.profile-advanced[open]>:not(summary){margin-left:16px;margin-right:16px}
+
+/* Profile remains focused on essentials; optional groups expand only when requested. */
+.profile-advanced{overflow:hidden}
+.profile-advanced>summary:focus-visible{outline:2px solid var(--gold2);outline-offset:-3px;border-radius:12px}
+.profile-advanced[open]>:not(summary){box-sizing:border-box}
+.profile-advanced[open] .profile-age-note{margin-top:-6px}
+.leaderboard-card{position:relative;overflow:hidden}
+.leaderboard-card:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,#9d6a21,#f4d58a,#9d6a21)}
+.leaderboard-row{min-height:62px}
+.leaderboard-rank{width:27px;height:27px;display:grid;place-items:center;flex:none;border-radius:50%;background:var(--panel-2);font-size:12px;font-weight:800}
+.leaderboard-row.top-rank{min-height:70px;padding:9px 8px;border-radius:13px;background:linear-gradient(100deg,rgba(255,202,90,.12),rgba(255,202,90,.025));border:1px solid rgba(255,202,90,.18)}
+.leaderboard-row.top-rank-1{background:linear-gradient(100deg,rgba(255,202,90,.2),rgba(255,202,90,.04));border-color:rgba(255,202,90,.38)}
+.leaderboard-row.top-rank .community-avatar{width:42px;height:42px;border:2px solid rgba(255,202,90,.55);font-size:13px}
+@media(max-width:760px){.profile-advanced>summary{padding:13px}.leaderboard-row.top-rank{min-height:66px}}

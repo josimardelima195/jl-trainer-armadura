@@ -6,7 +6,6 @@ import {
   UserRound,
   Trophy,
   MessageCircle,
-  Settings,
   LogOut,
   Bell,
   Search,
@@ -19,7 +18,7 @@ import {
 import { supabase } from "./lib/supabase";
 import { useStore } from "./lib/store";
 import { activePlan, stats, modalities as modalityCatalog } from "./lib/model";
-import { Title, Stat, Empty } from "./components/UI";
+import { Title, Stat, Empty, LeoMascot } from "./components/UI";
 import {
   Workouts,
   Progress,
@@ -60,8 +59,8 @@ function WelcomeTutorial({ onClose, go }) {
   return (
     <div className="tutorial-backdrop">
       <section className="tutorial-card">
-        <div className="tutorial-mascot" aria-hidden="true">
-          🦁
+        <div className="tutorial-mascot">
+          <LeoMascot size={100} />
         </div>
         <span className="eyebrow">COMECE COM O JL TRAINER</span>
         <h2>{current[0]}</h2>
@@ -103,383 +102,188 @@ function WelcomeTutorial({ onClose, go }) {
   );
 }
 function NutritionOnboarding({ profile, userId, mutate }) {
-  const [step, setStep] = useState(0),
-    [saving, setSaving] = useState(false),
-    [foodMode, setFoodMode] = useState(
-      profile.available_foods ? "custom" : "recommended",
-    ),
-    [foods, setFoods] = useState(
-      profile.available_foods
-        ? String(profile.available_foods).split(",").filter(Boolean)
-        : [],
-    ),
-    [supplements, setSupplements] = useState(
-      Array.isArray(profile.supplements) ? profile.supplements : [],
-    ),
-    [form, setForm] = useState({
-      birth_date: profile.birth_date || "",
-      sex: profile.sex || "",
-      daily_activity: profile.daily_activity || "moderate",
-      training_intensity: profile.training_intensity || "moderate",
-      training_duration: profile.training_duration || 45,
-      training_location: profile.training_location || "casa",
-      training_days_count: profile.training_days_count || 3,
-      training_level: profile.training_level || "beginner",
-      modality: profile.modality || "Musculação",
-      goal: profile.goal || "Condicionamento",
-      current_weight: profile.current_weight || "",
-      height: profile.height || "",
-      limitations: profile.limitations || "",
-      food_budget: profile.food_budget || "medium",
-      allergies: profile.allergies || "",
-      food_preferences: profile.food_preferences || "",
-    });
-  const choices = foodLibrary.filter((food) => Boolean(food.image) &&
-    [
-      "Aveia",
-      "Banana",
-      "Ovos",
-      "Leite",
-      "Iogurte natural",
-      "Arroz cozido",
-      "Batata-doce",
-      "Mandioca",
-      "Xima",
-      "Feijão cozido",
-      "Peixe grelhado",
-      "Frango grelhado",
-      "Carne magra",
-      "Couve e tomate",
-      "Papaia",
-      "Laranja",
-      "Manga",
-      "Abacate",
-      "Amendoim",
-      "Caril de amendoim",
-      "Esparguete com atum e tomate",
-      "Cozido caseiro de ovo, couve e frango",
-      "Salada cozida de ovo, couve, frango, batata e cenoura",
-    ].includes(food.name),
-  );
-  const update = (key, value) =>
-    setForm((current) => ({ ...current, [key]: value }));
-  async function finish() {
-    setSaving(true);
-    await mutate(
-      "profiles",
-      {
-        ...form,
-        current_weight: Number(form.current_weight) || profile.current_weight || null,
-        height: Number(form.height) || profile.height || null,
-        training_days_count: Number(form.training_days_count) || 3,
-        training_duration: Number(form.training_duration) || 45,
-        supplements,
-        available_foods: foodMode === "custom" ? foods.join(",") : "",
-        onboarding_completed: true,
-      },
-      userId,
-    );
-    setSaving(false);
+  const [step, setStep] = useState(0);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    birth_date: profile.birth_date || "",
+    sex: profile.sex || "",
+    current_weight: profile.current_weight || "",
+    height: profile.height || "",
+    goal: normalizeGoal(profile.goal),
+    modality: ["Musculação", "Calistenia", "Karatê", "Futsal", "Natação"].includes(profile.modality) ? profile.modality : "Musculação",
+    training_location: profile.training_location === "ginasio" ? "ginasio" : "casa",
+    training_level: profile.training_level || "beginner",
+    training_days_count: Number(profile.training_days_count || profile.training_frequency || 3),
+    training_time: String(profile.training_time || "18:00").slice(0, 5),
+    training_duration: Number(profile.training_duration || 45),
+    daily_activity: profile.daily_activity || "moderate",
+    training_intensity: profile.training_intensity || "moderate",
+    food_budget: profile.food_budget || "medium",
+    allergies: profile.allergies || "",
+    foods_to_avoid: profile.foods_to_avoid || profile.food_dislikes || "",
+    food_preferences: profile.food_preferences || "",
+  });
+  const [foods, setFoods] = useState(() => String(profile.available_foods || "").split(",").map((x) => x.trim()).filter(Boolean));
+  const [supplements, setSupplements] = useState(() => Array.isArray(profile.supplements) ? profile.supplements : []);
+
+  function normalizeGoal(value) {
+    const goal = String(value || "").toLowerCase();
+    if (goal.includes("emagrec")) return "emagrecimento";
+    if (goal.includes("bulking") || goal.includes("ganho") || goal.includes("massa")) return "bulking";
+    if (goal.includes("cutting") || goal.includes("defini")) return "definicao";
+    if (goal.includes("manut")) return "manutencao";
+    return "condicionamento";
   }
+  const age = (() => {
+    if (!form.birth_date) return null;
+    const birth = new Date(form.birth_date + "T00:00:00");
+    if (Number.isNaN(birth.getTime())) return null;
+    const today = new Date();
+    let years = today.getFullYear() - birth.getFullYear();
+    if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) years -= 1;
+    return years;
+  })();
+  const steps = [
+    ["birth_date", "Qual é a sua data de nascimento?", "A idade será calculada automaticamente e usada para ajustar as recomendações."],
+    ["sex", "Qual sexo deve ser usado na estimativa nutricional?", "É opcional. Se preferir, pode não informar."],
+    ["current_weight", "Qual é o seu peso atual?", "Informe o peso em quilogramas. O valor poderá ser atualizado pelo seu progresso."],
+    ["height", "Qual é a sua altura?", "Informe a altura em centímetros para estimar as necessidades diárias."],
+    ["goal", "Qual é o seu objetivo principal?", "A alimentação e os treinos serão ajustados a esta meta."],
+    ["modality", "Qual modalidade vai praticar?", "Os exercícios, séries e repetições serão adaptados à modalidade escolhida."],
+    ["training_location", "Onde vai treinar?", "Escolha apenas uma opção. Pode alterá-la mais tarde no perfil."],
+    ["training_level", "Qual é o seu nível de experiência?", "O programa adapta o volume e a progressão ao seu nível."],
+    ["training_days_count", "Quantos dias por semana pretende treinar?", "Vamos distribuir os treinos e os dias de recuperação."],
+    ["training_time", "A que horas costuma treinar?", "Este horário ajuda a organizar os lembretes e as refeições."],
+    ["training_duration", "Quanto tempo tem para cada treino?", "Escolha uma duração realista para a sua rotina."],
+    ["daily_activity", "Como é a sua atividade fora dos treinos?", "Esta informação ajuda a estimar o gasto diário."],
+    ["training_intensity", "Qual intensidade prefere?", "Pode ajustar a intensidade a qualquer momento."],
+    ["food_budget", "Qual é o seu orçamento alimentar?", "O plano vai priorizar alimentos compatíveis com o seu orçamento."],
+    ["allergies", "Tem alguma alergia ou intolerância?", "Escreva os alimentos que deve evitar. Se não tiver, deixe em branco."],
+    ["available_foods", "Quais alimentos costuma ter disponíveis?", "Selecione os alimentos que encontra com facilidade. Pode escolher vários."],
+    ["foods_to_avoid", "Há alimentos que não consome?", "Informe preferências ou alimentos que deseja excluir."],
+    ["food_preferences", "Tem alguma preferência alimentar ou prato local?", "Pode indicar pratos habituais, horários ou outras preferências."],
+    ["supplements", "Utiliza algum suplemento?", "Opcional. Não é necessário usar suplementos para começar."],
+  ];
+  const [currentKey, title, description] = steps[step];
+  const update = (key, value) => {
+    setError("");
+    setForm((current) => ({ ...current, [key]: value }));
+  };
+  const foodChoices = foodLibrary.filter((food) => [
+    "Aveia", "Banana", "Ovos", "Leite", "Iogurte natural", "Arroz cozido",
+    "Batata-doce", "Mandioca", "Xima", "Feijão cozido", "Peixe grelhado",
+    "Frango grelhado", "Carne magra", "Couve e tomate", "Papaia", "Laranja",
+    "Manga", "Abacate", "Amendoim", "Caril de amendoim"
+  ].includes(food.name));
+  const supplementChoices = ["Creatina", "Whey protein", "Cafeína", "Pré-treino"];
+  const defaultTrainingDays = (count) => ({
+    2: ["Seg", "Qui"],
+    3: ["Seg", "Qua", "Sex"],
+    4: ["Seg", "Ter", "Qui", "Sáb"],
+    5: ["Seg", "Ter", "Qua", "Sex", "Sáb"],
+    6: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+  })[count] || ["Seg", "Qua", "Sex"];
+  function validate() {
+    if (currentKey === "birth_date" && (!form.birth_date || age === null || age < 12 || age > 100)) return "Informe uma data de nascimento válida.";
+    if (currentKey === "current_weight" && (!Number(form.current_weight) || Number(form.current_weight) < 25 || Number(form.current_weight) > 300)) return "Informe um peso entre 25 e 300 kg.";
+    if (currentKey === "height" && (!Number(form.height) || Number(form.height) < 120 || Number(form.height) > 230)) return "Informe uma altura entre 120 e 230 cm.";
+    if (currentKey === "training_days_count" && (Number(form.training_days_count) < 2 || Number(form.training_days_count) > 6)) return "Escolha entre 2 e 6 dias por semana.";
+    return "";
+  }
+  async function finish() {
+    const validation = validate();
+    if (validation) { setError(validation); return; }
+    setSaving(true);
+    setError("");
+    const count = Number(form.training_days_count) || 3;
+    const payload = {
+      birth_date: form.birth_date,
+      age,
+      sex: form.sex || null,
+      current_weight: Number(form.current_weight),
+      initial_weight: Number(profile.initial_weight) || Number(form.current_weight),
+      height: Number(form.height),
+      goal: form.goal,
+      modality: form.modality,
+      equipment_preference: form.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
+      training_level: form.training_level,
+      training_days_count: count,
+      training_frequency: count,
+      training_days: Array.isArray(profile.training_days) && profile.training_days.length === count ? profile.training_days : defaultTrainingDays(count),
+      training_time: form.training_time || "18:00",
+      training_duration: Number(form.training_duration) || 45,
+      daily_activity: form.daily_activity,
+      training_intensity: form.training_intensity,
+      food_budget: form.food_budget,
+      allergies: form.allergies.trim(),
+      foods_to_avoid: form.foods_to_avoid.trim(),
+      food_preferences: form.food_preferences.trim(),
+      available_foods: foods.join(", "),
+      supplements,
+      household_size: Number(profile.household_size) || 1,
+      onboarding_completed: true,
+    };
+    const ok = await mutate("profiles", payload, userId);
+    setSaving(false);
+    if (!ok) setError("Não foi possível guardar os dados. Verifique a ligação e tente novamente.");
+  }
+  const goalOptions = [
+    ["emagrecimento", "Emagrecimento", "Redução gradual de peso e hábitos sustentáveis."],
+    ["bulking", "Ganho de massa", "Aumentar força e massa muscular gradualmente."],
+    ["definicao", "Cutting / definição", "Preservar força e reduzir gordura corporal."],
+    ["condicionamento", "Condicionamento", "Melhorar resistência, mobilidade e energia."],
+    ["manutencao", "Manutenção", "Manter consistência e melhorar a capacidade física."],
+  ];
+  const modalityOptions = ["Musculação", "Calistenia", "Karatê", "Futsal", "Natação"];
   return (
     <div className="nutrition-onboarding-backdrop">
-      <section className="nutrition-onboarding">
+      <section className="nutrition-onboarding onboarding-single-question">
         <div className="onboarding-top">
           <div>
             <span className="eyebrow">PERSONALIZAÇÃO JL TRAINER</span>
-            <h2>Vamos conhecer a sua rotina</h2>
-            <p>
-              Estas respostas ficam no seu perfil e ajudam a organizar treino,
-              refeições e hidratação. Pode alterar tudo depois.
-            </p>
+            <h2>Vamos preparar o seu plano</h2>
+            <p>Uma pergunta por vez. Pode voltar, alterar respostas e deixar os campos opcionais em branco.</p>
           </div>
-          <div className="onboarding-leo">🦁</div>
+          <div className="onboarding-leo"><LeoMascot size={82} /></div>
         </div>
-        <div className="onboarding-steps">
-          {["Base", "Rotina", "Alimentos", "Suplementos"].map(
-            (label, index) => (
-              <span className={step === index ? "active" : ""} key={label}>
-                {index + 1} · {label}
-              </span>
-            ),
-          )}
+        <div className="onboarding-progress-copy"><span>Passo {step + 1} de {steps.length}</span><b>{Math.round(((step + 1) / steps.length) * 100)}%</b></div>
+        <div className="onboarding-progress-track"><span style={{ width: ((step + 1) / steps.length) * 100 + "%" }} /></div>
+        <div className="onboarding-question">
+          <h3>{title}</h3>
+          <p>{description}</p>
+          {currentKey === "birth_date" && <label className="onboarding-single-field">Data de nascimento<input type="date" max={new Date().toISOString().slice(0, 10)} value={form.birth_date} onChange={(e) => update("birth_date", e.target.value)} /></label>}
+          {currentKey === "sex" && <div className="onboarding-choice-grid">{[["", "Prefiro não informar"], ["feminino", "Feminino"], ["masculino", "Masculino"]].map(([value, label]) => <button type="button" key={value || "none"} className={form.sex === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("sex", value)}><strong>{label}</strong></button>)}</div>}
+          {currentKey === "current_weight" && <label className="onboarding-single-field">Peso atual (kg)<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="Ex.: 75" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} /></label>}
+          {currentKey === "height" && <label className="onboarding-single-field">Altura (cm)<input type="number" min="120" max="230" step="1" inputMode="numeric" placeholder="Ex.: 175" value={form.height} onChange={(e) => update("height", e.target.value)} /></label>}
+          {currentKey === "goal" && <div className="onboarding-choice-grid">{goalOptions.map(([value, label, detail]) => <button type="button" key={value} className={form.goal === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("goal", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div>}
+          {currentKey === "modality" && <div className="onboarding-choice-grid onboarding-modality-grid">{modalityOptions.map((value) => <button type="button" key={value} className={form.modality === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("modality", value)}><strong>{value}</strong></button>)}</div>}
+          {currentKey === "training_location" && <div className="onboarding-choice-grid onboarding-location-grid"><button type="button" className={form.training_location === "ginasio" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "ginasio")}><strong>Gym</strong><small>Treino com equipamento</small></button><button type="button" className={form.training_location === "casa" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "casa")}><strong>Home</strong><small>Treino em casa</small></button></div>}
+          {currentKey === "training_level" && <div className="onboarding-choice-grid">{[["beginner","Iniciante","Estou a começar ou a regressar."],["intermediate","Intermédio","Já treino com regularidade."],["advanced","Avançado","Tenho experiência e boa técnica."]].map(([value,label,detail]) => <button type="button" key={value} className={form.training_level === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_level", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div>}
+          {currentKey === "training_days_count" && <div className="onboarding-frequency-grid">{[2,3,4,5,6].map((value) => <button type="button" key={value} className={Number(form.training_days_count) === value ? "onboarding-frequency selected" : "onboarding-frequency"} onClick={() => update("training_days_count", value)}><strong>{value}</strong><small>dias</small></button>)}</div>}
+          {currentKey === "training_time" && <label className="onboarding-single-field">Horário habitual<input type="time" value={form.training_time} onChange={(e) => update("training_time", e.target.value)} /></label>}
+          {currentKey === "training_duration" && <div className="onboarding-frequency-grid">{[30,45,60,75,90].map((value) => <button type="button" key={value} className={Number(form.training_duration) === value ? "onboarding-frequency selected" : "onboarding-frequency"} onClick={() => update("training_duration", value)}><strong>{value}</strong><small>min</small></button>)}</div>}
+          {currentKey === "daily_activity" && <label className="onboarding-single-field">Atividade diária<select value={form.daily_activity} onChange={(e) => update("daily_activity", e.target.value)}><option value="low">Baixa — passo a maior parte do dia sentado</option><option value="moderate">Moderada — caminho e movimento regular</option><option value="high">Alta — trabalho fisicamente ativo</option></select></label>}
+          {currentKey === "training_intensity" && <div className="onboarding-choice-grid">{[["easy","Leve"],["moderate","Moderada"],["hard","Intensa"]].map(([value,label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div>}
+          {currentKey === "food_budget" && <div className="onboarding-choice-grid">{[["low","Económico","Priorizar alimentos acessíveis e da época."],["medium","Moderado","Equilibrar variedade e custo."],["high","Flexível","Mais variedade de alimentos."]].map(([value,label,detail]) => <button type="button" key={value} className={form.food_budget === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("food_budget", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div>}
+          {currentKey === "allergies" && <label className="onboarding-single-field">Alergias ou intolerâncias<input type="text" value={form.allergies} onChange={(e) => update("allergies", e.target.value)} placeholder="Ex.: lactose, amendoim (opcional)" /></label>}
+          {currentKey === "available_foods" && <div className="onboarding-food-grid">{foodChoices.map((food) => <label className={foods.includes(food.name) ? "onboarding-food-option selected" : "onboarding-food-option"} key={food.name}>{food.image && <img src={food.image} alt="" loading="lazy" />}<input type="checkbox" checked={foods.includes(food.name)} onChange={(e) => setFoods((current) => e.target.checked ? [...current, food.name] : current.filter((name) => name !== food.name))} /><span>{food.name}</span></label>)}</div>}
+          {currentKey === "foods_to_avoid" && <label className="onboarding-single-field">Alimentos a evitar<input type="text" value={form.foods_to_avoid} onChange={(e) => update("foods_to_avoid", e.target.value)} placeholder="Opcional" /></label>}
+          {currentKey === "food_preferences" && <label className="onboarding-single-field">Preferências e pratos locais<textarea rows={4} value={form.food_preferences} onChange={(e) => update("food_preferences", e.target.value)} placeholder="Ex.: pratos moçambicanos, horários, alimentos preferidos..." /></label>}
+          {currentKey === "supplements" && <div className="onboarding-supplement-options">{supplementChoices.map((value) => <label key={value} className="checkbox"><input type="checkbox" checked={supplements.includes(value)} onChange={(e) => setSupplements((current) => e.target.checked ? [...current, value] : current.filter((item) => item !== value))} />{value}</label>)}</div>}
+          {currentKey === "birth_date" && age !== null && age >= 0 && <p className="onboarding-calculated-age">Idade calculada automaticamente: <b>{age} anos</b></p>}
         </div>
-        {step === 0 && (
-          <div className="onboarding-form">
-            <label>
-              Data de nascimento
-              <input
-                type="date"
-                value={form.birth_date}
-                onChange={(e) => update("birth_date", e.target.value)}
-              />
-            </label>
-            <label>
-              Sexo usado apenas para estimativa energética
-              <select
-                value={form.sex}
-                onChange={(e) => update("sex", e.target.value)}
-              >
-                <option value="">Prefiro não informar</option>
-                <option value="feminino">Feminino</option>
-                <option value="masculino">Masculino</option>
-              </select>
-            </label>
-            <label>
-              Orçamento alimentar
-              <select
-                value={form.food_budget}
-                onChange={(e) => update("food_budget", e.target.value)}
-              >
-                <option value="low">Económico</option>
-                <option value="medium">Moderado</option>
-                <option value="high">Flexível</option>
-              </select>
-            </label>
-            <label>
-              Alergias ou intolerâncias
-              <textarea
-                value={form.allergies}
-                onChange={(e) => update("allergies", e.target.value)}
-                placeholder="Ex.: nenhuma, lactose, amendoim…"
-              />
-            </label>
-          </div>
-        )}
-        {step === 1 && (
-          <div className="onboarding-form">
-            <label>
-              Peso atual (kg)
-              <input type="number" min="25" max="300" step="0.1" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} />
-            </label>
-            <label>
-              Altura (cm)
-              <input type="number" min="120" max="230" value={form.height} onChange={(e) => update("height", e.target.value)} />
-            </label>
-            <label>
-              Objetivo principal
-              <select value={form.goal} onChange={(e) => update("goal", e.target.value)}>
-                <option>Emagrecimento</option><option>Bulking (ganho de massa)</option><option>Definição (cutting)</option><option>Condicionamento</option>
-              </select>
-            </label>
-            <label>
-              Modalidade
-              <select value={form.modality} onChange={(e) => update("modality", e.target.value)}>
-                <option>Musculação</option><option>Calistenia</option><option>Karatê</option><option>Futsal</option><option>Natação</option>
-              </select>
-            </label>
-            <label>
-              Experiência
-              <select value={form.training_level} onChange={(e) => update("training_level", e.target.value)}>
-                <option value="beginner">Iniciante</option><option value="intermediate">Intermediário</option><option value="advanced">Avançado</option>
-              </select>
-            </label>
-            <label>
-              Dias disponíveis por semana
-              <select value={form.training_days_count} onChange={(e) => update("training_days_count", Number(e.target.value))}>
-                {[2,3,4,5,6].map((v) => <option key={v} value={v}>{v} dias</option>)}
-              </select>
-            </label>
-            <label className="onboarding-full-label">
-              Lesões ou limitações (opcional)
-              <textarea value={form.limitations} onChange={(e) => update("limitations", e.target.value)} placeholder="Movimentos a evitar ou limitações relevantes." />
-            </label>
-            <label>
-              Nível de atividade diária
-              <select
-                value={form.daily_activity}
-                onChange={(e) => update("daily_activity", e.target.value)}
-              >
-                <option value="sedentary">Pouco ativo</option>
-                <option value="light">Levemente ativo</option>
-                <option value="moderate">Moderadamente ativo</option>
-                <option value="active">Muito ativo</option>
-                <option value="very_active">Extremamente ativo</option>
-              </select>
-            </label>
-            <label>
-              Intensidade dos treinos
-              <select
-                value={form.training_intensity}
-                onChange={(e) => update("training_intensity", e.target.value)}
-              >
-                <option value="easy">Leve</option>
-                <option value="moderate">Moderada</option>
-                <option value="hard">Alta</option>
-              </select>
-            </label>
-            <label>
-              Duração média do treino
-              <input
-                type="number"
-                min="10"
-                max="240"
-                value={form.training_duration}
-                onChange={(e) => update("training_duration", e.target.value)}
-              />
-            </label>
-            <label>
-              Onde costuma treinar?
-              <select
-                value={form.training_location}
-                onChange={(e) => update("training_location", e.target.value)}
-              >
-                <option value="casa">Em casa / sem equipamento</option>
-                <option value="ginasio">No ginásio</option>
-                <option value="ambos">Casa e ginásio</option>
-              </select>
-            </label>
-            <p className="onboarding-hint">
-              O JL Trainer usará estas informações para ajustar as calorias
-              estimadas, a hidratação e o horário das refeições.
-            </p>
-          </div>
-        )}
-        {step === 2 && (
-          <div>
-            <p className="onboarding-hint">
-              Primeiro escolha como quer montar o plano. Se não selecionar
-              alimentos, o aplicativo usa automaticamente o plano recomendado
-              normal, sem deixar a alimentação vazia.
-            </p>
-            <div className="food-mode-options">
-              <button
-                type="button"
-                className={foodMode === "recommended" ? "selected" : ""}
-                onClick={() => {
-                  setFoodMode("recommended");
-                  setFoods([]);
-                }}
-              >
-                <span>✦</span>
-                <b>Plano recomendado JL</b>
-                <small>
-                  O aplicativo combina refeições equilibradas e pratos locais
-                  automaticamente.
-                </small>
-              </button>
-              <button
-                type="button"
-                className={foodMode === "custom" ? "selected" : ""}
-                onClick={() => setFoodMode("custom")}
-              >
-                <span>＋</span>
-                <b>Escolher alimentos</b>
-                <small>
-                  Selecione o que consegue comprar ou costuma ter em casa.
-                </small>
-              </button>
-            </div>
-            {foodMode === "custom" && (
-              <>
-                <p className="onboarding-hint">
-                  Não precisa escolher tudo. Escolha apenas o que tem acesso; o
-                  restante será completado pelo plano.
-                </p>
-                <div className="food-check-grid">
-                  {choices.map((food) => (
-                    <label
-                      className={`food-check ${foods.includes(food.name) ? "selected" : ""}`}
-                      key={food.id}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={foods.includes(food.name)}
-                        onChange={(e) =>
-                          setFoods((current) =>
-                            e.target.checked
-                              ? [...current, food.name]
-                              : current.filter((name) => name !== food.name),
-                          )
-                        }
-                      />
-                      {food.image && <img src={food.image} alt={food.name} loading="lazy" onError={(event) => event.currentTarget.closest(".food-check")?.remove()} />}
-                      <b>{food.name}</b>
-                    </label>
-                  ))}
-                </div>
-                <label className="onboarding-full-label">
-                  Outros alimentos ou pratos locais
-                  <textarea
-                    value={form.food_preferences}
-                    onChange={(e) => update("food_preferences", e.target.value)}
-                    placeholder="Ex.: matapa, caril de amendoim, esparguete com atum…"
-                  />
-                </label>
-              </>
-            )}
-          </div>
-        )}
-        {step === 3 && (
-          <div>
-            <p className="onboarding-hint">
-              Suplementos são opcionais. Primeiro construímos a alimentação;
-              depois mostramos apenas informações adequadas ao seu perfil.
-            </p>
-            <div className="supplement-check-list">
-              {[
-                "Não utilizo suplementos",
-                "Creatina",
-                "Whey protein",
-                "Pré-treino",
-                "Multivitamínico",
-              ].map((name) => (
-                <label key={name}>
-                  <input
-                    type="checkbox"
-                    checked={supplements.includes(name)}
-                    onChange={(e) =>
-                      setSupplements((current) =>
-                        e.target.checked
-                          ? [...current, name]
-                          : current.filter((value) => value !== name),
-                      )
-                    }
-                  />
-                  <span>{name}</span>
-                </label>
-              ))}
-            </div>
-            <div className="onboarding-note">
-              <b>Sem pressão para comprar.</b>
-              <span>
-                Se escolher creatina, a área Alimentação mostra a NPL como opção
-                comercial separada, com fonte oficial e contacto por WhatsApp.
-              </span>
-            </div>
-          </div>
-        )}
+        {error && <p className="onboarding-error" role="alert">{error}</p>}
         <div className="onboarding-actions">
-          <button
-            className="text-btn"
-            type="button"
-            onClick={step === 0 ? finish : () => setStep(step - 1)}
-          >
-            Guardar depois
-          </button>
-          {step < 3 ? (
-            <button
-              className="primary"
-              type="button"
-              onClick={() => setStep(step + 1)}
-            >
-              Continuar <ChevronRight size={16} />
-            </button>
-          ) : (
-            <button
-              className="primary"
-              type="button"
-              disabled={saving}
-              onClick={finish}
-            >
-              {saving ? "A guardar…" : "Concluir personalização"}
-            </button>
-          )}
+          <button className="text-btn" type="button" disabled={saving || step === 0} onClick={() => { setError(""); setStep((value) => value - 1); }}>Voltar</button>
+          {step < steps.length - 1 ? <button className="primary" type="button" onClick={() => { const message = validate(); if (message) setError(message); else { setError(""); setStep((value) => value + 1); } }}>Continuar <ChevronRight size={16} /></button> : <button className="primary" type="button" disabled={saving} onClick={finish}>{saving ? "A guardar…" : "Criar o meu plano"}</button>}
         </div>
+        <p className="onboarding-footnote">Os dados são usados para estimativas educativas. A idade é calculada pela data de nascimento; o peso pode ser atualizado automaticamente pelo registo de progresso.</p>
       </section>
     </div>
   );
 }
+
 export default function App() {
   const [language] = useLanguage(),
     t = uiText[language] || uiText.pt;
@@ -514,6 +318,18 @@ export default function App() {
     const match = String(meal.time || "").match(/(\d{1,2}):(\d{2})/);
     return match && Number(match[1]) * 60 + Number(match[2]) >= currentMinutes;
   }) || homeNutrition.meals?.[0] || null;
+  const homeGoal = String(profile.goal || "").toLowerCase();
+  const homeFoodFallback = homeGoal.includes("emagrec")
+    ? "/assets/food/reference-crops/couve-tomate.webp"
+    : homeGoal.includes("bulking") || homeGoal.includes("ganho") || homeGoal.includes("massa")
+      ? "/assets/food/recipes/R19.webp"
+      : "/assets/food/recipes/R09.webp";
+  const leoReminder = upcomingMeal
+    ? "Sua próxima refeição é " + String(upcomingMeal.title || "").toLowerCase() + " às " + upcomingMeal.time + "."
+    : "Complete os seus dados para o Leo personalizar os lembretes.";
+  const leoWaterTarget = homeNutrition.waterMl
+    ? (homeNutrition.waterMl / 1000).toFixed(1) + " L"
+    : "a sua meta diária";
   const weekActivity = Array.from({ length: 7 }, (_, index) => {
     const today = new Date();
     const mondayOffset = (today.getDay() + 6) % 7;
@@ -634,9 +450,6 @@ export default function App() {
       ["coach", t.coach, UserRound],
       ["planos", t.plans, Trophy],
       ["notificacoes", t.notifications, Bell],
-      ...(profile.role === "admin" || profile.role === "coach"
-        ? [["admin", "Gestão", Settings]]
-        : []),
     ];
   const whatsapp = (message) =>
     `https://wa.me/${(settings.whatsapp || "258868787572").replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
@@ -658,12 +471,13 @@ export default function App() {
     <div className={`shell theme-${theme}`}>
       {menu && (
         <button
+          type="button"
           className="drawer-backdrop"
           aria-label="Fechar menu"
           onClick={() => setMenu(false)}
         />
       )}
-      <aside className={menu ? "open" : ""}>
+      <aside id="primary-navigation" aria-label="Menu principal" className={menu ? "open" : ""}>
         <div className="brand">
           <div className="brand-mark">JL</div>
           <div>
@@ -674,6 +488,7 @@ export default function App() {
         <span className="side-label">SUA JORNADA</span>
         {[...nav, ...extra].map(([id, name, Icon]) => (
           <button
+            type="button"
             key={id}
             className={`side-btn ${tab === id ? "active" : ""}`}
             onClick={() => go(id)}
@@ -684,6 +499,7 @@ export default function App() {
         ))}
         <div className="side-bottom">
           <button
+            type="button"
             className="side-btn"
             onClick={async () => {
               if (supabase) {
@@ -700,8 +516,11 @@ export default function App() {
       <main>
         <header>
           <button
+            type="button"
             className="mobile-menu"
-            aria-label="Abrir menu"
+            aria-label={menu ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menu}
+            aria-controls="primary-navigation"
             onClick={() => setMenu(!menu)}
           >
             <Menu />
@@ -843,6 +662,15 @@ export default function App() {
                         </div>
                       </div>
                     </section>
+                    <section className="leo-reminder-card" aria-live="polite">
+                      <div className="leo-reminder-mascot"><LeoMascot size={74} /></div>
+                      <div className="leo-reminder-copy">
+                        <span className="eyebrow">LEO · LEMBRETE PERSONALIZADO</span>
+                        <strong>{leoReminder}</strong>
+                        <p>Não se esqueça da água: meta diária de {leoWaterTarget}.</p>
+                      </div>
+                      <button type="button" className="outline" onClick={() => go("nutricao")}>Ver alimentação</button>
+                    </section>
                     <div className="grid stats home-stats">
                       <Stat label="Dias com treino" value={metrics.total} detail={`${metrics.month} neste mês`} />
                       <Stat label="Sequência atual" value={`${metrics.streak} dias`} detail="Dias consecutivos registados" />
@@ -851,8 +679,18 @@ export default function App() {
                     </div>
                     <section className="home-focus-grid">
                       <article className="home-focus-card home-next-meal">
-                        <div className="home-focus-image" data-emoji="🥗">
-                          {upcomingMeal?.image ? <img src={upcomingMeal.image} alt={`Refeição: ${upcomingMeal.recipeName || upcomingMeal.title}`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; event.currentTarget.parentElement.classList.add("image-fallback"); }} /> : <span>🥗</span>}
+                        <div className="home-focus-image">
+                          <img
+                            src={upcomingMeal?.image || homeFoodFallback}
+                            alt={"Fotografia de " + (upcomingMeal?.recipeName || upcomingMeal?.title || "alimentos saudáveis")}
+                            loading="lazy"
+                            onError={(event) => {
+                              if (event.currentTarget.dataset.fallback !== "true") {
+                                event.currentTarget.dataset.fallback = "true";
+                                event.currentTarget.src = homeFoodFallback;
+                              } else event.currentTarget.style.display = "none";
+                            }}
+                          />
                         </div>
                         <div className="home-focus-copy">
                           <span className="eyebrow">PRÓXIMA REFEIÇÃO · {upcomingMeal?.time || "PLANO DIÁRIO"}</span>

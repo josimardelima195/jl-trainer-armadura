@@ -134,6 +134,176 @@
       "source_type": "project_recipe_photo",
       "status": "active",
       "note": "Fotografia de receita já presente no repositório; usada como imagem da aveia para não utilizar o ficheiro com marca de água."
+    },
+    {
+      "path": "/assets/food/recipes/banana-oatmeal.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Banana oatmeal.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Banana_oatmeal.jpg",
+      "author": "Shisma",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/banana-pancakes.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:BananaPancakes.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:BananaPancakes.JPG",
+      "author": "Zdlr",
+      "license": "Public domain",
+      "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/yogurt-fruit-bowl.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Yogurt fruit bowl.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Yogurt_fruit_bowl.jpg",
+      "author": "Jumbocombo0811",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/mango-pineapple-bowl.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Mango Pineapple Smoothie Bowl.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Mango_Pineapple_Smoothie_Bowl.jpg",
+      "author": "Eloquent Insan",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/tuna-pasta-salad.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Tuna pasta salad.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Tuna_pasta_salad.jpg",
+      "author": "FotoosVanRobin",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/tuna-salad-sandwich.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Tuna salad sandwich.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Tuna_salad_sandwich.jpg",
+      "author": "jeffreyw",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/beef-stew-rice.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Estofado de carne.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Estofado_de_carne.jpg",
+      "author": "PapiPijuan",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/fish-with-xima.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Peixe Vermelha com Xima.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Peixe_Vermelha_com_Xima.jpg",
+      "author": "PrestigiousSwazi",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/mozambique-typical-lunch.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Typical lunch in Mozambique.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Typical_lunch_in_Mozambique.JPG",
+      "author": "Andbandawe",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/mozambique-tilapia.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Tilápia.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Til%C3%A1pia.jpg",
+      "author": "Mussivane84",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/chicken-spaghetti.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Chicken Spaghetti.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Chicken_Spaghetti.jpg",
+      "author": "Thisisthestoryofagirl",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/omelette-spinach.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Egg and spinach breakfast omelet.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Egg_and_spinach_breakfast_omelet.jpg",
+      "author": "Kurt Kaiser",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/hamburger-plate.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Hamburger on a plate.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Hamburger_on_a_plate.jpg",
+      "author": "Lyndadelz",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/chicken-vegetable-soup.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Chicken vegetable soup.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Chicken_vegetable_soup.jpg",
+      "author": "Tiia Monto",
+      "license": "CC BY-SA 3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/rice-and-beans.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Rice and beans 1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Rice_and_beans_1.jpg",
+      "author": "Umuhiera",
+      "license": "CC0 1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/mozambique-bean-stew.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Bohnen - Eintopf.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Bohnen_-_Eintopf.JPG",
+      "author": "Lichinga-niassa",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/recipes/cheese-on-toast.webp",
+      "source_type": "wikimedia_commons",
+      "source_title": "File:Cheese-on-toast.JPG",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cheese-on-toast.JPG",
+      "author": "ProfDEH",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "modifications": "Resized and converted to WebP for app display."
     }
   ],
   "commercial_use_note": "Cada fotografia externa tem a sua licença e atribuição registadas em remote_images. Respeitar a licença individual, incluindo atribuição e share-alike quando aplicável.",
