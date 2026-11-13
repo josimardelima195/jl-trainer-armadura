@@ -3,7 +3,7 @@ import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 import { planMatrix, kataCatalog } from "../lib/model";
 import { upload, openMedia } from "../lib/storage";
-import { Title, Stat, Empty, Locked, Field, Chart } from "./UI";
+import { Title, Stat, Empty, Locked, Field, Chart, LeoMascot } from "./UI";
 import {
   build30DayPlan,
   intensityLabels,
@@ -11,6 +11,7 @@ import {
   exerciseEquipmentMode,
   normalizeEquipmentSelection,
   modalityKeyFor,
+  trainingModalityKeyFor,
   ageFromProfile,
   samePrimaryMuscle,
   suitableForProfile,
@@ -2365,8 +2366,8 @@ export function Assistant({ plan, go }) {
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
 const foodPhoto = (food) => food?.image || null;
 
-export function Nutrition({ plan }) {
-  const { profile } = useStore();
+export function Nutrition({ plan, whatsapp }) {
+  const { profile, userId } = useStore();
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
   const [day, setDay] = useState(Number(profile.nutrition_day) || 1),
@@ -2386,6 +2387,23 @@ export function Nutrition({ plan }) {
       }
     }),
     [replaced, setReplaced] = useState({});
+  const shoppingStorageKey = "jl-shopping-" + (userId || profile.id || "guest");
+  const [shoppingState, setShoppingState] = useState({ key: null, items: {} });
+  const shoppingChecked = shoppingState.key === shoppingStorageKey ? shoppingState.items : {};
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(shoppingStorageKey) || "{}");
+      setShoppingState({ key: shoppingStorageKey, items: saved });
+    } catch {
+      setShoppingState({ key: shoppingStorageKey, items: {} });
+    }
+  }, [shoppingStorageKey]);
+  useEffect(() => {
+    if (shoppingState.key !== shoppingStorageKey) return;
+    try {
+      localStorage.setItem(shoppingStorageKey, JSON.stringify(shoppingState.items));
+    } catch {}
+  }, [shoppingState, shoppingStorageKey]);
   const [waterMl, setWaterMl] = useState(() => {
     try {
       return Math.max(
@@ -2412,7 +2430,7 @@ export function Nutrition({ plan }) {
       nutrition_day: Number(day),
     }),
     kcal = estimateWorkoutKcal(profile, 35, intensity),
-    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays),
+    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays, n.portionScale),
     allowed = (plan?.tier || 0) >= 3;
   const foodGroups = ["Todos", ...new Set(foodLibrary.map((food) => food.group))];
   const visibleFoodLibrary = foodLibrary.filter((food) => {
@@ -2437,24 +2455,24 @@ export function Nutrition({ plan }) {
       }));
   };
   const mealData = (meal) => {
-    const foods = replaced[meal.title]?.length
-      ? replaced[meal.title]
-      : meal.foods;
-    const sum = (key) =>
-      Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
+    const hasReplacement = Boolean(replaced[meal.title]?.length);
+    const foods = hasReplacement ? replaced[meal.title] : meal.foods;
+    const sum = (key) => Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
+    const totals = hasReplacement ? null : meal.nutrition;
     return {
       ...meal,
       foods,
       items: meal.recipeName ? [meal.recipeName] : foods.map((food) => food.name),
-      ingredients: meal.ingredients?.length
-        ? meal.ingredients
-        : foods.map((food) => `${food.name} (${food.portion})`),
-      image: meal.image || foods.find((food) => foodPhoto(food))?.image || null,
-      kcal: sum("kcal"),
-      protein: sum("protein"),
-      carbs: sum("carbs"),
-      fat: sum("fat"),
-      fiber: sum("fiber"),
+      ingredients: hasReplacement
+        ? foods.map((food) => food.name + " (" + food.portion + ")")
+        : meal.ingredients?.length ? meal.ingredients : foods.map((food) => food.name + " (" + food.portion + ")"),
+      image: meal.image || null,
+      kcal: totals?.kcal ?? sum("kcal"),
+      protein: totals?.protein ?? sum("protein"),
+      carbs: totals?.carbs ?? sum("carbs"),
+      fat: totals?.fat ?? sum("fat"),
+      fiber: totals?.fiber ?? sum("fiber"),
+      allergyWarning: meal.allergyWarning && !hasReplacement,
     };
   };
   return (
@@ -2627,17 +2645,24 @@ export function Nutrition({ plan }) {
       {shoppingOpen && (
         <div className="shopping-layer" role="dialog" aria-modal="true" aria-label="Lista de compras">
           <button type="button" className="shopping-overlay" aria-label="Fechar lista de compras" onClick={() => setShoppingOpen(false)} />
-          <aside className="shopping-drawer">
+          <section className="shopping-drawer">
             <div className="shopping-drawer-head">
               <div><span className="eyebrow">COMPRAS CALCULADAS</span><h2>O que comprar</h2><p>{profile.household_size || profile.people_count || 1} pessoa(s) · {shoppingList.length} itens</p></div>
               <button type="button" className="icon-btn" onClick={() => setShoppingOpen(false)} aria-label="Fechar">×</button>
             </div>
             <label className="shopping-period">Período<select value={shoppingDays} onChange={(e) => setShoppingDays(Number(e.target.value))}><option value="7">7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></label>
             <p className="shopping-drawer-note">Quantidades calculadas a partir das refeições da modalidade atual e multiplicadas pelo número de pessoas.</p>
-            <div className="shopping-list">
-              {shoppingList.map((item) => <label className="shopping-item" key={`${item.name}-${item.unit}`}><input type="checkbox" /><span><b>{item.name}</b><small>{item.display}</small></span></label>)}
+            <div className="shopping-check-summary">
+              <b>{shoppingList.filter((item) => shoppingChecked[item.key]).length} de {shoppingList.length} itens marcados</b>
+              <button type="button" className="text-btn" onClick={() => setShoppingState({key:shoppingStorageKey,items:{}})}>Limpar marcados</button>
             </div>
-          </aside>
+            <div className="shopping-list">
+              {shoppingList.map((item) => <label className={shoppingChecked[item.key] ? "shopping-item checked" : "shopping-item"} key={item.key}>
+                <input type="checkbox" checked={Boolean(shoppingChecked[item.key])} onChange={(event) => setShoppingState((current) => ({key:shoppingStorageKey,items:{...current.items,[item.key]:event.target.checked}}))} />
+                <span><b>{item.name}</b><small>{item.display}</small></span>
+              </label>)}
+            </div>
+          </section>
         </div>
       )}
       <section className="meal-timeline">
@@ -2682,9 +2707,12 @@ export function Nutrition({ plan }) {
                   </span>
                 </div>
                 <div className="meal-ingredients">
-                  <b>Ingredientes e porções:</b>{" "}
+                  <b>Ingredientes e porções estimadas:</b>{" "}
                   {meal.ingredients?.join(" · ") || meal.items.join(" · ")}
                 </div>
+                {meal.allergyWarning && (
+                  <p className="allergy-warning">A receita inclui um ingrediente que coincide com uma restrição do seu perfil. Não consuma esta refeição sem confirmar uma substituição segura.</p>
+                )}
                 <div className="food-chips">
                   {meal.foods.filter((food) => foodPhoto(food)).map((food) => (
                     <div
