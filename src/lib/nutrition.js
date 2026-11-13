@@ -774,6 +774,185 @@ function workbookKeyFor(modality) {
     ? modality
     : "manutencao";
 }
+
+const recipeNutritionPer100 = {
+  Aveia:{kcal:389,protein:16.9,carbs:66.3,fat:6.9,fiber:10.6},
+  Leite:{kcal:61,protein:3.2,carbs:4.8,fat:3.3,fiber:0},
+  Banana:{kcal:89,protein:1.1,carbs:22.8,fat:0.3,fiber:2.6},
+  Canela:{kcal:247,protein:4,carbs:81,fat:1.2,fiber:53},
+  Ovos:{kcal:143,protein:12.6,carbs:0.7,fat:9.5,fiber:0},
+  "Pão integral":{kcal:247,protein:13,carbs:41,fat:4.2,fiber:7},
+  Tomate:{kcal:18,protein:0.9,carbs:3.9,fat:0.2,fiber:1.2},
+  "Farinha de milho":{kcal:365,protein:9.4,carbs:76.9,fat:4.7,fiber:7.3},
+  Papaia:{kcal:43,protein:0.5,carbs:10.8,fat:0.3,fiber:1.7},
+  "Iogurte natural":{kcal:61,protein:3.5,carbs:4.7,fat:3.3,fiber:0},
+  Ananás:{kcal:50,protein:0.5,carbs:13.1,fat:0.1,fiber:1.4},
+  "Queijo fresco":{kcal:98,protein:11.1,carbs:3.4,fat:4.3,fiber:0},
+  Laranja:{kcal:47,protein:0.9,carbs:11.8,fat:0.1,fiber:2.4},
+  "Batata-doce":{kcal:86,protein:1.6,carbs:20.1,fat:0.1,fiber:3},
+  Manga:{kcal:60,protein:0.8,carbs:15,fat:0.4,fiber:1.6},
+  Amendoim:{kcal:567,protein:25.8,carbs:16.1,fat:49.2,fiber:8.5},
+  Frango:{kcal:120,protein:22.5,carbs:0,fat:2.6,fiber:0},
+  Arroz:{kcal:365,protein:7.1,carbs:80,fat:0.7,fiber:1.3},
+  Alface:{kcal:15,protein:1.4,carbs:2.9,fat:0.2,fiber:1.3},
+  Cenoura:{kcal:41,protein:0.9,carbs:9.6,fat:0.2,fiber:2.8},
+  Azeite:{kcal:884,protein:0,carbs:0,fat:100,fiber:0},
+  Carapau:{kcal:158,protein:19.5,carbs:0,fat:8.5,fiber:0},
+  Cebola:{kcal:40,protein:1.1,carbs:9.3,fat:0.1,fiber:1.7},
+  "Carne magra":{kcal:170,protein:21,carbs:0,fat:9,fiber:0},
+  Mandioca:{kcal:160,protein:1.4,carbs:38,fat:0.3,fiber:1.8},
+  Couve:{kcal:35,protein:2.9,carbs:4.4,fat:1.5,fiber:4.1},
+  Feijão:{kcal:127,protein:8.7,carbs:22.8,fat:0.5,fiber:6.4},
+  Esparguete:{kcal:371,protein:13,carbs:75,fat:1.5,fiber:3.2},
+  Tilápia:{kcal:96,protein:20.1,carbs:0,fat:1.7,fiber:0},
+  Batata:{kcal:87,protein:1.9,carbs:20.1,fat:0.1,fiber:1.8},
+  Cabrito:{kcal:143,protein:27,carbs:0,fat:3,fiber:0},
+  Matapa:{kcal:210,protein:6,carbs:12,fat:16,fiber:4},
+  Mucapata:{kcal:160,protein:5,carbs:28,fat:3,fiber:4},
+  Atum:{kcal:116,protein:25.5,carbs:0,fat:0.8,fiber:0},
+  Abóbora:{kcal:26,protein:1,carbs:6.5,fat:0.1,fiber:0.5},
+  Pepino:{kcal:15,protein:0.7,carbs:3.6,fat:0.1,fiber:0.5},
+  Abacate:{kcal:160,protein:2,carbs:8.5,fat:14.7,fiber:6.7},
+};
+const recipeLibraryName = {
+  "Farinha de milho":"Xima", Arroz:"Arroz cozido", Frango:"Frango grelhado",
+  Carapau:"Carapau grelhado", "Carne magra":"Carne magra", Cabrito:"Carne magra",
+  Esparguete:"Massa integral", Tilápia:"Peixe grelhado", Peixe:"Peixe grelhado",
+  Batata:"Batata cozida", Couve:"Couve e tomate", Feijão:"Feijão cozido",
+};
+const recipeGramPerUnit = {
+  Banana:118, Ovos:50, Laranja:130, "Pão integral":30, Tomate:80,
+  Pepino:100, Alface:50, Cebola:70, Cenoura:60, Couve:60,
+};
+function normalizeRecipeIngredient(value) {
+  const key=String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+  if(key.includes("peito de frango")||key.includes("frango sem pele")||key.includes("frango cozido")||key==="frango")return "Frango";
+  if(key.includes("vaca")||key.includes("carne magra")||key.includes("carne picada"))return "Carne magra";
+  if(key.includes("cabrito"))return "Cabrito";
+  if(key.includes("tilapia"))return "Tilápia";
+  if(key.includes("carapau"))return "Carapau";
+  if(key.includes("peixe"))return "Peixe";
+  if(key.includes("farinha de milho"))return "Farinha de milho";
+  if(key.includes("esparguete")||key.includes("massa"))return "Esparguete";
+  if(key.includes("arroz"))return "Arroz";
+  if(key.includes("batata doce"))return "Batata-doce";
+  if(key.includes("batata"))return "Batata";
+  if(key.includes("mandioca"))return "Mandioca";
+  if(key.includes("feijao"))return "Feijão";
+  if(key.includes("ovo"))return "Ovos";
+  if(key.includes("pao"))return "Pão integral";
+  if(key.includes("queijo"))return "Queijo fresco";
+  if(key.includes("iogurte"))return "Iogurte natural";
+  if(key.includes("leite"))return "Leite";
+  if(key.includes("aveia"))return "Aveia";
+  if(key.includes("banana"))return "Banana";
+  if(key.includes("papaia"))return "Papaia";
+  if(key.includes("manga"))return "Manga";
+  if(key.includes("ananas"))return "Ananás";
+  if(key.includes("laranja"))return "Laranja";
+  if(key.includes("amendoim"))return "Amendoim";
+  if(key.includes("atum"))return "Atum";
+  if(key.includes("tomate"))return "Tomate";
+  if(key.includes("alface"))return "Alface";
+  if(key.includes("cenoura"))return "Cenoura";
+  if(key.includes("couve"))return "Couve";
+  if(key.includes("cebola"))return "Cebola";
+  if(key.includes("pepino"))return "Pepino";
+  if(key.includes("azeite"))return "Azeite";
+  if(key.includes("canela"))return "Canela";
+  if(key.includes("abobora"))return "Abóbora";
+  if(key.includes("abacate"))return "Abacate";
+  if(key.includes("matapa"))return "Matapa";
+  if(key.includes("mucapata"))return "Mucapata";
+  return null;
+}
+function splitGroupedRecipeIngredient(name) {
+  const normalized=String(name||"").trim();
+  if(/^salada$/i.test(normalized))return ["Alface","Tomate","Pepino"];
+  const parts=normalized.split(/,\s*|\s+e\s+/i).map((part)=>part.trim()).filter(Boolean);
+  return parts.length>1?parts:[normalized];
+}
+export function parseRecipeIngredients(text) {
+  const parts=String(text||"").split(/[;·]/).map((part)=>part.trim()).filter(Boolean);
+  const result=[];
+  for(const part of parts){
+    let name=part,quantity=1,unit="un",matched=false;
+    let match=part.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|unidades?|un|ovos?|fatias?|colheres?|colher)?\s*(.*)$/i);
+    if(match){
+      matched=true;quantity=Number(match[1].replace(",","."));unit=(match[2]||"un").toLowerCase();name=match[3].trim();
+      if(!name&&/ovos?/i.test(unit)){name="ovo";unit="un";}
+      else if(!name){name=unit;unit="un";}
+    }else{
+      match=part.match(/^(.+?)\s+(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|unidades?|un|ovos?|fatias?|colheres?|colher|m[eé]dia|m[eé]dio|pequeno|pequena|grande)?\b.*$/i);
+      if(match){matched=true;name=match[1].trim();quantity=Number(match[2].replace(",","."));unit=(match[3]||"un").toLowerCase();}
+    }
+    if(/kg/.test(unit)){quantity*=1000;unit="g";}
+    else if(unit==="g")unit="g";
+    else if(unit==="l"){quantity*=1000;unit="ml";}
+    else if(unit==="ml")unit="ml";
+    else if(/colher/.test(unit)){quantity*=15;unit="g";}
+    else unit="un";
+    if(!matched){
+      const key=normalizeRecipeIngredient(name);
+      if(key==="Canela"){quantity=1;unit="g";}
+      else if(key==="Tomate"||key==="Pepino"){quantity=1;unit="un";}
+      else if(key==="Alface"||key==="Couve"||key==="Cenoura"){quantity=100;unit="g";}
+    }
+    const grouped=splitGroupedRecipeIngredient(name);
+    if(grouped.length>1){
+      const total=unit==="g"||unit==="ml"?quantity:quantity*100;
+      const divided=total/grouped.length;
+      for(const groupName of grouped){
+        const canonical=normalizeRecipeIngredient(groupName);
+        if(canonical)result.push({name:canonical,libraryName:recipeLibraryName[canonical]||canonical,quantity:divided,unit:"g"});
+      }
+    }else{
+      const canonical=normalizeRecipeIngredient(name);
+      if(canonical)result.push({name:canonical,libraryName:recipeLibraryName[canonical]||canonical,quantity,unit});
+    }
+  }
+  return result;
+}
+function recipeIngredientGrams(item) {
+  if(item.unit==="g")return item.quantity;
+  if(item.unit==="ml")return item.quantity*(item.name==="Azeite"?0.91:1);
+  return item.quantity*(recipeGramPerUnit[item.name]||100);
+}
+function roundMacro(value,places=1){const factor=10**places;return Math.round((Number(value)||0)*factor)/factor;}
+function recipeIngredientMacros(item,scale=1){
+  const source=recipeNutritionPer100[item.name]||{kcal:0,protein:0,carbs:0,fat:0,fiber:0};
+  const factor=recipeIngredientGrams(item)*scale/100;
+  return {kcal:source.kcal*factor,protein:source.protein*factor,carbs:source.carbs*factor,fat:source.fat*factor,fiber:source.fiber*factor};
+}
+function recipeFoodItems(items,scale=1,allergy=""){
+  return items.map((item)=>{
+    const library=byName[item.libraryName]||byName[item.name]||{};
+    const macros=recipeIngredientMacros(item,scale);
+    const quantity=roundMacro(item.quantity*scale,1);
+    const portion= item.unit==="g"||item.unit==="ml"
+      ? Math.round(quantity)+" "+item.unit
+      : quantity+" un";
+    return {
+      id:library.id||("recipe-"+item.name.toLowerCase().replace(/\s+/g,"-")),
+      name:item.libraryName||item.name,
+      sourceIngredient:item.name,
+      portion,
+      kcal:Math.round(macros.kcal),
+      protein:roundMacro(macros.protein),
+      carbs:roundMacro(macros.carbs),
+      fat:roundMacro(macros.fat),
+      fiber:roundMacro(macros.fiber),
+      group:library.group||"Ingrediente",
+      image:library.image||null,
+      restricted:isRestrictedFood(item.libraryName||item.name,allergy),
+    };
+  });
+}
+function sumRecipeFoods(foods){
+  const keys=["kcal","protein","carbs","fat","fiber"];
+  return Object.fromEntries(keys.map((key)=>[key,roundMacro(foods.reduce((sum,food)=>sum+(Number(food[key])||0),0),key==="kcal"?0:1)]));
+}
+
 export const supplementCatalog = [
   { id:"usn-pure-creatine-200g",brand:"USN",name:"Pure Creatine Monohydrate",format:"200 g",priceMzn:900,pricePer100g:450,retailer:"Kratos Empire",image:"https://kratosempire.co.mz/cdn/shop/files/USNPURECREATINE300GRBag_800x800_881d7050-1ec1-4c41-84be-08c4b3f85768.jpg?v=1769620230",url:"https://kratosempire.co.mz/products/pure-creatine-monohydrate",availability:"Preço observado em 13/11/2026; confirmar variante e stock na loja." },
   { id:"usn-pure-creatine-410g",brand:"USN",name:"Pure Creatine Monohydrate",format:"410 g",priceMzn:1600,pricePer100g:390,retailer:"Kratos Empire",image:"https://kratosempire.co.mz/cdn/shop/files/USNPURECREATINE300GRBag_800x800_881d7050-1ec1-4c41-84be-08c4b3f85768.jpg?v=1769620230",url:"https://kratosempire.co.mz/products/pure-creatine-monohydrate",availability:"Preço observado em 13/11/2026; confirmar variante e stock na loja." },
