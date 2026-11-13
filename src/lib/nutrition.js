@@ -719,7 +719,12 @@ const recipeFoodNames = {
 const recipeImages = {
   R01: "/assets/food/recipes/R01.webp",
   R02: "/assets/food/recipes/R02.webp",
-    R19: "/assets/food/recipes/R19.webp",
+  R05: "https://commons.wikimedia.org/wiki/Special:FilePath/Banana_Pancakes_Pk021.jpg",
+  R09: "/assets/food/recipes/R09.webp",
+  R13: "https://commons.wikimedia.org/wiki/Special:FilePath/Chicken_Spaghetti.jpg",
+  R17: "https://commons.wikimedia.org/wiki/Special:FilePath/Matapa.jpg",
+  R19: "/assets/food/recipes/R19.webp",
+  R23: "https://commons.wikimedia.org/wiki/Special:FilePath/Tuna_Sandwich.jpg",
   R27: "/assets/food/recipes/R27.webp",
 };
 const ingredientAliases = [
@@ -770,16 +775,11 @@ function workbookKeyFor(modality) {
     : "manutencao";
 }
 export const supplementCatalog = [
-  {
-    id: "npl-creatine-monohydrate",
-    brand: "NPL",
-    name: "Creatine Monohydrate",
-    format: "150 g ou 500 g",
-    image: "/assets/supplements/npl-creatine-monohydrate.png",
-    url: "https://www.npl.za.com/collections/creatines/products/creatine-monohydrate",
-    whatsapp:
-      "https://wa.me/258868787572?text=Ol%C3%A1!%20Gostaria%20de%20saber%20o%20pre%C3%A7o%2C%20disponibilidade%20e%20entrega%20da%20NPL%20Creatine%20Monohydrate.",
-  },
+  { id:"usn-pure-creatine-200g",brand:"USN",name:"Pure Creatine Monohydrate",format:"200 g",priceMzn:900,pricePer100g:450,retailer:"Kratos Empire",image:"https://kratosempire.co.mz/cdn/shop/files/USNPURECREATINE300GRBag_800x800_881d7050-1ec1-4c41-84be-08c4b3f85768.jpg?v=1769620230",url:"https://kratosempire.co.mz/products/pure-creatine-monohydrate",availability:"Preço observado em 13/11/2026; confirmar variante e stock na loja." },
+  { id:"usn-pure-creatine-410g",brand:"USN",name:"Pure Creatine Monohydrate",format:"410 g",priceMzn:1600,pricePer100g:390,retailer:"Kratos Empire",image:"https://kratosempire.co.mz/cdn/shop/files/USNPURECREATINE300GRBag_800x800_881d7050-1ec1-4c41-84be-08c4b3f85768.jpg?v=1769620230",url:"https://kratosempire.co.mz/products/pure-creatine-monohydrate",availability:"Preço observado em 13/11/2026; confirmar variante e stock na loja." },
+  { id:"npl-creatine-150g",brand:"NPL",name:"Creatine Monohydrate",format:"150 g",priceMzn:1000,pricePer100g:667,retailer:"IR Fitness",image:"https://irfitnessshop.co.mz/wp-content/uploads/2026/02/NPL-Creatine-Monohydrate-150g.png.png",url:"https://irfitnessshop.co.mz/product/npl-creatine-monohydrate-150g/",availability:"Preço observado em 13/11/2026; confirmar stock e entrega." },
+  { id:"evolve-creatine-300g",brand:"Evolve",name:"Creatine Mono",format:"300 g",priceMzn:1550,pricePer100g:517,retailer:"IR Fitness",image:null,url:"https://irfitnessshop.co.mz/product-category/creatinas/",availability:"Preço observado em 13/11/2026 na categoria de creatinas; confirmar produto e stock." },
+  { id:"biogen-creatine-500g",brand:"Biogen",name:"Creatine Monohydrate",format:"500 g",priceMzn:2130,pricePer100g:426,retailer:"Krolyc",image:null,url:"https://krolyc.co.mz/product/biogen-creatine-monohydrate-500g/",availability:"Preço observado em 13/11/2026; confirmar stock e entrega." },
 ];
 const menu30 = [
   [
