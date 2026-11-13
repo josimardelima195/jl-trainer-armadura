@@ -3,7 +3,7 @@ import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
 import { planMatrix, kataCatalog } from "../lib/model";
 import { upload, openMedia } from "../lib/storage";
-import { Title, Stat, Empty, Locked, Field, Chart } from "./UI";
+import { Title, Stat, Empty, Locked, Field, Chart, LeoMascot } from "./UI";
 import {
   build30DayPlan,
   intensityLabels,
@@ -337,13 +337,9 @@ export function Workouts({ plan }) {
     [saved, setSaved] = useState(false),
     [logId, setLogId] = useState(() => crypto.randomUUID()),
     [equipment, setEquipment] = useState(
-      profile.training_location === "casa"
-        ? "Sem equipamento"
-        : profile.training_location === "ginasio"
-          ? "Com equipamento"
-          : "",
+      profile.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
     ),
-    [place, setPlace] = useState(profile.training_location || ""),
+    [place, setPlace] = useState(profile.training_location === "ginasio" ? "ginasio" : "casa"),
     [mode, setMode] = useState("auto"),
     [intervalSeconds, setIntervalSeconds] = useState(30),
     [intervalLeft, setIntervalLeft] = useState(0),
@@ -475,9 +471,20 @@ export function Workouts({ plan }) {
         ),
     [allExercises, plan?.tier, selectedEquipmentMode],
   );
-  const setsFor = (exercise) =>
-    age >= 60 ? Math.min(2, exercise.sets || 3) : exercise.sets || 3;
-  const repsFor = (exercise) => exercise.reps || "8–12";
+  const modalityName = String(profile.modality || "").toLowerCase();
+  const modalityDefaultSets = modalityName.includes("natação") ? 4 : 3;
+  const setsFor = (exercise) => {
+    const base = Number(exercise.sets) || modalityDefaultSets;
+    return age >= 60 ? Math.min(2, base) : base;
+  };
+  const repsFor = (exercise) => {
+    if (exercise.reps) return exercise.reps;
+    if (modalityName.includes("calisten")) return "6–10";
+    if (modalityName.includes("karat")) return "8–12 por lado";
+    if (modalityName.includes("futsal")) return "20–30 s";
+    if (modalityName.includes("natação")) return "4–6 × 25 m";
+    return "8–12";
+  };
   const total = exercises.reduce((sum, exercise) => sum + setsFor(exercise), 0);
   const count = exercises.reduce(
     (sum, exercise) =>
@@ -736,9 +743,8 @@ export function Workouts({ plan }) {
               reset();
             }}
           >
-            <option value="">Todos os locais</option>
-            <option value="ginasio">Ginásio</option>
-            <option value="casa">Em casa</option>
+            <option value="ginasio">Gym</option>
+            <option value="casa">Home</option>
           </select>
         </label>
         <label>
@@ -1026,232 +1032,160 @@ export function Workouts({ plan }) {
 }
 
 export function Progress({ metrics }) {
-  const { data, userId, mutate, busy, setError, refresh } = useStore(),
-    [form, setForm] = useState(false),
-    [photo, setPhoto] = useState("");
-  const rows = data.progress_measurements.filter((r) => r.user_id === userId);
+  const { data, userId, mutate, busy, setError, refresh, profile } = useStore();
+  const [form, setForm] = useState(false);
+  const [photo, setPhoto] = useState("");
+  const [photoUrls, setPhotoUrls] = useState({});
+  const rows = (data.progress_measurements || []).filter((row) => row.user_id === userId);
+  const userPhotos = (data.progress_photos || [])
+    .filter((item) => item.user_id === userId)
+    .sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+  const photoKey = userPhotos.map((item) => item.id + ":" + item.path).join("|");
+  useEffect(() => {
+    let alive = true;
+    if (!userPhotos.length) { setPhotoUrls({}); return () => { alive = false; }; }
+    Promise.all(userPhotos.map(async (item) => {
+      try { return [item.id, await openMedia("progress-photos", item.path, 3600)]; }
+      catch { return [item.id, null]; }
+    })).then((entries) => {
+      if (alive) setPhotoUrls(Object.fromEntries(entries.filter(([, url]) => url)));
+    });
+    return () => { alive = false; };
+  }, [photoKey, userId]);
+  const allLogs = (data.training_logs || []).filter((log) => log.user_id === userId);
+  const modalityKey = modalityKeyFor(profile.modality || profile.goal || "");
+  const modalityLogs = allLogs.filter((log) => !log.program_modality || !modalityKey || log.program_modality === modalityKey || log.loads?.modality === modalityKey);
+  const completedProgramDays = new Set(modalityLogs
+    .map((log) => Number(log.program_day || log.loads?.program_day))
+    .filter((day) => Number.isInteger(day) && day >= 1 && day <= 30));
+  const completedCount = Math.min(30, completedProgramDays.size);
+  const remainingCount = Math.max(0, 30 - completedCount);
+  const firstPhoto = userPhotos[0] || null;
+  const latestPhoto = userPhotos.at(-1) || null;
+  const subscription = (data.subscriptions || [])
+    .filter((item) => item.user_id === userId && item.status === "active")
+    .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
+  const firstLogDate = modalityLogs.length
+    ? modalityLogs.map((item) => item.completed_at).sort()[0]
+    : null;
+  const journeyStart = subscription?.started_at || firstLogDate || profile.created_at;
+  const elapsedDays = journeyStart
+    ? Math.min(30, Math.max(1, Math.floor((Date.now() - new Date(journeyStart).getTime()) / 86400000) + 1))
+    : 0;
+  const licenseRemaining = subscription?.expires_at
+    ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
+    : null;
+  const goalLabels = {
+    emagrecimento: "Emagrecimento",
+    bulking: "Ganho de massa",
+    definicao: "Cutting / definição",
+    condicionamento: "Condicionamento",
+    manutencao: "Manutenção",
+  };
+  const currentWeight = metrics.current ?? (profile.current_weight ? Number(profile.current_weight) : null);
   return (
     <>
       <Title tag="SUA JORNADA EM NÚMEROS" title="Minha evolução">
-        <button className="primary small" onClick={() => setForm(!form)}>
-          + Registrar medida
-        </button>
+        <button type="button" className="primary small" onClick={() => setForm((value) => !value)}>+ Registrar medida</button>
       </Title>
       <div className="grid stats">
-        <Stat
-          label="Peso atual"
-          value={metrics.current === null ? "—" : `${metrics.current} kg`}
-        />
-        <Stat label="Treinos" value={metrics.total} />
-        <Stat label="Sequência" value={`${metrics.streak} dias`} />
-        <Stat
-          label="Variação"
-          value={
-            metrics.delta === null ? "—" : `${metrics.delta.toFixed(1)} kg`
-          }
-        />
+        <Stat label="Peso atual" value={currentWeight === null ? "—" : currentWeight + " kg"} />
+        <Stat label="Treinos registados" value={metrics.total} />
+        <Stat label="Sequência" value={metrics.streak + " dias"} />
+        <Stat label="Variação" value={metrics.delta === null ? "—" : metrics.delta.toFixed(1) + " kg"} />
       </div>
+      <section className="progress-journey-card">
+        <div className="progress-journey-heading">
+          <div><span className="eyebrow">PLANO PERSONALIZADO</span><h2>Os seus 30 dias</h2><p>{profile.modality || "Modalidade"} · {goalLabels[String(profile.goal || "").toLowerCase()] || profile.goal || "Objetivo a definir"}</p></div>
+          <LeoMascot size={78} />
+        </div>
+        <div className="progress-journey-stats">
+          <div><strong>{completedCount}/30</strong><span>treinos/dias concluídos</span></div>
+          <div><strong>{remainingCount}</strong><span>por concluir</span></div>
+          <div><strong>{elapsedDays}/30</strong><span>dias desde o início</span></div>
+          {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>dias de licença restantes</span></div>}
+        </div>
+        <div className="progress-journey-track"><i style={{ width: completedCount / 30 * 100 + "%" }} /></div>
+        <div className="progress-30-grid" aria-label="Estado dos 30 dias">
+          {Array.from({ length: 30 }, (_, index) => {
+            const day = index + 1;
+            const done = completedProgramDays.has(day);
+            return <span key={day} className={done ? "done" : ""} title={done ? "Dia " + day + " concluído" : "Dia " + day + " por concluir"}>{day}</span>;
+          })}
+        </div>
+        <p className="progress-journey-note">O progresso é atualizado pelos treinos guardados. Um dia só fica concluído depois de registar o treino.</p>
+      </section>
       {form && (
-        <form
-          className="panel-form"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const f = Object.fromEntries(new FormData(e.currentTarget));
-            const payload = Object.fromEntries(
-              Object.entries(f).filter(([, v]) => v !== ""),
-            );
-            if (
-              await mutate("progress_measurements", {
-                ...payload,
-                user_id: userId,
-              })
-            )
-              setForm(false);
-          }}
-        >
+        <form className="panel-form progress-measure-form" onSubmit={async (event) => {
+          event.preventDefault();
+          const fields = Object.fromEntries(new FormData(event.currentTarget));
+          const payload = Object.fromEntries(Object.entries(fields).filter(([, value]) => value !== ""));
+          const weight = payload.weight ? Number(payload.weight) : null;
+          const ok = await mutate("progress_measurements", { ...payload, weight, user_id: userId });
+          if (ok) {
+            if (weight) await mutate("profiles", { current_weight: weight, initial_weight: Number(profile.initial_weight) || weight }, userId);
+            setForm(false);
+          }
+        }}>
           <div className="form-grid">
-            <Field
-              label="Data"
-              name="measured_at"
-              type="date"
-              required
-              defaultValue={new Date().toLocaleDateString("en-CA")}
-            />
-            <Field
-              label="Peso (kg)"
-              name="weight"
-              type="number"
-              min="20"
-              max="400"
-              step="0.1"
-              required
-            />
-            {["arm", "chest", "waist", "hip", "thigh"].map((n, i) => (
-              <Field
-                key={n}
-                label={
-                  [
-                    "Braço (cm)",
-                    "Peito (cm)",
-                    "Cintura (cm)",
-                    "Quadril (cm)",
-                    "Coxa (cm)",
-                  ][i]
-                }
-                name={n}
-                type="number"
-                min="1"
-                max="300"
-                step="0.1"
-              />
-            ))}
+            <Field label="Data" name="measured_at" type="date" required defaultValue={new Date().toLocaleDateString("en-CA")} />
+            <Field label="Peso (kg)" name="weight" type="number" min="20" max="400" step="0.1" required defaultValue={profile.current_weight || ""} />
+            {["arm", "chest", "waist", "hip", "thigh"].map((name, index) => <Field key={name} label={["Braço (cm)", "Peito (cm)", "Cintura (cm)", "Quadril (cm)", "Coxa (cm)"][index]} name={name} type="number" min="1" max="300" step="0.1" />)}
           </div>
-          <button className="primary" disabled={busy}>
-            Salvar registro
-          </button>
+          <button className="primary" disabled={busy}>Guardar medida e atualizar peso</button>
         </form>
       )}
       <div className="progress-card">
         <h2>Histórico de peso</h2>
-        <Chart rows={rows} />
+        <Chart rows={rows.filter((row) => row.weight !== null && row.weight !== undefined)} />
       </div>
-      <div className="events">
-        {[...rows]
-          .sort((a, b) => b.measured_at.localeCompare(a.measured_at))
-          .map((r) => (
-            <div className="event" key={r.id}>
-              <div>
-                <b>{r.weight} kg</b>
-                <small>
-                  {r.measured_at} · Cintura: {r.waist || "—"} cm
-                </small>
-              </div>
-              <button
-                className="text-btn"
-                onClick={() => mutate("progress_measurements", {}, r.id, true)}
-              >
-                Excluir registro
-              </button>
-            </div>
-          ))}
-      </div>
-      <h2 className="section-head">Fotos privadas de evolução</h2>
-      <section className="progress-photo-timeline">
-        <div className="section-head">
-          <div>
-            <span className="eyebrow">HISTÓRICO VISUAL</span>
-            <h2>Antes e depois, no seu ritmo</h2>
-          </div>
-          <span className="pill">PRIVADO</span>
+      <section className="progress-photo-section">
+        <div className="progress-photo-heading"><div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div><span className="pill">PRIVADO</span></div>
+        <p className="muted">As fotografias ficam privadas. Registe uma imagem no início e outra ao concluir os 30 dias para comparar a sua evolução.</p>
+        <div className="progress-before-after">
+          <article><span>INÍCIO</span>{firstPhoto && photoUrls[firstPhoto.id] ? <button type="button" onClick={() => setPhoto(photoUrls[firstPhoto.id])}><img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso" /></button> : <div className="progress-photo-placeholder">Ainda sem foto inicial</div>}<small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 0"}</small></article>
+          <article><span>MAIS RECENTE</span>{latestPhoto && latestPhoto.id !== firstPhoto?.id && photoUrls[latestPhoto.id] ? <button type="button" onClick={() => setPhoto(photoUrls[latestPhoto.id])}><img src={photoUrls[latestPhoto.id]} alt="Fotografia mais recente de progresso" /></button> : latestPhoto && photoUrls[latestPhoto.id] ? <button type="button" onClick={() => setPhoto(photoUrls[latestPhoto.id])}><img src={photoUrls[latestPhoto.id]} alt="Fotografia mais recente de progresso" /></button> : <div className="progress-photo-placeholder">Registe a próxima foto</div>}<small>{latestPhoto ? new Date(latestPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small></article>
         </div>
-        <p className="muted">
-          Registre uma foto no Dia 0 e outra ao concluir o Dia 30. O histórico
-          fica privado e organizado para você comparar mudanças reais.
-        </p>
-        <div className="progress-milestones">
-          <span>📸 Dia 0 · início</span>
-          <span>🏁 Dia 30 · comparação final</span>
-        </div>
-        {metrics.total >= 30 && (
-          <div className="progress-final-prompt">
-            <b>Você chegou aos 30 treinos.</b>
-            <span>
-              Registre uma nova foto e o peso atual para comparar com o início.
-            </span>
-          </div>
-        )}
-      </section>
-      <form
-        className="panel-form"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const el = e.currentTarget;
-          const f = new FormData(el);
+        <form className="panel-form progress-photo-upload" onSubmit={async (event) => {
+          event.preventDefault();
+          const element = event.currentTarget;
+          const fields = new FormData(element);
           let path;
           try {
-            path = await upload("progress-photos", f.get("photo"), userId);
-            if (
-              await mutate("progress_photos", {
-                user_id: userId,
-                path,
-                note: String(f.get("note")),
-              })
-            )
-              el.reset();
+            path = await upload("progress-photos", fields.get("photo"), userId);
+            const ok = await mutate("progress_photos", { user_id: userId, path, note: String(fields.get("note") || "") });
+            if (ok) { element.reset(); await refresh?.(); }
             else await supabase.storage.from("progress-photos").remove([path]);
-          } catch (err) {
-            setError(err.message);
-          }
-        }}
-      >
-        <label className="file-drop">
-          <span>Escolher foto de evolução</span>
-          <small>JPG, PNG ou WebP · até 10 MB</small>
-          <input
-            name="photo"
-            type="file"
-            required
-            accept="image/jpeg,image/png,image/webp"
-          />
-        </label>
-        <Field label="Observação" name="note" maxLength="300" />
-        <label className="checkbox">
-          <input type="checkbox" required />
-          Autorizo guardar esta foto privada para acompanhar meu progresso.
-        </label>
-        <button className="primary" disabled={busy}>
-          Enviar foto privada
-        </button>
-      </form>
-      {data.progress_photos
-        .filter((p) => p.user_id === userId)
-        .map((p) => (
-          <div className="event" key={p.id}>
-            <div>
-              <b>{p.note || "Registro de evolução"}</b>
-              <small>{new Date(p.created_at).toLocaleDateString()}</small>
-            </div>
-            <button
-              className="outline"
-              onClick={async () => {
-                try {
-                  setPhoto(await openMedia("progress-photos", p.path));
-                } catch (e) {
-                  setError(e.message);
-                }
-              }}
-            >
-              Ver foto
-            </button>
-            <button
-              className="text-btn"
-              onClick={async () => {
-                const { error } = await supabase.storage
-                  .from("progress-photos")
-                  .remove([p.path]);
-                if (error) setError(error.message);
-                else {
-                  setPhoto("");
-                  await mutate("progress_photos", {}, p.id, true);
-                  await refresh();
-                }
-              }}
-            >
-              Excluir foto
-            </button>
-          </div>
+          } catch (error) { setError(error.message); }
+        }}>
+          <label className="file-drop"><span>Escolher foto de evolução</span><small>JPG, PNG ou WebP · até 10 MB</small><input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" /></label>
+          <Field label="Observação" name="note" maxLength="300" placeholder="Ex.: início, dia 15 ou dia 30" />
+          <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada para acompanhar meu progresso.</label>
+          <button className="primary" disabled={busy}>Enviar foto privada</button>
+        </form>
+      </section>
+      <div className="progress-photo-gallery">
+        {userPhotos.map((item) => (
+          <article className="progress-photo-item" key={item.id}>
+            {photoUrls[item.id] ? <button type="button" onClick={() => setPhoto(photoUrls[item.id])}><img src={photoUrls[item.id]} alt={item.note || "Foto de evolução"} loading="lazy" /></button> : <div className="progress-photo-placeholder">A carregar foto…</div>}
+            <div><b>{item.note || "Registro de evolução"}</b><small>{new Date(item.created_at).toLocaleDateString("pt-MZ")}</small></div>
+            <button type="button" className="text-btn" onClick={async () => {
+              try {
+                const { error } = await supabase.storage.from("progress-photos").remove([item.path]);
+                if (error) throw error;
+                const { error: rowError } = await supabase.from("progress_photos").delete().eq("id", item.id).eq("user_id", userId);
+                if (rowError) throw rowError;
+                await refresh?.();
+              } catch (error) { setError(error.message); }
+            }}>Eliminar</button>
+          </article>
         ))}
-      {photo && (
-        <div className="photo-preview">
-          <button className="outline" onClick={() => setPhoto("")}>
-            Fechar
-          </button>
-          <img src={photo} alt="Sua foto privada de evolução" />
-        </div>
-      )}
+      </div>
+      {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label="Fechar foto">×</button><img src={photo} alt="Fotografia de progresso ampliada" /></div>}
     </>
   );
 }
+
 export function Profile({ theme, onThemeChange }) {
   const { profile, userId, session, data, mutate, busy, isDemo, setError } =
     useStore();
@@ -1266,6 +1200,7 @@ export function Profile({ theme, onThemeChange }) {
         onSubmit={async (e) => {
           e.preventDefault();
           const f = Object.fromEntries(new FormData(e.currentTarget));
+          delete f.training_location;
           if (
             await mutate(
               "profiles",
@@ -1274,6 +1209,11 @@ export function Profile({ theme, onThemeChange }) {
                 height: f.height ? Number(f.height) : null,
                 household_size: f.household_size ? Number(f.household_size) : 1,
                 training_frequency: f.training_frequency ? Number(f.training_frequency) : 3,
+                training_days_count: f.training_frequency ? Number(f.training_frequency) : (profile.training_days_count || 3),
+                current_weight: f.current_weight ? Number(f.current_weight) : profile.current_weight,
+                age: f.birth_date ? (() => { const birth = new Date(f.birth_date + "T00:00:00"); const today = new Date(); let years = today.getFullYear() - birth.getFullYear(); if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) years -= 1; return years; })() : profile.age,
+                equipment_preference: f.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
+                supplements: String(f.supplements || "").split(",").map((value) => value.trim()).filter(Boolean),
                 food_dislikes: f.foods_to_avoid || "",
                 training_days: Array.from(
                   e.currentTarget.elements.training_days?.selectedOptions || [],
@@ -1320,18 +1260,24 @@ export function Profile({ theme, onThemeChange }) {
             label="Altura (cm)"
             name="height"
             type="number"
-            min="80"
-            max="250"
+            min="120"
+            max="230"
             defaultValue={profile.height || ""}
           />
           <Field
-            label="Idade"
-            name="age"
+            label="Peso atual (kg)"
+            name="current_weight"
             type="number"
-            min="13"
-            max="100"
-            defaultValue={profile.age || ""}
+            min="25"
+            max="300"
+            step="0.1"
+            defaultValue={profile.current_weight || ""}
           />
+          <details className="profile-advanced">
+            <summary>
+              <span><small>DADOS OPCIONAIS</small><b>Rotina de treino e lembretes</b></span>
+              <span className="profile-advanced-hint">Ajustar</span>
+            </summary>
           <label>
             Sexo
             <select name="sex" defaultValue={profile.sex || ""}>
@@ -1340,15 +1286,6 @@ export function Profile({ theme, onThemeChange }) {
               <option value="masculino">Masculino</option>
             </select>
           </label>
-          <Field
-            label="Peso atual (kg)"
-            name="current_weight"
-            type="number"
-            min="20"
-            max="400"
-            step="0.1"
-            defaultValue={profile.current_weight || ""}
-          />
           <label>
             Nível
             <select
@@ -1438,16 +1375,27 @@ export function Profile({ theme, onThemeChange }) {
               </label>
             ))}
           </fieldset>
-          <div className="profile-section-label">
-            <span className="eyebrow">DADOS DA PERSONALIZAÇÃO</span>
-            <b>Nutrição, rotina e disponibilidade</b>
-          </div>
+          </details>
+          <details className="profile-advanced">
+            <summary>
+              <span><small>DADOS OPCIONAIS</small><b>Personalizar nutrição e rotina</b></span>
+              <span className="profile-advanced-hint">Ajustar</span>
+            </summary>
+            <div className="profile-section-label">
+              <span className="eyebrow">DADOS DA PERSONALIZAÇÃO</span>
+              <b>Nutrição, rotina e disponibilidade</b>
+            </div>
           <Field
             label="Data de nascimento"
             name="birth_date"
             type="date"
             defaultValue={profile.birth_date || ""}
           />
+          <p className="profile-age-note">
+            {profile.age
+              ? <>Idade calculada automaticamente: <b>{profile.age} anos</b>.</>
+              : "A idade será calculada automaticamente pela data de nascimento."}
+          </p>
           <Field
             label="Peso inicial (kg)"
             name="initial_weight"
@@ -1493,8 +1441,8 @@ export function Profile({ theme, onThemeChange }) {
             label="Frequência de treino (dias/semana)"
             name="training_frequency"
             type="number"
-            min="1"
-            max="7"
+            min="2"
+            max="6"
             defaultValue={profile.training_frequency || profile.training_days_count || 3}
           />
           <Field
@@ -1511,9 +1459,8 @@ export function Profile({ theme, onThemeChange }) {
               name="training_location"
               defaultValue={profile.training_location || "casa"}
             >
-              <option value="casa">Em casa / sem equipamento</option>
-              <option value="ginasio">Ginásio</option>
-              <option value="ambos">Casa e ginásio</option>
+              <option value="ginasio">Gym</option>
+              <option value="casa">Home</option>
             </select>
           </label>
           <label>
@@ -1560,11 +1507,17 @@ export function Profile({ theme, onThemeChange }) {
               }
             />
           </label>
+          </details>
         </div>
         <button className="primary" disabled={busy}>
           Salvar perfil
         </button>
       </form>
+      <details className="profile-advanced profile-account-settings">
+        <summary>
+          <span><small>DEFINIÇÕES DA CONTA</small><b>Idioma, aparência e privacidade</b></span>
+          <span className="profile-advanced-hint">Ajustar</span>
+        </summary>
       <section className="language-settings">
         <div>
           <span className="eyebrow">PREFERÊNCIAS</span>
@@ -1730,6 +1683,7 @@ export function Profile({ theme, onThemeChange }) {
           treino não substituem profissionais de saúde.
         </p>
       </details>
+      </details>
     </>
   );
 }
@@ -1766,58 +1720,196 @@ const defaultChallenges = [
   },
 ];
 function CommunityAvatar({ person }) {
-  const [failed, setFailed] = useState(false),
-    sex = String(person?.sex || "").toLowerCase(),
-    fallback = sex.includes("fem")
-      ? "♀"
-      : sex.includes("masc")
-        ? "♂"
-        : String(person?.full_name || "JL")
-            .slice(0, 2)
-            .toUpperCase();
+  const raw = String(person?.avatar_url || "");
+  const [src, setSrc] = useState("");
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    let active = true;
+    setSrc("");
+    setFailed(false);
+    if (!raw) return () => { active = false; };
+    if (/^https?:\/\//i.test(raw)) {
+      setSrc(raw);
+      return () => { active = false; };
+    }
+    openMedia("profile-photos", raw, 3600)
+      .then((url) => { if (active) setSrc(url || ""); })
+      .catch(() => { if (active) setFailed(true); });
+    return () => { active = false; };
+  }, [raw]);
+  const fallback = String(person?.full_name || "JL")
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0] || "")
+    .join("")
+    .toUpperCase();
   return (
     <span className="community-avatar">
-      {person?.avatar_url && !failed ? (
+      {src && !failed ? (
         <img
-          src={person.avatar_url}
-          alt={`Avatar de ${person.full_name || "membro"}`}
+          src={src}
+          alt={"Foto de " + (person?.full_name || "membro")}
+          loading="lazy"
           onError={() => setFailed(true)}
         />
-      ) : (
-        fallback
-      )}
+      ) : fallback}
     </span>
   );
 }
+
 export function Challenges() {
-  const { data, userId, profile, mutate, busy } = useStore();
+  const { data, userId, mutate, busy, setError, refresh } = useStore();
   const today = new Date().toLocaleDateString("en-CA");
-  const challenges = (
-    data.daily_challenges?.length ? data.daily_challenges : defaultChallenges
-  ).filter((item) => item.active !== false);
+  const authenticated = userId !== "demo";
+  const [proofFiles, setProofFiles] = useState({});
+  const [uploadingId, setUploadingId] = useState("");
+  const [proofUrls, setProofUrls] = useState({});
+  const [selectedFriendId, setSelectedFriendId] = useState("");
+  const [messageText, setMessageText] = useState("");
+  const challenges = (data.daily_challenges?.length ? data.daily_challenges : defaultChallenges)
+    .filter((item) => item.active !== false);
   const completions = (data.challenge_completions || []).filter(
-    (item) =>
-      item.user_id === userId &&
-      String(item.completed_on || "").slice(0, 10) === today,
+    (item) => item.user_id === userId && String(item.completed_on || "").slice(0, 10) === today,
   );
   const completedIds = new Set(completions.map((item) => item.challenge_id));
-  const complete = async (challenge) => {
-    if (completedIds.has(challenge.id) || busy) return;
-    await mutate("challenge_completions", {
-      id: crypto.randomUUID(),
-      user_id: userId,
-      challenge_id: challenge.id,
-      completed_on: today,
-      points: challenge.points,
+  const proofRows = (data.challenge_completions || [])
+    .filter((item) => item.proof_path)
+    .sort((a, b) => new Date(b.created_at || b.completed_on || 0) - new Date(a.created_at || a.completed_on || 0))
+    .slice(0, 12);
+  const proofKey = proofRows.map((item) => item.id + ":" + item.proof_path).join("|");
+  useEffect(() => {
+    let active = true;
+    if (!proofRows.length) {
+      setProofUrls({});
+      return () => { active = false; };
+    }
+    Promise.all(proofRows.map(async (item) => {
+      try { return [item.id, await openMedia("challenge-proofs", item.proof_path, 3600)]; }
+      catch { return [item.id, null]; }
+    })).then((entries) => {
+      if (active) setProofUrls(Object.fromEntries(entries.filter(([, url]) => url)));
     });
-  };
+    return () => { active = false; };
+  }, [proofKey]);
+
+  const members = [...new Map(
+    [...(data.community_leaderboard || []), ...(data.profiles || [])]
+      .filter((person) => person?.id)
+      .map((person) => [person.id, person]),
+  ).values()].filter((person) => person.id !== userId);
   const leaderboard = [...(data.community_leaderboard || [])]
     .sort((a, b) => (b.points || 0) - (a.points || 0))
     .slice(0, 10);
-  const myPoints = completions.reduce(
-    (sum, item) => sum + Number(item.points || 0),
-    0,
+  const friendshipRows = data.friendships || [];
+  const relationFor = (personId) => friendshipRows.find((row) =>
+    (row.requester_id === userId && row.addressee_id === personId)
+    || (row.requester_id === personId && row.addressee_id === userId),
   );
+  const incomingRequests = friendshipRows
+    .filter((row) => row.status === "pending" && row.addressee_id === userId)
+    .map((row) => ({
+      row,
+      person: members.find((person) => person.id === row.requester_id) || { id: row.requester_id, full_name: "Membro JL" },
+    }));
+  const friendIds = friendshipRows
+    .filter((row) => row.status === "accepted" && (row.requester_id === userId || row.addressee_id === userId))
+    .map((row) => row.requester_id === userId ? row.addressee_id : row.requester_id);
+  const friends = friendIds.map((id) => members.find((person) => person.id === id) || { id, full_name: "Membro JL" });
+  const friendsKey = friends.map((person) => person.id).join("|");
+  useEffect(() => {
+    if (!friends.some((person) => person.id === selectedFriendId)) {
+      setSelectedFriendId(friends[0]?.id || "");
+    }
+  }, [friendsKey, selectedFriendId]);
+  const selectedFriend = friends.find((person) => person.id === selectedFriendId) || null;
+  const chatMessages = (data.community_messages || [])
+    .filter((item) =>
+      (item.sender_id === userId && item.recipient_id === selectedFriendId)
+      || (item.sender_id === selectedFriendId && item.recipient_id === userId),
+    )
+    .sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+  const myPoints = completions.reduce((sum, item) => sum + Number(item.points || 0), 0);
+
+  const complete = async (challenge) => {
+    if (completedIds.has(challenge.id) || busy || uploadingId) return;
+    if (!authenticated) {
+      setError("Entre na sua conta para enviar o vídeo e participar da comunidade.");
+      return;
+    }
+    const file = proofFiles[challenge.id];
+    if (!file || !String(file.type || "").startsWith("video/")) {
+      setError("Grave ou escolha um vídeo para comprovar este desafio.");
+      return;
+    }
+    setUploadingId(challenge.id);
+    setError("");
+    let path = "";
+    try {
+      path = await upload("challenge-proofs", file, userId);
+      const ok = await mutate("challenge_completions", {
+        id: crypto.randomUUID(),
+        user_id: userId,
+        challenge_id: challenge.id,
+        completed_on: today,
+        points: challenge.points,
+        proof_path: path,
+        proof_mime_type: file.type,
+        caption: challenge.title,
+      });
+      if (ok) {
+        setProofFiles((current) => {
+          const next = { ...current };
+          delete next[challenge.id];
+          return next;
+        });
+        await refresh?.();
+      } else if (path) {
+        await supabase.storage.from("challenge-proofs").remove([path]);
+      }
+    } catch (error) {
+      setError(error.message || "Não foi possível enviar o vídeo. Tente novamente.");
+      if (path) await supabase.storage.from("challenge-proofs").remove([path]).catch(() => {});
+    } finally {
+      setUploadingId("");
+    }
+  };
+
+  const sendFriendRequest = async (person) => {
+    const relation = relationFor(person.id);
+    if (!authenticated) {
+      setError("Entre na sua conta para adicionar amigos.");
+      return;
+    }
+    if (relation?.status === "pending" && relation.addressee_id === userId) {
+      await mutate("friendships", { status: "accepted" }, relation.id);
+      return;
+    }
+    if (!relation) {
+      await mutate("friendships", {
+        id: crypto.randomUUID(),
+        requester_id: userId,
+        addressee_id: person.id,
+        status: "pending",
+      });
+    }
+  };
+  const respondToRequest = async (row, status) => {
+    await mutate("friendships", { status }, row.id);
+  };
+  const sendMessage = async (event) => {
+    event.preventDefault();
+    const body = messageText.trim();
+    if (!body || !selectedFriendId || !authenticated || busy) return;
+    const ok = await mutate("community_messages", {
+      id: crypto.randomUUID(),
+      sender_id: userId,
+      recipient_id: selectedFriendId,
+      body,
+    });
+    if (ok) setMessageText("");
+  };
+
   return (
     <>
       <Title tag="CONSISTÊNCIA EM COMUNIDADE" title="Desafios de hoje" />
@@ -1825,95 +1917,147 @@ export function Challenges() {
         <div>
           <span className="eyebrow">PEQUENAS AÇÕES, RESULTADOS REAIS</span>
           <h2>Seu placar de hoje</h2>
-          <p>
-            Complete tarefas simples, acompanhe seus pontos e veja a comunidade
-            evoluir. Sem batalhas online por enquanto: foco na consistência.
-          </p>
+          <p>Envie uma prova em vídeo, some pontos, acompanhe o ranking e partilhe a sua evolução com a comunidade.</p>
         </div>
         <div className="challenge-score">
           <strong>{myPoints}</strong>
           <span>pontos hoje</span>
         </div>
       </section>
+
       <div className="challenge-layout">
         <section>
           <div className="daily-challenges">
             {challenges.map((challenge) => {
               const done = completedIds.has(challenge.id);
+              const file = proofFiles[challenge.id];
               return (
-                <article
-                  className={`challenge-card ${done ? "done" : ""}`}
-                  key={challenge.id}
-                >
+                <article className={"challenge-card " + (done ? "done" : "")} key={challenge.id}>
                   <div className="challenge-icon">
-                    {challenge.id === "move"
-                      ? "⚡"
-                      : challenge.id === "water"
-                        ? "💧"
-                        : challenge.id === "progress"
-                          ? "📸"
-                          : challenge.id === "consistency"
-                            ? "🔥"
-                            : "🧘"}
+                    {challenge.id === "move" ? "⚡" : challenge.id === "water" ? "💧" : challenge.id === "progress" ? "📸" : challenge.id === "consistency" ? "🔥" : "🧘"}
                   </div>
-                  <div>
+                  <div className="challenge-card-copy">
                     <h3>{challenge.title}</h3>
                     <p>{challenge.description}</p>
                     <b>+{challenge.points} pontos</b>
+                    {done ? (
+                      <small className="challenge-proof-status">Vídeo enviado à comunidade</small>
+                    ) : (
+                      <label className="challenge-video-picker">
+                        <span>{file ? file.name : "Gravar ou escolher vídeo"}</span>
+                        <small>MP4, WebM ou MOV · máximo 100 MB</small>
+                        <input
+                          type="file"
+                          accept="video/mp4,video/webm,video/quicktime"
+                          capture="user"
+                          disabled={!authenticated || busy || Boolean(uploadingId)}
+                          onChange={(event) => {
+                            const selected = event.target.files?.[0];
+                            if (selected) setProofFiles((current) => ({ ...current, [challenge.id]: selected }));
+                          }}
+                        />
+                      </label>
+                    )}
                   </div>
                   <button
+                    type="button"
                     className={done ? "outline" : "primary"}
-                    disabled={busy || done}
+                    disabled={busy || Boolean(uploadingId) || done || !file || !authenticated}
                     onClick={() => complete(challenge)}
                   >
-                    {done ? "Concluído ✓" : "Concluir"}
+                    {done ? "Concluído ✓" : uploadingId === challenge.id ? "Enviando vídeo…" : "Concluir com vídeo"}
                   </button>
                 </article>
               );
             })}
           </div>
+          {!authenticated && <p className="community-login-note">Entre na sua conta para gravar vídeos, concluir desafios e conversar com outros membros.</p>}
         </section>
-        <aside className="leaderboard-card">
+
+        <section className="leaderboard-card">
           <div className="section-head">
-            <div>
-              <span className="eyebrow">COMUNIDADE JL</span>
-              <h2>Ranking</h2>
-            </div>
+            <div><span className="eyebrow">COMUNIDADE JL</span><h2>Ranking</h2></div>
             <span className="pill">TOP 10</span>
           </div>
-          <p className="leaderboard-note">
-            Pontos por treinos registrados e desafios concluídos. O ranking
-            mostra apenas dados comunitários básicos.
-          </p>
+          <p className="leaderboard-note">Pontos por treinos registados e desafios concluídos com vídeo.</p>
           <div className="leaderboard-list">
             {leaderboard.map((person, index) => (
-              <div
-                className={`leaderboard-row ${person.id === userId ? "me" : ""}`}
-                key={person.id}
-              >
-                <strong>{index + 1}</strong>
+              <div className={"leaderboard-row" + (index < 3 ? " top-rank top-rank-" + (index + 1) : "")} key={person.id}>
+                <span className="leaderboard-rank">{index < 3 ? ["🥇", "🥈", "🥉"][index] : index + 1}</span>
                 <CommunityAvatar person={person} />
-                <div>
-                  <b>{person.full_name || "Membro JL"}</b>
-                  <small>
-                    {person.workouts || 0} treinos · {person.challenges || 0}{" "}
-                    desafios
-                  </small>
-                </div>
+                <div><b>{person.full_name || "Membro JL"}</b><small>{person.workouts || 0} treinos · {person.challenges || 0} desafios</small></div>
                 <span>{person.points || 0}</span>
               </div>
             ))}
           </div>
-          {!leaderboard.length && (
-            <Empty>Ainda não há pontos no ranking. Seja o primeiro.</Empty>
-          )}
-        </aside>
+          {!leaderboard.length && <Empty>O ranking aparecerá aqui quando os membros registarem treinos ou desafios.</Empty>}
+        </section>
       </div>
-      <p className="challenge-disclaimer">
-        Os pontos são motivacionais e não substituem orientação de treino.
-        Prêmios e regras da comunidade devem ser definidos pelo coach antes de
-        qualquer campanha.
-      </p>
+
+      <section className="community-feed-card">
+        <div className="section-head"><div><span className="eyebrow">PROVAS COMPARTILHADAS</span><h2>Comunidade em movimento</h2></div><span className="pill">{proofRows.length} vídeos</span></div>
+        <div className="community-feed-grid">
+          {proofRows.map((post) => {
+            const person = (data.community_leaderboard || []).find((item) => item.id === post.user_id) || { id: post.user_id, full_name: "Membro JL" };
+            const challenge = challenges.find((item) => item.id === post.challenge_id);
+            return (
+              <article className="community-proof-card" key={post.id}>
+                <div className="community-proof-author"><CommunityAvatar person={person} /><div><b>{person.full_name}</b><small>{new Date(post.created_at || post.completed_on).toLocaleDateString("pt-MZ")}</small></div><strong>+{post.points || 0}</strong></div>
+                {proofUrls[post.id] ? <video src={proofUrls[post.id]} controls playsInline preload="metadata" /> : <div className="community-video-placeholder">A carregar vídeo…</div>}
+                <p>{post.caption || challenge?.title || "Desafio concluído"}</p>
+              </article>
+            );
+          })}
+        </div>
+        {!proofRows.length && <Empty>Os vídeos enviados pelos membros aparecerão aqui depois da primeira conclusão.</Empty>}
+      </section>
+
+      <section className="community-social-grid">
+        <article className="community-social-card">
+          <div className="section-head"><div><span className="eyebrow">LIGAÇÕES</span><h2>Amigos</h2></div><span className="pill">{friends.length}</span></div>
+          {incomingRequests.length > 0 && <div className="community-requests">
+            <b>Pedidos recebidos</b>
+            {incomingRequests.map(({ row, person }) => <div className="community-request-row" key={row.id}><CommunityAvatar person={person} /><span>{person.full_name}</span><button type="button" className="primary small" disabled={busy} onClick={() => respondToRequest(row, "accepted")}>Aceitar</button><button type="button" className="text-btn" disabled={busy} onClick={() => respondToRequest(row, "rejected")}>Recusar</button></div>)}
+          </div>}
+          <div className="community-people-list">
+            {members.slice(0, 12).map((person) => {
+              const relation = relationFor(person.id);
+              const isFriend = relation?.status === "accepted";
+              const pendingOut = relation?.status === "pending" && relation.requester_id === userId;
+              const pendingIn = relation?.status === "pending" && relation.addressee_id === userId;
+              return <div className="community-person-row" key={person.id}>
+                <CommunityAvatar person={person} />
+                <div><b>{person.full_name || "Membro JL"}</b><small>{person.points || 0} pontos</small></div>
+                <button type="button" className={isFriend ? "outline small" : "primary small"} disabled={!authenticated || busy || isFriend || pendingOut || relation?.status === "rejected"} onClick={() => sendFriendRequest(person)}>
+                  {isFriend ? "Amigo" : pendingOut ? "Enviado" : pendingIn ? "Aceitar" : relation?.status === "rejected" ? "Recusado" : "Adicionar"}
+                </button>
+              </div>;
+            })}
+          </div>
+          {!members.length && <Empty>Os membros da comunidade aparecerão aqui.</Empty>}
+        </article>
+
+        <article className="community-social-card community-chat-card">
+          <div className="section-head"><div><span className="eyebrow">MENSAGENS PRIVADAS</span><h2>Chat com amigos</h2></div></div>
+          {friends.length ? (
+            <>
+              <div className="community-friend-tabs">
+                {friends.map((person) => <button type="button" key={person.id} className={selectedFriendId === person.id ? "active" : ""} onClick={() => setSelectedFriendId(person.id)}><CommunityAvatar person={person} /><span>{person.full_name || "Membro"}</span></button>)}
+              </div>
+              <div className="community-chat-messages" aria-live="polite">
+                {chatMessages.map((message) => <div key={message.id} className={"community-chat-message " + (message.sender_id === userId ? "mine" : "theirs")}><p>{message.body}</p><small>{new Date(message.created_at).toLocaleString("pt-MZ")}</small></div>)}
+                {!chatMessages.length && <Empty>Comece a conversa com {selectedFriend?.full_name || "o seu amigo"}.</Empty>}
+              </div>
+              <form className="community-chat-compose" onSubmit={sendMessage}>
+                <textarea rows={2} maxLength={1000} value={messageText} onChange={(event) => setMessageText(event.target.value)} placeholder="Escreva uma mensagem…" />
+                <button type="submit" className="primary" disabled={!messageText.trim() || busy}>Enviar</button>
+              </form>
+            </>
+          ) : <Empty>Adicione um membro e aguarde a aceitação para começar uma conversa privada.</Empty>}
+        </article>
+      </section>
+
+      <p className="challenge-disclaimer">Os pontos são motivacionais e não substituem orientação de treino. Grave apenas a sua própria execução, num espaço seguro, e não publique vídeos de outras pessoas sem consentimento.</p>
     </>
   );
 }
@@ -2365,8 +2509,8 @@ export function Assistant({ plan, go }) {
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
 const foodPhoto = (food) => food?.image || null;
 
-export function Nutrition({ plan }) {
-  const { profile } = useStore();
+export function Nutrition({ plan, whatsapp }) {
+  const { profile, userId } = useStore();
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
   const [day, setDay] = useState(Number(profile.nutrition_day) || 1),
@@ -2386,6 +2530,23 @@ export function Nutrition({ plan }) {
       }
     }),
     [replaced, setReplaced] = useState({});
+  const shoppingStorageKey = "jl-shopping-" + (userId || profile.id || "guest");
+  const [shoppingState, setShoppingState] = useState({ key: null, items: {} });
+  const shoppingChecked = shoppingState.key === shoppingStorageKey ? shoppingState.items : {};
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(shoppingStorageKey) || "{}");
+      setShoppingState({ key: shoppingStorageKey, items: saved });
+    } catch {
+      setShoppingState({ key: shoppingStorageKey, items: {} });
+    }
+  }, [shoppingStorageKey]);
+  useEffect(() => {
+    if (shoppingState.key !== shoppingStorageKey) return;
+    try {
+      localStorage.setItem(shoppingStorageKey, JSON.stringify(shoppingState.items));
+    } catch {}
+  }, [shoppingState, shoppingStorageKey]);
   const [waterMl, setWaterMl] = useState(() => {
     try {
       return Math.max(
@@ -2412,7 +2573,7 @@ export function Nutrition({ plan }) {
       nutrition_day: Number(day),
     }),
     kcal = estimateWorkoutKcal(profile, 35, intensity),
-    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays),
+    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays, n.portionScale),
     allowed = (plan?.tier || 0) >= 3;
   const foodGroups = ["Todos", ...new Set(foodLibrary.map((food) => food.group))];
   const visibleFoodLibrary = foodLibrary.filter((food) => {
@@ -2437,24 +2598,24 @@ export function Nutrition({ plan }) {
       }));
   };
   const mealData = (meal) => {
-    const foods = replaced[meal.title]?.length
-      ? replaced[meal.title]
-      : meal.foods;
-    const sum = (key) =>
-      Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
+    const hasReplacement = Boolean(replaced[meal.title]?.length);
+    const foods = hasReplacement ? replaced[meal.title] : meal.foods;
+    const sum = (key) => Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
+    const totals = hasReplacement ? null : meal.nutrition;
     return {
       ...meal,
       foods,
       items: meal.recipeName ? [meal.recipeName] : foods.map((food) => food.name),
-      ingredients: meal.ingredients?.length
-        ? meal.ingredients
-        : foods.map((food) => `${food.name} (${food.portion})`),
-      image: meal.image || foods.find((food) => foodPhoto(food))?.image || null,
-      kcal: sum("kcal"),
-      protein: sum("protein"),
-      carbs: sum("carbs"),
-      fat: sum("fat"),
-      fiber: sum("fiber"),
+      ingredients: hasReplacement
+        ? foods.map((food) => food.name + " (" + food.portion + ")")
+        : meal.ingredients?.length ? meal.ingredients : foods.map((food) => food.name + " (" + food.portion + ")"),
+      image: meal.image || null,
+      kcal: totals?.kcal ?? sum("kcal"),
+      protein: totals?.protein ?? sum("protein"),
+      carbs: totals?.carbs ?? sum("carbs"),
+      fat: totals?.fat ?? sum("fat"),
+      fiber: totals?.fiber ?? sum("fiber"),
+      allergyWarning: meal.allergyWarning && !hasReplacement,
     };
   };
   return (
@@ -2539,7 +2700,8 @@ export function Nutrition({ plan }) {
             ))}
           </div>
           {!visibleFoodLibrary.length && <Empty>Nenhum alimento encontrado. Tente outra pesquisa.</Empty>}
-          <p className="nutrition-disclaimer">Valores nutricionais aproximados por porção. As imagens externas precisam de ligação à internet; quando uma fotografia não carrega, o aplicativo mostra um ícone de substituição em vez de uma fotografia errada.</p>
+          <p className="nutrition-disclaimer">Valores nutricionais aproximados por porção. As fotografias da biblioteca ficam armazenadas no aplicativo para carregar com mais rapidez.</p>
+          <a className="food-credits-link" href="/assets/food/food-image-sources.json" target="_blank" rel="noreferrer">Créditos e licenças das fotografias</a>
         </section>
       ) : (
         <>
@@ -2551,7 +2713,7 @@ export function Nutrition({ plan }) {
           </div>
           <span className="pill">30 DIAS</span>
         </div>
-        <div className="nutrition-day-grid">
+        <div className="nutrition-day-strip" aria-label="Dias do plano alimentar">
           {Array.from({ length: 30 }, (_, i) => (
             <button
               type="button"
@@ -2561,7 +2723,6 @@ export function Nutrition({ plan }) {
               onClick={() => setDay(i + 1)}
               key={i + 1}
             >
-              <span>Dia</span>
               <strong>{String(i + 1).padStart(2, "0")}</strong>
             </button>
           ))}
@@ -2624,22 +2785,7 @@ export function Nutrition({ plan }) {
         <span><b>Lista de compras</b><small>{shoppingList.length} itens calculados para {shoppingDays} dias</small></span>
         <strong>›</strong>
       </button>
-      {shoppingOpen && (
-        <div className="shopping-layer" role="dialog" aria-modal="true" aria-label="Lista de compras">
-          <button type="button" className="shopping-overlay" aria-label="Fechar lista de compras" onClick={() => setShoppingOpen(false)} />
-          <aside className="shopping-drawer">
-            <div className="shopping-drawer-head">
-              <div><span className="eyebrow">COMPRAS CALCULADAS</span><h2>O que comprar</h2><p>{profile.household_size || profile.people_count || 1} pessoa(s) · {shoppingList.length} itens</p></div>
-              <button type="button" className="icon-btn" onClick={() => setShoppingOpen(false)} aria-label="Fechar">×</button>
-            </div>
-            <label className="shopping-period">Período<select value={shoppingDays} onChange={(e) => setShoppingDays(Number(e.target.value))}><option value="7">7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></label>
-            <p className="shopping-drawer-note">Quantidades calculadas a partir das refeições da modalidade atual e multiplicadas pelo número de pessoas.</p>
-            <div className="shopping-list">
-              {shoppingList.map((item) => <label className="shopping-item" key={`${item.name}-${item.unit}`}><input type="checkbox" /><span><b>{item.name}</b><small>{item.display}</small></span></label>)}
-            </div>
-          </aside>
-        </div>
-      )}
+
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),
@@ -2682,9 +2828,12 @@ export function Nutrition({ plan }) {
                   </span>
                 </div>
                 <div className="meal-ingredients">
-                  <b>Ingredientes e porções:</b>{" "}
+                  <b>Ingredientes e porções estimadas:</b>{" "}
                   {meal.ingredients?.join(" · ") || meal.items.join(" · ")}
                 </div>
+                {meal.allergyWarning && (
+                  <p className="allergy-warning">A receita inclui um ingrediente que coincide com uma restrição do seu perfil. Não consuma esta refeição sem confirmar uma substituição segura.</p>
+                )}
                 <div className="food-chips">
                   {meal.foods.filter((food) => foodPhoto(food)).map((food) => (
                     <div
@@ -2844,6 +2993,29 @@ export function Nutrition({ plan }) {
         suplementos não são prescrição médica.
       </p>
         </>
+      )}
+      {shoppingOpen && (
+        <div className="shopping-layer" role="dialog" aria-modal="true" aria-label="Lista de compras">
+          <button type="button" className="shopping-overlay" aria-label="Fechar lista de compras" onClick={() => setShoppingOpen(false)} />
+          <section className="shopping-drawer">
+            <div className="shopping-drawer-head">
+              <div><span className="eyebrow">COMPRAS CALCULADAS</span><h2>O que comprar</h2><p>{profile.household_size || profile.people_count || 1} pessoa(s) · {shoppingList.length} itens</p></div>
+              <button type="button" className="icon-btn" onClick={() => setShoppingOpen(false)} aria-label="Fechar">×</button>
+            </div>
+            <label className="shopping-period">Período<select value={shoppingDays} onChange={(e) => setShoppingDays(Number(e.target.value))}><option value="7">7 dias</option><option value="14">14 dias</option><option value="30">30 dias</option></select></label>
+            <p className="shopping-drawer-note">Quantidades calculadas a partir das refeições da modalidade atual e multiplicadas pelo número de pessoas.</p>
+            <div className="shopping-check-summary">
+              <b>{shoppingList.filter((item) => shoppingChecked[item.key]).length} de {shoppingList.length} itens marcados</b>
+              <button type="button" className="text-btn" onClick={() => setShoppingState({key:shoppingStorageKey,items:{}})}>Limpar marcados</button>
+            </div>
+            <div className="shopping-list">
+              {shoppingList.map((item) => <label className={shoppingChecked[item.key] ? "shopping-item checked" : "shopping-item"} key={item.key}>
+                <input type="checkbox" checked={Boolean(shoppingChecked[item.key])} onChange={(event) => setShoppingState((current) => ({key:shoppingStorageKey,items:{...current.items,[item.key]:event.target.checked}}))} />
+                <span><b>{item.name}</b><small>{item.display}</small></span>
+              </label>)}
+            </div>
+          </section>
+        </div>
       )}
     </>
   );

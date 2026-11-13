@@ -28,7 +28,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Banana_fruit.jpeg/960px-Banana_fruit.jpeg",
+    image: "/assets/food/reference-crops/banana.webp",
   },
   {
     id: "eggs",
@@ -67,7 +67,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Plain_Yogurt.jpg/960px-Plain_Yogurt.jpg",
+    image: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   },
   {
     id: "fresh-cheese",
@@ -80,7 +80,6 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🧀",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Cottagecheese200px.jpg/960px-Cottagecheese200px.jpg",
   },
   {
     id: "chicken",
@@ -93,7 +92,6 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🍗",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilled_chicken_meat.jpg",
   },
   {
     id: "fish",
@@ -119,7 +117,6 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥩",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Grilling_beef_meat.jpg",
   },
   {
     id: "tuna",
@@ -132,7 +129,6 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Filete_de_at%C3%BAn.jpg",
   },
   {
     id: "rice",
@@ -171,7 +167,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Boiled_cassava_roots.jpg",
   },
   {
     id: "pasta",
@@ -197,7 +192,6 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato",
     emoji: "🍞",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Whole_wheat_bread.jpg/960px-Whole_wheat_bread.jpg",
   },
   {
     id: "xima",
@@ -210,7 +204,6 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🍚",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
   },
   {
     id: "beans",
@@ -236,7 +229,7 @@ export const foodLibrary = [
     fiber: 9,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Blackeye_Peas.JPG/960px-Blackeye_Peas.JPG",
+    image: "/assets/food/catalog/cowpea.webp",
   },
   {
     id: "peanut",
@@ -249,7 +242,6 @@ export const foodLibrary = [
     fiber: 2,
     group: "Gordura e proteína",
     emoji: "🥜",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Peanuts_in_a_bowl.jpg",
   },
   {
     id: "avocado",
@@ -275,7 +267,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍈",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Papaya_fruit.jpg/640px-Papaya_fruit.jpg",
+    image: "/assets/food/reference-crops/mamao.webp",
   },
   {
     id: "orange",
@@ -288,7 +280,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Orange_fruit.jpeg/640px-Orange_fruit.jpeg",
+    image: "/assets/food/reference-crops/laranja.webp",
   },
   {
     id: "mango",
@@ -301,7 +293,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🥭",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/A_beautiful_ripen_mango_fruit.jpg/960px-A_beautiful_ripen_mango_fruit.jpg",
+    image: "/assets/food/recipes/mango-pineapple-bowl.webp",
   },
   {
     id: "apple",
@@ -314,7 +306,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍎",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Apples_fruit.jpg/960px-Apples_fruit.jpg",
+    image: "/assets/food/reference-crops/maca.webp",
   },
   {
     id: "strawberry",
@@ -327,7 +319,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍓",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Strawberry_fruit.jpg",
+    image: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   },
   {
     id: "greens",
@@ -353,7 +345,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🥬",
-    image: "/assets/food/reference-crops/couve-tomate.webp",
   },
   {
     id: "tomato",
@@ -366,7 +357,6 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🍅",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "lettuce",
@@ -379,7 +369,6 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥬",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fresh_lettuce.jpg/500px-Fresh_lettuce.jpg",
   },
   {
     id: "cucumber",
@@ -392,7 +381,6 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥒",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Fresh_Tomatoes_and_Cucumber.jpg/715px-Fresh_Tomatoes_and_Cucumber.jpg",
   },
   {
     id: "pumpkin",
@@ -432,6 +420,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Prato moçambicano",
     emoji: "🍲",
+    image: "/assets/food/recipes/rice-and-beans.webp",
   },
   {
     id: "zambeziana",
@@ -444,7 +433,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Prato moçambicano",
     emoji: "🍗",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg/960px-Frango_a_Zambeziana_acompanhado_de_Salada_e_Batatas_Fritas.jpg",
+    image: "/assets/food/recipes/R19.webp",
   },
   {
     id: "sardine",
@@ -497,7 +486,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍝",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/Tuna_pasta_salad.jpg/500px-Tuna_pasta_salad.jpg",
+    image: "/assets/food/recipes/tuna-pasta-salad.webp",
     imageSource: "Fotografia pesquisada de esparguete com atum e tomate",
   },
   {
@@ -511,7 +500,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍲",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Chicken_stew_with_mixed_vegetables.jpg/960px-Chicken_stew_with_mixed_vegetables.jpg",
+    image: "/assets/food/recipes/chicken-vegetable-soup.webp",
   },
   {
     id: "chicken-peanut",
@@ -537,7 +526,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Prato simples",
     emoji: "🥔",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
+    image: "/assets/food/recipes/R09.webp",
   },
   {
     id: "carapau",
@@ -576,7 +565,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Proteína e fibra",
     emoji: "🫘",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Bowl_of_lentil_soup_with_green_and_red_lentils.jpg/960px-Bowl_of_lentil_soup_with_green_and_red_lentils.jpg",
+    image: "/assets/food/catalog/lentils.webp",
   },
   {
     id: "potato",
@@ -589,7 +578,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg/768px-Salad_of_boiled_eggs%2C_potatoes%2C_and_peas%2C_served_cold_with_tomatoes%2C_vinegar_carrot%2C_olive_oil%2C_black_pepper%2C_and_garlic_sea_salt_-_Massachusetts.jpg",
   },
   {
     id: "corn-porridge",
@@ -602,7 +590,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🥣",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Ugali_20251129_163844.jpg",
+    image: "/assets/food/recipes/banana-oatmeal.webp",
   },
   {
     id: "pineapple",
@@ -628,7 +616,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Fruta",
     emoji: "🍉",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Fresh_watermelon_slices.jpg/960px-Fresh_watermelon_slices.jpg",
+    image: "/assets/food/catalog/watermelon.webp",
   },
   {
     id: "guava",
@@ -654,7 +642,6 @@ export const foodLibrary = [
     fiber: 2,
     group: "Vegetais",
     emoji: "🥬",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Cucumber_lettuce_tomato_and_onion_salad.jpg",
   },
   {
     id: "carrot",
@@ -680,7 +667,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🥬",
-    image: "https://commons.wikimedia.org/wiki/Special:FilePath/Fresh_Okra.jpg",
   },
 ];
 const byName = Object.fromEntries(foodLibrary.map((food) => [food.name, food]));
@@ -717,10 +703,34 @@ const recipeFoodNames = {
   R30: ["Peixe grelhado", "Mandioca", "Cenoura", "Couve e tomate"],
 };
 const recipeImages = {
-  R01: "/assets/food/recipes/R01.webp",
+  R01: "/assets/food/recipes/banana-oatmeal.webp",
   R02: "/assets/food/recipes/R02.webp",
-    R19: "/assets/food/recipes/R19.webp",
+
+  R04: "/assets/food/recipes/yogurt-fruit-bowl.webp",
+  R05: "/assets/food/recipes/banana-pancakes.webp",
+  R06: "/assets/food/recipes/cheese-on-toast.webp",
+  R07: "/assets/food/batata-doce-assada.jpg",
+  R08: "/assets/food/recipes/mango-pineapple-bowl.webp",
+  R09: "/assets/food/recipes/R09.webp",
+  R10: "/assets/food/catalog/carapau.webp",
+  R11: "/assets/food/recipes/beef-stew-rice.webp",
+  R12: "/assets/food/recipes/rice-and-beans.webp",
+  R13: "/assets/food/recipes/chicken-spaghetti.webp",
+  R14: "/assets/food/peixe-grelhado.jpg",
+  R15: "/assets/food/recipes/hamburger-plate.webp",
+
+  R17: "/assets/food/matapa.jpg",
+
+  R19: "/assets/food/recipes/R19.webp",
+
+  R21: "/assets/food/recipes/chicken-vegetable-soup.webp",
+  R22: "/assets/food/recipes/omelette-spinach.webp",
+  R23: "/assets/food/recipes/tuna-salad-sandwich.webp",
+
+
+
   R27: "/assets/food/recipes/R27.webp",
+
 };
 const ingredientAliases = [
   [/aveia/i, "Aveia"], [/banana/i, "Banana"], [/ovo/i, "Ovos"],
@@ -769,17 +779,191 @@ function workbookKeyFor(modality) {
     ? modality
     : "manutencao";
 }
+
+const recipeNutritionPer100 = {
+  Aveia:{kcal:389,protein:16.9,carbs:66.3,fat:6.9,fiber:10.6},
+  Leite:{kcal:61,protein:3.2,carbs:4.8,fat:3.3,fiber:0},
+  Banana:{kcal:89,protein:1.1,carbs:22.8,fat:0.3,fiber:2.6},
+  Canela:{kcal:247,protein:4,carbs:81,fat:1.2,fiber:53},
+  Ovos:{kcal:143,protein:12.6,carbs:0.7,fat:9.5,fiber:0},
+  "Pão integral":{kcal:247,protein:13,carbs:41,fat:4.2,fiber:7},
+  Tomate:{kcal:18,protein:0.9,carbs:3.9,fat:0.2,fiber:1.2},
+  "Farinha de milho":{kcal:365,protein:9.4,carbs:76.9,fat:4.7,fiber:7.3},
+  Papaia:{kcal:43,protein:0.5,carbs:10.8,fat:0.3,fiber:1.7},
+  "Iogurte natural":{kcal:61,protein:3.5,carbs:4.7,fat:3.3,fiber:0},
+  Ananás:{kcal:50,protein:0.5,carbs:13.1,fat:0.1,fiber:1.4},
+  "Queijo fresco":{kcal:98,protein:11.1,carbs:3.4,fat:4.3,fiber:0},
+  Laranja:{kcal:47,protein:0.9,carbs:11.8,fat:0.1,fiber:2.4},
+  "Batata-doce":{kcal:86,protein:1.6,carbs:20.1,fat:0.1,fiber:3},
+  Manga:{kcal:60,protein:0.8,carbs:15,fat:0.4,fiber:1.6},
+  Amendoim:{kcal:567,protein:25.8,carbs:16.1,fat:49.2,fiber:8.5},
+  Frango:{kcal:120,protein:22.5,carbs:0,fat:2.6,fiber:0},
+  Arroz:{kcal:365,protein:7.1,carbs:80,fat:0.7,fiber:1.3},
+  Alface:{kcal:15,protein:1.4,carbs:2.9,fat:0.2,fiber:1.3},
+  Cenoura:{kcal:41,protein:0.9,carbs:9.6,fat:0.2,fiber:2.8},
+  Azeite:{kcal:884,protein:0,carbs:0,fat:100,fiber:0},
+  Carapau:{kcal:158,protein:19.5,carbs:0,fat:8.5,fiber:0},
+  Cebola:{kcal:40,protein:1.1,carbs:9.3,fat:0.1,fiber:1.7},
+  "Carne magra":{kcal:170,protein:21,carbs:0,fat:9,fiber:0},
+  Mandioca:{kcal:160,protein:1.4,carbs:38,fat:0.3,fiber:1.8},
+  Couve:{kcal:35,protein:2.9,carbs:4.4,fat:1.5,fiber:4.1},
+  Feijão:{kcal:127,protein:8.7,carbs:22.8,fat:0.5,fiber:6.4},
+  Esparguete:{kcal:371,protein:13,carbs:75,fat:1.5,fiber:3.2},
+  Tilápia:{kcal:96,protein:20.1,carbs:0,fat:1.7,fiber:0},
+  Batata:{kcal:87,protein:1.9,carbs:20.1,fat:0.1,fiber:1.8},
+  Cabrito:{kcal:143,protein:27,carbs:0,fat:3,fiber:0},
+  Matapa:{kcal:210,protein:6,carbs:12,fat:16,fiber:4},
+  Mucapata:{kcal:160,protein:5,carbs:28,fat:3,fiber:4},
+  Atum:{kcal:116,protein:25.5,carbs:0,fat:0.8,fiber:0},
+  Abóbora:{kcal:26,protein:1,carbs:6.5,fat:0.1,fiber:0.5},
+  Pepino:{kcal:15,protein:0.7,carbs:3.6,fat:0.1,fiber:0.5},
+  Abacate:{kcal:160,protein:2,carbs:8.5,fat:14.7,fiber:6.7},
+};
+const recipeLibraryName = {
+  "Farinha de milho":"Xima", Arroz:"Arroz cozido", Frango:"Frango grelhado",
+  Carapau:"Carapau grelhado", "Carne magra":"Carne magra", Cabrito:"Carne magra",
+  Esparguete:"Massa integral", Tilápia:"Peixe grelhado", Peixe:"Peixe grelhado",
+  Batata:"Batata cozida", Couve:"Couve e tomate", Feijão:"Feijão cozido",
+};
+const recipeGramPerUnit = {
+  Banana:118, Ovos:50, Laranja:130, "Pão integral":30, Tomate:80,
+  Pepino:100, Alface:50, Cebola:70, Cenoura:60, Couve:60,
+};
+function normalizeRecipeIngredient(value) {
+  const key=String(value||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+  if(key.includes("peito de frango")||key.includes("frango sem pele")||key.includes("frango cozido")||key==="frango")return "Frango";
+  if(key.includes("vaca")||key.includes("carne magra")||key.includes("carne picada"))return "Carne magra";
+  if(key.includes("cabrito"))return "Cabrito";
+  if(key.includes("tilapia"))return "Tilápia";
+  if(key.includes("carapau"))return "Carapau";
+  if(key.includes("peixe"))return "Peixe";
+  if(key.includes("farinha de milho"))return "Farinha de milho";
+  if(key.includes("esparguete")||key.includes("massa"))return "Esparguete";
+  if(key.includes("arroz"))return "Arroz";
+  if(key.includes("batata doce"))return "Batata-doce";
+  if(key.includes("batata"))return "Batata";
+  if(key.includes("mandioca"))return "Mandioca";
+  if(key.includes("feijao"))return "Feijão";
+  if(key.includes("ovo"))return "Ovos";
+  if(key.includes("pao"))return "Pão integral";
+  if(key.includes("queijo"))return "Queijo fresco";
+  if(key.includes("iogurte"))return "Iogurte natural";
+  if(key.includes("leite"))return "Leite";
+  if(key.includes("aveia"))return "Aveia";
+  if(key.includes("banana"))return "Banana";
+  if(key.includes("papaia"))return "Papaia";
+  if(key.includes("manga"))return "Manga";
+  if(key.includes("ananas"))return "Ananás";
+  if(key.includes("laranja"))return "Laranja";
+  if(key.includes("amendoim"))return "Amendoim";
+  if(key.includes("atum"))return "Atum";
+  if(key.includes("tomate"))return "Tomate";
+  if(key.includes("alface"))return "Alface";
+  if(key.includes("cenoura"))return "Cenoura";
+  if(key.includes("couve"))return "Couve";
+  if(key.includes("cebola"))return "Cebola";
+  if(key.includes("pepino"))return "Pepino";
+  if(key.includes("azeite"))return "Azeite";
+  if(key.includes("canela"))return "Canela";
+  if(key.includes("abobora"))return "Abóbora";
+  if(key.includes("abacate"))return "Abacate";
+  if(key.includes("matapa"))return "Matapa";
+  if(key.includes("mucapata"))return "Mucapata";
+  return null;
+}
+function splitGroupedRecipeIngredient(name) {
+  const normalized=String(name||"").trim();
+  if(/^salada$/i.test(normalized))return ["Alface","Tomate","Pepino"];
+  const parts=normalized.split(/,\s*|\s+e\s+/i).map((part)=>part.trim()).filter(Boolean);
+  return parts.length>1?parts:[normalized];
+}
+export function parseRecipeIngredients(text) {
+  const parts=String(text||"").split(/[;·]/).map((part)=>part.trim()).filter(Boolean);
+  const result=[];
+  for(const part of parts){
+    let name=part,quantity=1,unit="un",matched=false;
+    let match=part.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|unidades?|un|ovos?|fatias?|colheres?|colher)?\s*(.*)$/i);
+    if(match){
+      matched=true;quantity=Number(match[1].replace(",","."));unit=(match[2]||"un").toLowerCase();name=match[3].trim();
+      if(!name&&/ovos?/i.test(unit)){name="ovo";unit="un";}
+      else if(!name){name=unit;unit="un";}
+    }else{
+      match=part.match(/^(.+?)\s+(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|unidades?|un|ovos?|fatias?|colheres?|colher|m[eé]dia|m[eé]dio|pequeno|pequena|grande)?\b.*$/i);
+      if(match){matched=true;name=match[1].trim();quantity=Number(match[2].replace(",","."));unit=(match[3]||"un").toLowerCase();}
+    }
+    if(/kg/.test(unit)){quantity*=1000;unit="g";}
+    else if(unit==="g")unit="g";
+    else if(unit==="l"){quantity*=1000;unit="ml";}
+    else if(unit==="ml")unit="ml";
+    else if(/colher/.test(unit)){quantity*=15;unit="g";}
+    else unit="un";
+    if(!matched){
+      const key=normalizeRecipeIngredient(name);
+      if(key==="Canela"){quantity=1;unit="g";}
+      else if(key==="Tomate"||key==="Pepino"){quantity=1;unit="un";}
+      else if(key==="Alface"||key==="Couve"||key==="Cenoura"){quantity=100;unit="g";}
+    }
+    const grouped=splitGroupedRecipeIngredient(name);
+    if(grouped.length>1){
+      const total=unit==="g"||unit==="ml"?quantity:quantity*100;
+      const divided=total/grouped.length;
+      for(const groupName of grouped){
+        const canonical=normalizeRecipeIngredient(groupName);
+        if(canonical)result.push({name:canonical,libraryName:recipeLibraryName[canonical]||canonical,quantity:divided,unit:"g"});
+      }
+    }else{
+      const canonical=normalizeRecipeIngredient(name);
+      if(canonical)result.push({name:canonical,libraryName:recipeLibraryName[canonical]||canonical,quantity,unit});
+    }
+  }
+  return result;
+}
+function recipeIngredientGrams(item) {
+  if(item.unit==="g")return item.quantity;
+  if(item.unit==="ml")return item.quantity*(item.name==="Azeite"?0.91:1);
+  return item.quantity*(recipeGramPerUnit[item.name]||100);
+}
+function roundMacro(value,places=1){const factor=10**places;return Math.round((Number(value)||0)*factor)/factor;}
+function recipeIngredientMacros(item,scale=1){
+  const source=recipeNutritionPer100[item.name]||{kcal:0,protein:0,carbs:0,fat:0,fiber:0};
+  const factor=recipeIngredientGrams(item)*scale/100;
+  return {kcal:source.kcal*factor,protein:source.protein*factor,carbs:source.carbs*factor,fat:source.fat*factor,fiber:source.fiber*factor};
+}
+function recipeFoodItems(items,scale=1,allergy=""){
+  return items.map((item)=>{
+    const library=byName[item.libraryName]||byName[item.name]||{};
+    const macros=recipeIngredientMacros(item,scale);
+    const quantity=roundMacro(item.quantity*scale,1);
+    const portion= item.unit==="g"||item.unit==="ml"
+      ? Math.round(quantity)+" "+item.unit
+      : quantity+" un";
+    return {
+      id:library.id||("recipe-"+item.name.toLowerCase().replace(/\s+/g,"-")),
+      name:item.libraryName||item.name,
+      sourceIngredient:item.name,
+      portion,
+      kcal:Math.round(macros.kcal),
+      protein:roundMacro(macros.protein),
+      carbs:roundMacro(macros.carbs),
+      fat:roundMacro(macros.fat),
+      fiber:roundMacro(macros.fiber),
+      group:library.group||"Ingrediente",
+      image:library.image||null,
+      restricted:isRestrictedFood(item.libraryName||item.name,allergy),
+    };
+  });
+}
+function sumRecipeFoods(foods){
+  const keys=["kcal","protein","carbs","fat","fiber"];
+  return Object.fromEntries(keys.map((key)=>[key,roundMacro(foods.reduce((sum,food)=>sum+(Number(food[key])||0),0),key==="kcal"?0:1)]));
+}
+
 export const supplementCatalog = [
-  {
-    id: "npl-creatine-monohydrate",
-    brand: "NPL",
-    name: "Creatine Monohydrate",
-    format: "150 g ou 500 g",
-    image: "/assets/supplements/npl-creatine-monohydrate.png",
-    url: "https://www.npl.za.com/collections/creatines/products/creatine-monohydrate",
-    whatsapp:
-      "https://wa.me/258868787572?text=Ol%C3%A1!%20Gostaria%20de%20saber%20o%20pre%C3%A7o%2C%20disponibilidade%20e%20entrega%20da%20NPL%20Creatine%20Monohydrate.",
-  },
+  { id:"usn-pure-creatine-200g",brand:"USN",name:"Pure Creatine Monohydrate",format:"200 g",priceMzn:900,pricePer100g:450,retailer:"Kratos Empire",image:"https://kratosempire.co.mz/cdn/shop/files/USNPURECREATINE300GRBag_800x800_881d7050-1ec1-4c41-84be-08c4b3f85768.jpg?v=1769620230",url:"https://kratosempire.co.mz/products/pure-creatine-monohydrate",availability:"Preço observado em 13/11/2026; confirmar variante e stock na loja." },
+  { id:"usn-pure-creatine-410g",brand:"USN",name:"Pure Creatine Monohydrate",format:"410 g",priceMzn:1600,pricePer100g:390,retailer:"Kratos Empire",image:"https://kratosempire.co.mz/cdn/shop/files/USNPURECREATINE300GRBag_800x800_881d7050-1ec1-4c41-84be-08c4b3f85768.jpg?v=1769620230",url:"https://kratosempire.co.mz/products/pure-creatine-monohydrate",availability:"Preço observado em 13/11/2026; confirmar variante e stock na loja." },
+  { id:"npl-creatine-150g",brand:"NPL",name:"Creatine Monohydrate",format:"150 g",priceMzn:1000,pricePer100g:667,retailer:"IR Fitness",image:"https://irfitnessshop.co.mz/wp-content/uploads/2026/02/NPL-Creatine-Monohydrate-150g.png.png",url:"https://irfitnessshop.co.mz/product/npl-creatine-monohydrate-150g/",availability:"Preço observado em 13/11/2026; confirmar stock e entrega." },
+  { id:"evolve-creatine-300g",brand:"Evolve",name:"Creatine Mono",format:"300 g",priceMzn:1550,pricePer100g:517,retailer:"IR Fitness",image:null,url:"https://irfitnessshop.co.mz/product-category/creatinas/",availability:"Preço observado em 13/11/2026 na categoria de creatinas; confirmar produto e stock." },
+  { id:"biogen-creatine-500g",brand:"Biogen",name:"Creatine Monohydrate",format:"500 g",priceMzn:2130,pricePer100g:426,retailer:"Krolyc",image:null,url:"https://krolyc.co.mz/product/biogen-creatine-monohydrate-500g/",availability:"Preço observado em 13/11/2026; confirmar stock e entrega." },
 ];
 const menu30 = [
   [
@@ -1251,31 +1435,22 @@ export function nutritionPlan(profile = {}) {
       // que já foi definida para o dia.
       return name;
     });
-  const targetScale = objective.portion * (calories / (base || calories));
   const shiftForMeal = (row) => {
     if (String(row.meal).toLowerCase().includes("pré-treino")) return shift(-90);
     if (String(row.meal).toLowerCase().includes("pós-treino")) return shift(75);
     return row.time;
   };
-  const safeFood = (name) => byName[name] || {
-    id: `recipe-${String(name).toLowerCase().replace(/\s+/g, "-")}`,
-    name,
-    portion: "porção da receita",
-    kcal: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
-    fiber: 0,
-    group: "Ingrediente da receita",
-    emoji: "🍽️",
-  };
-  const meals = day.map((row) => {
-    const ingredientNames = adaptItems(
-      foodNamesFromIngredients(row.ingredients, recipeFoodNames[row.recipeId] || []),
-    );
-    const foods = ingredientNames.map(safeFood).map((food) => scaleFood(food, targetScale));
-    const sum = (key) => Math.round(foods.reduce((a, f) => a + (f[key] || 0), 0));
-    const recipeImage = recipeImages[row.recipeId] || null;
+  const rawMeals = (day || []).map((row) => ({
+    row,
+    ingredients: parseRecipeIngredients(row.ingredients),
+  }));
+  const rawDayCalories = rawMeals.reduce((total, meal) =>
+    total + sumRecipeFoods(recipeFoodItems(meal.ingredients,1,allergy)).kcal, 0);
+  const targetScale = Math.min(1.35,Math.max(0.7,calories/(rawDayCalories||calories)));
+  const meals = rawMeals.map(({row,ingredients}) => {
+    const foods = recipeFoodItems(ingredients,targetScale,allergy);
+    const totals = sumRecipeFoods(foods);
+    const allergyWarning = foods.some((food)=>food.restricted);
     return {
       time: shiftForMeal(row),
       title: row.meal,
@@ -1283,21 +1458,25 @@ export function nutritionPlan(profile = {}) {
       recipeId: row.recipeId,
       items: [row.recipe],
       foods,
-      image: recipeImage || foods.find((food) => food.image)?.image || null,
-      ingredients: [row.ingredients],
+      image: recipeImages[row.recipeId] || null,
+      ingredients: foods.map((food)=>food.name+" ("+food.portion+")"),
+      recipeIngredients: row.ingredients,
+      nutrition: totals,
       purpose: row.purpose,
       preparation: row.preparation,
       adjustment: row.adjustment,
       recipe: row.preparation,
-      kcal: sum("kcal"),
-      protein: sum("protein"),
-      carbs: sum("carbs"),
-      fat: sum("fat"),
-      fiber: sum("fiber"),
+      kcal: totals.kcal,
+      protein: totals.protein,
+      carbs: totals.carbs,
+      fat: totals.fat,
+      fiber: totals.fiber,
+      allergyWarning,
     };
   });
   const finalMeals = meals;
-  const resistanceFocused = ["musculacao", "bulking", "definicao"].includes(modality);
+  const trainingModality = String(profile.modality || "").toLowerCase();
+  const resistanceFocused = ["bulking","definicao","musculacao"].includes(modality) || /muscul|calisten|futsal|karat/.test(trainingModality);
   const supplementAdvice = age < 18
     ? { show: false, title: "Suplementos", detail: "Para menores, o aplicativo não recomenda suplementos automaticamente. Fale com um profissional qualificado e com o responsável." }
     : resistanceFocused
@@ -1310,6 +1489,8 @@ export function nutritionPlan(profile = {}) {
     bmr: Math.round(bmr),
     waterMl: hydration(profile, calories),
     meals: finalMeals,
+    portionScale: roundMacro(targetScale,2),
+    estimatedMealCalories: finalMeals.reduce((sum,meal)=>sum+meal.kcal,0),
     training,
     modalityLabel: labels[modality] || labels.condicionamento,
     modalityNote:
@@ -1331,8 +1512,9 @@ export function nutritionPlan(profile = {}) {
     supplementAdvice,
     creatine:
       age < 18
-        ? "Suplementos não são recomendados automaticamente para menores. Converse com um profissional."
-        : "Creatina monohidratada é opcional. A referência informativa frequentemente estudada para adultos saudáveis é 3–5 g/dia, sem calcular dose pelo peso e sem substituir avaliação profissional.",
+        ? "O JL Trainer não apresenta ofertas nem sugere doses de creatina para menores. Converse com um profissional de saúde e com o responsável."
+        : "Creatina monohidratada é opcional. Em adultos saudáveis, estudos frequentemente usam 3–5 g/dia como manutenção; não é dose individual, não é calculada pelo peso e não substitui avaliação profissional.",
+    creatineSourceUrl:"https://link.springer.com/article/10.1186/s12970-017-0173-z",
   };
 }
 
@@ -1341,50 +1523,41 @@ const shoppingName = (value) => String(value || "")
   .normalize("NFD")
   .replace(/[\u0300-\u036f]/g, "")
   .replace(/\([^)]*\)/g, "")
-  .replace(/\b(cru|cozido|cozida|media|medio|medios|escorrido|opcional)\b/g, "")
   .replace(/\s+/g, " ")
   .trim();
 
-function parseIngredientLine(line, people) {
-  return String(line || "")
-    .split(/[;·]/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((part) => {
-      const byName = part.match(/^(.*?)(?:\s+)(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|un|unidade|unidades|ovos?|media|medio)?$/i);
-      const byQuantity = part.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|un|unidade|unidades|ovos?)?\s+(.*)$/i);
-      const match = byName || byQuantity;
-      if (!match) return { name: part, quantity: people, unit: "porções" };
-      const firstIsName = Boolean(byName);
-      const quantity = Number(String(firstIsName ? match[2] : match[1]).replace(",", ".")) * people;
-      const rawUnit = String(firstIsName ? match[3] || "un" : match[2] || "un").toLowerCase();
-      return {
-        name: String(firstIsName ? match[1] : match[3]).replace(/\s+/g, " ").trim(),
-        quantity,
-        unit: rawUnit === "ovos" || rawUnit === "ovo" ? "un" : rawUnit,
-      };
-    });
+function formatShoppingQuantity(quantity,unit) {
+  const value=Math.round(quantity*10)/10;
+  if(unit==="g"&&value>=1000)return (Math.round(value/100)/10)+" kg";
+  if(unit==="ml"&&value>=1000)return (Math.round(value/100)/10)+" L";
+  if(unit==="un")return value+" "+(value===1?"unidade":"unidades");
+  return value+" "+unit;
 }
-
-export function buildShoppingList(profile = {}, days = 30) {
+export function buildShoppingList(profile = {}, days = 30, portionScale = null) {
   const people = Math.min(12, Math.max(1, Number(profile.household_size || profile.people_count) || 1));
   const totalDays = Math.min(30, Math.max(1, Number(days) || 30));
   const modality = modalityKeyFor(profile);
   const plan = workbookMealPlans[workbookKeyFor(modality)] || workbookMealPlans.emagrecimento;
+  const scale = Math.min(1.35,Math.max(0.7,Number(portionScale)||1));
   const totals = new Map();
   for (let day = 1; day <= totalDays; day += 1) {
     for (const row of plan[day] || []) {
-      for (const ingredient of parseIngredientLine(row.ingredients, people)) {
-        const key = `${shoppingName(ingredient.name)}|${ingredient.unit}`;
-        const current = totals.get(key) || { name: ingredient.name, quantity: 0, unit: ingredient.unit };
-        current.quantity += ingredient.quantity;
+      for (const ingredient of parseRecipeIngredients(row.ingredients)) {
+        const quantity=ingredient.quantity*people*scale;
+        const key = shoppingName(ingredient.name)+"|"+ingredient.unit;
+        const current = totals.get(key) || { key, name: ingredient.name, quantity: 0, unit: ingredient.unit };
+        current.quantity += quantity;
         totals.set(key, current);
       }
     }
   }
   return Array.from(totals.values())
     .filter((item) => item.name && item.quantity > 0)
-    .map((item) => ({ ...item, quantity: Math.round(item.quantity * 10) / 10, display: `${Math.round(item.quantity * 10) / 10} ${item.unit}` }))
+    .map((item) => ({
+      ...item,
+      quantity: Math.round(item.quantity * 10) / 10,
+      display: formatShoppingQuantity(item.quantity,item.unit),
+    }))
     .sort((a, b) => a.name.localeCompare(b.name, "pt"));
 }
 
