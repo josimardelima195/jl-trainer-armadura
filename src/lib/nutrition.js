@@ -1430,31 +1430,22 @@ export function nutritionPlan(profile = {}) {
       // que já foi definida para o dia.
       return name;
     });
-  const targetScale = objective.portion * (calories / (base || calories));
   const shiftForMeal = (row) => {
     if (String(row.meal).toLowerCase().includes("pré-treino")) return shift(-90);
     if (String(row.meal).toLowerCase().includes("pós-treino")) return shift(75);
     return row.time;
   };
-  const safeFood = (name) => byName[name] || {
-    id: `recipe-${String(name).toLowerCase().replace(/\s+/g, "-")}`,
-    name,
-    portion: "porção da receita",
-    kcal: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
-    fiber: 0,
-    group: "Ingrediente da receita",
-    emoji: "🍽️",
-  };
-  const meals = day.map((row) => {
-    const ingredientNames = adaptItems(
-      foodNamesFromIngredients(row.ingredients, recipeFoodNames[row.recipeId] || []),
-    );
-    const foods = ingredientNames.map(safeFood).map((food) => scaleFood(food, targetScale));
-    const sum = (key) => Math.round(foods.reduce((a, f) => a + (f[key] || 0), 0));
-    const recipeImage = recipeImages[row.recipeId] || null;
+  const rawMeals = (day || []).map((row) => ({
+    row,
+    ingredients: parseRecipeIngredients(row.ingredients),
+  }));
+  const rawDayCalories = rawMeals.reduce((total, meal) =>
+    total + sumRecipeFoods(recipeFoodItems(meal.ingredients,1,allergy)).kcal, 0);
+  const targetScale = Math.min(1.35,Math.max(0.7,calories/(rawDayCalories||calories)));
+  const meals = rawMeals.map(({row,ingredients}) => {
+    const foods = recipeFoodItems(ingredients,targetScale,allergy);
+    const totals = sumRecipeFoods(foods);
+    const allergyWarning = foods.some((food)=>food.restricted);
     return {
       time: shiftForMeal(row),
       title: row.meal,
@@ -1462,21 +1453,25 @@ export function nutritionPlan(profile = {}) {
       recipeId: row.recipeId,
       items: [row.recipe],
       foods,
-      image: recipeImage || foods.find((food) => food.image)?.image || null,
-      ingredients: [row.ingredients],
+      image: recipeImages[row.recipeId] || null,
+      ingredients: foods.map((food)=>food.name+" ("+food.portion+")"),
+      recipeIngredients: row.ingredients,
+      nutrition: totals,
       purpose: row.purpose,
       preparation: row.preparation,
       adjustment: row.adjustment,
       recipe: row.preparation,
-      kcal: sum("kcal"),
-      protein: sum("protein"),
-      carbs: sum("carbs"),
-      fat: sum("fat"),
-      fiber: sum("fiber"),
+      kcal: totals.kcal,
+      protein: totals.protein,
+      carbs: totals.carbs,
+      fat: totals.fat,
+      fiber: totals.fiber,
+      allergyWarning,
     };
   });
   const finalMeals = meals;
-  const resistanceFocused = ["musculacao", "bulking", "definicao"].includes(modality);
+  const trainingModality = String(profile.modality || "").toLowerCase();
+  const resistanceFocused = ["bulking","definicao","musculacao"].includes(modality) || /muscul|calisten|futsal|karat/.test(trainingModality);
   const supplementAdvice = age < 18
     ? { show: false, title: "Suplementos", detail: "Para menores, o aplicativo não recomenda suplementos automaticamente. Fale com um profissional qualificado e com o responsável." }
     : resistanceFocused
@@ -1489,6 +1484,8 @@ export function nutritionPlan(profile = {}) {
     bmr: Math.round(bmr),
     waterMl: hydration(profile, calories),
     meals: finalMeals,
+    portionScale: roundMacro(targetScale,2),
+    estimatedMealCalories: finalMeals.reduce((sum,meal)=>sum+meal.kcal,0),
     training,
     modalityLabel: labels[modality] || labels.condicionamento,
     modalityNote:
@@ -1510,8 +1507,9 @@ export function nutritionPlan(profile = {}) {
     supplementAdvice,
     creatine:
       age < 18
-        ? "Suplementos não são recomendados automaticamente para menores. Converse com um profissional."
-        : "Creatina monohidratada é opcional. A referência informativa frequentemente estudada para adultos saudáveis é 3–5 g/dia, sem calcular dose pelo peso e sem substituir avaliação profissional.",
+        ? "O JL Trainer não apresenta ofertas nem sugere doses de creatina para menores. Converse com um profissional de saúde e com o responsável."
+        : "Creatina monohidratada é opcional. Em adultos saudáveis, estudos frequentemente usam 3–5 g/dia como manutenção; não é dose individual, não é calculada pelo peso e não substitui avaliação profissional.",
+    creatineSourceUrl:"https://link.springer.com/article/10.1186/s12970-017-0173-z",
   };
 }
 
@@ -1520,50 +1518,41 @@ const shoppingName = (value) => String(value || "")
   .normalize("NFD")
   .replace(/[\u0300-\u036f]/g, "")
   .replace(/\([^)]*\)/g, "")
-  .replace(/\b(cru|cozido|cozida|media|medio|medios|escorrido|opcional)\b/g, "")
   .replace(/\s+/g, " ")
   .trim();
 
-function parseIngredientLine(line, people) {
-  return String(line || "")
-    .split(/[;·]/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .map((part) => {
-      const byName = part.match(/^(.*?)(?:\s+)(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|un|unidade|unidades|ovos?|media|medio)?$/i);
-      const byQuantity = part.match(/^(\d+(?:[.,]\d+)?)\s*(kg|g|ml|l|un|unidade|unidades|ovos?)?\s+(.*)$/i);
-      const match = byName || byQuantity;
-      if (!match) return { name: part, quantity: people, unit: "porções" };
-      const firstIsName = Boolean(byName);
-      const quantity = Number(String(firstIsName ? match[2] : match[1]).replace(",", ".")) * people;
-      const rawUnit = String(firstIsName ? match[3] || "un" : match[2] || "un").toLowerCase();
-      return {
-        name: String(firstIsName ? match[1] : match[3]).replace(/\s+/g, " ").trim(),
-        quantity,
-        unit: rawUnit === "ovos" || rawUnit === "ovo" ? "un" : rawUnit,
-      };
-    });
+function formatShoppingQuantity(quantity,unit) {
+  const value=Math.round(quantity*10)/10;
+  if(unit==="g"&&value>=1000)return (Math.round(value/100)/10)+" kg";
+  if(unit==="ml"&&value>=1000)return (Math.round(value/100)/10)+" L";
+  if(unit==="un")return value+" "+(value===1?"unidade":"unidades");
+  return value+" "+unit;
 }
-
-export function buildShoppingList(profile = {}, days = 30) {
+export function buildShoppingList(profile = {}, days = 30, portionScale = null) {
   const people = Math.min(12, Math.max(1, Number(profile.household_size || profile.people_count) || 1));
   const totalDays = Math.min(30, Math.max(1, Number(days) || 30));
   const modality = modalityKeyFor(profile);
   const plan = workbookMealPlans[workbookKeyFor(modality)] || workbookMealPlans.emagrecimento;
+  const scale = Math.min(1.35,Math.max(0.7,Number(portionScale)||1));
   const totals = new Map();
   for (let day = 1; day <= totalDays; day += 1) {
     for (const row of plan[day] || []) {
-      for (const ingredient of parseIngredientLine(row.ingredients, people)) {
-        const key = `${shoppingName(ingredient.name)}|${ingredient.unit}`;
-        const current = totals.get(key) || { name: ingredient.name, quantity: 0, unit: ingredient.unit };
-        current.quantity += ingredient.quantity;
+      for (const ingredient of parseRecipeIngredients(row.ingredients)) {
+        const quantity=ingredient.quantity*people*scale;
+        const key = shoppingName(ingredient.name)+"|"+ingredient.unit;
+        const current = totals.get(key) || { key, name: ingredient.name, quantity: 0, unit: ingredient.unit };
+        current.quantity += quantity;
         totals.set(key, current);
       }
     }
   }
   return Array.from(totals.values())
     .filter((item) => item.name && item.quantity > 0)
-    .map((item) => ({ ...item, quantity: Math.round(item.quantity * 10) / 10, display: `${Math.round(item.quantity * 10) / 10} ${item.unit}` }))
+    .map((item) => ({
+      ...item,
+      quantity: Math.round(item.quantity * 10) / 10,
+      display: formatShoppingQuantity(item.quantity,item.unit),
+    }))
     .sort((a, b) => a.name.localeCompare(b.name, "pt"));
 }
 
