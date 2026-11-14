@@ -28,7 +28,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
-    image: "/assets/food/reference-crops/banana.webp",
   },
   {
     id: "eggs",
@@ -67,7 +66,6 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
-    image: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   },
   {
     id: "fresh-cheese",
@@ -293,7 +291,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🥭",
-    image: "/assets/food/recipes/mango-pineapple-bowl.webp",
   },
   {
     id: "apple",
@@ -319,7 +316,6 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍓",
-    image: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   },
   {
     id: "greens",
@@ -420,7 +416,6 @@ export const foodLibrary = [
     fiber: 8,
     group: "Prato moçambicano",
     emoji: "🍲",
-    image: "/assets/food/recipes/rice-and-beans.webp",
   },
   {
     id: "zambeziana",
@@ -500,7 +495,6 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍲",
-    image: "/assets/food/recipes/chicken-vegetable-soup.webp",
   },
   {
     id: "chicken-peanut",
@@ -541,19 +535,7 @@ export const foodLibrary = [
     emoji: "🐟",
     image: "/assets/food/catalog/carapau.webp",
   },
-  {
-    id: "tilapia",
-    name: "Tilápia grelhada",
-    portion: "150 g",
-    kcal: 190,
-    protein: 36,
-    carbs: 0,
-    fat: 4,
-    fiber: 0,
-    group: "Proteína",
-    emoji: "🐟",
-    image: "/assets/food/catalog/tilapia.webp",
-  },
+
   {
     id: "lentils",
     name: "Lentilhas cozidas",
@@ -705,7 +687,7 @@ const recipeFoodNames = {
 const recipeImages = {
   R01: "/assets/food/recipes/banana-oatmeal.webp",
   R02: "/assets/food/recipes/R02.webp",
-
+  R03: "/assets/food/recipes/banana-oatmeal.webp",
   R04: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R05: "/assets/food/recipes/banana-pancakes.webp",
   R06: "/assets/food/recipes/cheese-on-toast.webp",
@@ -718,19 +700,19 @@ const recipeImages = {
   R13: "/assets/food/recipes/chicken-spaghetti.webp",
   R14: "/assets/food/peixe-grelhado.jpg",
   R15: "/assets/food/recipes/hamburger-plate.webp",
-
+  R16: "/assets/food/recipes/beef-stew-rice.webp",
   R17: "/assets/food/matapa.jpg",
-
+  R18: "/assets/food/recipes/rice-and-beans.webp",
   R19: "/assets/food/recipes/R19.webp",
-
+  R20: "/assets/food/recipes/tuna-pasta-salad.webp",
   R21: "/assets/food/recipes/chicken-vegetable-soup.webp",
   R22: "/assets/food/recipes/omelette-spinach.webp",
   R23: "/assets/food/recipes/tuna-salad-sandwich.webp",
-
-
-
+  R24: "/assets/food/recipes/banana-oatmeal.webp",
+  R25: "/assets/food/recipes/yogurt-fruit-bowl.webp",
+  R26: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R27: "/assets/food/recipes/R27.webp",
-
+  R30: "/assets/food/recipes/fish-with-xima.webp",
 };
 const ingredientAliases = [
   [/aveia/i, "Aveia"], [/banana/i, "Banana"], [/ovo/i, "Ovos"],
@@ -1257,7 +1239,6 @@ const allergenMatchers = {
     "Atum",
     "Sardinha",
     "Carapau grelhado",
-    "Tilápia grelhada",
     "Caril de peixe",
   ],
 };
@@ -1323,7 +1304,7 @@ function objectiveMenu(modality, day) {
 }
 export function nutritionPlan(profile = {}) {
   const age = ageFrom(profile),
-    modality = modalityKeyFor(profile),
+    modality = age !== null && age < 18 ? "condicionamento" : modalityKeyFor(profile),
     baseObjective = objectives[modality] || objectives.condicionamento,
     objective =
       age !== null && age < 18
@@ -1366,7 +1347,7 @@ export function nutritionPlan(profile = {}) {
   const base =
     bmr * activityFactor(profile) +
     (modalAdjust[String(profile.modality || "").toLowerCase()] || 0);
-  const calories = Math.max(
+  const estimatedCalories = Math.max(
     age < 18 ? Math.round(base) : 1400,
     Math.round(
       base +
@@ -1378,6 +1359,7 @@ export function nutritionPlan(profile = {}) {
             : 0),
     ),
   );
+  const calories = age < 18 ? null : estimatedCalories;
   const dayNumber = Math.min(
       30,
       Math.max(1, Number(profile.nutrition_day) || 1),
@@ -1446,7 +1428,7 @@ export function nutritionPlan(profile = {}) {
   }));
   const rawDayCalories = rawMeals.reduce((total, meal) =>
     total + sumRecipeFoods(recipeFoodItems(meal.ingredients,1,allergy)).kcal, 0);
-  const targetScale = Math.min(1.35,Math.max(0.7,calories/(rawDayCalories||calories)));
+  const targetScale = age < 18 ? 1 : Math.min(1.35,Math.max(0.7,calories/(rawDayCalories||calories)));
   const meals = rawMeals.map(({row,ingredients}) => {
     const foods = recipeFoodItems(ingredients,targetScale,allergy);
     const totals = sumRecipeFoods(foods);
@@ -1486,11 +1468,11 @@ export function nutritionPlan(profile = {}) {
     incomplete: false,
     dayNumber,
     calories,
-    bmr: Math.round(bmr),
+    bmr: age < 18 ? null : Math.round(bmr),
     waterMl: hydration(profile, calories),
     meals: finalMeals,
     portionScale: roundMacro(targetScale,2),
-    estimatedMealCalories: finalMeals.reduce((sum,meal)=>sum+meal.kcal,0),
+    estimatedMealCalories: age < 18 ? null : finalMeals.reduce((sum,meal)=>sum+meal.kcal,0),
     training,
     modalityLabel: labels[modality] || labels.condicionamento,
     modalityNote:
@@ -1500,9 +1482,9 @@ export function nutritionPlan(profile = {}) {
     ageNote: ageNote,
     proteinTarget:
       age !== null && age < 18 ? null : Math.round(weight * objective.protein),
-    carbsTarget: Math.round((calories * 0.45) / 4),
-    fatTarget: Math.round((calories * 0.3) / 9),
-    fiberTarget: Math.round(Math.max(25, (calories / 1000) * 14)),
+    carbsTarget: age < 18 ? null : Math.round((calories * 0.45) / 4),
+    fatTarget: age < 18 ? null : Math.round((calories * 0.3) / 9),
+    fiberTarget: age < 18 ? null : Math.round(Math.max(25, (calories / 1000) * 14)),
     hydrationReminders: hydrationReminders(profile),
     budgetNote:
       profile.food_budget === "low"
