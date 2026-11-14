@@ -135,11 +135,20 @@ export default function Auth({ children }) {
         setMode("login");
       }
     } catch (e) {
-      setError(
-        e?.message?.toLowerCase().includes("fetch")
-          ? "Não foi possível contactar o servidor. Verifique a internet, desative VPN/bloqueador e tente novamente."
-          : e.message || "Não foi possível concluir a operação.",
-      );
+      const message = String(e?.message || "");
+      const normalized = message.toLowerCase();
+      const friendlyMessage = normalized.includes("database error saving new user")
+        ? "Não foi possível guardar os dados do cadastro. Tente novamente em instantes. Se já criou esta conta, volte ao login."
+        : normalized.includes("already registered") || normalized.includes("user exists")
+          ? "Este email já tem uma conta. Volte ao login ou recupere a senha."
+          : normalized.includes("email not confirmed")
+            ? "Confirme o email da sua conta antes de entrar."
+            : normalized.includes("invalid login credentials")
+              ? "Email ou senha incorretos. Confira os dados e tente novamente."
+              : normalized.includes("fetch")
+                ? "Não foi possível contactar o servidor. Verifique a internet e tente novamente."
+                : message || "Não foi possível concluir a operação. Tente novamente.";
+      setError(friendlyMessage);
     } finally {
       setBusy(false);
     }
