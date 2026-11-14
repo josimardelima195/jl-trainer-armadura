@@ -635,15 +635,9 @@ export function build30DayPlan(
     );
     const isRunDay = modality === "emagrecimento" && runningDays.has(day);
     const age = ageFromProfile(profile);
-    const workSeconds =
-      age >= 65
-        ? 25
-        : intensity === "hard"
-          ? 40
-          : intensity === "easy"
-            ? 20
-            : 30;
-    const restSeconds = age >= 65 ? 45 : intensity === "hard" ? 20 : 30;
+    const youth = age < 18;
+    const workSeconds = youth ? 20 : age >= 65 ? 25 : intensity === "hard" ? 40 : intensity === "easy" ? 20 : 30;
+    const restSeconds = youth ? 60 : age >= 65 ? 60 : intensity === "hard" ? 20 : 30;
     const timed = cardioFirst || isRecovery;
     return {
       day,
@@ -659,8 +653,8 @@ export function build30DayPlan(
       sessionType: timed ? "interval" : "sets",
       interval: {
         workSeconds,
-        restSeconds: isRecovery ? 20 : restSeconds,
-        rounds: age >= 65 ? 2 : intensity === "hard" ? 4 : 3,
+        restSeconds: isRecovery ? age < 18 || age >= 65 ? 60 : 20 : restSeconds,
+        rounds: youth || age >= 65 ? 2 : intensity === "hard" ? 4 : 3,
       },
       sessionLabel: isRunDay
         ? "Cardio guiado por tempo"
@@ -669,26 +663,24 @@ export function build30DayPlan(
           : "Treino específico da modalidade",
       exercises: selected.map((e, order) => ({
         ...e,
-        sets: timed
-          ? age >= 65
-            ? 2
-            : intensity === "hard"
-              ? 4
-              : 3
-          : age >= 65
-            ? 2
-            : intensity === "hard"
-              ? 4
-              : intensity === "easy"
-                ? 2
-                : 3,
+        sets: youth || age >= 65
+          ? 2
+          : intensity === "hard"
+            ? 4
+            : intensity === "easy"
+              ? 2
+              : 3,
         reps: timed
           ? `${workSeconds} s`
-          : intensity === "hard"
-            ? "10–15"
-            : intensity === "easy"
+          : youth
+            ? "8–12"
+            : age >= 65
               ? "8–10"
-              : "8–12",
+              : intensity === "hard"
+                ? "10–15"
+                : intensity === "easy"
+                  ? "8–10"
+                  : "8–12",
         work_seconds: timed ? workSeconds : null,
         rest_seconds: timed ? restSeconds : e.rest_seconds || 60,
         day_number: day,

@@ -1457,7 +1457,7 @@ export function Profile({ theme, onThemeChange }) {
             Local principal de treino
             <select
               name="training_location"
-              defaultValue={profile.training_location || "casa"}
+              defaultValue={profile.training_location === "ginasio" ? "ginasio" : "casa"}
             >
               <option value="ginasio">Gym</option>
               <option value="casa">Home</option>
@@ -1974,7 +1974,7 @@ export function Challenges() {
           {!authenticated && <p className="community-login-note">Entre na sua conta para gravar vídeos, concluir desafios e conversar com outros membros.</p>}
         </section>
 
-        <section className="leaderboard-card">
+        <aside className="leaderboard-card">
           <div className="section-head">
             <div><span className="eyebrow">COMUNIDADE JL</span><h2>Ranking</h2></div>
             <span className="pill">TOP 10</span>
@@ -1991,7 +1991,7 @@ export function Challenges() {
             ))}
           </div>
           {!leaderboard.length && <Empty>O ranking aparecerá aqui quando os membros registarem treinos ou desafios.</Empty>}
-        </section>
+        </aside>
       </div>
 
       <section className="community-feed-card">
@@ -2507,7 +2507,7 @@ export function Assistant({ plan, go }) {
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
-const foodPhoto = (food) => food?.image || null;
+const foodPhoto = (food) => foodLibrary.find((known) => known.name === food?.name)?.image || null;
 
 export function Nutrition({ plan, whatsapp }) {
   const { profile, userId } = useStore();
@@ -2643,7 +2643,7 @@ export function Nutrition({ plan, whatsapp }) {
         <div className="nutrition-kcal">
           <strong>{n.calories ?? "—"}</strong>
           <span>
-            {n.incomplete ? "complete o perfil" : "kcal estimadas/dia"}
+            {n.ageCategory === "adolescente" ? "sem meta calórica automática para menores" : n.incomplete ? "complete o perfil" : "kcal estimadas/dia"}
           </span>
         </div>
       </div>
@@ -2678,12 +2678,12 @@ export function Nutrition({ plan, whatsapp }) {
             ))}
           </div>
           <div className="food-library-grid">
-            {visibleFoodLibrary.filter((food) => foodPhoto(food)).map((food) => (
+            {visibleFoodLibrary.map((food) => (
               <article className="food-library-card" key={food.id}>
                 <div className="food-library-image">
                   {foodPhoto(food) ? (
-                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.closest(".food-library-card")?.remove(); }} />
-                  ) : null}
+                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
+                  ) : <span className="food-library-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>}
                 </div>
                 <div className="food-library-copy">
                   <span className="food-library-group">{food.group}</span>
@@ -2820,12 +2820,11 @@ export function Nutrition({ plan, whatsapp }) {
                   </div>
                 </div>
                 <div className="meal-total">
-                  <b>{meal.kcal || 0} kcal</b>
-                  <span>
-                    {meal.protein || 0} g proteína · {meal.carbs || 0} g
-                    carboidratos · {meal.fat || 0} g gordura · {meal.fiber || 0}{" "}
-                    g fibras
-                  </span>
+                  {n.ageCategory === "adolescente" ? (
+                    <><b>Refeição equilibrada</b><span>Sem contagem ou restrição calórica automática para menores.</span></>
+                  ) : (
+                    <><b>{meal.kcal || 0} kcal</b><span>{meal.protein || 0} g proteína · {meal.carbs || 0} g carboidratos · {meal.fat || 0} g gordura · {meal.fiber || 0} g fibras</span></>
+                  )}
                 </div>
                 <div className="meal-ingredients">
                   <b>Ingredientes e porções estimadas:</b>{" "}
@@ -2835,27 +2834,16 @@ export function Nutrition({ plan, whatsapp }) {
                   <p className="allergy-warning">A receita inclui um ingrediente que coincide com uma restrição do seu perfil. Não consuma esta refeição sem confirmar uma substituição segura.</p>
                 )}
                 <div className="food-chips">
-                  {meal.foods.filter((food) => foodPhoto(food)).map((food) => (
-                    <div
-                      className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`}
-                      key={food.name}
-                    >
+                  {meal.foods.map((food) => (
+                    <div className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`} key={food.name}>
                       {foodPhoto(food) ? (
-                        <span className="food-chip-media" data-emoji={food.emoji || "🍽️"}>
-                          <img
-                            src={foodPhoto(food)}
-                            alt={`Fotografia de ${food.name}`}
-                            loading="lazy"
-                            onError={(event) => event.currentTarget.closest(".food-chip")?.remove()}
-                          />
+                        <span className="food-chip-media">
+                          <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
                         </span>
-                      ) : null}
+                      ) : <span className="food-chip-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>}
                       <div>
                         <b>{food.name}</b>
-                        <small>
-                          {food.portion} · {food.kcal} kcal · {food.protein} g
-                          proteína
-                        </small>
+                        <small>{food.portion}{n.ageCategory === "adolescente" ? "" : ` · ${food.kcal} kcal · ${food.protein} g proteína`}</small>
                       </div>
                     </div>
                   ))}

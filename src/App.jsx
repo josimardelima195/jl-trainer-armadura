@@ -145,25 +145,11 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     return years;
   })();
   const steps = [
-    ["birth_date", "Qual é a sua data de nascimento?", "A idade será calculada automaticamente e usada para ajustar as recomendações."],
-    ["sex", "Qual sexo deve ser usado na estimativa nutricional?", "É opcional. Se preferir, pode não informar."],
-    ["current_weight", "Qual é o seu peso atual?", "Informe o peso em quilogramas. O valor poderá ser atualizado pelo seu progresso."],
-    ["height", "Qual é a sua altura?", "Informe a altura em centímetros para estimar as necessidades diárias."],
-    ["goal", "Qual é o seu objetivo principal?", "A alimentação e os treinos serão ajustados a esta meta."],
-    ["modality", "Qual modalidade vai praticar?", "Os exercícios, séries e repetições serão adaptados à modalidade escolhida."],
-    ["training_location", "Onde vai treinar?", "Escolha apenas uma opção. Pode alterá-la mais tarde no perfil."],
-    ["training_level", "Qual é o seu nível de experiência?", "O programa adapta o volume e a progressão ao seu nível."],
-    ["training_days_count", "Quantos dias por semana pretende treinar?", "Vamos distribuir os treinos e os dias de recuperação."],
-    ["training_time", "A que horas costuma treinar?", "Este horário ajuda a organizar os lembretes e as refeições."],
-    ["training_duration", "Quanto tempo tem para cada treino?", "Escolha uma duração realista para a sua rotina."],
-    ["daily_activity", "Como é a sua atividade fora dos treinos?", "Esta informação ajuda a estimar o gasto diário."],
-    ["training_intensity", "Qual intensidade prefere?", "Pode ajustar a intensidade a qualquer momento."],
-    ["food_budget", "Qual é o seu orçamento alimentar?", "O plano vai priorizar alimentos compatíveis com o seu orçamento."],
-    ["allergies", "Tem alguma alergia ou intolerância?", "Escreva os alimentos que deve evitar. Se não tiver, deixe em branco."],
-    ["available_foods", "Quais alimentos costuma ter disponíveis?", "Selecione os alimentos que encontra com facilidade. Pode escolher vários."],
-    ["foods_to_avoid", "Há alimentos que não consome?", "Informe preferências ou alimentos que deseja excluir."],
-    ["food_preferences", "Tem alguma preferência alimentar ou prato local?", "Pode indicar pratos habituais, horários ou outras preferências."],
-    ["supplements", "Utiliza algum suplemento?", "Opcional. Não é necessário usar suplementos para começar."],
+    ["basics", "Seus dados básicos", "Precisamos deles para calcular estimativas ajustadas à sua idade e medidas."],
+    ["goal", "O que quer alcançar?", "Escolha seu objetivo e a modalidade que prefere praticar."],
+    ["routine", "Sua rotina de treino", "Vamos adaptar o plano ao lugar, aos dias e ao tempo que você tem."],
+    ["nutrition", "Sua alimentação", "Conte-nos sobre alergias e orçamento. Estes campos podem ficar em branco."],
+    ["foods", "Alimentos do seu dia a dia", "Opcional: marque o que costuma encontrar para personalizar as refeições."]
   ];
   const [currentKey, title, description] = steps[step];
   const update = (key, value) => {
@@ -185,10 +171,16 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     6: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
   })[count] || ["Seg", "Qua", "Sex"];
   function validate() {
-    if (currentKey === "birth_date" && (!form.birth_date || age === null || age < 12 || age > 100)) return "Informe uma data de nascimento válida.";
-    if (currentKey === "current_weight" && (!Number(form.current_weight) || Number(form.current_weight) < 25 || Number(form.current_weight) > 300)) return "Informe um peso entre 25 e 300 kg.";
-    if (currentKey === "height" && (!Number(form.height) || Number(form.height) < 120 || Number(form.height) > 230)) return "Informe uma altura entre 120 e 230 cm.";
-    if (currentKey === "training_days_count" && (Number(form.training_days_count) < 2 || Number(form.training_days_count) > 6)) return "Escolha entre 2 e 6 dias por semana.";
+    if (currentKey === "basics") {
+      if (!form.birth_date || age === null || age < 12 || age > 100) return "Informe uma data de nascimento válida.";
+      if (!Number(form.current_weight) || Number(form.current_weight) < 25 || Number(form.current_weight) > 300) return "Informe um peso entre 25 e 300 kg.";
+      if (!Number(form.height) || Number(form.height) < 120 || Number(form.height) > 230) return "Informe uma altura entre 120 e 230 cm.";
+    }
+    if (currentKey === "goal" && (!form.goal || !form.modality)) return "Escolha um objetivo e uma modalidade.";
+    if (currentKey === "routine") {
+      if (Number(form.training_days_count) < 2 || Number(form.training_days_count) > 6) return "Escolha entre 2 e 6 dias por semana.";
+      if (Number(form.training_duration) < 10 || Number(form.training_duration) > 180) return "Escolha uma duração entre 10 e 180 minutos.";
+    }
     return "";
   }
   async function finish() {
@@ -252,28 +244,56 @@ function NutritionOnboarding({ profile, userId, mutate }) {
         <div className="onboarding-question">
           <h3>{title}</h3>
           <p>{description}</p>
-          {currentKey === "birth_date" && <label className="onboarding-single-field">Data de nascimento<input type="date" max={new Date().toISOString().slice(0, 10)} value={form.birth_date} onChange={(e) => update("birth_date", e.target.value)} /></label>}
-          {currentKey === "sex" && <div className="onboarding-choice-grid">{[["", "Prefiro não informar"], ["feminino", "Feminino"], ["masculino", "Masculino"]].map(([value, label]) => <button type="button" key={value || "none"} className={form.sex === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("sex", value)}><strong>{label}</strong></button>)}</div>}
-          {currentKey === "current_weight" && <label className="onboarding-single-field">Peso atual (kg)<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="Ex.: 75" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} /></label>}
-          {currentKey === "height" && <label className="onboarding-single-field">Altura (cm)<input type="number" min="120" max="230" step="1" inputMode="numeric" placeholder="Ex.: 175" value={form.height} onChange={(e) => update("height", e.target.value)} /></label>}
-          {currentKey === "goal" && <div className="onboarding-choice-grid">{goalOptions.map(([value, label, detail]) => <button type="button" key={value} className={form.goal === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("goal", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div>}
-          {currentKey === "modality" && <div className="onboarding-choice-grid onboarding-modality-grid">{modalityOptions.map((value) => <button type="button" key={value} className={form.modality === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("modality", value)}><strong>{value}</strong></button>)}</div>}
-          {currentKey === "training_location" && <div className="onboarding-choice-grid onboarding-location-grid"><button type="button" className={form.training_location === "ginasio" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "ginasio")}><strong>Gym</strong><small>Treino com equipamento</small></button><button type="button" className={form.training_location === "casa" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "casa")}><strong>Home</strong><small>Treino em casa</small></button></div>}
-          {currentKey === "training_level" && <div className="onboarding-choice-grid">{[["beginner","Iniciante","Estou a começar ou a regressar."],["intermediate","Intermédio","Já treino com regularidade."],["advanced","Avançado","Tenho experiência e boa técnica."]].map(([value,label,detail]) => <button type="button" key={value} className={form.training_level === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_level", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div>}
-          {currentKey === "training_days_count" && <div className="onboarding-frequency-grid">{[2,3,4,5,6].map((value) => <button type="button" key={value} className={Number(form.training_days_count) === value ? "onboarding-frequency selected" : "onboarding-frequency"} onClick={() => update("training_days_count", value)}><strong>{value}</strong><small>dias</small></button>)}</div>}
-          {currentKey === "training_time" && <label className="onboarding-single-field">Horário habitual<input type="time" value={form.training_time} onChange={(e) => update("training_time", e.target.value)} /></label>}
-          {currentKey === "training_duration" && <div className="onboarding-frequency-grid">{[30,45,60,75,90].map((value) => <button type="button" key={value} className={Number(form.training_duration) === value ? "onboarding-frequency selected" : "onboarding-frequency"} onClick={() => update("training_duration", value)}><strong>{value}</strong><small>min</small></button>)}</div>}
-          {currentKey === "daily_activity" && <label className="onboarding-single-field">Atividade diária<select value={form.daily_activity} onChange={(e) => update("daily_activity", e.target.value)}><option value="low">Baixa — passo a maior parte do dia sentado</option><option value="moderate">Moderada — caminho e movimento regular</option><option value="high">Alta — trabalho fisicamente ativo</option></select></label>}
-          {currentKey === "training_intensity" && <div className="onboarding-choice-grid">{[["easy","Leve"],["moderate","Moderada"],["hard","Intensa"]].map(([value,label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div>}
-          {currentKey === "food_budget" && <div className="onboarding-choice-grid">{[["low","Económico","Priorizar alimentos acessíveis e da época."],["medium","Moderado","Equilibrar variedade e custo."],["high","Flexível","Mais variedade de alimentos."]].map(([value,label,detail]) => <button type="button" key={value} className={form.food_budget === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("food_budget", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div>}
-          {currentKey === "allergies" && <label className="onboarding-single-field">Alergias ou intolerâncias<input type="text" value={form.allergies} onChange={(e) => update("allergies", e.target.value)} placeholder="Ex.: lactose, amendoim (opcional)" /></label>}
-          {currentKey === "available_foods" && <div className="onboarding-food-grid">{foodChoices.map((food) => <label className={foods.includes(food.name) ? "onboarding-food-option selected" : "onboarding-food-option"} key={food.name}>{food.image && <img src={food.image} alt="" loading="lazy" />}<input type="checkbox" checked={foods.includes(food.name)} onChange={(e) => setFoods((current) => e.target.checked ? [...current, food.name] : current.filter((name) => name !== food.name))} /><span>{food.name}</span></label>)}</div>}
-          {currentKey === "foods_to_avoid" && <label className="onboarding-single-field">Alimentos a evitar<input type="text" value={form.foods_to_avoid} onChange={(e) => update("foods_to_avoid", e.target.value)} placeholder="Opcional" /></label>}
-          {currentKey === "food_preferences" && <label className="onboarding-single-field">Preferências e pratos locais<textarea rows={4} value={form.food_preferences} onChange={(e) => update("food_preferences", e.target.value)} placeholder="Ex.: pratos moçambicanos, horários, alimentos preferidos..." /></label>}
-          {currentKey === "supplements" && <div className="onboarding-supplement-options">{supplementChoices.map((value) => <label key={value} className="checkbox"><input type="checkbox" checked={supplements.includes(value)} onChange={(e) => setSupplements((current) => e.target.checked ? [...current, value] : current.filter((item) => item !== value))} />{value}</label>)}</div>}
-          {currentKey === "birth_date" && age !== null && age >= 0 && <p className="onboarding-calculated-age">Idade calculada automaticamente: <b>{age} anos</b></p>}
+          {currentKey === "basics" && (
+            <div className="onboarding-field-stack">
+              <label className="onboarding-single-field">Data de nascimento<input type="date" max={new Date().toISOString().slice(0, 10)} value={form.birth_date} onChange={(e) => update("birth_date", e.target.value)} /></label>
+              <div className="onboarding-choice-block">
+                <span>Sexo para estimativa energética <small>(opcional)</small></span>
+                <div className="onboarding-choice-grid onboarding-choice-grid-three">{[["", "Prefiro não informar"], ["feminino", "Feminino"], ["masculino", "Masculino"]].map(([value, label]) => <button type="button" key={value || "none"} className={form.sex === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("sex", value)}><strong>{label}</strong></button>)}</div>
+              </div>
+              <div className="onboarding-field-pair">
+                <label className="onboarding-single-field">Peso (kg)<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="Ex.: 75" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} /></label>
+                <label className="onboarding-single-field">Altura (cm)<input type="number" min="120" max="230" step="1" inputMode="numeric" placeholder="Ex.: 175" value={form.height} onChange={(e) => update("height", e.target.value)} /></label>
+              </div>
+              {age !== null && <p className="onboarding-inline-note">Idade calculada automaticamente: <b>{age} anos</b></p>}
+            </div>
+          )}
+          {currentKey === "goal" && (
+            <div className="onboarding-field-stack">
+              <div className="onboarding-choice-block"><span>Objetivo principal</span><div className="onboarding-choice-grid">{goalOptions.map(([value, label, detail]) => <button type="button" key={value} className={form.goal === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("goal", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>Modalidade</span><div className="onboarding-choice-grid onboarding-modality-grid onboarding-choice-grid-three">{modalityOptions.map((value) => <button type="button" key={value} className={form.modality === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("modality", value)}><strong>{value}</strong></button>)}</div></div>
+            </div>
+          )}
+          {currentKey === "routine" && (
+            <div className="onboarding-field-stack">
+              <div className="onboarding-choice-block"><span>Onde vai treinar?</span><div className="onboarding-choice-grid onboarding-location-grid onboarding-choice-grid-two"><button type="button" className={form.training_location === "ginasio" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "ginasio")}><strong>Gym</strong><small>Com equipamentos</small></button><button type="button" className={form.training_location === "casa" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "casa")}><strong>Em casa</strong><small>Com ou sem equipamento</small></button></div></div>
+              <div className="onboarding-choice-block"><span>Experiência</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["beginner", "Estou começando"], ["intermediate", "Já treino"], ["advanced", "Avançada"]].map(([value, label]) => <button type="button" key={value} className={form.training_level === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_level", value)}><strong>{label}</strong></button>)}</div></div>
+              <div className="onboarding-field-pair">
+                <label className="onboarding-single-field">Dias por semana<select value={form.training_days_count} onChange={(e) => update("training_days_count", Number(e.target.value))}><option value={2}>2 dias</option><option value={3}>3 dias</option><option value={4}>4 dias</option><option value={5}>5 dias</option><option value={6}>6 dias</option></select></label>
+                <label className="onboarding-single-field">Duração<input type="number" min="10" max="180" step="5" inputMode="numeric" value={form.training_duration} onChange={(e) => update("training_duration", e.target.value)} /></label>
+              </div>
+              <div className="onboarding-field-pair">
+                <label className="onboarding-single-field">Horário habitual<input type="time" value={form.training_time} onChange={(e) => update("training_time", e.target.value)} /></label>
+                <label className="onboarding-single-field">Atividade diária<select value={form.daily_activity} onChange={(e) => update("daily_activity", e.target.value)}><option value="sedentary">Pouco ativo</option><option value="light">Leve</option><option value="moderate">Moderada</option><option value="active">Muito ativo</option><option value="very_active">Extremamente ativo</option></select></label>
+              </div>
+              <div className="onboarding-choice-block"><span>Intensidade preferida</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["easy", "Leve"], ["moderate", "Moderada"], ["hard", "Alta"]].map(([value, label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div></div>
+            </div>
+          )}
+          {currentKey === "nutrition" && (
+            <div className="onboarding-field-stack">
+              <div className="onboarding-choice-block"><span>Orçamento alimentar</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["low", "Económico"], ["medium", "Moderado"], ["high", "Flexível"]].map(([value, label]) => <button type="button" key={value} className={form.food_budget === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("food_budget", value)}><strong>{label}</strong></button>)}</div></div>
+              <label className="onboarding-single-field">Alergias ou intolerâncias<textarea rows="2" placeholder="Ex.: lactose, amendoim; se não houver, deixe em branco." value={form.allergies} onChange={(e) => update("allergies", e.target.value)} /></label>
+              <label className="onboarding-single-field">Alimentos que prefere evitar <small>(opcional)</small><textarea rows="2" placeholder="Ex.: não como carne" value={form.foods_to_avoid} onChange={(e) => update("foods_to_avoid", e.target.value)} /></label>
+            </div>
+          )}
+          {currentKey === "foods" && (
+            <div className="onboarding-field-stack">
+              <div className="onboarding-choice-block"><span>O que costuma ter em casa? <small>(opcional)</small></span><div className="food-check-grid onboarding-food-grid">{foodChoices.map((food) => <button type="button" key={food.id} className={foods.includes(food.name) ? "food-check selected" : "food-check"} onClick={() => setFoods((current) => current.includes(food.name) ? current.filter((item) => item !== food.name) : [...current, food.name])}><span className="food-choice-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span><b>{food.name}</b></button>)}</div></div>
+              <label className="onboarding-single-field">Pratos ou preferências <small>(opcional)</small><textarea rows="2" placeholder="Ex.: matapa, caril de amendoim..." value={form.food_preferences} onChange={(e) => update("food_preferences", e.target.value)} /></label>
+              <p className="onboarding-inline-note">Pode deixar tudo em branco. O plano recomendado continua disponível e pode ser alterado no Perfil.</p>
+            </div>
+          )}
         </div>
-        {error && <p className="onboarding-error" role="alert">{error}</p>}
         <div className="onboarding-actions">
           <button className="text-btn" type="button" disabled={saving || step === 0} onClick={() => { setError(""); setStep((value) => value - 1); }}>Voltar</button>
           {step < steps.length - 1 ? <button className="primary" type="button" onClick={() => { const message = validate(); if (message) setError(message); else { setError(""); setStep((value) => value + 1); } }}>Continuar <ChevronRight size={16} /></button> : <button className="primary" type="button" disabled={saving} onClick={finish}>{saving ? "A guardar…" : "Criar o meu plano"}</button>}

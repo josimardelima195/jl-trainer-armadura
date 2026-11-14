@@ -842,3 +842,148 @@ header{
 .leaderboard-row.top-rank-1{background:linear-gradient(100deg,rgba(255,202,90,.2),rgba(255,202,90,.04));border-color:rgba(255,202,90,.38)}
 .leaderboard-row.top-rank .community-avatar{width:42px;height:42px;border:2px solid rgba(255,202,90,.55);font-size:13px}
 @media(max-width:760px){.profile-advanced>summary{padding:13px}.leaderboard-row.top-rank{min-height:66px}}
+/* The mobile sidebar rule targets every aside; keep the challenge ranking visible. */
+.challenge-layout aside.leaderboard-card{display:block}
+@media(max-width:900px){.challenge-layout aside.leaderboard-card{display:block;transform:none;transition:none;box-shadow:none}}
+
+/* Onboarding curto, legível e com controlos grandes para toque. */
+.nutrition-onboarding.onboarding-single-question {
+  width: min(680px, 100%);
+  max-height: calc(100dvh - 28px);
+  padding: clamp(18px, 4vw, 30px);
+}
+.onboarding-progress-copy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 22px 0 7px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.onboarding-progress-copy b { color: var(--gold2); font-size: 12px; }
+.onboarding-progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #303139; }
+.onboarding-progress-track span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #d59a32, #f0c55d); transition: width .2s ease; }
+.onboarding-question { margin: 20px 0 12px; }
+.onboarding-question h3 { margin: 0 0 5px; font-size: clamp(19px, 3vw, 24px); line-height: 1.25; }
+.onboarding-question > p { margin: 0 0 16px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.onboarding-field-stack { display: grid; gap: 16px; }
+.onboarding-field-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.onboarding-choice-block { display: grid; gap: 8px; }
+.onboarding-choice-block > span { color: var(--text); font-size: 12px; font-weight: 650; }
+.onboarding-choice-block > span small { color: var(--muted); font-weight: 400; }
+.onboarding-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.onboarding-choice-grid-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.onboarding-choice-grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.onboarding-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  min-height: 54px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #15171b;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .16s ease, background .16s ease, transform .16s ease;
+}
+.onboarding-choice:hover { border-color: color-mix(in srgb, var(--gold2) 65%, var(--line)); }
+.onboarding-choice:active { transform: scale(.985); }
+.onboarding-choice:focus-visible { outline: 2px solid var(--gold2); outline-offset: 2px; }
+.onboarding-choice.selected {
+  border-color: var(--gold2);
+  background: color-mix(in srgb, var(--gold2) 16%, #15171b);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold2) 30%, transparent);
+}
+.onboarding-choice strong { color: var(--text); font-size: 13px; line-height: 1.3; }
+.onboarding-choice small { color: var(--muted); font-size: 11px; line-height: 1.4; }
+.onboarding-single-field { display: grid; gap: 7px; color: var(--text); font-size: 12px; }
+.onboarding-single-field input,
+.onboarding-single-field select,
+.onboarding-single-field textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #15171b;
+  color: var(--text);
+  font: inherit;
+}
+.onboarding-single-field textarea { min-height: 76px; resize: vertical; }
+.onboarding-single-field input:focus,
+.onboarding-single-field select:focus,
+.onboarding-single-field textarea:focus { outline: 2px solid color-mix(in srgb, var(--gold2) 65%, transparent); border-color: var(--gold2); }
+.onboarding-inline-note { margin: 0; padding: 10px 12px; border-radius: 11px; background: color-mix(in srgb, var(--gold) 10%, var(--panel)); color: var(--muted); font-size: 11px; line-height: 1.5; }
+.onboarding-inline-note b { color: var(--text); }
+.onboarding-food-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); max-height: 220px; overflow-y: auto; padding: 2px 4px 2px 0; }
+.onboarding-food-grid .food-check {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #15171b;
+  color: var(--text);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.onboarding-food-grid .food-check.selected { border-color: var(--gold2); background: color-mix(in srgb, var(--gold2) 16%, #15171b); }
+.food-choice-emoji { display: grid; place-items: center; flex: 0 0 28px; font-size: 22px; }
+.onboarding-food-grid .food-check b { font-size: 11px; line-height: 1.25; }
+.onboarding-actions {
+  position: sticky;
+  bottom: -1px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px -4px -5px;
+  padding: 14px 4px 5px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--panel) 88%, transparent), var(--panel) 35%);
+}
+.onboarding-actions button { min-height: 48px; padding-inline: 18px; touch-action: manipulation; }
+.onboarding-actions .primary { min-width: 144px; justify-content: center; }
+.onboarding-actions .text-btn { color: var(--gold2); }
+.onboarding-footnote { margin-top: 12px; color: var(--muted); font-size: 11px; line-height: 1.45; }
+@media (max-width: 620px) {
+  .nutrition-onboarding-backdrop { display: block; padding: 8px; }
+  .nutrition-onboarding.onboarding-single-question {
+    width: 100%;
+    max-height: calc(100dvh - 16px);
+    padding: 18px 15px;
+    border-radius: 20px;
+  }
+  .onboarding-top { align-items: center; gap: 10px; }
+  .onboarding-top h2 { font-size: 23px; }
+  .onboarding-top p { font-size: 12px; }
+  .onboarding-leo { flex: 0 0 48px; width: 48px; height: 48px; }
+  .onboarding-question { margin: 16px 0 8px; }
+  .onboarding-question > p { font-size: 12px; }
+  .onboarding-field-stack { gap: 13px; }
+  .onboarding-field-pair { gap: 9px; }
+  .onboarding-choice-grid-three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .onboarding-food-grid { max-height: 180px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .onboarding-actions { margin-top: 8px; }
+}
+@media (max-width: 360px) {
+  .onboarding-field-pair { grid-template-columns: 1fr; }
+  .onboarding-choice-grid-three { grid-template-columns: 1fr 1fr; }
+}
+
+
+.food-library-image { display: grid; place-items: center; }
+.food-library-emoji { display: grid; place-items: center; width: 100%; height: 100%; min-height: 120px; font-size: 48px; background: color-mix(in srgb, var(--panel2) 72%, var(--panel)); }
+.food-chip-emoji { display: grid; place-items: center; width: 40px; height: 40px; flex: 0 0 40px; border-radius: 10px; background: var(--panel2); font-size: 24px; }
+.food-chip-media { display: grid; place-items: center; overflow: hidden; }
+.food-chip-media img { width: 100%; height: 100%; object-fit: cover; }
