@@ -28,6 +28,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍌",
+    image: "/assets/food/user/banana.jpg",
   },
   {
     id: "eggs",
@@ -165,6 +166,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Carboidrato",
     emoji: "🥔",
+    image: "/assets/food/user/cassava.jpg",
   },
   {
     id: "pasta",
@@ -190,6 +192,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Carboidrato",
     emoji: "🍞",
+    image: "/assets/food/user/wholegrain-bread.jpg",
   },
   {
     id: "xima",
@@ -265,7 +268,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🍈",
-    image: "/assets/food/reference-crops/mamao.webp",
+    image: "/assets/food/user/papaya.jpg",
   },
   {
     id: "orange",
@@ -278,7 +281,6 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
-    image: "/assets/food/reference-crops/laranja.webp",
   },
   {
     id: "mango",
@@ -303,7 +305,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍎",
-    image: "/assets/food/reference-crops/maca.webp",
+    image: "/assets/food/user/apple.jpg",
   },
   {
     id: "strawberry",
@@ -328,7 +330,6 @@ export const foodLibrary = [
     fiber: 4,
     group: "Vegetais",
     emoji: "🥬",
-    image: "/assets/food/reference-crops/couve-tomate.webp",
   },
   {
     id: "cabbage",
@@ -341,6 +342,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Vegetais",
     emoji: "🥬",
+    image: "/assets/food/user/kale.jpg",
   },
   {
     id: "tomato",
@@ -353,6 +355,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🍅",
+    image: "/assets/food/user/tomato.webp",
   },
   {
     id: "lettuce",
