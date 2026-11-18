@@ -56,7 +56,7 @@ export function accountDayStatuses(createdAt, workoutLogs = [], nutritionLogs = 
 
   const days = [];
   const cursor = start;
-  while (localDateKey(cursor) <= todayKey) {
+  while (days.length < 30 && localDateKey(cursor) <= todayKey) {
     const date = localDateKey(cursor);
     const workoutDone = workoutDates.has(date);
     const nutrition = nutritionByDate.get(date);
