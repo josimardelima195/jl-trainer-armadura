@@ -304,6 +304,76 @@
       "license": "CC BY-SA 4.0",
       "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
       "modifications": "Resized and converted to WebP for app display."
+    },
+    {
+      "path": "/assets/food/user-provided/plano-alimentar.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/arroz-feijao-e-ovo.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/batata-doce.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/couve-e-tomate.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/banana-amendoim-leite.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/frango-grelhado.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/alface.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/frango-grelhado-arroz-salada.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/amendoim.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/manga.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/iogurte-natural.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/iogurte-com-manga.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/canela.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/aveia-banana-leite-canela.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
     }
   ],
   "commercial_use_note": "Cada fotografia externa tem a sua licença e atribuição registadas em remote_images. Respeitar a licença individual, incluindo atribuição e share-alike quando aplicável.",

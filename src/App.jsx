@@ -338,12 +338,7 @@ export default function App() {
     const match = String(meal.time || "").match(/(\d{1,2}):(\d{2})/);
     return match && Number(match[1]) * 60 + Number(match[2]) >= currentMinutes;
   }) || homeNutrition.meals?.[0] || null;
-  const homeGoal = String(profile.goal || "").toLowerCase();
-  const homeFoodFallback = homeGoal.includes("emagrec")
-    ? "/assets/food/reference-crops/couve-tomate.webp"
-    : homeGoal.includes("bulking") || homeGoal.includes("ganho") || homeGoal.includes("massa")
-      ? "/assets/food/recipes/R19.webp"
-      : "/assets/food/recipes/R09.webp";
+  const homeFoodFallback = "/assets/food/user-provided/plano-alimentar.webp";
   const leoReminder = upcomingMeal
     ? "Sua próxima refeição é " + String(upcomingMeal.title || "").toLowerCase() + " às " + upcomingMeal.time + "."
     : "Complete os seus dados para o Leo personalizar os lembretes.";
@@ -702,7 +697,7 @@ export default function App() {
                         <div className="home-focus-image">
                           <img
                             src={upcomingMeal?.image || homeFoodFallback}
-                            alt={"Fotografia de " + (upcomingMeal?.recipeName || upcomingMeal?.title || "alimentos saudáveis")}
+                            alt={upcomingMeal ? "Fotografia de " + (upcomingMeal.recipeName || upcomingMeal.title || "refeição") : "Plano alimentar"}
                             loading="lazy"
                             onError={(event) => {
                               if (event.currentTarget.dataset.fallback !== "true") {

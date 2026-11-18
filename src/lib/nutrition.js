@@ -67,6 +67,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥣",
+    image: "/assets/food/user-provided/iogurte-natural.webp",
   },
   {
     id: "fresh-cheese",
@@ -91,6 +92,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🍗",
+    image: "/assets/food/user-provided/frango-grelhado.webp",
   },
   {
     id: "fish",
@@ -153,7 +155,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Carboidrato",
     emoji: "🍠",
-    image: "/assets/food/batata-doce-assada.jpg",
+    image: "/assets/food/user-provided/batata-doce.webp",
   },
   {
     id: "cassava",
@@ -243,6 +245,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Gordura e proteína",
     emoji: "🥜",
+    image: "/assets/food/user-provided/amendoim.webp",
   },
   {
     id: "avocado",
@@ -293,6 +296,7 @@ export const foodLibrary = [
     fiber: 3,
     group: "Fruta",
     emoji: "🥭",
+    image: "/assets/food/user-provided/manga.webp",
   },
   {
     id: "apple",
@@ -330,6 +334,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Vegetais",
     emoji: "🥬",
+    image: "/assets/food/user-provided/couve-e-tomate.webp",
   },
   {
     id: "cabbage",
@@ -368,6 +373,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥬",
+    image: "/assets/food/user-provided/alface.webp",
   },
   {
     id: "cucumber",
@@ -653,6 +659,19 @@ export const foodLibrary = [
     group: "Vegetais",
     emoji: "🥬",
   },
+  {
+    id: "cinnamon",
+    name: "Canela",
+    portion: "1 g",
+    kcal: 2,
+    protein: 0,
+    carbs: 0.8,
+    fat: 0,
+    fiber: 0.5,
+    group: "Temperos",
+    emoji: "🟤",
+    image: "/assets/food/user-provided/canela.webp",
+  },
 ];
 const byName = Object.fromEntries(foodLibrary.map((food) => [food.name, food]));
 const recipeFoodNames = {
@@ -688,18 +707,18 @@ const recipeFoodNames = {
   R30: ["Peixe grelhado", "Mandioca", "Cenoura", "Couve e tomate"],
 };
 const recipeImages = {
-  R01: "/assets/food/recipes/banana-oatmeal.webp",
+  R01: "/assets/food/user-provided/aveia-banana-leite-canela.webp",
   R02: "/assets/food/recipes/R02.webp",
   R03: "/assets/food/recipes/banana-oatmeal.webp",
   R04: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R05: "/assets/food/recipes/banana-pancakes.webp",
   R06: "/assets/food/recipes/cheese-on-toast.webp",
   R07: "/assets/food/batata-doce-assada.jpg",
-  R08: "/assets/food/recipes/mango-pineapple-bowl.webp",
-  R09: "/assets/food/recipes/R09.webp",
+  R08: "/assets/food/user-provided/iogurte-com-manga.webp",
+  R09: "/assets/food/user-provided/frango-grelhado-arroz-salada.webp",
   R10: "/assets/food/catalog/carapau.webp",
   R11: "/assets/food/recipes/beef-stew-rice.webp",
-  R12: "/assets/food/recipes/rice-and-beans.webp",
+  R12: "/assets/food/user-provided/arroz-feijao-e-ovo.webp",
   R13: "/assets/food/recipes/chicken-spaghetti.webp",
   R14: "/assets/food/peixe-grelhado.jpg",
   R15: "/assets/food/recipes/hamburger-plate.webp",
@@ -711,7 +730,7 @@ const recipeImages = {
   R21: "/assets/food/recipes/chicken-vegetable-soup.webp",
   R22: "/assets/food/recipes/omelette-spinach.webp",
   R23: "/assets/food/recipes/tuna-salad-sandwich.webp",
-  R24: "/assets/food/recipes/banana-oatmeal.webp",
+  R24: "/assets/food/user-provided/banana-amendoim-leite.webp",
   R25: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R26: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R27: "/assets/food/recipes/R27.webp",
