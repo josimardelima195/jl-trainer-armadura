@@ -1061,7 +1061,15 @@ export function Progress({ metrics }) {
   const completedCount = Math.min(30, completedProgramDays.size);
   const remainingCount = Math.max(0, 30 - completedCount);
   const firstPhoto = userPhotos[0] || null;
-  const latestPhoto = userPhotos.at(-1) || null;
+  const afterPhoto = userPhotos
+    .slice(1)
+    .filter((item) => /(?:dia\s*30|foto\s*final|depois)/i.test(String(item.note || "")))
+    .at(-1) || null;
+  const photoStage = !firstPhoto
+    ? "before"
+    : completedCount >= 30 && !afterPhoto
+      ? "after"
+      : null;
   const subscription = (data.subscriptions || [])
     .filter((item) => item.user_id === userId && item.status === "active")
     .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
@@ -1140,47 +1148,70 @@ export function Progress({ metrics }) {
         <Chart rows={rows.filter((row) => row.weight !== null && row.weight !== undefined)} />
       </div>
       <section className="progress-photo-section">
-        <div className="progress-photo-heading"><div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div><span className="pill">PRIVADO</span></div>
-        <p className="muted">As fotografias ficam privadas. Registe uma imagem no início e outra ao concluir os 30 dias para comparar a sua evolução.</p>
-        <div className="progress-before-after">
-          <article><span>INÍCIO</span>{firstPhoto && photoUrls[firstPhoto.id] ? <button type="button" onClick={() => setPhoto(photoUrls[firstPhoto.id])}><img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso" /></button> : <div className="progress-photo-placeholder">Ainda sem foto inicial</div>}<small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 0"}</small></article>
-          <article><span>MAIS RECENTE</span>{latestPhoto && latestPhoto.id !== firstPhoto?.id && photoUrls[latestPhoto.id] ? <button type="button" onClick={() => setPhoto(photoUrls[latestPhoto.id])}><img src={photoUrls[latestPhoto.id]} alt="Fotografia mais recente de progresso" /></button> : latestPhoto && photoUrls[latestPhoto.id] ? <button type="button" onClick={() => setPhoto(photoUrls[latestPhoto.id])}><img src={photoUrls[latestPhoto.id]} alt="Fotografia mais recente de progresso" /></button> : <div className="progress-photo-placeholder">Registe a próxima foto</div>}<small>{latestPhoto ? new Date(latestPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small></article>
+        <div className="progress-photo-heading">
+          <div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div>
+          <span className="pill">PRIVADO</span>
         </div>
-        <form className="panel-form progress-photo-upload" onSubmit={async (event) => {
-          event.preventDefault();
-          const element = event.currentTarget;
-          const fields = new FormData(element);
-          let path;
-          try {
-            path = await upload("progress-photos", fields.get("photo"), userId);
-            const ok = await mutate("progress_photos", { user_id: userId, path, note: String(fields.get("note") || "") });
-            if (ok) { element.reset(); await refresh?.(); }
-            else await supabase.storage.from("progress-photos").remove([path]);
-          } catch (error) { setError(error.message); }
-        }}>
-          <label className="file-drop"><span>Escolher foto de evolução</span><small>JPG, PNG ou WebP · até 10 MB</small><input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" /></label>
-          <Field label="Observação" name="note" maxLength="300" placeholder="Ex.: início, dia 15 ou dia 30" />
-          <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada para acompanhar meu progresso.</label>
-          <button className="primary" disabled={busy}>Enviar foto privada</button>
-        </form>
-      </section>
-      <div className="progress-photo-gallery">
-        {userPhotos.map((item) => (
-          <article className="progress-photo-item" key={item.id}>
-            {photoUrls[item.id] ? <button type="button" onClick={() => setPhoto(photoUrls[item.id])}><img src={photoUrls[item.id]} alt={item.note || "Foto de evolução"} loading="lazy" /></button> : <div className="progress-photo-placeholder">A carregar foto…</div>}
-            <div><b>{item.note || "Registro de evolução"}</b><small>{new Date(item.created_at).toLocaleDateString("pt-MZ")}</small></div>
-            <button type="button" className="text-btn" onClick={async () => {
-              try {
-                const { error } = await supabase.storage.from("progress-photos").remove([item.path]);
-                if (error) throw error;
-                const { error: rowError } = await supabase.from("progress_photos").delete().eq("id", item.id).eq("user_id", userId);
-                if (rowError) throw rowError;
-                await refresh?.();
-              } catch (error) { setError(error.message); }
-            }}>Eliminar</button>
+        <p className="muted">A foto inicial fica guardada. A foto final será liberada depois de concluir os 30 dias de treino.</p>
+        <div className="progress-before-after">
+          <article className="progress-photo-slot">
+            <span>ANTES · DIA 0</span>
+            {firstPhoto ? (
+              photoUrls[firstPhoto.id] ? (
+                <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[firstPhoto.id])}>
+                  <img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso" />
+                </button>
+              ) : <div className="progress-photo-placeholder">A carregar foto inicial…</div>
+            ) : <div className="progress-photo-placeholder">Ainda sem foto inicial</div>}
+            <small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 0"}</small>
           </article>
-        ))}
-      </div>
+          <article className="progress-photo-slot">
+            <span>DEPOIS · DIA 30</span>
+            {completedCount >= 30 && afterPhoto ? (
+              photoUrls[afterPhoto.id] ? (
+                <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[afterPhoto.id])}>
+                  <img src={photoUrls[afterPhoto.id]} alt="Fotografia final de progresso após 30 dias" />
+                </button>
+              ) : <div className="progress-photo-placeholder">A carregar foto final…</div>
+            ) : (
+              <div className="progress-photo-placeholder">
+                {completedCount < 30
+                  ? "Disponível após concluir os 30 dias"
+                  : firstPhoto
+                    ? "Aguardando foto final"
+                    : "Guarde primeiro a foto inicial"}
+              </div>
+            )}
+            <small>{completedCount >= 30 && afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small>
+          </article>
+        </div>
+        {photoStage && (
+          <form className="panel-form progress-photo-upload" onSubmit={async (event) => {
+            event.preventDefault();
+            if (!photoStage) return;
+            const element = event.currentTarget;
+            const fields = new FormData(element);
+            let path;
+            try {
+              path = await upload("progress-photos", fields.get("photo"), userId);
+              const note = photoStage === "before" ? "Foto inicial · Dia 0" : "Foto final · Dia 30";
+              const ok = await mutate("progress_photos", { user_id: userId, path, note });
+              if (ok) { element.reset(); await refresh?.(); }
+              else await supabase.storage.from("progress-photos").remove([path]);
+            } catch (error) { setError(error.message); }
+          }}>
+            <label className="file-drop">
+              <span>{photoStage === "before" ? "Escolher foto inicial" : "Escolher foto final do Dia 30"}</span>
+              <small>JPG, PNG ou WebP · até 10 MB</small>
+              <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" />
+            </label>
+            <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada para acompanhar meu progresso.</label>
+            <button className="primary" disabled={busy}>
+              {photoStage === "before" ? "Guardar foto inicial" : "Guardar foto final"}
+            </button>
+          </form>
+        )}
+      </section>
       {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label="Fechar foto">×</button><img src={photo} alt="Fotografia de progresso ampliada" /></div>}
     </>
   );
@@ -2749,43 +2780,9 @@ export function Nutrition({ plan, whatsapp }) {
             <option value="hard">Difícil</option>
           </select>
         </label>
-        <div className={`intensity-note intensity-${intensity}`}>
-          <b>
-            {intensity === "easy"
-              ? "Fácil"
-              : intensity === "hard"
-                ? "Difícil"
-                : "Médio"}
-          </b>{" "}
-          · As porções e o gasto estimado acompanham esta dificuldade.
-        </div>
-        <div className="budget-note">
-          <b>Opção económica:</b> {n.budgetNote}
-        </div>
-        <div className="nutrition-stat">
-          <b>{n.waterMl ? `${(n.waterMl / 1000).toFixed(1)} L` : "—"}</b>
-          <small>hidratação estimada</small>
-        </div>
-        <div className="nutrition-stat">
-          <b>{n.proteinTarget ?? "—"} g</b>
-          <small>proteína alvo</small>
-        </div>
-        <div className="nutrition-stat">
-          <b>{n.carbsTarget ?? "—"} g</b>
-          <small>carboidratos alvo</small>
-        </div>
-        <div className="nutrition-stat">
-          <b>{n.fatTarget ?? "—"} g</b>
-          <small>gorduras alvo</small>
-        </div>
+
       </div>
       <section className="training-schedule-card"><div><span className="eyebrow">HORÁRIO PERSONALIZADO</span><b>Treino previsto às {n.training || profile.training_time || "18:00"}</b><p>O pré-treino aparece cerca de 75 minutos antes e o pós-treino cerca de 75 minutos depois. Este horário vem do seu cadastro e pode ser alterado no Perfil.</p></div><button type="button" className="outline" onClick={() => { location.hash = "perfil"; }}>Alterar horário</button></section>
-      <button type="button" className="shopping-fab" onClick={() => setShoppingOpen(true)}>
-        <span className="shopping-fab-icon">🛒</span>
-        <span><b>Lista de compras</b><small>{shoppingList.length} itens calculados para {shoppingDays} dias</small></span>
-        <strong>›</strong>
-      </button>
-
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),

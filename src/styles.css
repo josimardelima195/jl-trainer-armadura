@@ -1036,3 +1036,122 @@ header{
  .progress-photo-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
 }
 
+
+
+/* Ajustes de simplicidade na alimentação e comparação compacta de progresso */
+.nutrition-controls {
+  display: block;
+  margin: 14px 0 18px;
+}
+.nutrition-controls > label:first-child {
+  display: block;
+  width: min(100%, 340px);
+}
+.progress-before-after {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+  margin: 14px 0;
+}
+.progress-photo-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line, #343a42);
+  border-radius: 13px;
+  background: var(--panel, #151a20);
+}
+.progress-photo-slot > span {
+  align-self: flex-start;
+  color: var(--gold2, #f0c56e);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .7px;
+}
+.progress-photo-preview,
+.progress-photo-slot .progress-photo-placeholder {
+  display: grid;
+  place-items: center;
+  width: min(100%, 170px);
+  aspect-ratio: 4 / 5;
+  margin: 9px auto 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line, #343a42);
+  border-radius: 10px;
+  background: #0d1014;
+}
+.progress-photo-preview {
+  cursor: zoom-in;
+}
+.progress-photo-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+.progress-photo-slot .progress-photo-placeholder {
+  padding: 12px;
+  color: var(--muted, #a8b0ba);
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: center;
+}
+.progress-photo-slot > small {
+  margin-top: 8px;
+  color: var(--muted, #a8b0ba);
+  font-size: 10px;
+}
+.progress-photo-upload {
+  max-width: 440px;
+  padding: 14px;
+  gap: 10px;
+}
+.progress-photo-upload .file-drop {
+  min-height: 0;
+}
+.progress-photo-upload .primary {
+  width: 100%;
+  justify-content: center;
+}
+@media(max-width:520px) {
+  .progress-before-after { gap: 8px; }
+  .progress-photo-slot { padding: 9px 7px; }
+  .progress-photo-preview,
+  .progress-photo-slot .progress-photo-placeholder { width: min(100%, 145px); }
+  .progress-photo-upload { padding: 12px; }
+}
+
+.progress-photo-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, .92);
+}
+.progress-photo-lightbox > button {
+  position: absolute;
+  top: max(18px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 50%;
+  background: #202329;
+  color: #fff;
+  font-size: 26px;
+  cursor: pointer;
+}
+.progress-photo-lightbox img {
+  display: block;
+  max-width: min(92vw, 720px);
+  max-height: 84vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
