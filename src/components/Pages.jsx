@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useStore } from "../lib/store";
 import { supabase } from "../lib/supabase";
-import { planMatrix, kataCatalog } from "../lib/model";
+import { planMatrix } from "../lib/model";
 import { upload, openMedia } from "../lib/storage";
-import { Title, Stat, Empty, Locked, Field, Chart, LeoMascot } from "./UI";
+import { Title, Stat, Empty, Locked, Field, LeoMascot } from "./UI";
 import {
   build30DayPlan,
   intensityLabels,
@@ -11,21 +11,23 @@ import {
   exerciseEquipmentMode,
   normalizeEquipmentSelection,
   modalityKeyFor,
+  exerciseGoalKeyFor,
   ageFromProfile,
   isTimedExercise,
   exerciseDurationSeconds,
   samePrimaryMuscle,
   suitableForProfile,
+  isRemovedModalityExercise,
 } from "../lib/programs";
 import {
   foodLibrary,
   nutritionPlan,
   buildShoppingList,
-  estimateWorkoutKcal,
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
 import { useLanguage, translatedInstructions } from "../lib/i18n";
+import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
   const source = exercise?.image_path || exercise?.gifUrl;
@@ -263,6 +265,10 @@ export function Workouts({ plan }) {
   const trainingLogs = (data.training_logs || []).filter(
     (log) => log.user_id === userId,
   );
+  const userNutritionLogs = (data.daily_nutrition_logs || []).filter(
+    (log) => log.user_id === userId,
+  );
+  const accountTracking = accountDayStatuses(profile.created_at, trainingLogs, userNutritionLogs);
   const [completed, setCompleted] = useState({}),
     [guided, setGuided] = useState(false),
     [timer, setTimer] = useState(0),
@@ -275,10 +281,15 @@ export function Workouts({ plan }) {
     [place, setPlace] = useState(profile.training_location === "ginasio" ? "ginasio" : "casa"),
     [previewExercise, setPreviewExercise] = useState(null),
     [substitutions, setSubstitutions] = useState({}),
-    [programDay, setProgramDay] = useState(1),
+    [programDay, setProgramDay] = useState(() => Math.min(30, accountDayNumber(profile.created_at))),
     [intensity, setIntensity] = useState("moderate"),
     [libraryLimit, setLibraryLimit] = useState(12);
   const [language] = useLanguage();
+  useEffect(() => {
+    if (profile.created_at && programDay === 1) {
+      setProgramDay(Math.min(30, accountDayNumber(profile.created_at)));
+    }
+  }, [profile.created_at]);
   useEffect(() => {
     const idle =
       window.requestIdleCallback || ((callback) => setTimeout(callback, 350));
@@ -289,7 +300,10 @@ export function Workouts({ plan }) {
     };
   }, [ensureExerciseLibrary]);
   const allAvailable = (data.workouts || []).filter(
-    (workout) => !workout.user_id || workout.user_id === userId,
+    (workout) =>
+      workout.active !== false &&
+      (!workout.user_id || workout.user_id === userId) &&
+      !/\\b(?:karat[eê]|futsal|nata[cç][aã]o|swimming|soccer)\\b/i.test(`${workout.title || ""} ${workout.description || ""}`),
   );
   const personalized = allAvailable.filter((workout) => {
     const modality = data.modalities.find(
@@ -308,11 +322,10 @@ export function Workouts({ plan }) {
               .slice(0, index)
               .some((previous) => previous.id === exercise.id),
         )
+        .filter((exercise) => !isRemovedModalityExercise(exercise))
         .filter((exercise) => {
           const name = String(exercise.name || "").toLowerCase();
-          return !/front lever|muscle up|handstand|clap|pistol|human flag|human flag|planche|frog stand|suspend row|l[- ]?sit|bar spin|release catch/i.test(
-            name,
-          );
+          return !/front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|suspend row|l[- ]?sit|bar spin|release catch/i.test(name);
         }),
     [exerciseLibrary, data.exercises, profile.age, profile.training_level],
   );
@@ -320,10 +333,8 @@ export function Workouts({ plan }) {
     profile.current_weight && profile.height
       ? Number(profile.current_weight) / (Number(profile.height) / 100) ** 2
       : null;
-  const goalKey = modalityKeyFor({
-    modality: profile.modality,
-    goal: profile.goal,
-  });
+  const modalityKey = modalityKeyFor(profile);
+  const goalKey = exerciseGoalKeyFor(profile);
   const age = ageFor(profile);
   const programEquipment =
     equipment ||
@@ -352,6 +363,10 @@ export function Workouts({ plan }) {
       profile.birth_date,
       profile.age,
       profile.training_location,
+      profile.training_days_count,
+      profile.training_frequency,
+      modalityKey,
+      profile.goal,
     ],
   );
   const today = program[programDay - 1] || program[0];
@@ -399,7 +414,7 @@ export function Workouts({ plan }) {
     [allExercises, plan?.tier, selectedEquipmentMode],
   );
   const modalityName = String(profile.modality || "").toLowerCase();
-  const modalityDefaultSets = modalityName.includes("natação") ? 4 : 3;
+  const modalityDefaultSets = 3;
   const setsFor = (exercise) => {
     if (isTimedExercise(exercise)) return 1;
     const base = Number(exercise.sets) || modalityDefaultSets;
@@ -411,9 +426,6 @@ export function Workouts({ plan }) {
   const repsFor = (exercise) => {
     if (exercise.reps) return exercise.reps;
     if (modalityName.includes("calisten")) return "6–10";
-    if (modalityName.includes("karat")) return "8–12 por lado";
-    if (modalityName.includes("futsal")) return "20–30 s";
-    if (modalityName.includes("natação")) return "4–6 × 25 m";
     return "8–12";
   };
   const total = exercises.reduce((sum, exercise) => sum + setsFor(exercise), 0);
@@ -428,12 +440,21 @@ export function Workouts({ plan }) {
       : selectedEquipmentMode === "equipment"
         ? "Com equipamento"
         : "Todos os equipamentos";
-  const completedDay = trainingLogs.some(
-    (log) =>
-      Number(log.loads?.program_day) === programDay &&
-      String(log.loads?.modality || "") === String(goalKey) &&
-      String(log.loads?.equipment || "") === String(equipmentTitle),
-  );
+  const programKey = `${modalityKey}:${goalKey}`;
+  const completedDay = trainingLogs.some((log) => {
+    if (Number(log.loads?.program_day) !== programDay) return false;
+    if (String(log.loads?.equipment || "") !== String(equipmentTitle)) return false;
+    const savedModality = String(log.loads?.modality || "");
+    const savedGoal = String(log.loads?.goal || "");
+    const isCurrentFormat = log.program_modality === programKey
+      && savedModality === modalityKey
+      && savedGoal === goalKey;
+    const isLegacyFormat = !savedGoal && (
+      (log.program_modality === goalKey && savedModality === goalKey)
+      || (log.program_modality === modalityKey && savedModality === modalityKey)
+    );
+    return isCurrentFormat || isLegacyFormat;
+  });
 
   const reset = () => {
     setCompleted({});
@@ -451,7 +472,7 @@ export function Workouts({ plan }) {
           <span className="eyebrow">PROGRAMA PERSONALIZADO</span>
           <h2>30 dias de evolução</h2>
           <p>
-            {today?.focus || "Treino guiado"} · {profile.modality || goalKey} ·{" "}
+            {today?.focus || "Treino guiado"} · {profile.modality || modalityKey} ·{" "}
             {equipmentTitle}
           </p>
           <div className="program-focus-tags">
@@ -478,23 +499,25 @@ export function Workouts({ plan }) {
             {program.map((day) => (
               <button
                 type="button"
-                className={`day-chip ${programDay === day.day ? "active" : ""}`}
+                className={`day-chip ${programDay === day.day ? "active" : ""} ${accountTracking.days[day.day - 1]?.workoutMissed ? "missed" : accountTracking.days[day.day - 1]?.workoutDone ? "done" : ""}`}
                 key={day.day}
+                title={accountTracking.days[day.day - 1]?.workoutMissed ? "Treino perdido" : accountTracking.days[day.day - 1]?.workoutDone ? "Treino concluído" : "Dia por cumprir"}
                 onClick={() => {
                   setProgramDay(day.day);
                   reset();
                 }}
               >
                 <strong>{day.day}</strong>
-                <small>{day.focus}</small>
+                <small>{accountTracking.days[day.day - 1]?.workoutMissed ? "Perdido" : day.focus}</small>
               </button>
             ))}
           </div>
+          <p className="nutrition-calendar-note">Verde: treino registado. Vermelho: dia terminado sem treino guardado.</p>
         </div>
         <div className="program-choice-block difficulty-choice">
           <span className="choice-label">Dificuldade</span>
           <div className="choice-pills">
-            {Object.entries(intensityLabels).map(([value, label]) => (
+            {Object.entries(intensityLabels).filter(([value]) => !(age >= 12 && age < 18 && value === "hard")).map(([value, label]) => (
               <button
                 type="button"
                 className={intensity === value ? "active" : ""}
@@ -739,8 +762,9 @@ export function Workouts({ plan }) {
                 workout_id: workout?.id || null,
                 workout_name: `Dia ${programDay} · ${today?.focus || "Treino guiado"} · ${intensityLabels[intensity]} · ${equipmentTitle}`,
                 completed_at: new Date().toISOString(),
+                local_date: localDateKey(new Date()),
                 program_day: programDay,
-                program_modality: goalKey,
+                program_modality: programKey,
                 equipment_mode: equipmentTitle,
                 notes: fields.notes || "",
                 loads: {
@@ -748,7 +772,8 @@ export function Workouts({ plan }) {
                   program_day: programDay,
                   intensity,
                   equipment: equipmentTitle,
-                  modality: goalKey,
+                  modality: modalityKey,
+                  goal: goalKey,
                 },
               })
             )
@@ -871,7 +896,6 @@ export function Progress({ metrics }) {
   const [form, setForm] = useState(false);
   const [photo, setPhoto] = useState("");
   const [photoUrls, setPhotoUrls] = useState({});
-  const rows = (data.progress_measurements || []).filter((row) => row.user_id === userId);
   const userPhotos = (data.progress_photos || [])
     .filter((item) => item.user_id === userId)
     .sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
@@ -888,13 +912,13 @@ export function Progress({ metrics }) {
     return () => { alive = false; };
   }, [photoKey, userId]);
   const allLogs = (data.training_logs || []).filter((log) => log.user_id === userId);
-  const modalityKey = modalityKeyFor(profile.modality || profile.goal || "");
-  const modalityLogs = allLogs.filter((log) => !log.program_modality || !modalityKey || log.program_modality === modalityKey || log.loads?.modality === modalityKey);
-  const completedProgramDays = new Set(modalityLogs
-    .map((log) => Number(log.program_day || log.loads?.program_day))
-    .filter((day) => Number.isInteger(day) && day >= 1 && day <= 30));
-  const completedCount = Math.min(30, completedProgramDays.size);
+  const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
+  const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs);
+  const firstThirtyDays = accountTracking.days.slice(0, 30);
+  const completedCount = firstThirtyDays.filter((item) => item.workoutDone).length;
   const remainingCount = Math.max(0, 30 - completedCount);
+  const missedWorkoutDays = accountTracking.missedWorkoutDays;
+  const missedNutritionDays = accountTracking.missedNutritionDays;
   const finalPhotoPattern = /(?:dia\s*30|foto\s*final|after)/i;
   const initialPhotoPattern = /(?:dia\s*0|foto\s*inicial|antes)/i;
   const firstPhoto = userPhotos.filter((item) => initialPhotoPattern.test(String(item.note || ""))).at(-1)
@@ -904,13 +928,7 @@ export function Progress({ metrics }) {
   const subscription = (data.subscriptions || [])
     .filter((item) => item.user_id === userId && item.status === "active")
     .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
-  const firstLogDate = modalityLogs.length
-    ? modalityLogs.map((item) => item.completed_at).sort()[0]
-    : null;
-  const journeyStart = firstLogDate || subscription?.started_at || profile.created_at;
-  const elapsedDays = journeyStart
-    ? Math.min(30, Math.max(1, Math.floor((Date.now() - new Date(journeyStart).getTime()) / 86400000) + 1))
-    : 0;
+  const elapsedDays = Math.min(30, accountTracking.days.length);
   const canUploadAfter = completedCount >= 30 && elapsedDays >= 30;
   const licenseRemaining = subscription?.expires_at
     ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
@@ -959,6 +977,8 @@ export function Progress({ metrics }) {
       <div className="grid stats">
         <Stat label="Peso atual" value={currentWeight === null ? "—" : currentWeight + " kg"} />
         <Stat label="Treinos registados" value={metrics.total} />
+        <Stat label="Treinos perdidos" value={missedWorkoutDays} />
+        <Stat label="Dias de alimentação perdidos" value={missedNutritionDays} />
         <Stat label="Sequência" value={metrics.streak + " dias"} />
         <Stat label="Variação" value={metrics.delta === null ? "—" : metrics.delta.toFixed(1) + " kg"} />
       </div>
@@ -977,11 +997,22 @@ export function Progress({ metrics }) {
         <div className="progress-30-grid" aria-label="Estado dos 30 dias">
           {Array.from({ length: 30 }, (_, index) => {
             const day = index + 1;
-            const done = completedProgramDays.has(day);
-            return <span key={day} className={done ? "done" : ""} title={done ? "Dia " + day + " concluído" : "Dia " + day + " por concluir"}>{day}</span>;
+            const status = firstThirtyDays[index];
+            const done = Boolean(status?.workoutDone && status?.nutritionDone);
+            const missed = Boolean(status?.missed);
+            const partial = Boolean(status && !done && !missed && (status.workoutDone || status.nutritionDone));
+            const className = done ? "done" : missed ? "missed" : partial ? "partial" : "";
+            const title = done
+              ? "Dia " + day + ": treino e alimentação concluídos"
+              : missed
+                ? "Dia " + day + ": " + [status.workoutMissed ? "treino perdido" : "", status.nutritionMissed ? "alimentação perdida" : ""].filter(Boolean).join(" e ")
+                : partial
+                  ? "Dia " + day + ": conclusão parcial"
+                  : "Dia " + day + ": ainda por cumprir";
+            return <span key={day} className={className} title={title}>{day}</span>;
           })}
         </div>
-        <p className="progress-journey-note">O progresso é atualizado pelos treinos guardados. Um dia só fica concluído depois de registar o treino.</p>
+        <p className="progress-journey-note">Verde: treino e alimentação concluídos. Vermelho: pelo menos uma das duas partes ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.</p>
       </section>
       {form && (
         <form className="panel-form progress-measure-form" onSubmit={async (event) => {
@@ -1003,10 +1034,6 @@ export function Progress({ metrics }) {
           <button className="primary" disabled={busy}>Guardar medida e atualizar peso</button>
         </form>
       )}
-      <div className="progress-card">
-        <h2>Histórico de peso</h2>
-        <Chart rows={rows.filter((row) => row.weight !== null && row.weight !== undefined)} />
-      </div>
       <section className="progress-photo-section">
         <div className="progress-photo-heading">
           <div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div>
@@ -2190,37 +2217,7 @@ export function Contents({ go, plan }) {
           )}
         </div>
       )}
-      {plan.tier >= 3 && (
-        <div className="kata-library">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">KIMURA SHUKOKAI • PREMIUM</p>
-              <h2>Biblioteca de katas</h2>
-            </div>
-            <a
-              className="outline"
-              href="https://www.shukokai-skf.com/training-with-skf/kata/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Fonte KSI/SKF
-            </a>
-          </div>
-          <p className="muted">
-            Os nomes abaixo seguem o syllabus publicado pela SKF. O link é uma
-            referência oficial; a execução, graduação e bunkai devem ser
-            confirmadas no dojo.
-          </p>
-          <div className="kata-grid">
-            {kataCatalog.map((k) => (
-              <div className="kata-card" key={k.level}>
-                <b>{k.level}</b>
-                <span>{k.names.join(" · ")}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+
     </>
   );
 }
@@ -2393,10 +2390,12 @@ export function Assistant({ plan, go }) {
 const foodPhoto = (food) => foodLibrary.find((known) => known.name === food?.name)?.image || null;
 
 export function Nutrition({ plan, whatsapp }) {
-  const { profile, userId } = useStore();
+  const { profile, userId, data, refresh, setError, loading } = useStore();
+  const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
+  const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs);
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
-  const [day, setDay] = useState(Number(profile.nutrition_day) || 1),
+  const [day, setDay] = useState(() => Math.min(30, Number(profile.nutrition_day) || accountDayNumber(profile.created_at))),
     [shoppingDays, setShoppingDays] = useState(30),
     [shoppingOpen, setShoppingOpen] = useState(false),
     [nutritionView, setNutritionView] = useState("plan"),
@@ -2410,7 +2409,12 @@ export function Nutrition({ plan, whatsapp }) {
       }
     }),
     [replaced, setReplaced] = useState({});
-  const intensity = profile.training_intensity || "moderate";
+  useEffect(() => {
+    if (profile.created_at && !profile.nutrition_day && day === 1) {
+      setDay(Math.min(30, accountDayNumber(profile.created_at)));
+    }
+  }, [profile.created_at]);
+  const intensity = ageFromProfile(profile) < 18 ? "moderate" : profile.training_intensity || "moderate";
   const shoppingStorageKey = "jl-shopping-" + (userId || profile.id || "guest");
   const [shoppingState, setShoppingState] = useState({ key: null, items: {} });
   const shoppingChecked = shoppingState.key === shoppingStorageKey ? shoppingState.items : {};
@@ -2453,9 +2457,85 @@ export function Nutrition({ plan, whatsapp }) {
       training_intensity: intensity,
       nutrition_day: Number(day),
     }),
-    kcal = estimateWorkoutKcal(profile, 35, intensity),
     shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays, n.portionScale),
     allowed = (plan?.tier || 0) >= 3;
+  const selectedPlanDate = accountDateForDay(profile.created_at, day);
+  const selectedNutritionLog = nutritionLogs.find((log) => String(log.local_date || "").slice(0, 10) === selectedPlanDate);
+  const selectedMealKeys = Array.isArray(selectedNutritionLog?.meal_keys) ? selectedNutritionLog.meal_keys : [];
+  useEffect(() => {
+    if (!selectedNutritionLog) return;
+    const prefix = `${day}-`;
+    setConsumed((current) => [
+      ...current.filter((key) => !key.startsWith(prefix)),
+      ...selectedMealKeys,
+    ]);
+  }, [selectedPlanDate, selectedNutritionLog?.updated_at, selectedMealKeys.join("|")]);
+  const persistNutritionDay = async (nextConsumed) => {
+    if (!supabase || userId === "demo" || !selectedPlanDate || !n.meals.length) return;
+    const mealKeys = n.meals
+      .map((meal) => `${day}-${meal.title}`)
+      .filter((key) => nextConsumed.includes(key));
+    try {
+      const { error } = await supabase.from("daily_nutrition_logs").upsert({
+        user_id: userId,
+        local_date: selectedPlanDate,
+        plan_day: Number(day),
+        meal_keys: mealKeys,
+        expected_meals: n.meals.length,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "user_id,local_date" });
+      if (error) throw error;
+      await refresh?.();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+  const legacyConsumedKey = consumed.join("|");
+  useEffect(() => {
+    if (loading || !supabase || userId === "demo" || !selectedPlanDate || selectedNutritionLog || !n.meals.length) return;
+    const selectedKeys = n.meals
+      .map((meal) => `${day}-${meal.title}`)
+      .filter((key) => consumed.includes(key));
+    if (selectedKeys.length) void persistNutritionDay(consumed);
+  }, [loading, selectedPlanDate, selectedNutritionLog?.id, n.meals.length]);
+  useEffect(() => {
+    if (loading || !supabase || userId === "demo" || !profile.created_at || !legacyConsumedKey) return;
+    const existingDates = new Set(nutritionLogs.map((log) => String(log.local_date || "").slice(0, 10)));
+    const payloads = [];
+    for (let planDay = 1; planDay <= 30; planDay += 1) {
+      if (planDay === Number(day)) continue;
+      const localDate = accountDateForDay(profile.created_at, planDay);
+      if (!localDate || existingDates.has(localDate)) continue;
+      const dayPlan = nutritionPlan({
+        ...profile,
+        training_intensity: intensity,
+        nutrition_day: planDay,
+      });
+      const meals = dayPlan.meals || [];
+      if (!meals.length) continue;
+      const mealKeys = meals
+        .map((meal) => `${planDay}-${meal.title}`)
+        .filter((key) => consumed.includes(key));
+      if (!mealKeys.length) continue;
+      payloads.push({
+        user_id: userId,
+        local_date: localDate,
+        plan_day: planDay,
+        meal_keys: mealKeys,
+        expected_meals: meals.length,
+        updated_at: new Date().toISOString(),
+      });
+    }
+    if (!payloads.length) return;
+    let cancelled = false;
+    supabase.from("daily_nutrition_logs").upsert(payloads, { onConflict: "user_id,local_date" })
+      .then(({ error }) => {
+        if (cancelled) return;
+        if (error) setError(error.message);
+        else refresh?.();
+      });
+    return () => { cancelled = true; };
+  }, [loading, profile.created_at, profile.birth_date, profile.age, profile.goal, profile.modality, profile.current_weight, profile.height, profile.allergies, profile.foods_to_avoid, profile.available_foods, profile.food_budget, profile.training_intensity, userId, nutritionLogs.length, legacyConsumedKey]);
   const foodGroups = ["Todos", ...new Set(foodLibrary.map((food) => food.group))];
   const visibleFoodLibrary = foodLibrary.filter((food) => {
     const matchesSearch = food.name.toLowerCase().includes(foodSearch.toLowerCase());
@@ -2464,9 +2544,11 @@ export function Nutrition({ plan, whatsapp }) {
   });
   const completedMeals = n.meals.filter((meal) => consumed.includes(`${day}-${meal.title}`)).length;
   const markConsumed = (key) =>
-    setConsumed((list) =>
-      list.includes(key) ? list.filter((item) => item !== key) : [...list, key],
-    );
+    setConsumed((list) => {
+      const next = list.includes(key) ? list.filter((item) => item !== key) : [...list, key];
+      void persistNutritionDay(next);
+      return next;
+    });
   const replaceMeal = (meal) => {
     const alternatives = meal.foods
       .flatMap((food) => foodSubstitutions(food.name, profile))
@@ -2561,9 +2643,9 @@ export function Nutrition({ plan, whatsapp }) {
           <div className="food-library-grid">
             {visibleFoodLibrary.map((food) => (
               <article className="food-library-card" key={food.id}>
-                <div className="food-library-image">
+                <div className="food-library-image" style={foodPhoto(food) ? { "--food-image": `url("${foodPhoto(food)}")` } : undefined}>
                   {foodPhoto(food) ? (
-                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
+                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" style={{ "--food-image": `url("${foodPhoto(food)}")` }} onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
                   ) : <span className="food-library-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>}
                 </div>
                 <div className="food-library-copy">
@@ -2598,8 +2680,9 @@ export function Nutrition({ plan, whatsapp }) {
           {Array.from({ length: 30 }, (_, i) => (
             <button
               type="button"
-              className={`nutrition-day-button ${Number(day) === i + 1 ? "selected" : ""}`}
+              className={`nutrition-day-button ${Number(day) === i + 1 ? "selected" : ""} ${nutritionTracking.days[i]?.nutritionMissed ? "missed" : nutritionTracking.days[i]?.nutritionDone ? "done" : ""}`}
               aria-label={`Selecionar dia ${i + 1}`}
+              title={nutritionTracking.days[i]?.nutritionMissed ? "Alimentação perdida" : nutritionTracking.days[i]?.nutritionDone ? "Todas as refeições concluídas" : "Dia por cumprir"}
               aria-pressed={Number(day) === i + 1}
               onClick={() => setDay(i + 1)}
               key={i + 1}
@@ -2608,7 +2691,7 @@ export function Nutrition({ plan, whatsapp }) {
             </button>
           ))}
         </div>
-        <p className="nutrition-calendar-note">Selecione um dos 30 dias para consultar as refeições, porções e horários previstos para a sua rotina.</p>
+        <p className="nutrition-calendar-note">Verde: todas as refeições marcadas. Vermelho: dia terminado sem concluir todas as refeições. O dia atual só é avaliado quando terminar.</p>
       </section>
       <section className="meal-progress-strip">
         <div>
@@ -2636,6 +2719,7 @@ export function Nutrition({ plan, whatsapp }) {
                     <img
                       className="meal-recipe-thumb"
                       src={meal.image}
+                      style={{ "--food-image": `url("${meal.image}")` }}
                       alt={`Fotografia de ${meal.recipeName || meal.title}`}
                       loading="lazy"
                       onError={(event) => { event.currentTarget.style.display = "none"; }}
@@ -2670,7 +2754,7 @@ export function Nutrition({ plan, whatsapp }) {
                   {meal.foods.map((food) => (
                     <div className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`} key={food.name}>
                       {foodPhoto(food) ? (
-                        <span className="food-chip-media">
+                        <span className="food-chip-media" style={{ "--food-image": `url("${foodPhoto(food)}")` }}>
                           <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
                         </span>
                       ) : <span className="food-chip-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>}

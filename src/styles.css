@@ -1250,3 +1250,72 @@ header{
     font-size: 10px;
   }
 }
+
+
+/* Estado diário: dias anteriores incompletos ficam claramente assinalados. */
+.day-chip.missed,
+.nutrition-day-button.missed {
+  border-color: #a94b4b !important;
+  background: #351a1d !important;
+  color: #ffc2c2 !important;
+}
+.day-chip.missed strong,
+.day-chip.missed small,
+.nutrition-day-button.missed strong { color: #ffc2c2 !important; }
+.day-chip.done:not(.active),
+.nutrition-day-button.done:not(.selected) {
+  border-color: #4e8d61 !important;
+  background: #183324 !important;
+  color: #b8ebc3 !important;
+}
+.day-chip.done:not(.active) strong,
+.day-chip.done:not(.active) small,
+.nutrition-day-button.done:not(.selected) strong { color: #b8ebc3 !important; }
+.progress-30-grid span.missed {
+  border-color: #a94b4b;
+  background: #351a1d;
+  color: #ffc2c2;
+}
+.progress-30-grid span.partial {
+  border-color: #9c7937;
+  background: #352b17;
+  color: #f0d48f;
+}
+
+/* Fotografias: o fundo preenche o quadrado e a imagem principal permanece inteira. */
+.food-chip-media,
+.food-library-image {
+  background-image: var(--food-image) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  overflow: hidden;
+}
+.food-chip-media img,
+.food-library-image img,
+.meal-recipe-thumb {
+  object-fit: contain !important;
+  object-position: center !important;
+  background-image: var(--food-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 0 !important;
+}
+.food-chip-emoji {
+  display: grid !important;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  font-size: 25px;
+  background: linear-gradient(145deg, #30343b, #1b2027);
+}
+.food-library-emoji {
+  display: grid !important;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  min-height: 120px;
+  font-size: 48px;
+  background: linear-gradient(145deg, #30343b, #1b2027);
+}

@@ -773,13 +773,25 @@ function foodNamesFromIngredients(text, fallback = []) {
   const unique = Array.from(new Set([...names, ...detected].filter((name) => byName[name])));
   return unique.length ? unique : Array.from(new Set(fallback));
 }
-function workbookKeyFor(modality) {
-  if (modality === "definicao") return "cutting";
-  if (modality === "musculacao") return "manutencao";
-  if (modality === "massa") return "bulking";
-  if (["futsal", "karate", "natacao", "condicionamento", "casa"].includes(modality))
+function workbookKeyFor(goal) {
+  if (goal === "definicao") return "cutting";
+  if (goal === "massa") return "bulking";
+  if (["musculacao", "manutencao", "condicionamento", "calistenia", "casa"].includes(goal))
     return "manutencao";
-  return ["emagrecimento", "bulking", "cutting", "manutencao"].includes(modality)
+  return ["emagrecimento", "bulking", "cutting", "manutencao"].includes(goal)
+    ? goal
+    : "manutencao";
+}
+function nutritionGoalKeyFor(profile = {}) {
+  const goal = String(profile.goal || profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (goal.includes("emagrec")) return "emagrecimento";
+  if (goal.includes("defini") || goal.includes("cut")) return "definicao";
+  if (goal.includes("bulking") || goal.includes("ganho") || goal.includes("massa")) return "bulking";
+  if (goal.includes("manut") || goal.includes("recompos")) return "manutencao";
+  if (goal.includes("condicion")) return "condicionamento";
+  if (goal.includes("muscul")) return "musculacao";
+  const modality = modalityKeyFor(profile);
+  return modality === "emagrecimento" || modality === "definicao" || modality === "bulking" || modality === "musculacao"
     ? modality
     : "manutencao";
 }
@@ -1157,6 +1169,7 @@ const labels = {
   bulking: "Bulking (ganho de massa)",
   musculacao: "Musculação normal / manutenção",
   condicionamento: "Alimentação equilibrada",
+  manutencao: "Manutenção equilibrada",
 };
 const objectives = {
   emagrecimento: { calorie: -300, portion: 0.88, protein: 1.8 },
@@ -1164,19 +1177,16 @@ const objectives = {
   bulking: { calorie: 300, portion: 1.15, protein: 1.8 },
   musculacao: { calorie: 0, portion: 1, protein: 1.6 },
   condicionamento: { calorie: 0, portion: 1, protein: 1.4 },
+  manutencao: { calorie: 0, portion: 1, protein: 1.4 },
 };
 const modalAdjust = {
-  corrida: 120,
-  cardio: 120,
-  natacao: 100,
-  futsal: 140,
-  karate: 100,
   bodybuilding: 150,
   musculacao: 40,
+  calistenia: 40,
 };
 function ageFrom(profile) {
   if (profile.birth_date) {
-    const d = new Date(profile.birth_date),
+    const d = new Date(`${profile.birth_date}T12:00:00`),
       now = new Date();
     let age = now.getFullYear() - d.getFullYear();
     if (now < new Date(now.getFullYear(), d.getMonth(), d.getDate())) age--;
@@ -1326,10 +1336,11 @@ function objectiveMenu(modality, day) {
 }
 export function nutritionPlan(profile = {}) {
   const age = ageFrom(profile),
-    modality = age !== null && age < 18 ? "condicionamento" : modalityKeyFor(profile),
-    baseObjective = objectives[modality] || objectives.condicionamento,
+    isAdolescent = age !== null && age >= 12 && age < 18,
+    modality = isAdolescent ? "manutencao" : nutritionGoalKeyFor(profile),
+    baseObjective = objectives[modality] || objectives.manutencao,
     objective =
-      age !== null && age < 18
+      isAdolescent
         ? { ...baseObjective, calorie: 0, portion: 1, protein: 1.2 }
         : baseObjective;
   if (!complete(profile)) {
@@ -1368,7 +1379,7 @@ export function nutritionPlan(profile = {}) {
     (sex.includes("fem") ? -161 : sex.includes("masc") ? 5 : 0);
   const base =
     bmr * activityFactor(profile) +
-    (modalAdjust[String(profile.modality || "").toLowerCase()] || 0);
+    (modalAdjust[String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")] || 0);
   const estimatedCalories = Math.max(
     age < 18 ? Math.round(base) : 1400,
     Math.round(
@@ -1386,7 +1397,7 @@ export function nutritionPlan(profile = {}) {
       30,
       Math.max(1, Number(profile.nutrition_day) || 1),
     ),
-    day = workbookMealPlans[workbookKeyFor(modality)]?.[dayNumber] || workbookMealPlans.emagrecimento[dayNumber],
+    day = workbookMealPlans[workbookKeyFor(modality)]?.[dayNumber] || workbookMealPlans.manutencao[dayNumber],
     training = String(profile.training_time || "18:00").slice(0, 5),
     [h, m] = training.split(":").map(Number);
   const at = (hour, minute = 0) => {
@@ -1400,8 +1411,8 @@ export function nutritionPlan(profile = {}) {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
   const ageNote =
-    ageCategory(age) === "adolescente"
-      ? "Para menores de 18 anos: plano equilibrado, sem défice automático ou recomendações de doses de suplementos. Procure um profissional qualificado."
+    isAdolescent
+      ? "Plano equilibrado para adolescentes, com refeições variadas e porções flexíveis para apoiar crescimento, escola, treino e recuperação. Sem metas calóricas, défice ou suplementos automáticos."
       : age >= 65
         ? "Priorize hidratação, mastigação confortável e avaliação individual quando necessário."
         : "";
@@ -1479,8 +1490,8 @@ export function nutritionPlan(profile = {}) {
     };
   });
   const finalMeals = meals;
-  const trainingModality = String(profile.modality || "").toLowerCase();
-  const resistanceFocused = ["bulking","definicao","musculacao"].includes(modality) || /muscul|calisten|futsal|karat/.test(trainingModality);
+  const trainingModality = String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const resistanceFocused = ["bulking","definicao","musculacao"].includes(modality) || /muscul|calisten/.test(trainingModality);
   const supplementAdvice = age < 18
     ? { show: false, title: "Suplementos", detail: "Para menores, o aplicativo não recomenda suplementos automaticamente. Fale com um profissional qualificado e com o responsável." }
     : resistanceFocused
@@ -1540,8 +1551,8 @@ function formatShoppingQuantity(quantity,unit) {
 export function buildShoppingList(profile = {}, days = 30, portionScale = null) {
   const people = Math.min(12, Math.max(1, Number(profile.household_size || profile.people_count) || 1));
   const totalDays = Math.min(30, Math.max(1, Number(days) || 30));
-  const modality = modalityKeyFor(profile);
-  const plan = workbookMealPlans[workbookKeyFor(modality)] || workbookMealPlans.emagrecimento;
+  const modality = ageFrom(profile) !== null && ageFrom(profile) < 18 ? "manutencao" : nutritionGoalKeyFor(profile);
+  const plan = workbookMealPlans[workbookKeyFor(modality)] || workbookMealPlans.manutencao;
   const scale = Math.min(1.35,Math.max(0.7,Number(portionScale)||1));
   const totals = new Map();
   for (let day = 1; day <= totalDays; day += 1) {

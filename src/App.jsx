@@ -111,7 +111,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     current_weight: profile.current_weight || "",
     height: profile.height || "",
     goal: normalizeGoal(profile.goal),
-    modality: ["Musculação", "Calistenia", "Karatê", "Futsal", "Natação"].includes(profile.modality) ? profile.modality : "Musculação",
+    modality: ["Musculação", "Calistenia"].includes(profile.modality) ? profile.modality : "Musculação",
     training_location: profile.training_location === "ginasio" ? "ginasio" : "casa",
     training_level: profile.training_level || "beginner",
     training_days_count: Number(profile.training_days_count || profile.training_frequency || 3),
@@ -144,6 +144,11 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) years -= 1;
     return years;
   })();
+  useEffect(() => {
+    if (age !== null && age < 18 && form.training_intensity === "hard") {
+      setForm((current) => ({ ...current, training_intensity: "moderate" }));
+    }
+  }, [age, form.training_intensity]);
   const steps = [
     ["basics", "Seus dados básicos", "Precisamos deles para calcular estimativas ajustadas à sua idade e medidas."],
     ["goal", "O que quer alcançar?", "Escolha seu objetivo e a modalidade que prefere praticar."],
@@ -206,7 +211,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
       training_time: form.training_time || "18:00",
       training_duration: Number(form.training_duration) || 45,
       daily_activity: form.daily_activity,
-      training_intensity: form.training_intensity,
+      training_intensity: age !== null && age < 18 ? "moderate" : form.training_intensity,
       food_budget: form.food_budget,
       allergies: form.allergies.trim(),
       foods_to_avoid: form.foods_to_avoid.trim(),
@@ -227,7 +232,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     ["condicionamento", "Condicionamento", "Melhorar resistência, mobilidade e energia."],
     ["manutencao", "Manutenção", "Manter consistência e melhorar a capacidade física."],
   ];
-  const modalityOptions = ["Musculação", "Calistenia", "Karatê", "Futsal", "Natação"];
+  const modalityOptions = ["Musculação", "Calistenia"];
   return (
     <div className="nutrition-onboarding-backdrop">
       <section className="nutrition-onboarding onboarding-single-question">
@@ -276,7 +281,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
                 <label className="onboarding-single-field">Horário habitual<input type="time" value={form.training_time} onChange={(e) => update("training_time", e.target.value)} /></label>
                 <label className="onboarding-single-field">Atividade diária<select value={form.daily_activity} onChange={(e) => update("daily_activity", e.target.value)}><option value="sedentary">Pouco ativo</option><option value="light">Leve</option><option value="moderate">Moderada</option><option value="active">Muito ativo</option><option value="very_active">Extremamente ativo</option></select></label>
               </div>
-              <div className="onboarding-choice-block"><span>Intensidade preferida</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["easy", "Leve"], ["moderate", "Moderada"], ["hard", "Alta"]].map(([value, label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>Intensidade preferida</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["easy", "Leve"], ["moderate", "Moderada"], ["hard", "Alta"]].filter(([value]) => !(age !== null && age < 18 && value === "hard")).map(([value, label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div></div>
             </div>
           )}
           {currentKey === "nutrition" && (
