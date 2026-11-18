@@ -1,6 +1,7 @@
 const pad = (value) => String(value).padStart(2, "0");
 
-export function localDateKey(value = new Date()) {
+export function localDateKey(value) {
+  if (value === null || value === undefined || value === "") return "";
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) return "";
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
@@ -21,10 +22,13 @@ export function accountDateForDay(createdAt, dayNumber) {
 }
 
 export function accountDayNumber(createdAt, now = new Date()) {
-  const start = localNoon(localDateKey(createdAt));
-  const current = localNoon(localDateKey(now));
+  const startKey = localDateKey(createdAt);
+  const currentKey = localDateKey(now);
+  const start = localNoon(startKey);
+  const current = localNoon(currentKey);
   if (!start || !current) return 1;
-  return Math.max(1, Math.floor((current.getTime() - start.getTime()) / 86400000) + 1);
+  const ordinal = (date) => Math.floor(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000);
+  return Math.max(1, ordinal(current) - ordinal(start) + 1);
 }
 
 export function accountDayStatuses(createdAt, workoutLogs = [], nutritionLogs = [], now = new Date()) {

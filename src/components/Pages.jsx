@@ -2395,7 +2395,7 @@ export function Nutrition({ plan, whatsapp }) {
   const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs);
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
-  const [day, setDay] = useState(() => Math.min(30, Number(profile.nutrition_day) || accountDayNumber(profile.created_at))),
+  const [day, setDay] = useState(() => Math.max(1, Math.min(30, Number(profile.nutrition_day) || accountDayNumber(profile.created_at)))),
     [shoppingDays, setShoppingDays] = useState(30),
     [shoppingOpen, setShoppingOpen] = useState(false),
     [nutritionView, setNutritionView] = useState("plan"),
@@ -2471,7 +2471,7 @@ export function Nutrition({ plan, whatsapp }) {
     ]);
   }, [selectedPlanDate, selectedNutritionLog?.updated_at, selectedMealKeys.join("|")]);
   const persistNutritionDay = async (nextConsumed) => {
-    if (!supabase || userId === "demo" || !selectedPlanDate || !n.meals.length) return;
+    if (!supabase || !userId || userId === "demo" || !selectedPlanDate || !n.meals.length) return;
     const mealKeys = n.meals
       .map((meal) => `${day}-${meal.title}`)
       .filter((key) => nextConsumed.includes(key));
@@ -2492,14 +2492,14 @@ export function Nutrition({ plan, whatsapp }) {
   };
   const legacyConsumedKey = consumed.join("|");
   useEffect(() => {
-    if (loading || !supabase || userId === "demo" || !selectedPlanDate || selectedNutritionLog || !n.meals.length) return;
+    if (loading || !supabase || !userId || userId === "demo" || !selectedPlanDate || selectedNutritionLog || !n.meals.length) return;
     const selectedKeys = n.meals
       .map((meal) => `${day}-${meal.title}`)
       .filter((key) => consumed.includes(key));
     if (selectedKeys.length) void persistNutritionDay(consumed);
   }, [loading, selectedPlanDate, selectedNutritionLog?.id, n.meals.length]);
   useEffect(() => {
-    if (loading || !supabase || userId === "demo" || !profile.created_at || !legacyConsumedKey) return;
+    if (loading || !supabase || !userId || userId === "demo" || !profile.created_at || !legacyConsumedKey) return;
     const existingDates = new Set(nutritionLogs.map((log) => String(log.local_date || "").slice(0, 10)));
     const payloads = [];
     for (let planDay = 1; planDay <= 30; planDay += 1) {
