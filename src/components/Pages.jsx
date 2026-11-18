@@ -12,6 +12,8 @@ import {
   normalizeEquipmentSelection,
   modalityKeyFor,
   ageFromProfile,
+  isTimedExercise,
+  exerciseDurationSeconds,
   samePrimaryMuscle,
   suitableForProfile,
 } from "../lib/programs";
@@ -90,206 +92,137 @@ function RestClock({ seconds, nonce, onClear }) {
     </>
   );
 }
+function formatExerciseDuration(seconds) {
+  const total = Math.max(0, Math.round(Number(seconds) || 0));
+  const minutes = Math.floor(total / 60);
+  const rest = total % 60;
+  if (minutes && rest) return minutes + " min " + rest + " s";
+  if (minutes) return minutes + " min";
+  return (rest || total) + " s";
+}
+function formatCountdown(seconds) {
+  const value = Math.max(0, Math.round(Number(seconds) || 0));
+  return String(Math.floor(value / 60)).padStart(2, "0") + ":" + String(value % 60).padStart(2, "0");
+}
 function GuidedWorkout({
   exercises,
   setsFor,
   repsFor,
+  durationFor,
+  isTimedFor,
   onExit,
   onSeriesComplete,
   language,
 }) {
-  const [index, setIndex] = useState(0),
-    [setNumber, setSetNumber] = useState(1);
+  const [index, setIndex] = useState(0);
+  const [setNumber, setSetNumber] = useState(1);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [timerState, setTimerState] = useState("idle");
   const exercise = exercises[index];
-  if (!exercise) return null;
-  const totalSets = setsFor(exercise),
-    instructions = translatedInstructions(exercise, language);
-  const complete = () => {
+  const timed = Boolean(exercise && isTimedFor(exercise));
+  const totalSets = exercise ? setsFor(exercise) : 1;
+  const durationSeconds = timed ? Math.max(10, Number(durationFor(exercise)) || 60) : 0;
+  const instructions = exercise ? translatedInstructions(exercise, language) : [];
+
+  useEffect(() => {
+    if (!timed || timerState !== "running") return;
+    const interval = setInterval(() => {
+      setTimeLeft((value) => Math.max(0, value - 1));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timed, timerState]);
+
+  useEffect(() => {
+    if (!timed || timerState !== "running" || timeLeft > 0) return;
+    setTimerState("done");
     onSeriesComplete?.(exercise);
-    if (setNumber < totalSets) setSetNumber((value) => value + 1);
-    else if (index < exercises.length - 1) {
+  }, [timed, timerState, timeLeft, exercise?.id]);
+
+  if (!exercise) return null;
+
+  const advance = () => {
+    if (index < exercises.length - 1) {
       setIndex((value) => value + 1);
       setSetNumber(1);
-    } else onExit();
+      setTimeLeft(0);
+      setTimerState("idle");
+    } else {
+      onExit();
+    }
   };
+  const completeSet = () => {
+    onSeriesComplete?.(exercise);
+    if (setNumber < totalSets) setSetNumber((value) => value + 1);
+    else advance();
+  };
+  const startTimer = () => {
+    setTimeLeft(durationSeconds);
+    setTimerState("running");
+  };
+  const distanceBased = new RegExp("\\b\\d+\\s*m\\b", "i").test(String(repsFor(exercise) || ""));
+
   return (
     <div className="guided-workout-backdrop" role="dialog" aria-modal="true">
       <div className="guided-workout">
         <div className="guided-head">
           <div>
-            <span className="eyebrow">
-              TREINO GUIADO · {index + 1}/{exercises.length}
-            </span>
+            <span className="eyebrow">TREINO GUIADO · {index + 1}/{exercises.length}</span>
             <h2>{exercise.name}</h2>
           </div>
-          <button className="outline" type="button" onClick={onExit}>
-            Sair ×
-          </button>
+          <button className="outline" type="button" onClick={onExit}>Sair ×</button>
         </div>
         <div className="guided-media">
           <ExerciseGif exercise={exercise} variant="guided" />
         </div>
         <div className="guided-meta">
-          <span className="pill">
-            SÉRIE {setNumber} DE {totalSets}
-          </span>
-          <span className="pill">{repsFor(exercise)} repetições</span>
+          {timed ? (
+            <>
+              <span className="pill">TEMPO CONTÍNUO</span>
+              <span className="pill">{formatExerciseDuration(durationSeconds)}</span>
+            </>
+          ) : (
+            <>
+              <span className="pill">SÉRIE {setNumber} DE {totalSets}</span>
+              <span className="pill">{distanceBased ? "Distância: " + repsFor(exercise) : repsFor(exercise) + " repetições"}</span>
+            </>
+          )}
           <span className="pill">{equipmentLabel(exercise)}</span>
         </div>
+        {timed && (
+          <div className="interval-display" aria-live="assertive">
+            <span>{timerState === "done" ? "Tempo concluído" : timerState === "running" ? "Tempo restante" : timerState === "paused" ? "Temporizador pausado" : "Duração prevista"}</span>
+            <strong>{formatCountdown(timerState === "idle" ? durationSeconds : timeLeft)}</strong>
+            <small>Faça o movimento de forma contínua, sem dividir em séries.</small>
+          </div>
+        )}
         <div className="guided-instructions">
           <h3>Como executar</h3>
           <ol>
             {instructions.length ? (
               instructions.map((step, i) => <li key={i}>{step}</li>)
             ) : (
-              <li>
-                Faça o movimento devagar, com postura controlada e sem dor.
-              </li>
+              <li>Faça o movimento devagar, com postura controlada e sem dor.</li>
             )}
           </ol>
         </div>
         <div className="guided-actions">
-          <button className="primary" type="button" onClick={complete}>
-            {setNumber < totalSets
-              ? `Concluir série ${setNumber}`
-              : index < exercises.length - 1
-                ? "Concluir e próximo exercício"
-                : "Concluir treino"}
-          </button>
-          <small>
-            Avanço automático após completar as séries deste exercício.
-          </small>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function IntervalWorkout({
-  exercises,
-  settings,
-  onExit,
-  onComplete,
-  language,
-}) {
-  const [index, setIndex] = useState(0),
-    [round, setRound] = useState(1),
-    [phase, setPhase] = useState("ready"),
-    [left, setLeft] = useState(settings.workSeconds);
-  const exercise = exercises[index];
-  useEffect(() => {
-    if (phase === "ready" || phase === "done") return;
-    const id = setInterval(
-      () =>
-        setLeft((value) => {
-          if (value > 1) return value - 1;
-          return 0;
-        }),
-      1000,
-    );
-    return () => clearInterval(id);
-  }, [phase]);
-  useEffect(() => {
-    if (left !== 0 || phase === "ready" || phase === "done") return;
-    const isWork = phase === "work";
-    if (isWork) {
-      window.navigator?.vibrate?.(120);
-      setPhase("rest");
-      setLeft(settings.restSeconds);
-      return;
-    }
-    window.navigator?.vibrate?.([100, 70, 100]);
-    if (round < settings.rounds) {
-      setRound((value) => value + 1);
-      setPhase("work");
-      setLeft(settings.workSeconds);
-      return;
-    }
-    if (index < exercises.length - 1) {
-      setIndex((value) => value + 1);
-      setRound(1);
-      setPhase("work");
-      setLeft(settings.workSeconds);
-      return;
-    }
-    setPhase("done");
-    onComplete?.();
-  }, [left, phase, index, round, settings, onComplete, exercises.length]);
-  if (!exercise) return null;
-  const start = () => {
-    setPhase("work");
-    setLeft(settings.workSeconds);
-  };
-  const label =
-    phase === "ready"
-      ? "Preparar"
-      : phase === "work"
-        ? "Movimento"
-        : phase === "rest"
-          ? "Descanso"
-          : "Concluído";
-  return (
-    <div className="guided-workout-backdrop" role="dialog" aria-modal="true">
-      <div className="guided-workout interval-workout">
-        <div className="guided-head">
-          <div>
-            <span className="eyebrow">
-              CARDIO GUIADO · {index + 1}/{exercises.length}
-            </span>
-            <h2>{exercise.name}</h2>
-          </div>
-          <button className="outline" type="button" onClick={onExit}>
-            Sair ×
-          </button>
-        </div>
-        <div className="guided-media">
-          <ExerciseGif exercise={exercise} variant="guided" />
-        </div>
-        <div className="interval-display" aria-live="assertive">
-          <span>{label}</span>
-          <strong>{left}s</strong>
-          <small>
-            Rodada {round} de {settings.rounds}
-          </small>
-        </div>
-        <div className="guided-instructions">
-          <h3>
-            {phase === "rest" ? "Recupere a respiração" : "Como executar"}
-          </h3>
-          {phase === "rest" ? (
-            <p>
-              Caminhe devagar, respire e prepare-se para o próximo bloco. O
-              aplicativo avança automaticamente.
-            </p>
+          {timed ? (
+            <>
+              {timerState === "idle" && <button className="primary" type="button" onClick={startTimer}>Iniciar {formatExerciseDuration(durationSeconds)}</button>}
+              {timerState === "running" && <button className="outline" type="button" onClick={() => setTimerState("paused")}>Pausar temporizador</button>}
+              {timerState === "paused" && <button className="primary" type="button" onClick={() => setTimerState("running")}>Retomar temporizador</button>}
+              {timerState === "done" && <button className="primary" type="button" onClick={advance}>{index < exercises.length - 1 ? "Próximo exercício" : "Concluir treino"}</button>}
+            </>
           ) : (
-            <ol>
-              {translatedInstructions(exercise, language).length ? (
-                translatedInstructions(exercise, language).map((step, i) => (
-                  <li key={i}>{step}</li>
-                ))
-              ) : (
-                <li>
-                  Execute num ritmo confortável, sem dor e sem perder a postura.
-                </li>
-              )}
-            </ol>
-          )}
-        </div>
-        <div className="guided-actions">
-          {phase === "ready" && (
-            <button className="primary" type="button" onClick={start}>
-              Iniciar treino cronometrado
+            <button className="primary" type="button" onClick={completeSet}>
+              {setNumber < totalSets
+                ? "Concluir série " + setNumber
+                : index < exercises.length - 1
+                  ? "Concluir e próximo exercício"
+                  : "Concluir treino"}
             </button>
           )}
-          {phase === "done" && (
-            <button className="primary" type="button" onClick={onExit}>
-              Finalizar
-            </button>
-          )}
-          <small>
-            Alterna movimento e descanso. O telemóvel vibra no momento de trocar
-            de fase.
-          </small>
+          <small>{timed ? "O temporizador conta o tempo de execução contínua." : "Avanço automático após completar as séries deste exercício."}</small>
         </div>
       </div>
     </div>
@@ -301,8 +234,8 @@ const loadRecommendation = (profile, exercise) => {
   const age = ageFor(profile),
     weight = Number(profile?.current_weight) || 70,
     level = profile?.training_level || "beginner";
-  if (exercise?.work_seconds)
-    return `${exercise.work_seconds} s de movimento · ${exercise.rest_seconds || 30} s de recuperação`;
+  if (isTimedExercise(exercise))
+    return formatExerciseDuration(exercise.duration_seconds || exercise.work_seconds || 60) + " contínuos";
   if (age < 18)
     return "Priorize técnica supervisionada e progressão gradual; sem teste de carga máxima";
   if (/sem equipamento|bodyweight/i.test(exercise?.equipment || ""))
@@ -340,10 +273,6 @@ export function Workouts({ plan }) {
       profile.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
     ),
     [place, setPlace] = useState(profile.training_location === "ginasio" ? "ginasio" : "casa"),
-    [mode, setMode] = useState("auto"),
-    [intervalSeconds, setIntervalSeconds] = useState(30),
-    [intervalLeft, setIntervalLeft] = useState(0),
-    [intervalRunning, setIntervalRunning] = useState(false),
     [previewExercise, setPreviewExercise] = useState(null),
     [substitutions, setSubstitutions] = useState({}),
     [programDay, setProgramDay] = useState(1),
@@ -426,8 +355,6 @@ export function Workouts({ plan }) {
     ],
   );
   const today = program[programDay - 1] || program[0];
-  const isTimedSession =
-    today?.sessionType === "interval" || mode === "interval";
   const baseExercises = (today?.exercises || []).filter(
     (exercise) => (exercise.min_tier || 0) <= (plan?.tier || 0),
   );
@@ -474,9 +401,13 @@ export function Workouts({ plan }) {
   const modalityName = String(profile.modality || "").toLowerCase();
   const modalityDefaultSets = modalityName.includes("natação") ? 4 : 3;
   const setsFor = (exercise) => {
+    if (isTimedExercise(exercise)) return 1;
     const base = Number(exercise.sets) || modalityDefaultSets;
     return age >= 60 ? Math.min(2, base) : base;
   };
+  const durationFor = (exercise) =>
+    Number(exercise.duration_seconds || exerciseDurationSeconds(exercise, profile, intensity)) || 60;
+  const durationLabelFor = (exercise) => formatExerciseDuration(durationFor(exercise));
   const repsFor = (exercise) => {
     if (exercise.reps) return exercise.reps;
     if (modalityName.includes("calisten")) return "6–10";
@@ -510,25 +441,8 @@ export function Workouts({ plan }) {
     setLogId(crypto.randomUUID());
     setTimer(0);
     setTimerNonce((value) => value + 1);
-    setIntervalRunning(false);
-    setIntervalLeft(0);
     setLibraryLimit(12);
   };
-  useEffect(() => {
-    if (!intervalRunning) return;
-    const interval = setInterval(
-      () =>
-        setIntervalLeft((value) => {
-          if (value <= 1) {
-            setIntervalRunning(false);
-            return 0;
-          }
-          return value - 1;
-        }),
-      1000,
-    );
-    return () => clearInterval(interval);
-  }, [intervalRunning]);
   return (
     <>
       <Title title="Meus treinos" tag={profile.modality || "SEU PROGRAMA"} />
@@ -675,56 +589,27 @@ export function Workouts({ plan }) {
         )}
       </section>
       <div className="workout-mode-toggle">
-        <button type="button" className="outline active">
-          ☷ Lista completa
-        </button>
-        <button
-          type="button"
-          className="primary small"
-          onClick={() => setGuided(true)}
-        >
+        <button type="button" className="primary small" onClick={() => setGuided(true)}>
           ▶ Começar treino guiado
         </button>
       </div>
-      {guided &&
-        (isTimedSession ? (
-          <IntervalWorkout
-            exercises={exercises}
-            settings={
-              today?.interval || {
-                workSeconds: intervalSeconds,
-                restSeconds: 30,
-                rounds: 3,
-              }
-            }
-            language={language}
-            onComplete={() =>
-              setCompleted(
-                Object.fromEntries(
-                  exercises.map((exercise) => [exercise.id, setsFor(exercise)]),
-                ),
-              )
-            }
-            onExit={() => setGuided(false)}
-          />
-        ) : (
-          <GuidedWorkout
-            exercises={exercises}
-            setsFor={setsFor}
-            repsFor={repsFor}
-            language={language}
-            onSeriesComplete={(exercise) =>
-              setCompleted((current) => ({
-                ...current,
-                [exercise.id]: Math.min(
-                  (current[exercise.id] || 0) + 1,
-                  setsFor(exercise),
-                ),
-              }))
-            }
-            onExit={() => setGuided(false)}
-          />
-        ))}
+      {guided && (
+        <GuidedWorkout
+          exercises={exercises}
+          setsFor={setsFor}
+          repsFor={repsFor}
+          durationFor={durationFor}
+          isTimedFor={isTimedExercise}
+          language={language}
+          onSeriesComplete={(exercise) =>
+            setCompleted((current) => ({
+              ...current,
+              [exercise.id]: Math.min((current[exercise.id] || 0) + 1, setsFor(exercise)),
+            }))
+          }
+          onExit={() => setGuided(false)}
+        />
+      )}
       <div className="filter-row">
         <label>
           Local
@@ -761,59 +646,11 @@ export function Workouts({ plan }) {
             <option>Com equipamento</option>
           </select>
         </label>
-        <label>
-          Modo
-          <select
-            value={mode}
-            onChange={(event) => setMode(event.target.value)}
-          >
-            <option value="auto">Automático para o treino do dia</option>
-            <option value="series">Séries</option>
-            <option value="interval">Intervalado / Tabata</option>
-          </select>
-        </label>
       </div>
-      {mode === "interval" && (
-        <div className="interval-controls">
-          <label>
-            Segundos por bloco
-            <input
-              type="number"
-              min="10"
-              max="300"
-              step="5"
-              value={intervalSeconds}
-              onChange={(event) =>
-                setIntervalSeconds(Number(event.target.value) || 30)
-              }
-            />
-          </label>
-          <button
-            className="primary"
-            onClick={() => {
-              setIntervalLeft(intervalSeconds);
-              setIntervalRunning(true);
-            }}
-          >
-            {intervalRunning
-              ? `Bloco ativo: ${intervalLeft}s`
-              : "Iniciar bloco"}
-          </button>
-          <button
-            className="outline"
-            onClick={() => {
-              setIntervalRunning(false);
-              setIntervalLeft(0);
-            }}
-          >
-            Parar
-          </button>
-        </div>
-      )}
       <div className="workout-banner">
         <div>
           <span className="pill">
-            {count} / {total} SÉRIES
+            {count} / {total} ETAPAS CONCLUÍDAS
           </span>
           <h2>{today?.title || "Treino guiado"}</h2>
           <p>
@@ -823,15 +660,11 @@ export function Workouts({ plan }) {
           </p>
         </div>
         <div className="timer" aria-live="polite">
-          {isTimedSession && intervalRunning ? (
-            `${intervalLeft}s`
-          ) : (
-            <RestClock
-              seconds={timer}
-              nonce={timerNonce}
-              onClear={() => setTimer(0)}
-            />
-          )}
+          <RestClock
+            seconds={timer}
+            nonce={timerNonce}
+            onClear={() => setTimer(0)}
+          />
         </div>
       </div>
       {exercises.map((exercise) => (
@@ -854,9 +687,9 @@ export function Workouts({ plan }) {
               </p>
               <small>
                 {equipmentLabel(exercise)} · trabalha: {muscleLabel(exercise)} ·{" "}
-                {loadRecommendation(profile, exercise)} · {setsFor(exercise)}{" "}
-                séries de {repsFor(exercise)} · pausa{" "}
-                {exercise.rest_seconds || 60}s
+                {isTimedExercise(exercise)
+                  ? durationLabelFor(exercise) + " contínuos, sem séries"
+                  : loadRecommendation(profile, exercise) + " · " + setsFor(exercise) + " séries de " + repsFor(exercise) + " · pausa " + (exercise.rest_seconds || 60) + "s"}
               </small>
             </div>
           </div>
@@ -878,13 +711,15 @@ export function Workouts({ plan }) {
               onClick={() => {
                 setCompleted((current) => ({
                   ...current,
-                  [exercise.id]: (current[exercise.id] || 0) + 1,
+                  [exercise.id]: Math.min((current[exercise.id] || 0) + 1, setsFor(exercise)),
                 }));
-                setTimer(exercise.rest_seconds || 60);
-                setTimerNonce((value) => value + 1);
+                if (!isTimedExercise(exercise)) {
+                  setTimer(exercise.rest_seconds || 60);
+                  setTimerNonce((value) => value + 1);
+                }
               }}
             >
-              {completed[exercise.id] || 0}/{setsFor(exercise)} · Concluir série
+              {completed[exercise.id] || 0}/{setsFor(exercise)} · {isTimedExercise(exercise) ? "Concluir exercício" : "Concluir série"}
             </button>
           </div>
         </article>
@@ -1060,26 +895,23 @@ export function Progress({ metrics }) {
     .filter((day) => Number.isInteger(day) && day >= 1 && day <= 30));
   const completedCount = Math.min(30, completedProgramDays.size);
   const remainingCount = Math.max(0, 30 - completedCount);
-  const firstPhoto = userPhotos[0] || null;
-  const afterPhoto = userPhotos
-    .slice(1)
-    .filter((item) => /(?:dia\s*30|foto\s*final|depois)/i.test(String(item.note || "")))
-    .at(-1) || null;
-  const photoStage = !firstPhoto
-    ? "before"
-    : completedCount >= 30 && !afterPhoto
-      ? "after"
-      : null;
+  const finalPhotoPattern = /(?:dia\s*30|foto\s*final|after)/i;
+  const initialPhotoPattern = /(?:dia\s*0|foto\s*inicial|antes)/i;
+  const firstPhoto = userPhotos.filter((item) => initialPhotoPattern.test(String(item.note || ""))).at(-1)
+    || userPhotos.find((item) => !finalPhotoPattern.test(String(item.note || "")))
+    || null;
+  const afterPhoto = userPhotos.filter((item) => finalPhotoPattern.test(String(item.note || ""))).at(-1) || null;
   const subscription = (data.subscriptions || [])
     .filter((item) => item.user_id === userId && item.status === "active")
     .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
   const firstLogDate = modalityLogs.length
     ? modalityLogs.map((item) => item.completed_at).sort()[0]
     : null;
-  const journeyStart = subscription?.started_at || firstLogDate || profile.created_at;
+  const journeyStart = firstLogDate || subscription?.started_at || profile.created_at;
   const elapsedDays = journeyStart
     ? Math.min(30, Math.max(1, Math.floor((Date.now() - new Date(journeyStart).getTime()) / 86400000) + 1))
     : 0;
+  const canUploadAfter = completedCount >= 30 && elapsedDays >= 30;
   const licenseRemaining = subscription?.expires_at
     ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
     : null;
@@ -1091,6 +923,34 @@ export function Progress({ metrics }) {
     manutencao: "Manutenção",
   };
   const currentWeight = metrics.current ?? (profile.current_weight ? Number(profile.current_weight) : null);
+  const saveProgressPhoto = async (event, stage) => {
+    event.preventDefault();
+    if (stage === "after" && !canUploadAfter) {
+      setError("A foto final só fica disponível depois de concluir os 30 treinos e completar 30 dias.");
+      return;
+    }
+    const formElement = event.currentTarget;
+    const fields = new FormData(formElement);
+    const file = fields.get("photo");
+    if (!(file instanceof File) || !file.size) {
+      setError("Escolha uma fotografia antes de guardar.");
+      return;
+    }
+    let path = "";
+    try {
+      path = await upload("progress-photos", file, userId);
+      const note = stage === "before" ? "Foto inicial · Dia 0" : "Foto final · Dia 30";
+      const ok = await mutate("progress_photos", { user_id: userId, path, note });
+      if (ok) {
+        formElement.reset();
+        await refresh?.();
+      } else if (path) {
+        await supabase.storage.from("progress-photos").remove([path]);
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
   return (
     <>
       <Title tag="SUA JORNADA EM NÚMEROS" title="Minha evolução">
@@ -1152,65 +1012,57 @@ export function Progress({ metrics }) {
           <div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div>
           <span className="pill">PRIVADO</span>
         </div>
-        <p className="muted">A foto inicial fica guardada. A foto final será liberada depois de concluir os 30 dias de treino.</p>
+        <p className="muted">Guarde a foto inicial no começo do plano. A foto final será liberada somente após 30/30 treinos e 30 dias decorridos.</p>
         <div className="progress-before-after">
           <article className="progress-photo-slot">
             <span>ANTES · DIA 0</span>
             {firstPhoto ? (
               photoUrls[firstPhoto.id] ? (
                 <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[firstPhoto.id])}>
-                  <img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso" />
+                  <img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso, corpo inteiro" />
                 </button>
               ) : <div className="progress-photo-placeholder">A carregar foto inicial…</div>
             ) : <div className="progress-photo-placeholder">Ainda sem foto inicial</div>}
             <small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 0"}</small>
+            <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "before")}>
+              <label className="file-drop">
+                <span>{firstPhoto ? "Selecionar outra foto inicial" : "Selecionar foto inicial"}</span>
+                <small>JPG, PNG ou WebP · até 10 MB</small>
+                <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" />
+              </label>
+              <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada.</label>
+              <button className="primary" disabled={busy}>{firstPhoto ? "Atualizar foto inicial" : "Guardar foto inicial"}</button>
+            </form>
           </article>
           <article className="progress-photo-slot">
             <span>DEPOIS · DIA 30</span>
-            {completedCount >= 30 && afterPhoto ? (
+            {afterPhoto ? (
               photoUrls[afterPhoto.id] ? (
                 <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[afterPhoto.id])}>
-                  <img src={photoUrls[afterPhoto.id]} alt="Fotografia final de progresso após 30 dias" />
+                  <img src={photoUrls[afterPhoto.id]} alt="Fotografia final de progresso após 30 dias, corpo inteiro" />
                 </button>
               ) : <div className="progress-photo-placeholder">A carregar foto final…</div>
             ) : (
               <div className="progress-photo-placeholder">
-                {completedCount < 30
-                  ? "Disponível após concluir os 30 dias"
-                  : firstPhoto
-                    ? "Aguardando foto final"
-                    : "Guarde primeiro a foto inicial"}
+                {!canUploadAfter
+                  ? completedCount < 30
+                    ? `Bloqueada até concluir os 30 treinos (${completedCount}/30)`
+                    : `Disponível ao completar 30 dias (${elapsedDays}/30)`
+                  : "Pronta para receber a foto final"}
               </div>
             )}
-            <small>{completedCount >= 30 && afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small>
+            <small>{afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small>
+            <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "after")}>
+              <label className="file-drop">
+                <span>{afterPhoto ? "Selecionar outra foto final" : "Selecionar foto final"}</span>
+                <small>{canUploadAfter ? "JPG, PNG ou WebP · até 10 MB" : "Disponível depois dos 30 dias de treino"}</small>
+                <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" disabled={!canUploadAfter} />
+              </label>
+              <label className="checkbox"><input type="checkbox" required disabled={!canUploadAfter} />Autorizo guardar esta foto privada.</label>
+              <button className="primary" disabled={busy || !canUploadAfter}>{afterPhoto ? "Atualizar foto final" : "Guardar foto final"}</button>
+            </form>
           </article>
         </div>
-        {photoStage && (
-          <form className="panel-form progress-photo-upload" onSubmit={async (event) => {
-            event.preventDefault();
-            if (!photoStage) return;
-            const element = event.currentTarget;
-            const fields = new FormData(element);
-            let path;
-            try {
-              path = await upload("progress-photos", fields.get("photo"), userId);
-              const note = photoStage === "before" ? "Foto inicial · Dia 0" : "Foto final · Dia 30";
-              const ok = await mutate("progress_photos", { user_id: userId, path, note });
-              if (ok) { element.reset(); await refresh?.(); }
-              else await supabase.storage.from("progress-photos").remove([path]);
-            } catch (error) { setError(error.message); }
-          }}>
-            <label className="file-drop">
-              <span>{photoStage === "before" ? "Escolher foto inicial" : "Escolher foto final do Dia 30"}</span>
-              <small>JPG, PNG ou WebP · até 10 MB</small>
-              <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" />
-            </label>
-            <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada para acompanhar meu progresso.</label>
-            <button className="primary" disabled={busy}>
-              {photoStage === "before" ? "Guardar foto inicial" : "Guardar foto final"}
-            </button>
-          </form>
-        )}
       </section>
       {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label="Fechar foto">×</button><img src={photo} alt="Fotografia de progresso ampliada" /></div>}
     </>
@@ -2545,9 +2397,6 @@ export function Nutrition({ plan, whatsapp }) {
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
   const [day, setDay] = useState(Number(profile.nutrition_day) || 1),
-    [intensity, setIntensity] = useState(
-      profile.training_intensity || "moderate",
-    ),
     [shoppingDays, setShoppingDays] = useState(30),
     [shoppingOpen, setShoppingOpen] = useState(false),
     [nutritionView, setNutritionView] = useState("plan"),
@@ -2561,6 +2410,7 @@ export function Nutrition({ plan, whatsapp }) {
       }
     }),
     [replaced, setReplaced] = useState({});
+  const intensity = profile.training_intensity || "moderate";
   const shoppingStorageKey = "jl-shopping-" + (userId || profile.id || "guest");
   const [shoppingState, setShoppingState] = useState({ key: null, items: {} });
   const shoppingChecked = shoppingState.key === shoppingStorageKey ? shoppingState.items : {};
@@ -2768,20 +2618,6 @@ export function Nutrition({ plan, whatsapp }) {
         <strong>{n.meals.length ? Math.round((completedMeals / n.meals.length) * 100) : 0}%</strong>
         <div className="meal-progress-track"><i style={{ width: `${n.meals.length ? (completedMeals / n.meals.length) * 100 : 0}%` }} /></div>
       </section>
-      <div className="nutrition-controls">
-        <label>
-          Intensidade do treino
-          <select
-            value={intensity}
-            onChange={(e) => setIntensity(e.target.value)}
-          >
-            <option value="easy">Fácil</option>
-            <option value="moderate">Médio</option>
-            <option value="hard">Difícil</option>
-          </select>
-        </label>
-
-      </div>
       <section className="training-schedule-card"><div><span className="eyebrow">HORÁRIO PERSONALIZADO</span><b>Treino previsto às {n.training || profile.training_time || "18:00"}</b><p>O pré-treino aparece cerca de 75 minutos antes e o pós-treino cerca de 75 minutos depois. Este horário vem do seu cadastro e pode ser alterado no Perfil.</p></div><button type="button" className="outline" onClick={() => { location.hash = "perfil"; }}>Alterar horário</button></section>
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {

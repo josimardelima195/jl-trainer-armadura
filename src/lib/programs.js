@@ -264,6 +264,7 @@ const modalitySchedules = {
   calistenia: ["chest_triceps", "back_biceps", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "recovery"],
   futsal: ["cardio_core", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "legs_glutes", "recovery"],
   karate: ["full_body", "cardio_core", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "recovery"],
+  natacao: ["back_biceps", "shoulders_mobility", "legs_glutes", "cardio_core", "full_body", "back_biceps", "recovery"],
 };
 const runningDays = new Set([1, 4, 8, 11, 15, 18, 22, 25, 29]);
 const recoveryWords = [
@@ -315,23 +316,99 @@ export function ageFromProfile(profile = {}) {
   return Number(profile.age) || 30;
 }
 
+export function isTimedExercise(exercise = {}) {
+  const name = clean(exercise?.name);
+  const category = clean(exercise?.category);
+  const bodyParts = (exercise?.body_parts || exercise?.bodyParts || []).map(clean);
+  const muscles = (exercise?.primary_muscles || exercise?.targetMuscles || exercise?.target_muscles || []).map(clean);
+  const equipment = clean(exercise?.equipment);
+  const reps = clean(exercise?.reps);
+
+  if (Number(exercise?.duration_seconds || exercise?.work_seconds || exercise?.duration_minutes) > 0) return true;
+  if (bodyParts.includes("cardio") || category === "cardio" || muscles.includes("cardiovascular system")) return true;
+  if (/\b\d+\s*(?:m|metros)\b/.test(reps)) return false;
+
+  const continuousMovement = /\b(?:stationary bike|stationary bicycle|exercise bike|hands bike|bike|bicicleta ergonometrica|bicicleta estacionaria|cycling|cycle cross trainer|elliptical|stepmill|treadmill|esteira|running|run|jog|corrida|correr|jump rope|jack jump|star jump|jumping jacks?|polichinelos?|pular corda|high knees|mountain climbers?|bear crawl|burpees?|skater hops|battling ropes|march in place|marcha no lugar|caminhada|walking|sprints?|wind sprints?|farmers walk)\b/.test(name);
+  if (continuousMovement) return true;
+
+  if (/stationary bike|elliptical machine|stepmill machine|treadmill|upper body ergometer/.test(equipment)) return true;
+
+  const staticHold = /\b(?:plank|prancha|hollow hold|wall sit|l[- ]?sit|dead hang|isometric|hold|frog stand|planche|front lever)\b/.test(name);
+  const dynamicVariation = /\b(?:tap|shoulder tap|hip abduction|push[- ]?up|rear fly|crunch|jackknife)\b/.test(name);
+  if (staticHold && !dynamicVariation) return true;
+
+  return /\d+\s*(?:[-–]\s*\d+\s*)?(?:s|secs?|seconds?|seg(?:undo|undos)?|min|mins?|minutes?|minutos?)\b/.test(reps);
+}
+
+function timeRangeFromPrescription(value) {
+  const text = clean(value).replace(/,/g, ".");
+  const range = text.match(/(\d+)\s*(?:-|–|a)\s*(\d+)\s*(s|secs?|seconds?|seg(?:undo|undos)?|min|mins?|minutes?|minutos?)(?:\b|$)/);
+  if (range) return { min: Number(range[1]), max: Number(range[2]), unit: range[3] };
+  const single = text.match(/(\d+)\s*(s|secs?|seconds?|seg(?:undo|undos)?|min|mins?|minutes?|minutos?)(?:\b|$)/);
+  if (single) return { min: Number(single[1]), max: Number(single[1]), unit: single[2] };
+  return null;
+}
+
+export function exerciseDurationSeconds(exercise = {}, profile = {}, intensity = "moderate") {
+  const age = ageFromProfile(profile);
+  const level = clean(profile.training_level || "beginner");
+  const name = clean(exercise?.name);
+  const explicitSeconds = Number(exercise?.duration_seconds || exercise?.work_seconds);
+  const explicitMinutes = Number(exercise?.duration_minutes);
+  if (explicitSeconds > 0) return explicitSeconds;
+  if (explicitMinutes > 0) return Math.round(explicitMinutes * 60);
+  const isHold = /\b(?:plank|prancha|hollow hold|wall sit|l[- ]?sit|dead hang|isometric|hold|frog stand|planche|front lever)\b/.test(name);
+  const prescribed = timeRangeFromPrescription(exercise?.reps);
+  if (prescribed) {
+    const unit = /min/.test(prescribed.unit) ? 60 : 1;
+    const beginnerOrOlder = level.includes("beginner") || level.includes("iniciante") || age >= 65;
+    const advanced = level.includes("advanced") || level.includes("avancado");
+    const chosen = prescribed.min === prescribed.max
+      ? prescribed.min
+      : beginnerOrOlder || intensity === "easy"
+        ? prescribed.min
+        : advanced && intensity === "hard" && age < 50
+          ? prescribed.max
+          : Math.round((prescribed.min + prescribed.max) / 2);
+    return Math.max(10, chosen * unit);
+  }
+
+  if (isHold) {
+    const base = intensity === "hard" ? 40 : intensity === "easy" ? 20 : 30;
+    return age >= 65 || level.includes("beginner") || level.includes("iniciante")
+      ? Math.min(base, age >= 65 ? 15 : 20)
+      : base;
+  }
+
+  const highImpact = /\b(?:jump rope|jack jump|semi squat jump|scissor jumps?|astride jumps?|star jump|jumping jacks?|polichinelos?|pular corda|high knees|mountain climbers?|bear crawl|burpees?|skater hops|battling ropes|ski step|sprints?|wind sprints?)\b/.test(name);
+  let minutes = highImpact
+    ? intensity === "hard" ? 3 : intensity === "easy" ? 1 : 2
+    : intensity === "hard" ? 10 : intensity === "easy" ? 5 : 8;
+  if (level.includes("beginner") || level.includes("iniciante")) minutes = Math.min(minutes, highImpact ? 1 : 6);
+  if (age >= 50) minutes = Math.min(minutes, highImpact ? 2 : 8);
+  if (age >= 65) minutes = Math.min(minutes, highImpact ? 1 : 5);
+  return minutes * 60;
+}
+
 export function modalityKeyFor(value) {
-  const text = clean(
-    typeof value === "object"
-      ? `${value?.modality || ""} ${value?.goal || ""}`
-      : value,
-  );
-  if (text.includes("emag")) return "emagrecimento";
-  if (text.includes("defini") || text.includes("cut")) return "definicao";
-  if (text.includes("bulking")) return "bulking";
-  if (text.includes("muscul")) return "musculacao";
-  if (text.includes("massa")) return "massa";
-  if (text.includes("casa")) return "casa";
-  if (text.includes("calisten")) return "calistenia";
-  if (text.includes("futsal")) return "futsal";
-  if (text.includes("karat")) return "karate";
-  if (text.includes("nata")) return "natacao";
-  return "condicionamento";
+  const modalityText = clean(typeof value === "object" ? value?.modality || "" : value);
+  const goalText = clean(typeof value === "object" ? value?.goal || "" : "");
+  const detect = (text) => {
+    if (text.includes("calisten")) return "calistenia";
+    if (text.includes("futsal")) return "futsal";
+    if (text.includes("karat")) return "karate";
+    if (text.includes("nata")) return "natacao";
+    if (text.includes("emag")) return "emagrecimento";
+    if (text.includes("defini") || text.includes("cut")) return "definicao";
+    if (text.includes("bulking")) return "bulking";
+    if (text.includes("muscul")) return "musculacao";
+    if (text.includes("massa")) return "massa";
+    if (text.includes("casa")) return "casa";
+    return "";
+  };
+  const modalityKey = detect(modalityText);
+  if (["calistenia", "futsal", "karate", "natacao"].includes(modalityKey)) return modalityKey;
+  return detect(goalText) || modalityKey || detect(modalityText + " " + goalText) || "condicionamento";
 }
 
 function textFor(e) {
@@ -567,24 +644,98 @@ const calisthenicsBlocks = [
  ]}
 ];
 export function buildCalisthenics30DayPlan(profile = {}) {
- const age=ageFromProfile(profile), level=profile.training_level||"beginner";
- const beginner=level==="beginner"||level==="iniciante", senior=age>=60;
- const daysPerWeek=Math.min(6,Math.max(2,Number(profile.training_days_count)||3));
- return Array.from({length:30},(_,index)=>{
-  const day=index+1, week=Math.min(3,Math.floor((day-1)/8));
-  const rest=day%7===0 || (daysPerWeek<=3 && [2,4,6].includes((day-1)%7));
-  const block=calisthenicsBlocks[week], sets=senior||beginner?2:3;
-  return {
-   day,title:"Dia "+day+" · "+(rest?"Recuperação":block.title),
-   focus:rest?"Mobilidade e recuperação":block.focus,focus_key:rest?"recovery":"full_body",
-   level,intensity:senior||beginner?"easy":"moderate",rest,equipment_mode:"bodyweight",
-   sessionType:"sets",sessionLabel:rest?"Recuperação ativa":"Progressão de calistenia",
-   progressionNote:week===0?"Aprenda a técnica e encontre uma variante controlada.":week===1?"Aumente repetições apenas se mantiver a técnica.":week===2?"Consolide estabilidade escapular, punhos e core.":"Reduza o volume e revise a qualidade do movimento.",
-   skillNote:"Planche é uma habilidade avançada. Este ciclo prepara punhos, ombros, escápulas e core; não garante planche em 30 dias.",
-   exercises:rest?[{id:"cal-rest-"+day,name:"Caminhada leve e mobilidade",category:"Recuperação",equipment:"Sem equipamento",sets:1,reps:"10–20 min",rest_seconds:0,description:"Ritmo confortável e mobilidade sem dor.",image_path:null}]:
-    block.items.map((item,i)=>({id:"cal-"+day+"-"+i,name:item[0],category:"Calistenia",equipment:"Peso corporal / barra baixa / paralelas estáveis",sets:sets,reps:item[1],rest_seconds:item[2],description:item[3],image_path:null,day_number:day,sort_order:i}))
-  };
- });
+  const age = ageFromProfile(profile);
+  const level = profile.training_level || "beginner";
+  const beginner = level === "beginner" || level === "iniciante";
+  const senior = age >= 60;
+  const daysPerWeek = Math.min(6, Math.max(2, Number(profile.training_days_count) || 3));
+  const intensity = profile.training_intensity || (senior || beginner ? "easy" : "moderate");
+  const baseSets = senior || beginner
+    ? 2
+    : intensity === "hard"
+      ? 4
+      : intensity === "easy"
+        ? 2
+        : 3;
+
+  return Array.from({ length: 30 }, (_, index) => {
+    const day = index + 1;
+    const week = Math.min(3, Math.floor((day - 1) / 8));
+    const rest = day % 7 === 0 || (daysPerWeek <= 3 && [2, 4, 6].includes((day - 1) % 7));
+    const block = calisthenicsBlocks[week];
+
+    const rawExercises = rest
+      ? [{
+          id: "cal-rest-" + day,
+          name: "Caminhada leve e mobilidade",
+          category: "Recuperação",
+          equipment: "Sem equipamento",
+          sets: 1,
+          reps: "10–20 min",
+          rest_seconds: 0,
+          description: "Ritmo confortável e mobilidade sem dor.",
+          image_path: null,
+        }]
+      : block.items.map((item, itemIndex) => {
+          const prescriptionParts = String(item[1] || "").split(/×|x/i);
+          const setText = prescriptionParts[0] || "";
+          const reps = prescriptionParts.slice(1).join(" × ").trim() || item[1];
+          const setMatch = setText.match(/(\d+)\s*(?:[-–]\s*(\d+))?/);
+          const plannedSets = /[-–]/.test(setText)
+            ? Math.min(baseSets, Number(setMatch?.[2]) || baseSets)
+            : Number(setMatch?.[1]) || baseSets;
+          return {
+            id: "cal-" + day + "-" + itemIndex,
+            name: item[0],
+            category: "Calistenia",
+            equipment: "Peso corporal / barra baixa / paralelas estáveis",
+            sets: senior ? Math.min(2, plannedSets) : plannedSets,
+            reps,
+            rest_seconds: item[2],
+            description: item[3],
+            image_path: null,
+            day_number: day,
+            sort_order: itemIndex,
+          };
+        });
+
+    const exercises = rawExercises.map((exercise) => {
+      const timed = isTimedExercise(exercise);
+      const durationSeconds = timed
+        ? exerciseDurationSeconds(exercise, profile, intensity)
+        : null;
+      return {
+        ...exercise,
+        sets: timed ? 1 : exercise.sets,
+        reps: timed ? null : exercise.reps,
+        duration_seconds: durationSeconds,
+        rest_seconds: timed ? 0 : exercise.rest_seconds,
+      };
+    });
+    const timedCount = exercises.filter((exercise) => isTimedExercise(exercise)).length;
+
+    return {
+      day,
+      title: "Dia " + day + " · " + (rest ? "Recuperação" : block.title),
+      focus: rest ? "Mobilidade e recuperação" : block.focus,
+      focus_key: rest ? "recovery" : "full_body",
+      level,
+      intensity,
+      rest,
+      equipment_mode: "bodyweight",
+      sessionType: timedCount === 0 ? "sets" : timedCount === exercises.length ? "timed" : "mixed",
+      sessionLabel: rest ? "Recuperação ativa por tempo" : "Progressão de calistenia",
+      progressionNote: week === 0
+        ? "Aprenda a técnica e encontre uma variante controlada."
+        : week === 1
+          ? "Aumente repetições apenas se mantiver a técnica."
+          : week === 2
+            ? "Consolide estabilidade escapular, punhos e core."
+            : "Reduza o volume e revise a qualidade do movimento.",
+      skillNote: "Planche é uma habilidade avançada. Este ciclo prepara punhos, ombros, escápulas e core; não garante planche em 30 dias.",
+      exercises,
+    };
+  });
 }
 
 export function focusForDay(day, goal = "condicionamento") {
@@ -609,19 +760,20 @@ export function build30DayPlan(
   const ageFactor = ageForDose >= 65 ? 0.6 : ageForDose >= 50 ? 0.8 : 1;
   const requestedCount = Math.max(2, Math.round((counts[intensity] || counts.moderate) * experienceFactor * ageFactor));
   const modality = modalityKeyFor(goal);
-  if (modality === "calistenia") return buildCalisthenics30DayPlan({ ...profile, training_level: level });
+  if (modality === "calistenia") return buildCalisthenics30DayPlan({ ...profile, training_level: level, training_intensity: intensity });
+
   const source = uniqueExercises(exercises).filter(
-    (e) => (e?.image_path || e?.gifUrl) && suitableForProfile(e, profile),
+    (exercise) => (exercise?.image_path || exercise?.gifUrl) && suitableForProfile(exercise, profile),
   );
   const filtered = source.filter(
-    (e) =>
-      requestedMode === "all" || exerciseEquipmentMode(e) === requestedMode,
+    (exercise) => requestedMode === "all" || exerciseEquipmentMode(exercise) === requestedMode,
   );
+
   return Array.from({ length: 30 }, (_, index) => {
-    const day = index + 1,
-      focus = focusForDay(day, modality),
-      isRecovery = focus.key === "recovery";
-    const exact = filtered.filter((e) => exerciseMatchesFocus(e, focus.key));
+    const day = index + 1;
+    const focus = focusForDay(day, modality);
+    const isRecovery = focus.key === "recovery";
+    const exact = filtered.filter((exercise) => exerciseMatchesFocus(exercise, focus.key));
     const ranked = rankedForDay(exact, focus.key, modality, day, requestedMode);
     const cardioFirst = focus.key === "cardio_core";
     const selected = rotatePick(
@@ -633,12 +785,62 @@ export function build30DayPlan(
           : requestedCount,
       day,
     );
+
     const isRunDay = modality === "emagrecimento" && runningDays.has(day);
     const age = ageFromProfile(profile);
     const youth = age < 18;
-    const workSeconds = youth ? 20 : age >= 65 ? 25 : intensity === "hard" ? 40 : intensity === "easy" ? 20 : 30;
-    const restSeconds = youth ? 60 : age >= 65 ? 60 : intensity === "hard" ? 20 : 30;
-    const timed = cardioFirst || isRecovery;
+    const defaultSets = youth || age >= 65
+      ? 2
+      : intensity === "hard"
+        ? 4
+        : intensity === "easy"
+          ? 2
+          : modality === "natacao"
+            ? 4
+            : 3;
+    const defaultReps = modality === "karate"
+      ? "8–12 por lado"
+      : modality === "natacao"
+        ? "25 m"
+        : youth
+          ? "8–12"
+          : age >= 65
+            ? "8–10"
+            : intensity === "hard"
+              ? "10–15"
+              : intensity === "easy"
+                ? "8–10"
+                : "8–12";
+
+    const plannedExercises = selected.map((exercise, order) => {
+      const timed = isTimedExercise(exercise);
+      const durationSeconds = timed
+        ? exerciseDurationSeconds(exercise, profile, intensity)
+        : null;
+      const isDefaultExerciseDbDose = exercise.source === "ExerciseDB gratuito" || !exercise.reps || exercise.reps === "8–12";
+      const reps = timed
+        ? null
+        : isDefaultExerciseDbDose
+          ? defaultReps
+          : exercise.reps;
+
+      return {
+        ...exercise,
+        sets: timed ? 1 : defaultSets,
+        reps,
+        duration_seconds: durationSeconds,
+        rest_seconds: timed ? 0 : exercise.rest_seconds || 60,
+        day_number: day,
+        sort_order: order,
+      };
+    });
+    const timedCount = plannedExercises.filter((exercise) => isTimedExercise(exercise)).length;
+    const sessionType = timedCount === 0
+      ? "sets"
+      : timedCount === plannedExercises.length
+        ? "timed"
+        : "mixed";
+
     return {
       day,
       title: `Dia ${day} · ${focus.label}`,
@@ -650,42 +852,15 @@ export function build30DayPlan(
       rest: isRecovery,
       equipment_mode: requestedMode,
       isRunDay,
-      sessionType: timed ? "interval" : "sets",
-      interval: {
-        workSeconds,
-        restSeconds: isRecovery ? age < 18 || age >= 65 ? 60 : 20 : restSeconds,
-        rounds: youth || age >= 65 ? 2 : intensity === "hard" ? 4 : 3,
-      },
-      sessionLabel: isRunDay
-        ? "Cardio guiado por tempo"
-        : timed
-          ? "Circuito guiado por tempo"
-          : "Treino específico da modalidade",
-      exercises: selected.map((e, order) => ({
-        ...e,
-        sets: youth || age >= 65
-          ? 2
-          : intensity === "hard"
-            ? 4
-            : intensity === "easy"
-              ? 2
-              : 3,
-        reps: timed
-          ? `${workSeconds} s`
-          : youth
-            ? "8–12"
-            : age >= 65
-              ? "8–10"
-              : intensity === "hard"
-                ? "10–15"
-                : intensity === "easy"
-                  ? "8–10"
-                  : "8–12",
-        work_seconds: timed ? workSeconds : null,
-        rest_seconds: timed ? restSeconds : e.rest_seconds || 60,
-        day_number: day,
-        sort_order: order,
-      })),
+      sessionType,
+      sessionLabel: isRunDay || (timedCount > 0 && timedCount === plannedExercises.length)
+        ? "Treino contínuo por tempo"
+        : timedCount > 0
+          ? "Treino misto: tempo e repetições"
+          : isRecovery
+            ? "Recuperação ativa"
+            : "Treino específico da modalidade",
+      exercises: plannedExercises,
     };
   });
 }
