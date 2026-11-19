@@ -16,6 +16,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "./lib/supabase";
+import { upload } from "./lib/storage";
 import { useStore } from "./lib/store";
 import { activePlan, stats, modalities as modalityCatalog } from "./lib/model";
 import { Title, Stat, Empty, LeoMascot } from "./components/UI";
@@ -29,7 +30,7 @@ import {
   Challenges,
 } from "./components/Pages";
 import Admin from "./components/Admin";
-import { useLanguage, uiText } from "./lib/i18n";
+import { useLanguage, uiText, onboardingText } from "./lib/i18n";
 import { foodLibrary, nutritionPlan } from "./lib/nutrition";
 function WelcomeTutorial({ onClose, go }) {
   const [step, setStep] = useState(0);
@@ -101,10 +102,14 @@ function WelcomeTutorial({ onClose, go }) {
     </div>
   );
 }
-function NutritionOnboarding({ profile, userId, mutate }) {
+function NutritionOnboarding({ profile, userId, mutate, refresh }) {
+  const [language] = useLanguage();
+  const copy = onboardingText[language] || onboardingText.pt;
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [bodyPhoto, setBodyPhoto] = useState(null);
   const [form, setForm] = useState({
     birth_date: profile.birth_date || "",
     sex: profile.sex || "",
@@ -123,6 +128,7 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     allergies: profile.allergies || "",
     foods_to_avoid: profile.foods_to_avoid || profile.food_dislikes || "",
     food_preferences: profile.food_preferences || "",
+    cuisine_preference: profile.cuisine_preference || "mixed",
   });
   const [foods, setFoods] = useState(() => String(profile.available_foods || "").split(",").map((x) => x.trim()).filter(Boolean));
   const [supplements, setSupplements] = useState(() => Array.isArray(profile.supplements) ? profile.supplements : []);
@@ -150,11 +156,12 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     }
   }, [age, form.training_intensity]);
   const steps = [
-    ["basics", "Seus dados básicos", "Precisamos deles para calcular estimativas ajustadas à sua idade e medidas."],
-    ["goal", "O que quer alcançar?", "Escolha seu objetivo e a modalidade que prefere praticar."],
-    ["routine", "Sua rotina de treino", "Vamos adaptar o plano ao lugar, aos dias e ao tempo que você tem."],
-    ["nutrition", "Sua alimentação", "Conte-nos sobre alergias e orçamento. Estes campos podem ficar em branco."],
-    ["foods", "Alimentos do seu dia a dia", "Opcional: marque o que costuma encontrar para personalizar as refeições."]
+    ["basics", copy.basics, copy.basicsDesc],
+    ["goal", copy.goal, copy.goalDesc],
+    ["routine", copy.routine, copy.routineDesc],
+    ["nutrition", copy.nutrition, copy.nutritionDesc],
+    ["foods", copy.foods, copy.foodsDesc],
+    ["photos", copy.photos, copy.photosDesc],
   ];
   const [currentKey, title, description] = steps[step];
   const update = (key, value) => {
@@ -167,7 +174,6 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     "Frango grelhado", "Carne magra", "Couve e tomate", "Papaia", "Laranja",
     "Manga", "Abacate", "Amendoim", "Caril de amendoim"
   ].includes(food.name));
-  const supplementChoices = ["Creatina", "Whey protein", "Cafeína", "Pré-treino"];
   const defaultTrainingDays = (count) => ({
     2: ["Seg", "Qui"],
     3: ["Seg", "Qua", "Sex"],
@@ -177,14 +183,14 @@ function NutritionOnboarding({ profile, userId, mutate }) {
   })[count] || ["Seg", "Qua", "Sex"];
   function validate() {
     if (currentKey === "basics") {
-      if (!form.birth_date || age === null || age < 12 || age > 100) return "Informe uma data de nascimento válida.";
-      if (!Number(form.current_weight) || Number(form.current_weight) < 25 || Number(form.current_weight) > 300) return "Informe um peso entre 25 e 300 kg.";
-      if (!Number(form.height) || Number(form.height) < 120 || Number(form.height) > 230) return "Informe uma altura entre 120 e 230 cm.";
+      if (!form.birth_date || age === null || age < 12 || age > 100) return copy.ageError;
+      if (!Number(form.current_weight) || Number(form.current_weight) < 25 || Number(form.current_weight) > 300) return copy.weightError;
+      if (!Number(form.height) || Number(form.height) < 120 || Number(form.height) > 230) return copy.heightError;
     }
-    if (currentKey === "goal" && (!form.goal || !form.modality)) return "Escolha um objetivo e uma modalidade.";
+    if (currentKey === "goal" && (!form.goal || !form.modality)) return copy.goalError;
     if (currentKey === "routine") {
-      if (Number(form.training_days_count) < 2 || Number(form.training_days_count) > 6) return "Escolha entre 2 e 6 dias por semana.";
-      if (Number(form.training_duration) < 10 || Number(form.training_duration) > 180) return "Escolha uma duração entre 10 e 180 minutos.";
+      if (Number(form.training_days_count) < 2 || Number(form.training_days_count) > 6) return copy.daysError;
+      if (Number(form.training_duration) < 10 || Number(form.training_duration) > 180) return copy.durationError;
     }
     return "";
   }
@@ -194,116 +200,186 @@ function NutritionOnboarding({ profile, userId, mutate }) {
     setSaving(true);
     setError("");
     const count = Number(form.training_days_count) || 3;
-    const payload = {
-      birth_date: form.birth_date,
-      age,
-      sex: form.sex || null,
-      current_weight: Number(form.current_weight),
-      initial_weight: Number(profile.initial_weight) || Number(form.current_weight),
-      height: Number(form.height),
-      goal: form.goal,
-      modality: form.modality,
-      equipment_preference: form.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
-      training_level: form.training_level,
-      training_days_count: count,
-      training_frequency: count,
-      training_days: Array.isArray(profile.training_days) && profile.training_days.length === count ? profile.training_days : defaultTrainingDays(count),
-      training_time: form.training_time || "18:00",
-      training_duration: Number(form.training_duration) || 45,
-      daily_activity: form.daily_activity,
-      training_intensity: age !== null && age < 18 ? "moderate" : form.training_intensity,
-      food_budget: form.food_budget,
-      allergies: form.allergies.trim(),
-      foods_to_avoid: form.foods_to_avoid.trim(),
-      food_preferences: form.food_preferences.trim(),
-      available_foods: foods.join(", "),
-      supplements,
-      household_size: Number(profile.household_size) || 1,
-      onboarding_completed: true,
-    };
-    const ok = await mutate("profiles", payload, userId);
-    setSaving(false);
-    if (!ok) setError("Não foi possível guardar os dados. Verifique a ligação e tente novamente.");
+    let avatarPath = profile.avatar_url || null;
+    let bodyPath = "";
+    const uploaded = [];
+    try {
+      if (profilePhoto) {
+        avatarPath = await upload("profile-photos", profilePhoto, userId);
+        uploaded.push(["profile-photos", avatarPath]);
+      }
+      if (bodyPhoto) {
+        bodyPath = await upload("progress-photos", bodyPhoto, userId);
+        uploaded.push(["progress-photos", bodyPath]);
+      }
+      const payload = {
+        birth_date: form.birth_date,
+        age,
+        sex: form.sex || null,
+        current_weight: Number(form.current_weight),
+        initial_weight: Number(profile.initial_weight) || Number(form.current_weight),
+        height: Number(form.height),
+        goal: form.goal,
+        modality: form.modality,
+        equipment_preference: form.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
+        training_level: form.training_level,
+        training_days_count: count,
+        training_frequency: count,
+        training_days: Array.isArray(profile.training_days) && profile.training_days.length === count ? profile.training_days : defaultTrainingDays(count),
+        training_time: form.training_time || "18:00",
+        training_duration: Number(form.training_duration) || 45,
+        daily_activity: form.daily_activity,
+        training_intensity: age !== null && age < 18 ? "moderate" : form.training_intensity,
+        food_budget: form.food_budget,
+        allergies: form.allergies.trim(),
+        foods_to_avoid: form.foods_to_avoid.trim(),
+        food_preferences: form.food_preferences.trim(),
+        cuisine_preference: form.cuisine_preference,
+        language,
+        available_foods: foods.join(", "),
+        supplements,
+        household_size: Number(profile.household_size) || 1,
+        onboarding_completed: true,
+        ...(profilePhoto ? { avatar_url: avatarPath } : {}),
+      };
+      const ok = await mutate("profiles", payload, userId);
+      if (!ok) {
+        for (const [bucket, path] of uploaded) await supabase?.storage.from(bucket).remove([path]).catch(() => {});
+        setError(copy.saveError);
+        setSaving(false);
+        return;
+      }
+      if (bodyPath) {
+        const photoSaved = await mutate("progress_photos", { user_id: userId, path: bodyPath, note: "Foto inicial · Dia 0" });
+        if (!photoSaved) {
+          await supabase?.storage.from("progress-photos").remove([bodyPath]).catch(() => {});
+        }
+      }
+      await refresh?.();
+    } catch (uploadError) {
+      for (const [bucket, path] of uploaded) await supabase?.storage.from(bucket).remove([path]).catch(() => {});
+      setError(uploadError?.message || copy.saveError);
+    } finally {
+      setSaving(false);
+    }
   }
   const goalOptions = [
-    ["emagrecimento", "Emagrecimento", "Redução gradual de peso e hábitos sustentáveis."],
-    ["bulking", "Ganho de massa", "Aumentar força e massa muscular gradualmente."],
-    ["definicao", "Cutting / definição", "Preservar força e reduzir gordura corporal."],
-    ["condicionamento", "Condicionamento", "Melhorar resistência, mobilidade e energia."],
-    ["manutencao", "Manutenção", "Manter consistência e melhorar a capacidade física."],
+    ["emagrecimento", copy.lose, copy.loseDesc],
+    ["bulking", copy.gain, copy.gainDesc],
+    ["definicao", copy.cut, copy.cutDesc],
+    ["condicionamento", copy.conditioning, copy.conditioningDesc],
+    ["manutencao", copy.maintenance, copy.maintenanceDesc],
   ];
-  const modalityOptions = ["Musculação", "Calistenia"];
+  const modalityOptions = [["Musculação", copy.bodybuilding], ["Calistenia", copy.calisthenics]];
+  const cuisineOptions = [
+    ["mozambican", copy.mozambican, copy.mozambicanDesc],
+    ["international", copy.international, copy.internationalDesc],
+    ["mixed", copy.mixed, copy.mixedDesc],
+  ];
+  const photoAccept = "image/jpeg,image/png,image/webp";
   return (
     <div className="nutrition-onboarding-backdrop">
       <section className="nutrition-onboarding onboarding-single-question">
         <div className="onboarding-top">
           <div>
-            <span className="eyebrow">PERSONALIZAÇÃO JL TRAINER</span>
-            <h2>Vamos preparar o seu plano</h2>
-            <p>Uma pergunta por vez. Pode voltar, alterar respostas e deixar os campos opcionais em branco.</p>
+            <span className="eyebrow">JL TRAINER · PERSONALIZAÇÃO</span>
+            <h2>{copy.header}</h2>
+            <p>{copy.intro}</p>
           </div>
           <div className="onboarding-leo"><LeoMascot size={82} /></div>
         </div>
-        <div className="onboarding-progress-copy"><span>Passo {step + 1} de {steps.length}</span><b>{Math.round(((step + 1) / steps.length) * 100)}%</b></div>
+        <div className="onboarding-progress-copy"><span>{copy.step} {step + 1} {copy.of} {steps.length}</span><b>{Math.round(((step + 1) / steps.length) * 100)}%</b></div>
         <div className="onboarding-progress-track"><span style={{ width: ((step + 1) / steps.length) * 100 + "%" }} /></div>
         <div className="onboarding-question">
           <h3>{title}</h3>
           <p>{description}</p>
           {currentKey === "basics" && (
             <div className="onboarding-field-stack">
-              <label className="onboarding-single-field">Data de nascimento<input type="date" max={new Date().toISOString().slice(0, 10)} value={form.birth_date} onChange={(e) => update("birth_date", e.target.value)} /></label>
+              <label className="onboarding-single-field">{copy.birth}<input type="date" max={new Date().toISOString().slice(0, 10)} value={form.birth_date} onChange={(e) => update("birth_date", e.target.value)} /></label>
               <div className="onboarding-choice-block">
-                <span>Sexo para estimativa energética <small>(opcional)</small></span>
-                <div className="onboarding-choice-grid onboarding-choice-grid-three">{[["", "Prefiro não informar"], ["feminino", "Feminino"], ["masculino", "Masculino"]].map(([value, label]) => <button type="button" key={value || "none"} className={form.sex === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("sex", value)}><strong>{label}</strong></button>)}</div>
+                <span>{copy.sex} <small>({copy.optional})</small></span>
+                <div className="onboarding-choice-grid onboarding-choice-grid-three">{[["", copy.preferNot], ["feminino", copy.female], ["masculino", copy.male]].map(([value, label]) => <button type="button" key={value || "none"} className={form.sex === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("sex", value)}><strong>{label}</strong></button>)}</div>
               </div>
               <div className="onboarding-field-pair">
-                <label className="onboarding-single-field">Peso (kg)<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="Ex.: 75" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} /></label>
-                <label className="onboarding-single-field">Altura (cm)<input type="number" min="120" max="230" step="1" inputMode="numeric" placeholder="Ex.: 175" value={form.height} onChange={(e) => update("height", e.target.value)} /></label>
+                <label className="onboarding-single-field">{copy.weight}<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="75" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} /></label>
+                <label className="onboarding-single-field">{copy.height}<input type="number" min="120" max="230" step="1" inputMode="numeric" placeholder="175" value={form.height} onChange={(e) => update("height", e.target.value)} /></label>
               </div>
-              {age !== null && <p className="onboarding-inline-note">Idade calculada automaticamente: <b>{age} anos</b></p>}
+              {age !== null && <p className="onboarding-inline-note">{copy.ageCalculated}: <b>{age}</b></p>}
             </div>
           )}
           {currentKey === "goal" && (
             <div className="onboarding-field-stack">
-              <div className="onboarding-choice-block"><span>Objetivo principal</span><div className="onboarding-choice-grid">{goalOptions.map(([value, label, detail]) => <button type="button" key={value} className={form.goal === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("goal", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div></div>
-              <div className="onboarding-choice-block"><span>Modalidade</span><div className="onboarding-choice-grid onboarding-modality-grid onboarding-choice-grid-three">{modalityOptions.map((value) => <button type="button" key={value} className={form.modality === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("modality", value)}><strong>{value}</strong></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>{copy.mainGoal}</span><div className="onboarding-choice-grid">{goalOptions.map(([value, label, detail]) => <button type="button" key={value} className={form.goal === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("goal", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>{copy.modality}</span><div className="onboarding-choice-grid onboarding-modality-grid onboarding-choice-grid-two">{modalityOptions.map(([value, label]) => <button type="button" key={value} className={form.modality === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("modality", value)}><strong>{label}</strong></button>)}</div></div>
             </div>
           )}
           {currentKey === "routine" && (
             <div className="onboarding-field-stack">
-              <div className="onboarding-choice-block"><span>Onde vai treinar?</span><div className="onboarding-choice-grid onboarding-location-grid onboarding-choice-grid-two"><button type="button" className={form.training_location === "ginasio" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "ginasio")}><strong>Gym</strong><small>Com equipamentos</small></button><button type="button" className={form.training_location === "casa" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "casa")}><strong>Em casa</strong><small>Com ou sem equipamento</small></button></div></div>
-              <div className="onboarding-choice-block"><span>Experiência</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["beginner", "Estou começando"], ["intermediate", "Já treino"], ["advanced", "Avançada"]].map(([value, label]) => <button type="button" key={value} className={form.training_level === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_level", value)}><strong>{label}</strong></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>{copy.where}</span><div className="onboarding-choice-grid onboarding-location-grid onboarding-choice-grid-two"><button type="button" className={form.training_location === "ginasio" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "ginasio")}><strong>{copy.gym}</strong><small>{copy.equipment}</small></button><button type="button" className={form.training_location === "casa" ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_location", "casa")}><strong>{copy.home}</strong><small>{copy.equipment}</small></button></div></div>
+              <div className="onboarding-choice-block"><span>{copy.experience}</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["beginner", copy.beginner], ["intermediate", copy.intermediate], ["advanced", copy.advanced]].map(([value, label]) => <button type="button" key={value} className={form.training_level === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_level", value)}><strong>{label}</strong></button>)}</div></div>
               <div className="onboarding-field-pair">
-                <label className="onboarding-single-field">Dias por semana<select value={form.training_days_count} onChange={(e) => update("training_days_count", Number(e.target.value))}><option value={2}>2 dias</option><option value={3}>3 dias</option><option value={4}>4 dias</option><option value={5}>5 dias</option><option value={6}>6 dias</option></select></label>
-                <label className="onboarding-single-field">Duração<input type="number" min="10" max="180" step="5" inputMode="numeric" value={form.training_duration} onChange={(e) => update("training_duration", e.target.value)} /></label>
+                <label className="onboarding-single-field">{copy.days}<select value={form.training_days_count} onChange={(e) => update("training_days_count", Number(e.target.value))}><option value={2}>2</option><option value={3}>3</option><option value={4}>4</option><option value={5}>5</option><option value={6}>6</option></select></label>
+                <label className="onboarding-single-field">{copy.duration}<input type="number" min="10" max="180" step="5" inputMode="numeric" value={form.training_duration} onChange={(e) => update("training_duration", e.target.value)} /></label>
               </div>
               <div className="onboarding-field-pair">
-                <label className="onboarding-single-field">Horário habitual<input type="time" value={form.training_time} onChange={(e) => update("training_time", e.target.value)} /></label>
-                <label className="onboarding-single-field">Atividade diária<select value={form.daily_activity} onChange={(e) => update("daily_activity", e.target.value)}><option value="sedentary">Pouco ativo</option><option value="light">Leve</option><option value="moderate">Moderada</option><option value="active">Muito ativo</option><option value="very_active">Extremamente ativo</option></select></label>
+                <label className="onboarding-single-field">{copy.time}<input type="time" value={form.training_time} onChange={(e) => update("training_time", e.target.value)} /></label>
+                <label className="onboarding-single-field">{copy.activity}<select value={form.daily_activity} onChange={(e) => update("daily_activity", e.target.value)}><option value="sedentary">{copy.sedentary}</option><option value="light">{copy.light}</option><option value="moderate">{copy.moderate}</option><option value="active">{copy.active}</option><option value="very_active">{copy.veryActive}</option></select></label>
               </div>
-              <div className="onboarding-choice-block"><span>Intensidade preferida</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["easy", "Leve"], ["moderate", "Moderada"], ["hard", "Alta"]].filter(([value]) => !(age !== null && age < 18 && value === "hard")).map(([value, label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>{copy.intensity}</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["easy", copy.easy], ["moderate", copy.moderate], ["hard", copy.hard]].filter(([value]) => !(age !== null && age < 18 && value === "hard")).map(([value, label]) => <button type="button" key={value} className={form.training_intensity === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("training_intensity", value)}><strong>{label}</strong></button>)}</div></div>
             </div>
           )}
           {currentKey === "nutrition" && (
             <div className="onboarding-field-stack">
-              <div className="onboarding-choice-block"><span>Orçamento alimentar</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["low", "Económico"], ["medium", "Moderado"], ["high", "Flexível"]].map(([value, label]) => <button type="button" key={value} className={form.food_budget === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("food_budget", value)}><strong>{label}</strong></button>)}</div></div>
-              <label className="onboarding-single-field">Alergias ou intolerâncias<textarea rows="2" placeholder="Ex.: lactose, amendoim; se não houver, deixe em branco." value={form.allergies} onChange={(e) => update("allergies", e.target.value)} /></label>
-              <label className="onboarding-single-field">Alimentos que prefere evitar <small>(opcional)</small><textarea rows="2" placeholder="Ex.: não como carne" value={form.foods_to_avoid} onChange={(e) => update("foods_to_avoid", e.target.value)} /></label>
+              <div className="onboarding-choice-block"><span>{copy.budget}</span><div className="onboarding-choice-grid onboarding-choice-grid-three">{[["low", copy.economical], ["medium", copy.moderate], ["high", copy.flexible]].map(([value, label]) => <button type="button" key={value} className={form.food_budget === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("food_budget", value)}><strong>{label}</strong></button>)}</div></div>
+              <label className="onboarding-single-field">{copy.allergies}<textarea rows="2" placeholder={copy.optional} value={form.allergies} onChange={(e) => update("allergies", e.target.value)} /></label>
+              <label className="onboarding-single-field">{copy.avoid} <small>({copy.optional})</small><textarea rows="2" placeholder={copy.optional} value={form.foods_to_avoid} onChange={(e) => update("foods_to_avoid", e.target.value)} /></label>
+              <div className="onboarding-choice-block"><span>{copy.cuisine}</span><div className="onboarding-choice-grid onboarding-cuisine-grid">{cuisineOptions.map(([value, label, detail]) => <button type="button" key={value} className={form.cuisine_preference === value ? "onboarding-choice selected" : "onboarding-choice"} onClick={() => update("cuisine_preference", value)}><strong>{label}</strong><small>{detail}</small></button>)}</div></div>
             </div>
           )}
           {currentKey === "foods" && (
             <div className="onboarding-field-stack">
-              <div className="onboarding-choice-block"><span>O que costuma ter em casa? <small>(opcional)</small></span><div className="food-check-grid onboarding-food-grid">{foodChoices.map((food) => <button type="button" key={food.id} className={foods.includes(food.name) ? "food-check selected" : "food-check"} onClick={() => setFoods((current) => current.includes(food.name) ? current.filter((item) => item !== food.name) : [...current, food.name])}><span className="food-choice-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span><b>{food.name}</b></button>)}</div></div>
-              <label className="onboarding-single-field">Pratos ou preferências <small>(opcional)</small><textarea rows="2" placeholder="Ex.: matapa, caril de amendoim..." value={form.food_preferences} onChange={(e) => update("food_preferences", e.target.value)} /></label>
-              <p className="onboarding-inline-note">Pode deixar tudo em branco. O plano recomendado continua disponível e pode ser alterado no Perfil.</p>
+              <div className="onboarding-choice-block"><span>{copy.available} <small>({copy.optional})</small></span><div className="food-check-grid onboarding-food-grid">{foodChoices.map((food) => <button type="button" key={food.id} className={foods.includes(food.name) ? "food-check selected" : "food-check"} onClick={() => setFoods((current) => current.includes(food.name) ? current.filter((item) => item !== food.name) : [...current, food.name])}><span className="food-choice-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span><b>{food.name}</b></button>)}</div></div>
+              <label className="onboarding-single-field">{copy.preferences}<textarea rows="2" placeholder={copy.optional} value={form.food_preferences} onChange={(e) => update("food_preferences", e.target.value)} /></label>
+              <p className="onboarding-inline-note">{copy.blank}</p>
+            </div>
+          )}
+          {currentKey === "photos" && (
+            <div className="onboarding-field-stack onboarding-photo-stack">
+              <div className="onboarding-photo-grid">
+                <label className="onboarding-photo-card">
+                  <span className="onboarding-photo-icon"><UserRound size={26} /></span>
+                  <strong>{copy.profilePhoto}</strong>
+                  <small>{profilePhoto ? profilePhoto.name : copy.optional}</small>
+                  <span className="outline small">{copy.addPhoto}</span>
+                  <input type="file" accept={photoAccept} onChange={(event) => setProfilePhoto(event.target.files?.[0] || null)} />
+                </label>
+                <label className="onboarding-photo-card">
+                  <span className="onboarding-photo-icon"><Dumbbell size={26} /></span>
+                  <strong>{copy.bodyPhoto}</strong>
+                  <small>{bodyPhoto ? bodyPhoto.name : copy.optional}</small>
+                  <span className="outline small">{copy.upload}</span>
+                  <input type="file" accept={photoAccept} onChange={(event) => setBodyPhoto(event.target.files?.[0] || null)} />
+                </label>
+                <div className="onboarding-photo-card locked">
+                  <span className="onboarding-photo-icon"><Trophy size={26} /></span>
+                  <strong>{copy.day30}</strong>
+                  <small>{copy.locked}</small>
+                  <span className="locked-pill">{copy.locked}</span>
+                </div>
+              </div>
+              <p className="onboarding-inline-note">{copy.photosProgress}</p>
+              <p className="onboarding-inline-note">{copy.photoPrivacy}</p>
+              <p className="onboarding-inline-note">{copy.skip}: {copy.optional}</p>
             </div>
           )}
         </div>
+        {error && <p className="error" role="alert">{error}</p>}
         <div className="onboarding-actions">
-          <button className="text-btn" type="button" disabled={saving || step === 0} onClick={() => { setError(""); setStep((value) => value - 1); }}>Voltar</button>
-          {step < steps.length - 1 ? <button className="primary" type="button" onClick={() => { const message = validate(); if (message) setError(message); else { setError(""); setStep((value) => value + 1); } }}>Continuar <ChevronRight size={16} /></button> : <button className="primary" type="button" disabled={saving} onClick={finish}>{saving ? "A guardar…" : "Criar o meu plano"}</button>}
+          <button className="text-btn" type="button" disabled={saving || step === 0} onClick={() => { setError(""); setStep((value) => value - 1); }}>{copy.back}</button>
+          {step < steps.length - 1 ? <button className="primary" type="button" onClick={() => { const message = validate(); if (message) setError(message); else { setError(""); setStep((value) => value + 1); } }}>{copy.continue} <ChevronRight size={16} /></button> : <button className="primary" type="button" disabled={saving} onClick={finish}>{saving ? copy.saving : copy.create}</button>}
+          {currentKey === "photos" && <button className="text-btn" type="button" disabled={saving} onClick={finish}>{copy.skip}</button>}
         </div>
-        <p className="onboarding-footnote">Os dados são usados para estimativas educativas. A idade é calculada pela data de nascimento; o peso pode ser atualizado automaticamente pelo registo de progresso.</p>
+        <p className="onboarding-footnote">{language === "pt" ? "Os dados são usados para estimativas educativas. A idade é calculada pela data de nascimento; o peso pode ser atualizado pelo registo de progresso." : language === "en" ? "Data is used for educational estimates. Age is calculated from date of birth; weight can be updated in Progress." : language === "fr" ? "Les données servent à des estimations éducatives. L’âge est calculé à partir de la date de naissance ; le poids peut être actualisé dans Progression." : language === "es" ? "Los datos se utilizan para estimaciones educativas. La edad se calcula a partir de la fecha de nacimiento; el peso puede actualizarse en Progreso." : language === "zh" ? "这些数据仅用于教育性估算。年龄根据出生日期计算，体重可在进度页面更新。" : "डेटा का उपयोग शैक्षिक अनुमान के लिए किया जाता है। उम्र जन्म तिथि से गणना होती है और वज़न प्रगति में बदला जा सकता है।"}</p>
       </section>
     </div>
   );
