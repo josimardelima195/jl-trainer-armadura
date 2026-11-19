@@ -1399,7 +1399,15 @@ export function Profile({ theme, onThemeChange }) {
             name="foods_to_avoid"
             defaultValue={profile.foods_to_avoid || profile.food_dislikes || ""}
           />
-          <label className="profile-wide-field">
+          <label>
+            Preferência de cozinha
+            <select name="cuisine_preference" defaultValue={profile.cuisine_preference || "mixed"}>
+              <option value="mozambican">Cozinha moçambicana</option>
+              <option value="international">Cozinha internacional</option>
+              <option value="mixed">Misturar as duas</option>
+            </select>
+          </label>
+                    <label className="profile-wide-field">
             Preferências e pratos locais
             <textarea
               name="food_preferences"
@@ -1440,11 +1448,13 @@ export function Profile({ theme, onThemeChange }) {
         <select
           aria-label="Idioma do aplicativo"
           value={language}
-          onChange={(event) => setLanguage(event.target.value)}
+          onChange={async (event) => {
+            const value = event.target.value;
+            setLanguage(value);
+            await mutate("profiles", { language: value }, userId);
+          }}
         >
-          <option value="pt">Português</option>
-          <option value="en">English</option>
-          <option value="fr">Français</option>
+          {languageOptions.map(([code, label]) => <option key={code} value={code}>{label}</option>)}
         </select>
       </section>
       <section className="theme-settings">
@@ -1495,6 +1505,19 @@ export function Profile({ theme, onThemeChange }) {
             </span>
             <b>Sprint Energy</b>
             <small>Grafite · lima elétrica</small>
+          </button>
+          <button
+            type="button"
+            className={theme === "blue" ? "selected" : ""}
+            onClick={() => onThemeChange?.("blue")}
+          >
+            <span className="theme-preview theme-preview-blue">
+              <i />
+              <i />
+              <i />
+            </span>
+            <b>Ocean Light</b>
+            <small>Branco · azul · violeta</small>
           </button>
         </div>
       </section>
