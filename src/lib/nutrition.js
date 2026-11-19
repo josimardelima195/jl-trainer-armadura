@@ -1231,12 +1231,12 @@ const labels = {
   manutencao: "Manutenção equilibrada",
 };
 const objectives = {
-  emagrecimento: { calorie: -300, portion: 0.88, protein: 1.8 },
-  definicao: { calorie: -250, portion: 0.9, protein: 2 },
-  bulking: { calorie: 300, portion: 1.15, protein: 1.8 },
-  musculacao: { calorie: 0, portion: 1, protein: 1.6 },
-  condicionamento: { calorie: 0, portion: 1, protein: 1.4 },
-  manutencao: { calorie: 0, portion: 1, protein: 1.4 },
+  emagrecimento: { calorieRate: -0.12, portion: 0.88, protein: 1.8 },
+  definicao: { calorieRate: -0.10, portion: 0.9, protein: 2 },
+  bulking: { calorieRate: 0.07, portion: 1.15, protein: 1.8 },
+  musculacao: { calorieRate: 0, portion: 1, protein: 1.6 },
+  condicionamento: { calorieRate: 0, portion: 1, protein: 1.4 },
+  manutencao: { calorieRate: 0, portion: 1, protein: 1.4 },
 };
 const modalAdjust = {
   bodybuilding: 150,
@@ -1435,9 +1435,9 @@ export function nutritionPlan(profile = {}) {
   const base =
     bmr * activityFactor(profile) +
     (modalAdjust[String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")] || 0);
+  const goalRate = age >= 65 ? Math.max(-0.10, objective.calorieRate || 0) : (objective.calorieRate || 0);
   const desiredCalories = Math.round(
-    base +
-      objective.calorie +
+    base * (1 + goalRate) +
       (profile.training_intensity === "hard"
         ? 120
         : profile.training_intensity === "easy"
