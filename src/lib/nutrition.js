@@ -1,6 +1,6 @@
 import { modalityKeyFor } from "./programs.js";
 import { workbookMealPlans } from "./workbookMeals.js";
-import { translateRecipeName, translateFoodName, translateIngredientString, translateMealLabel, translateRecipePreparation, translateRecipePurpose, translateRecipeAdjustment } from "./i18n.js";
+import { translateRecipeName, translateFoodName, translateIngredientString, translateMealLabel, translateRecipePreparation, translateRecipePurpose, translateRecipeAdjustment, translateUiText } from "./i18n.js";
 
 // Valores de referência aproximados por porção indicada. São estimativas educativas,
 // não prescrição clínica. Imagens só são usadas quando correspondem ao alimento.
@@ -1394,6 +1394,7 @@ function objectiveMenu(modality, day) {
   return base;
 }
 export function nutritionPlan(profile = {}) {
+  const language = ["pt","en","fr","es","zh","hi"].includes(profile.language) ? profile.language : "pt";
   const age = ageFrom(profile),
     isAdolescent = age !== null && age >= 12 && age < 18,
     modality = isAdolescent ? "manutencao" : nutritionGoalKeyFor(profile),
@@ -1407,8 +1408,7 @@ export function nutritionPlan(profile = {}) {
       return {
         incomplete: true,
         modalityLabel: labels[modality] || labels.condicionamento,
-        message:
-          "Complete idade/data de nascimento, peso e altura no Perfil para personalizar este plano.",
+        message: translateUiText("Complete idade/data de nascimento, peso e altura no Perfil para personalizar este plano.", language),
         meals: [],
         dayNumber: 1,
         calories: null,
@@ -1424,8 +1424,7 @@ export function nutritionPlan(profile = {}) {
     return {
       ...fallback,
       incomplete: true,
-      message:
-        "Mostramos um plano recomendado provisório. Complete os seus dados no Perfil para ajustar calorias, água e porções.",
+      message: translateUiText("Mostramos um plano recomendado provisório. Complete os seus dados no Perfil para ajustar calorias, água e porções.", language),
     };
   }
   const weight = Number(profile.current_weight),
@@ -1517,7 +1516,6 @@ export function nutritionPlan(profile = {}) {
     ? profile.cuisine_preference
     : "mixed";
   const selectedDay = adaptCuisineDay(day, cuisinePreference, modality, dayNumber);
-  const language = ["pt","en","fr","es","zh","hi"].includes(profile.language) ? profile.language : "pt";
   const rawMeals = selectedDay.map((row) => ({
     row,
     ingredients: parseRecipeIngredients(row.ingredients),
@@ -1574,7 +1572,7 @@ export function nutritionPlan(profile = {}) {
     estimatedMealCalories: age < 18 ? null : finalMeals.reduce((sum,meal)=>sum+meal.kcal,0),
     training,
     modalityLabel: labels[modality] || labels.condicionamento,
-    modalityNote:
+    modalityNote: translateUiText(
       ageNote ||
       calorieSafetyNote ||
       (cuisinePreference === "international"
@@ -1582,9 +1580,11 @@ export function nutritionPlan(profile = {}) {
         : cuisinePreference === "mozambican"
           ? "Plano com maior presença de pratos moçambicanos tradicionais, preservando opções locais."
           : "Plano misto com pratos moçambicanos e internacionais, ajustados ao objetivo e à atividade."),
+      language,
+    ),
     ageCategory: ageCategory(age),
-    ageNote: ageNote,
-    calorieSafetyNote,
+    ageNote: translateUiText(ageNote, language),
+    calorieSafetyNote: translateUiText(calorieSafetyNote, language),
     cuisinePreference,
     proteinTarget:
       age !== null && age < 18 ? null : Math.round(weight * (age >= 65 ? Math.min(1.6, Math.max(1.2, objective.protein)) : objective.protein)),
@@ -1592,10 +1592,12 @@ export function nutritionPlan(profile = {}) {
     fatTarget: age < 18 ? null : Math.round((calories * 0.3) / 9),
     fiberTarget: age < 18 ? null : Math.round(Math.max(25, (calories / 1000) * 14)),
     hydrationReminders: hydrationReminders(profile),
-    budgetNote:
+    budgetNote: translateUiText(
       profile.food_budget === "low"
         ? "Priorize feijão, ovos, aveia, arroz, hortaliças da época e peixe local; compare preços e use substituições."
         : "Combine alimentos locais e internacionais conforme disponibilidade e orçamento.",
+      language,
+    ),
     eligibleForSupplement: age >= 18 && resistanceFocused,
     supplementAdvice,
     creatine:
