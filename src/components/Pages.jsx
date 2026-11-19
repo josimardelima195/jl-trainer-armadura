@@ -1400,11 +1400,11 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.foods_to_avoid || profile.food_dislikes || ""}
           />
           <label>
-            Preferência de cozinha
+            {translateUiText("Preferência de cozinha", language)}
             <select name="cuisine_preference" defaultValue={profile.cuisine_preference || "mixed"}>
-              <option value="mozambican">Cozinha moçambicana</option>
-              <option value="international">Cozinha internacional</option>
-              <option value="mixed">Misturar as duas</option>
+              <option value="mozambican">{translateUiText("Cozinha moçambicana", language)}</option>
+              <option value="international">{translateUiText("Cozinha internacional", language)}</option>
+              <option value="mixed">{translateUiText("Misturar as duas", language)}</option>
             </select>
           </label>
                     <label className="profile-wide-field">
@@ -1439,14 +1439,14 @@ export function Profile({ theme, onThemeChange }) {
       <section className="language-settings">
         <div>
           <span className="eyebrow">PREFERÊNCIAS</span>
-          <h2>Idioma do aplicativo</h2>
+          <h2>{translateUiText("Idioma do aplicativo", language)}</h2>
           <p>
             Altere os textos principais, navegação e instruções do treino
             guiado.
           </p>
         </div>
         <select
-          aria-label="Idioma do aplicativo"
+          aria-label={translateUiText("Idioma do aplicativo", language)}
           value={language}
           onChange={async (event) => {
             const value = event.target.value;
@@ -1459,7 +1459,7 @@ export function Profile({ theme, onThemeChange }) {
       </section>
       <section className="theme-settings">
         <div>
-          <span className="eyebrow">APARÊNCIA</span>
+          <span className="eyebrow">{translateUiText("APARÊNCIA", language)}</span>
           <h2>Tema do aplicativo</h2>
           <p>
             Escolha a paleta que deixa o seu treino mais confortável de
@@ -1503,8 +1503,8 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Sprint Energy</b>
-            <small>Grafite · lima elétrica</small>
+            <b>{translateUiText("Sprint Energy", language)}</b>
+            <small>{translateUiText("Grafite · lima elétrica", language)}</small>
           </button>
           <button
             type="button"
@@ -1516,8 +1516,8 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Ocean Light</b>
-            <small>Branco · azul · violeta</small>
+            <b>{translateUiText("Ocean Light", language)}</b>
+            <small>{translateUiText("Branco · azul · violeta", language)}</small>
           </button>
         </div>
       </section>
