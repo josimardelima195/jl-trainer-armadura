@@ -15,6 +15,9 @@ export default function Auth({ children }) {
   const [language, setLanguage] = useLanguage();
   const labels = authText[language] || authText.pt;
   useEffect(() => {
+    const savedTheme = localStorage.getItem("jl-theme");
+    document.body.classList.toggle("theme-blue", savedTheme === "blue" || savedTheme === "ocean");
+    document.documentElement.style.colorScheme = savedTheme === "blue" || savedTheme === "ocean" ? "light" : "dark";
     if (!supabase) {
       setLoading(false);
       return;
