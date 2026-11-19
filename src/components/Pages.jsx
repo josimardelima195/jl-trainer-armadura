@@ -26,7 +26,7 @@ import {
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
-import { useLanguage, translatedInstructions } from "../lib/i18n";
+import { useLanguage, translatedInstructions, languageOptions } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
