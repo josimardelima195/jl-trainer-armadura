@@ -113,6 +113,155 @@ const commonTranslations = {
   "Voltar":{en:"Back",fr:"Retour",es:"Volver",zh:"返回",hi:"वापस"},
   "Ver planos":{en:"View plans",fr:"Voir les forfaits",es:"Ver planes",zh:"查看计划",hi:"योजनाएँ देखें"},
 };
+const recipeNameTranslations = {
+  R01:{en:"Creamy banana oatmeal",fr:"Porridge crémeux à la banane",es:"Avena cremosa con banana",zh:"香蕉奶香燕麦粥",hi:"केले वाला क्रीमी ओटमील"},
+  R02:{en:"Scrambled eggs with whole-grain toast",fr:"Œufs brouillés et pain complet",es:"Huevos revueltos con pan integral",zh:"炒鸡蛋配全麦面包",hi:"होल-ग्रेन टोस्ट के साथ भुर्जी"},
+  R03:{en:"Cornmeal porridge with milk and papaya",fr:"Bouillie de maïs au lait et papaye",es:"Gachas de maíz con leche y papaya",zh:"牛奶玉米粥配木瓜",hi:"दूध और पपीते के साथ मक्के का दलिया"},
+  R04:{en:"Yogurt with oats and pineapple",fr:"Yaourt à l’avoine et à l’ananas",es:"Yogur con avena y piña",zh:"酸奶燕麦菠萝杯",hi:"ओट्स और अनानास के साथ दही"},
+  R05:{en:"Banana and oat pancakes",fr:"Pancakes à la banane et à l’avoine",es:"Tortitas de banana y avena",zh:"香蕉燕麦煎饼",hi:"केला और ओट्स पैनकेक"},
+  R06:{en:"Whole-grain bread with fresh cheese",fr:"Pain complet au fromage frais",es:"Pan integral con queso fresco",zh:"全麦面包配鲜奶酪",hi:"ताज़े चीज़ के साथ होल-ग्रेन ब्रेड"},
+  R07:{en:"Sweet potato and boiled eggs",fr:"Patate douce et œufs durs",es:"Batata dulce y huevos cocidos",zh:"红薯配水煮蛋",hi:"शकरकंद और उबले अंडे"},
+  R08:{en:"Plain yogurt with mango",fr:"Yaourt nature à la mangue",es:"Yogur natural con mango",zh:"原味酸奶配芒果",hi:"आम के साथ सादा दही"},
+  R09:{en:"Grilled chicken, rice and salad",fr:"Poulet grillé, riz et salade",es:"Pollo a la plancha, arroz y ensalada",zh:"烤鸡肉、米饭和沙拉",hi:"ग्रिल्ड चिकन, चावल और सलाद"},
+  R10:{en:"Baked horse mackerel with xima and tomato",fr:"Chinchard au four avec xima et tomate",es:"Jurel al horno con xima y tomate",zh:"烤竹荚鱼配西马和番茄",hi:"ज़िमा और टमाटर के साथ बेक्ड हॉर्स मैकेरल"},
+  R11:{en:"Lean beef stew with cassava",fr:"Ragoût de bœuf maigre au manioc",es:"Estofado de ternera magra con yuca",zh:"瘦牛肉炖木薯",hi:"कसावा के साथ लीन बीफ़ स्टू"},
+  R12:{en:"Beans, rice and egg",fr:"Haricots, riz et œuf",es:"Frijoles con arroz y huevo",zh:"豆子、米饭和鸡蛋",hi:"बीन्स, चावल और अंडा"},
+  R13:{en:"Spaghetti with shredded chicken",fr:"Spaghetti au poulet effiloché",es:"Espaguetis con pollo desmenuzado",zh:"鸡丝意大利面",hi:"कटा हुआ चिकन स्पेगेटी"},
+  R14:{en:"Grilled fish with sweet potato",fr:"Poisson grillé et patate douce",es:"Pescado a la plancha con batata",zh:"烤鱼配红薯",hi:"शकरकंद के साथ ग्रिल्ड मछली"},
+  R15:{en:"Homemade burger with roasted potatoes",fr:"Burger maison et pommes de terre rôties",es:"Hamburguesa casera con patatas asadas",zh:"自制汉堡配烤土豆",hi:"भुने आलू के साथ घर का बना बर्गर"},
+  R16:{en:"Lean goat with rice and greens",fr:"Chèvre maigre, riz et chou",es:"Cabrito magro con arroz y col",zh:"瘦山羊肉配米饭和青菜",hi:"चावल और हरी सब्ज़ियों के साथ लीन बकरी का मांस"},
+  R17:{en:"Matapa with fish and xima",fr:"Matapa au poisson et xima",es:"Matapa con pescado y xima",zh:"莫桑比克马塔帕配鱼和西马",hi:"मछली और ज़िमा के साथ मटापा"},
+  R18:{en:"Mucapata with fish",fr:"Mucapata au poisson",es:"Mucapata con pescado",zh:"穆卡帕塔配鱼",hi:"मछली के साथ मुकापाटा"},
+  R19:{en:"Chicken curry with rice",fr:"Curry de poulet et riz",es:"Curry de pollo con arroz",zh:"鸡肉咖喱配米饭",hi:"चावल के साथ चिकन करी"},
+  R20:{en:"Tuna, potato and egg salad",fr:"Salade de thon, pommes de terre et œuf",es:"Ensalada de atún, patata y huevo",zh:"金枪鱼土豆鸡蛋沙拉",hi:"टूना, आलू और अंडे का सलाद"},
+  R21:{en:"Bean, pumpkin and chicken soup",fr:"Soupe de haricots, potiron et poulet",es:"Sopa de frijoles, calabaza y pollo",zh:"豆子南瓜鸡肉汤",hi:"बीन्स, कद्दू और चिकन का सूप"},
+  R22:{en:"Cheese and greens omelet",fr:"Omelette au fromage et aux légumes verts",es:"Tortilla de queso y verduras",zh:"奶酪蔬菜煎蛋饼",hi:"चीज़ और हरी सब्ज़ियों का ऑमलेट"},
+  R23:{en:"Tuna and tomato sandwich",fr:"Sandwich au thon et à la tomate",es:"Sándwich de atún y tomate",zh:"金枪鱼番茄三明治",hi:"टूना और टमाटर सैंडविच"},
+  R24:{en:"Banana with peanuts and milk",fr:"Banane, arachides et lait",es:"Banana con cacahuetes y leche",zh:"香蕉、花生和牛奶",hi:"मूंगफली और दूध के साथ केला"},
+  R25:{en:"Orange and fresh cheese",fr:"Orange et fromage frais",es:"Naranja y queso fresco",zh:"橙子配鲜奶酪",hi:"संतरा और ताज़ा चीज़"},
+  R26:{en:"Papaya with yogurt",fr:"Papaye au yaourt",es:"Papaya con yogur",zh:"木瓜酸奶",hi:"दही के साथ पपीता"},
+  R27:{en:"Boiled egg and bread",fr:"Œuf dur et pain",es:"Huevo cocido y pan",zh:"水煮蛋配面包",hi:"उबला अंडा और ब्रेड"},
+  R28:{en:"Milk, banana and oat smoothie",fr:"Smoothie au lait, banane et avoine",es:"Batido de leche, banana y avena",zh:"牛奶香蕉燕麦奶昔",hi:"दूध, केला और ओट्स स्मूदी"},
+  R29:{en:"Chicken and avocado salad",fr:"Salade de poulet et avocat",es:"Ensalada de pollo y aguacate",zh:"鸡肉牛油果沙拉",hi:"चिकन और एवोकाडो सलाद"},
+  R30:{en:"Boiled fish with cassava and vegetables",fr:"Poisson bouilli, manioc et légumes",es:"Pescado cocido con yuca y verduras",zh:"水煮鱼配木薯和蔬菜",hi:"कसावा और सब्ज़ियों के साथ उबली मछली"},
+  I01:{en:"Overnight oats with banana and yogurt",fr:"Overnight oats à la banane et au yaourt",es:"Avena reposada con banana y yogur",zh:"隔夜香蕉酸奶燕麦",hi:"केला और दही के साथ ओवरनाइट ओट्स"},
+  I02:{en:"Chicken burrito bowl",fr:"Bowl façon burrito au poulet",es:"Bowl de pollo estilo burrito",zh:"鸡肉墨西哥卷碗",hi:"चिकन बुरिटो बाउल"},
+  I03:{en:"Lean beef and bean chili",fr:"Chili de bœuf maigre et haricots",es:"Chili de carne magra y frijoles",zh:"瘦牛肉豆子辣炖",hi:"लीन बीफ़ और बीन्स चिली"},
+  I04:{en:"Baked potato stuffed with tuna",fr:"Pomme de terre au four farcie au thon",es:"Patata asada rellena de atún",zh:"金枪鱼馅烤土豆",hi:"टूना से भरा बेक्ड आलू"},
+  I05:{en:"Whole-wheat chicken wrap",fr:"Wrap complet au poulet",es:"Wrap integral de pollo",zh:"全麦鸡肉卷",hi:"होल-व्हीट चिकन रैप"},
+  I06:{en:"Brazilian rice, beans and chicken plate",fr:"Assiette brésilienne de riz, haricots et poulet",es:"Plato brasileño de arroz, frijoles y pollo",zh:"巴西风味米饭、豆子和鸡肉",hi:"ब्राज़ीलियन चावल, बीन्स और चिकन प्लेट"},
+  I07:{en:"Protein banana and oat pancakes",fr:"Pancakes protéinés à la banane et à l’avoine",es:"Tortitas proteicas de banana y avena",zh:"高蛋白香蕉燕麦煎饼",hi:"प्रोटीन केला और ओट्स पैनकेक"},
+  I08:{en:"Whole-wheat chicken pasta",fr:"Pâtes complètes au poulet",es:"Pasta integral con pollo",zh:"全麦鸡肉意面",hi:"होल-व्हीट चिकन पास्ता"},
+  I09:{en:"Chicken and sweet potato bowl",fr:"Bowl de poulet et patate douce",es:"Bowl de pollo y batata",zh:"鸡肉红薯碗",hi:"चिकन और शकरकंद बाउल"},
+  I10:{en:"Yogurt, mango and oat bowl",fr:"Bol de yaourt, mangue et avoine",es:"Bol de yogur, mango y avena",zh:"酸奶芒果燕麦碗",hi:"दही, आम और ओट्स बाउल"},
+  I11:{en:"Tuna pasta salad",fr:"Salade de pâtes au thon",es:"Ensalada de pasta con atún",zh:"金枪鱼意面沙拉",hi:"टूना पास्ता सलाद"},
+  M01:{en:"Grilled horse mackerel with xima and salad",fr:"Chinchard grillé avec xima et salade",es:"Jurel a la plancha con xima y ensalada",zh:"烤竹荚鱼配西马和沙拉",hi:"ज़िमा और सलाद के साथ ग्रिल्ड हॉर्स मैकेरल"},
+  M02:{en:"Mozambican-style chicken curry with rice",fr:"Curry de poulet façon mozambicaine avec riz",es:"Curry de pollo al estilo mozambiqueño con arroz",zh:"莫桑比克风味鸡肉咖喱饭",hi:"मोज़ाम्बिक शैली चिकन करी और चावल"},
+  M03:{en:"Matapa with fish and xima",fr:"Matapa au poisson et xima",es:"Matapa con pescado y xima",zh:"马塔帕配鱼和西马",hi:"मछली और ज़िमा के साथ मटापा"},
+  M04:{en:"Mucapata with fish",fr:"Mucapata au poisson",es:"Mucapata con pescado",zh:"穆卡帕塔配鱼",hi:"मछली के साथ मुकापाटा"},
+  M05:{en:"Fish with cassava and vegetables",fr:"Poisson au manioc et légumes",es:"Pescado con yuca y verduras",zh:"鱼配木薯和蔬菜",hi:"कसावा और सब्ज़ियों के साथ मछली"}
+};
+const foodNameTranslations = {
+  "Aveia":{en:"Oats",fr:"Avoine",es:"Avena",zh:"燕麦",hi:"जई"},
+  "Banana":{en:"Banana",fr:"Banane",es:"Banana",zh:"香蕉",hi:"केला"},
+  "Leite":{en:"Milk",fr:"Lait",es:"Leche",zh:"牛奶",hi:"दूध"},
+  "Canela":{en:"Cinnamon",fr:"Cannelle",es:"Canela",zh:"肉桂",hi:"दालचीनी"},
+  "Ovos":{en:"Eggs",fr:"Œufs",es:"Huevos",zh:"鸡蛋",hi:"अंडे"},
+  "Ovo":{en:"Egg",fr:"Œuf",es:"Huevo",zh:"鸡蛋",hi:"अंडा"},
+  "Pão integral":{en:"Whole-grain bread",fr:"Pain complet",es:"Pan integral",zh:"全麦面包",hi:"होल-ग्रेन ब्रेड"},
+  "Tomate":{en:"Tomato",fr:"Tomate",es:"Tomate",zh:"番茄",hi:"टमाटर"},
+  "Farinha de milho":{en:"Cornmeal",fr:"Farine de maïs",es:"Harina de maíz",zh:"玉米粉",hi:"मक्के का आटा"},
+  "Papaia":{en:"Papaya",fr:"Papaye",es:"Papaya",zh:"木瓜",hi:"पपीता"},
+  "Iogurte natural":{en:"Plain yogurt",fr:"Yaourt nature",es:"Yogur natural",zh:"原味酸奶",hi:"सादा दही"},
+  "Ananás":{en:"Pineapple",fr:"Ananas",es:"Piña",zh:"菠萝",hi:"अनानास"},
+  "Batata-doce":{en:"Sweet potato",fr:"Patate douce",es:"Batata",zh:"红薯",hi:"शकरकंद"},
+  "Amendoim":{en:"Peanuts",fr:"Arachides",es:"Cacahuetes",zh:"花生",hi:"मूंगफली"},
+  "Frango grelhado":{en:"Grilled chicken",fr:"Poulet grillé",es:"Pollo a la plancha",zh:"烤鸡肉",hi:"ग्रिल्ड चिकन"},
+  "Frango":{en:"Chicken",fr:"Poulet",es:"Pollo",zh:"鸡肉",hi:"चिकन"},
+  "Arroz":{en:"Rice",fr:"Riz",es:"Arroz",zh:"米饭",hi:"चावल"},
+  "Alface":{en:"Lettuce",fr:"Laitue",es:"Lechuga",zh:"生菜",hi:"सलाद पत्ता"},
+  "Cenoura":{en:"Carrot",fr:"Carotte",es:"Zanahoria",zh:"胡萝卜",hi:"गाजर"},
+  "Azeite":{en:"Olive oil",fr:"Huile d’olive",es:"Aceite de oliva",zh:"橄榄油",hi:"जैतून का तेल"},
+  "Carapau":{en:"Horse mackerel",fr:"Chinchard",es:"Jurel",zh:"竹荚鱼",hi:"हॉर्स मैकेरल"},
+  "Cebola":{en:"Onion",fr:"Oignon",es:"Cebolla",zh:"洋葱",hi:"प्याज़"},
+  "Carne magra":{en:"Lean beef",fr:"Bœuf maigre",es:"Carne magra",zh:"瘦牛肉",hi:"लीन बीफ़"},
+  "Mandioca":{en:"Cassava",fr:"Manioc",es:"Yuca",zh:"木薯",hi:"कसावा"},
+  "Couve":{en:"Collard greens",fr:"Chou vert",es:"Col verde",zh:"羽衣甘蓝",hi:"हरी पत्तेदार सब्ज़ी"},
+  "Feijão cozido":{en:"Cooked beans",fr:"Haricots cuits",es:"Frijoles cocidos",zh:"熟豆子",hi:"पकी हुई बीन्स"},
+  "Feijão":{en:"Beans",fr:"Haricots",es:"Frijoles",zh:"豆子",hi:"बीन्स"},
+  "Esparguete":{en:"Spaghetti",fr:"Spaghetti",es:"Espaguetis",zh:"意大利面",hi:"स्पेगेटी"},
+  "Peixe grelhado":{en:"Grilled fish",fr:"Poisson grillé",es:"Pescado a la plancha",zh:"烤鱼",hi:"ग्रिल्ड मछली"},
+  "Peixe":{en:"Fish",fr:"Poisson",es:"Pescado",zh:"鱼",hi:"मछली"},
+  "Tilápia":{en:"Tilapia",fr:"Tilapia",es:"Tilapia",zh:"罗非鱼",hi:"तिलापिया"},
+  "Matapa":{en:"Matapa greens",fr:"Feuilles de matapa",es:"Hojas de matapa",zh:"马塔帕叶",hi:"मटापा पत्तियाँ"},
+  "Mucapata":{en:"Mucapata",fr:"Mucapata",es:"Mucapata",zh:"穆卡帕塔",hi:"मुकापाटा"},
+  "Atum":{en:"Tuna",fr:"Thon",es:"Atún",zh:"金枪鱼",hi:"टूना"},
+  "Batata":{en:"Potato",fr:"Pomme de terre",es:"Patata",zh:"土豆",hi:"आलू"},
+  "Pepino":{en:"Cucumber",fr:"Concombre",es:"Pepino",zh:"黄瓜",hi:"खीरा"},
+  "Abóbora":{en:"Pumpkin",fr:"Courge",es:"Calabaza",zh:"南瓜",hi:"कद्दू"},
+  "Queijo fresco":{en:"Fresh cheese",fr:"Fromage frais",es:"Queso fresco",zh:"鲜奶酪",hi:"ताज़ा चीज़"},
+  "Laranja":{en:"Orange",fr:"Orange",es:"Naranja",zh:"橙子",hi:"संतरा"},
+  "Manga":{en:"Mango",fr:"Mangue",es:"Mango",zh:"芒果",hi:"आम"},
+  "Abacate":{en:"Avocado",fr:"Avocat",es:"Aguacate",zh:"牛油果",hi:"एवोकाडो"},
+  "Xima":{en:"Xima (maize porridge)",fr:"Xima (bouillie de maïs)",es:"Xima (gachas de maíz)",zh:"西马（玉米糊）",hi:"ज़िमा (मक्के का दलिया)"},
+  "Couve e tomate":{en:"Greens and tomato",fr:"Légumes verts et tomate",es:"Verduras y tomate",zh:"青菜和番茄",hi:"हरी सब्ज़ियाँ और टमाटर"}
+};
+const mealLabelTranslations = {
+  "Pequeno-almoço":{en:"Breakfast",fr:"Petit-déjeuner",es:"Desayuno",zh:"早餐",hi:"नाश्ता"},
+  "Lanche da manhã":{en:"Morning snack",fr:"Collation du matin",es:"Tentempié de la mañana",zh:"上午加餐",hi:"सुबह का नाश्ता"},
+  "Almoço":{en:"Lunch",fr:"Déjeuner",es:"Almuerzo",zh:"午餐",hi:"दोपहर का भोजन"},
+  "Lanche / pré-treino":{en:"Snack / pre-workout",fr:"Collation / avant l’entraînement",es:"Merienda / preentreno",zh:"加餐 / 训练前",hi:"स्नैक / वर्कआउट से पहले"},
+  "Jantar / pós-treino":{en:"Dinner / post-workout",fr:"Dîner / après l’entraînement",es:"Cena / postentreno",zh:"晚餐 / 训练后",hi:"रात का खाना / वर्कआउट के बाद"}
+};
+export function translateRecipeName(id, fallback, language) {
+  return language === "pt" ? fallback : recipeNameTranslations[id]?.[language] || fallback;
+}
+export function translateFoodName(name, language) {
+  return language === "pt" ? name : foodNameTranslations[name]?.[language] || name;
+}
+export function translateIngredientString(value, language) {
+  if (language === "pt" || !value) return value;
+  let result = String(value);
+  for (const key of Object.keys(foodNameTranslations).sort((a,b)=>b.length-a.length)) {
+    const translated = foodNameTranslations[key]?.[language];
+    if (translated) result = result.replace(new RegExp(key, "gi"), translated);
+  }
+  return result;
+}
+export function translateMealLabel(value, language) {
+  return language === "pt" ? value : mealLabelTranslations[value]?.[language] || value;
+}
+export function translateRecipePreparation(value, language) {
+  if (language === "pt" || !value) return value;
+  return ({
+    en:"Prepare the ingredients in the quantities shown. Cook meat, fish and eggs thoroughly; prepare the grains and vegetables, then serve the planned portion.",
+    fr:"Préparez les ingrédients selon les quantités indiquées. Faites bien cuire la viande, le poisson et les œufs, préparez les féculents et les légumes, puis servez la portion prévue.",
+    es:"Prepara los ingredientes en las cantidades indicadas. Cocina bien la carne, el pescado y los huevos; prepara los cereales y las verduras y sirve la porción prevista.",
+    zh:"按所列分量准备食材。将肉类、鱼和鸡蛋彻底煮熟，准备主食和蔬菜，再按计划份量食用。",
+    hi:"दी गई मात्रा के अनुसार सामग्री तैयार करें। मांस, मछली और अंडे अच्छी तरह पकाएँ; अनाज और सब्ज़ियाँ तैयार करें और निर्धारित मात्रा परोसें。"
+  })[language] || value;
+}
+export function translateRecipePurpose(value, language) {
+  if (language === "pt" || !value) return value;
+  return ({
+    en:"Balanced meal planned to support your selected goal and daily nutrition targets.",
+    fr:"Repas équilibré conçu pour soutenir votre objectif et vos besoins nutritionnels quotidiens.",
+    es:"Comida equilibrada para apoyar tu objetivo y tus necesidades nutricionales diarias.",
+    zh:"均衡餐食，旨在支持你选择的目标和每日营养需求。",
+    hi:"आपके चुने हुए लक्ष्य और दैनिक पोषण आवश्यकताओं के लिए संतुलित भोजन।"
+  })[language] || value;
+}
+export function translateRecipeAdjustment(value, language) {
+  if (language === "pt" || !value) return value;
+  return ({
+    en:"Adjust the serving to your daily plan. Prefer simple preparation and avoid adding excess oil, salt or sugar.",
+    fr:"Adaptez la portion à votre programme quotidien. Privilégiez une préparation simple et évitez l’excès d’huile, de sel ou de sucre.",
+    es:"Ajusta la porción a tu plan diario. Prefiere preparaciones sencillas y evita añadir demasiado aceite, sal o azúcar.",
+    zh:"根据每日计划调整份量。尽量采用简单烹饪方式，避免添加过多油、盐或糖。",
+    hi:"अपनी दैनिक योजना के अनुसार मात्रा समायोजित करें। सरल पकाने का तरीका अपनाएँ और अतिरिक्त तेल, नमक या चीनी से बचें।"
+  })[language] || value;
+}
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
