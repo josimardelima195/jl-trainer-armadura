@@ -173,6 +173,7 @@ const recipeNameTranslations = {
   I09:{en:"Chicken and sweet potato bowl",fr:"Bowl de poulet et patate douce",es:"Bowl de pollo y batata",zh:"鸡肉红薯碗",hi:"चिकन और शकरकंद बाउल"},
   I10:{en:"Yogurt, mango and oat bowl",fr:"Bol de yaourt, mangue et avoine",es:"Bol de yogur, mango y avena",zh:"酸奶芒果燕麦碗",hi:"दही, आम और ओट्स बाउल"},
   I11:{en:"Tuna pasta salad",fr:"Salade de pâtes au thon",es:"Ensalada de pasta con atún",zh:"金枪鱼意面沙拉",hi:"टूना पास्ता सलाद"},
+  I12:{en:"Lean beef and potato stew",fr:"Ragoût de bœuf maigre et pommes de terre",es:"Estofado de carne magra con patatas",zh:"瘦牛肉土豆炖菜",hi:"लीन बीफ़ और आलू का स्टू"},
   M01:{en:"Grilled horse mackerel with xima and salad",fr:"Chinchard grillé avec xima et salade",es:"Jurel a la plancha con xima y ensalada",zh:"烤竹荚鱼配西马和沙拉",hi:"ज़िमा और सलाद के साथ ग्रिल्ड हॉर्स मैकेरल"},
   M02:{en:"Mozambican-style chicken curry with rice",fr:"Curry de poulet façon mozambicaine avec riz",es:"Curry de pollo al estilo mozambiqueño con arroz",zh:"莫桑比克风味鸡肉咖喱饭",hi:"मोज़ाम्बिक शैली चिकन करी और चावल"},
   M03:{en:"Matapa with fish and xima",fr:"Matapa au poisson et xima",es:"Matapa con pescado y xima",zh:"马塔帕配鱼和西马",hi:"मछली और ज़िमा के साथ मटापा"},
