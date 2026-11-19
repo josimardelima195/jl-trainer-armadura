@@ -217,6 +217,30 @@ const foodNameTranslations = {
   "Xima":{en:"Xima (maize porridge)",fr:"Xima (bouillie de maïs)",es:"Xima (gachas de maíz)",zh:"西马（玉米糊）",hi:"ज़िमा (मक्के का दलिया)"},
   "Couve e tomate":{en:"Greens and tomato",fr:"Légumes verts et tomate",es:"Verduras y tomate",zh:"青菜和番茄",hi:"हरी सब्ज़ियाँ और टमाटर"}
 };
+Object.assign(foodNameTranslations, {
+  "Arroz cozido":{en:"Cooked rice",fr:"Riz cuit",es:"Arroz cocido",zh:"熟米饭",hi:"पके हुए चावल"},
+  "Batata cozida":{en:"Boiled potato",fr:"Pomme de terre cuite",es:"Patata cocida",zh:"煮土豆",hi:"उबला आलू"},
+  "Mandioca cozida":{en:"Cooked cassava",fr:"Manioc cuit",es:"Yuca cocida",zh:"熟木薯",hi:"पका कसावा"},
+  "Massa integral":{en:"Whole-wheat pasta",fr:"Pâtes complètes",es:"Pasta integral",zh:"全麦意面",hi:"होल-व्हीट पास्ता"},
+  "Feijão-nhemba":{en:"Cowpeas",fr:"Niébé",es:"Caupí",zh:"豇豆",hi:"लोबिया"},
+  "Maçã":{en:"Apple",fr:"Pomme",es:"Manzana",zh:"苹果",hi:"सेब"},
+  "Morangos":{en:"Strawberries",fr:"Fraises",es:"Fresas",zh:"草莓",hi:"स्ट्रॉबेरी"},
+  "Frango à zambeziana":{en:"Zambezia-style chicken",fr:"Poulet à la zambézienne",es:"Pollo al estilo zambeziano",zh:"赞比西亚风味鸡肉",hi:"ज़ाम्बेज़िया शैली चिकन"},
+  "Sardinha":{en:"Sardines",fr:"Sardines",es:"Sardinas",zh:"沙丁鱼",hi:"सार्डिन"},
+  "Caril de peixe":{en:"Fish curry",fr:"Curry de poisson",es:"Curry de pescado",zh:"鱼咖喱",hi:"मछली करी"},
+  "Caril de amendoim":{en:"Peanut curry",fr:"Curry aux arachides",es:"Curry de cacahuete",zh:"花生咖喱",hi:"मूंगफली करी"},
+  "Esparguete com atum e tomate":{en:"Spaghetti with tuna and tomato",fr:"Spaghetti au thon et à la tomate",es:"Espaguetis con atún y tomate",zh:"金枪鱼番茄意大利面",hi:"टूना और टमाटर स्पेगेटी"},
+  "Cozido caseiro de ovo, couve e frango":{en:"Homestyle egg, greens and chicken stew",fr:"Ragoût maison aux œufs, légumes verts et poulet",es:"Guiso casero de huevo, verduras y pollo",zh:"家常鸡蛋青菜炖鸡",hi:"घर का बना अंडा, हरी सब्ज़ी और चिकन स्टू"},
+  "Frango com molho de amendoim":{en:"Chicken in peanut sauce",fr:"Poulet à la sauce d’arachide",es:"Pollo en salsa de cacahuete",zh:"花生酱鸡肉",hi:"मूंगफली की चटनी में चिकन"},
+  "Salada cozida de ovo, couve, frango, batata e cenoura":{en:"Boiled egg, greens, chicken, potato and carrot salad",fr:"Salade d’œuf, chou, poulet, pomme de terre et carotte",es:"Ensalada de huevo, col, pollo, patata y zanahoria",zh:"鸡蛋、青菜、鸡肉、土豆和胡萝卜沙拉",hi:"उबले अंडे, हरी सब्ज़ी, चिकन, आलू और गाजर का सलाद"},
+  "Carapau grelhado":{en:"Grilled horse mackerel",fr:"Chinchard grillé",es:"Jurel a la plancha",zh:"烤竹荚鱼",hi:"ग्रिल्ड हॉर्स मैकेरल"},
+  "Lentilhas cozidas":{en:"Cooked lentils",fr:"Lentilles cuites",es:"Lentejas cocidas",zh:"熟扁豆",hi:"पकी हुई दाल"},
+  "Papa de milho":{en:"Cornmeal porridge",fr:"Bouillie de maïs",es:"Gachas de maíz",zh:"玉米粥",hi:"मक्के का दलिया"},
+  "Melancia":{en:"Watermelon",fr:"Pastèque",es:"Sandía",zh:"西瓜",hi:"तरबूज़"},
+  "Goiaba":{en:"Guava",fr:"Goyave",es:"Guayaba",zh:"番石榴",hi:"अमरूद"},
+  "Alface e pepino":{en:"Lettuce and cucumber",fr:"Laitue et concombre",es:"Lechuga y pepino",zh:"生菜和黄瓜",hi:"सलाद पत्ता और खीरा"},
+  "Quiabo":{en:"Okra",fr:"Gombo",es:"Quimbombó",zh:"秋葵",hi:"भिंडी"}
+});
 const mealLabelTranslations = {
   "Pequeno-almoço":{en:"Breakfast",fr:"Petit-déjeuner",es:"Desayuno",zh:"早餐",hi:"नाश्ता"},
   "Lanche da manhã":{en:"Morning snack",fr:"Collation du matin",es:"Tentempié de la mañana",zh:"上午加餐",hi:"सुबह का नाश्ता"},
