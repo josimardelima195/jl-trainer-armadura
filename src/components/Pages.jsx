@@ -268,7 +268,7 @@ export function Workouts({ plan }) {
   const userNutritionLogs = (data.daily_nutrition_logs || []).filter(
     (log) => log.user_id === userId,
   );
-  const accountTracking = accountDayStatuses(profile.created_at, trainingLogs, userNutritionLogs);
+  const accountTracking = accountDayStatuses(profile.created_at, trainingLogs, userNutritionLogs, new Date(), profile);
   const [completed, setCompleted] = useState({}),
     [guided, setGuided] = useState(false),
     [timer, setTimer] = useState(0),
@@ -913,9 +913,10 @@ export function Progress({ metrics }) {
   }, [photoKey, userId]);
   const allLogs = (data.training_logs || []).filter((log) => log.user_id === userId);
   const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
-  const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs);
+  const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs, new Date(), profile);
   const firstThirtyDays = accountTracking.days.slice(0, 30);
-  const completedCount = firstThirtyDays.filter((item) => item.workoutDone).length;
+  const completedCount = firstThirtyDays.filter((item) => item.dayComplete).length;
+  const completedWorkoutCount = firstThirtyDays.filter((item) => item.workoutDone).length;
   const remainingCount = Math.max(0, 30 - completedCount);
   const missedWorkoutDays = accountTracking.missedWorkoutDays;
   const missedNutritionDays = accountTracking.missedNutritionDays;
@@ -929,7 +930,7 @@ export function Progress({ metrics }) {
     .filter((item) => item.user_id === userId && item.status === "active")
     .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
   const elapsedDays = Math.min(30, accountTracking.days.length);
-  const canUploadAfter = completedCount >= 30 && elapsedDays >= 30;
+  const canUploadAfter = elapsedDays >= 30;
   const licenseRemaining = subscription?.expires_at
     ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
     : null;
@@ -988,8 +989,9 @@ export function Progress({ metrics }) {
           <LeoMascot size={78} />
         </div>
         <div className="progress-journey-stats">
-          <div><strong>{completedCount}/30</strong><span>treinos/dias concluídos</span></div>
-          <div><strong>{remainingCount}</strong><span>por concluir</span></div>
+          <div><strong>{completedCount}/30</strong><span>dias concluídos</span></div>
+          <div><strong>{completedWorkoutCount}</strong><span>treinos registados</span></div>
+          <div><strong>{remainingCount}</strong><span>dias por concluir</span></div>
           <div><strong>{elapsedDays}/30</strong><span>dias desde o início</span></div>
           {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>dias de licença restantes</span></div>}
         </div>
@@ -998,21 +1000,21 @@ export function Progress({ metrics }) {
           {Array.from({ length: 30 }, (_, index) => {
             const day = index + 1;
             const status = firstThirtyDays[index];
-            const done = Boolean(status?.workoutDone && status?.nutritionDone);
+            const done = Boolean(status?.dayComplete);
             const missed = Boolean(status?.missed);
             const partial = Boolean(status && !done && !missed && (status.workoutDone || status.nutritionDone));
             const className = done ? "done" : missed ? "missed" : partial ? "partial" : "";
             const title = done
-              ? "Dia " + day + ": treino e alimentação concluídos"
+              ? "Dia " + day + ": rotina e alimentação concluídas"
               : missed
-                ? "Dia " + day + ": " + [status.workoutMissed ? "treino perdido" : "", status.nutritionMissed ? "alimentação perdida" : ""].filter(Boolean).join(" e ")
+                ? "Dia " + day + ": " + [status.workoutMissed ? "treino programado perdido" : "", status.nutritionMissed ? "alimentação perdida" : ""].filter(Boolean).join(" e ")
                 : partial
                   ? "Dia " + day + ": conclusão parcial"
                   : "Dia " + day + ": ainda por cumprir";
             return <span key={day} className={className} title={title}>{day}</span>;
           })}
         </div>
-        <p className="progress-journey-note">Verde: treino e alimentação concluídos. Vermelho: pelo menos uma das duas partes ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.</p>
+        <p className="progress-journey-note">Verde: alimentação concluída e treino feito ou descanso previsto. Vermelho: treino programado ou alimentação ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.</p>
       </section>
       {form && (
         <form className="panel-form progress-measure-form" onSubmit={async (event) => {
@@ -1039,7 +1041,7 @@ export function Progress({ metrics }) {
           <div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div>
           <span className="pill">PRIVADO</span>
         </div>
-        <p className="muted">Guarde a foto inicial no começo do plano. A foto final será liberada somente após 30/30 treinos e 30 dias decorridos.</p>
+        <p className="muted">Guarde a foto inicial no começo do plano. A foto final será liberada depois de completar os 30 dias do programa.</p>
         <div className="progress-before-after">
           <article className="progress-photo-slot">
             <span>ANTES · DIA 0</span>
@@ -1072,9 +1074,7 @@ export function Progress({ metrics }) {
             ) : (
               <div className="progress-photo-placeholder">
                 {!canUploadAfter
-                  ? completedCount < 30
-                    ? `Bloqueada até concluir os 30 treinos (${completedCount}/30)`
-                    : `Disponível ao completar 30 dias (${elapsedDays}/30)`
+                  ? `Disponível ao completar 30 dias (${elapsedDays}/30)`
                   : "Pronta para receber a foto final"}
               </div>
             )}
@@ -1082,7 +1082,7 @@ export function Progress({ metrics }) {
             <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "after")}>
               <label className="file-drop">
                 <span>{afterPhoto ? "Selecionar outra foto final" : "Selecionar foto final"}</span>
-                <small>{canUploadAfter ? "JPG, PNG ou WebP · até 10 MB" : "Disponível depois dos 30 dias de treino"}</small>
+                <small>{canUploadAfter ? "JPG, PNG ou WebP · até 10 MB" : "Disponível depois dos 30 dias do programa"}</small>
                 <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" disabled={!canUploadAfter} />
               </label>
               <label className="checkbox"><input type="checkbox" required disabled={!canUploadAfter} />Autorizo guardar esta foto privada.</label>
@@ -2415,7 +2415,7 @@ const foodPhoto = (food) => foodLibrary.find((known) => known.name === food?.nam
 export function Nutrition({ plan, whatsapp }) {
   const { profile, userId, data, refresh, setError, loading } = useStore();
   const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
-  const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs);
+  const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs, new Date(), profile);
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
   const [day, setDay] = useState(() => Math.max(1, Math.min(30, Number(profile.nutrition_day) || accountDayNumber(profile.created_at)))),
