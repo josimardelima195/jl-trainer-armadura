@@ -945,7 +945,7 @@ export function Progress({ metrics }) {
   const saveProgressPhoto = async (event, stage) => {
     event.preventDefault();
     if (stage === "after" && !canUploadAfter) {
-      setError("A foto final só fica disponível depois de concluir os 30 treinos e completar 30 dias.");
+      setError("A foto final só fica disponível depois de completar os 30 dias do programa.");
       return;
     }
     const formElement = event.currentTarget;
