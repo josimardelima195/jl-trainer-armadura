@@ -328,6 +328,15 @@ Object.assign(commonTranslations, {
   "Intermediário":{en:"Intermediate",fr:"Intermédiaire",es:"Intermedio",zh:"中级",hi:"मध्यम"},
   "Avançado":{en:"Advanced",fr:"Avancé",es:"Avanzado",zh:"高级",hi:"उन्नत"}
 });
+Object.assign(commonTranslations, {
+  "Verde: treino registado. Vermelho: dia terminado sem treino guardado.":{en:"Green: workout logged. Red: day ended without a saved workout.",fr:"Vert : entraînement enregistré. Rouge : journée terminée sans entraînement sauvegardé.",es:"Verde: entrenamiento registrado. Rojo: día terminado sin entrenamiento guardado.",zh:"绿色：已记录训练。红色：当天结束但未保存训练。",hi:"हरा: वर्कआउट दर्ज। लाल: दिन बिना सेव किए गए वर्कआउट के समाप्त।"},
+  "Leve":{en:"Light",fr:"Légère",es:"Ligera",zh:"轻度",hi:"हल्की"},
+  "Moderada":{en:"Moderate",fr:"Modérée",es:"Moderada",zh:"中等",hi:"मध्यम"},
+  "Alta":{en:"High",fr:"Élevée",es:"Alta",zh:"高",hi:"उच्च"},
+  "Treino guiado":{en:"Guided workout",fr:"Entraînement guidé",es:"Entrenamiento guiado",zh:"指导训练",hi:"निर्देशित वर्कआउट"},
+  "Abdômen":{en:"Core",fr:"Abdominaux",es:"Abdomen",zh:"核心",hi:"कोर"},
+  "SEU PROGRAMA":{en:"YOUR PROGRAM",fr:"VOTRE PROGRAMME",es:"TU PROGRAMA",zh:"你的计划",hi:"आपका कार्यक्रम"}
+});
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
