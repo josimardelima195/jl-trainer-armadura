@@ -1449,3 +1449,10 @@ body.theme-blue{
 .onboarding-photo-icon{width:44px;height:44px;border-radius:12px;background:#25231e;color:var(--gold2);display:grid;place-items:center}
 .locked-pill{margin-top:auto;padding:6px 8px;border-radius:20px;background:rgba(120,130,145,.12);font-size:10px}
 @media(max-width:700px){.onboarding-cuisine-grid,.onboarding-photo-grid{grid-template-columns:1fr}.onboarding-photo-card{min-height:130px}}
+
+body.theme-blue .auth-page{background:#f3f8ff;color:#142744}
+body.theme-blue .auth-art{background:radial-gradient(circle at 30% 40%,#d9ecff,transparent 44%),linear-gradient(130deg,#e9f5ff,#f7f9ff)}
+body.theme-blue .auth-art h1 em{color:#176fe6}
+body.theme-blue .auth-box input{background:#fff;color:#142744;border-color:#d8e6f7}
+body.theme-blue .auth-box label,body.theme-blue .auth-box>p{color:#62758d}
+body.theme-blue .auth-links button,body.theme-blue .auth-box details summary{color:#176fe6}
