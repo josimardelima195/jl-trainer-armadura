@@ -59,6 +59,13 @@ export function useLanguage() {
   return [language, setLanguage, uiText[language] || uiText.pt];
 }
 
+Object.assign(onboardingText.pt,{targetWeight:"Peso objetivo (opcional)"});
+Object.assign(onboardingText.en,{targetWeight:"Target weight (optional)"});
+Object.assign(onboardingText.fr,{targetWeight:"Poids cible (facultatif)"});
+Object.assign(onboardingText.es,{targetWeight:"Peso objetivo (opcional)"});
+Object.assign(onboardingText.zh,{targetWeight:"目标体重（选填）"});
+Object.assign(onboardingText.hi,{targetWeight:"लक्ष्य वज़न (वैकल्पिक)"});
+
 const commonTranslations = {
   "SUA JORNADA EM NÚMEROS":{en:"YOUR JOURNEY IN NUMBERS",fr:"VOTRE PARCOURS EN CHIFFRES",es:"TU CAMINO EN CIFRAS",zh:"你的进度数据",hi:"आपकी प्रगति के आँकड़े"},
   "Minha evolução":{en:"My progress",fr:"Ma progression",es:"Mi progreso",zh:"我的进度",hi:"मेरी प्रगति"},
