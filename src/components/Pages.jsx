@@ -26,7 +26,7 @@ import {
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
-import { useLanguage, translatedInstructions, languageOptions } from "../lib/i18n";
+import { useLanguage, translatedInstructions, languageOptions, translateUiText } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
@@ -469,16 +469,16 @@ export function Workouts({ plan }) {
       <Title title="Meus treinos" tag={profile.modality || "SEU PROGRAMA"} />
       <section className="program-panel">
         <div>
-          <span className="eyebrow">PROGRAMA PERSONALIZADO</span>
-          <h2>30 dias de evolução</h2>
+          <span className="eyebrow">{translateUiText("PROGRAMA PERSONALIZADO", language)}</span>
+          <h2>{translateUiText("30 dias de evolução", language)}</h2>
           <p>
-            {today?.focus || "Treino guiado"} · {profile.modality || modalityKey} ·{" "}
-            {equipmentTitle}
+            {translateUiText(today?.focus || "Treino guiado", language)} · {translateUiText(profile.modality || modalityKey, language)} ·{" "}
+            {translateUiText(equipmentTitle, language)}
           </p>
           <div className="program-focus-tags">
             {(today?.groups || []).map((group) => (
               <span key={group}>
-                {group
+                {translateUiText(group
                   .replace("chest", "peito")
                   .replace("triceps", "tríceps")
                   .replace("back", "costas")
@@ -488,34 +488,34 @@ export function Workouts({ plan }) {
                   .replace("cardio", "cardio")
                   .replace("core", "abdômen")
                   .replace("shoulders", "ombros")
-                  .replace("mobility", "mobilidade")}
+                  .replace("mobility", "mobilidade"), language)}
               </span>
             ))}
           </div>
         </div>
         <div className="program-choice-block">
-          <span className="choice-label">Escolha o dia</span>
+          <span className="choice-label">{translateUiText("Escolha o dia", language)}</span>
           <div className="day-picker">
             {program.map((day) => (
               <button
                 type="button"
                 className={`day-chip ${programDay === day.day ? "active" : ""} ${accountTracking.days[day.day - 1]?.workoutMissed ? "missed" : accountTracking.days[day.day - 1]?.workoutDone ? "done" : ""}`}
                 key={day.day}
-                title={accountTracking.days[day.day - 1]?.workoutMissed ? "Treino perdido" : accountTracking.days[day.day - 1]?.workoutDone ? "Treino concluído" : "Dia por cumprir"}
+                title={translateUiText(accountTracking.days[day.day - 1]?.workoutMissed ? "Treino perdido" : accountTracking.days[day.day - 1]?.workoutDone ? "Treino concluído" : "Dia por cumprir", language)}
                 onClick={() => {
                   setProgramDay(day.day);
                   reset();
                 }}
               >
                 <strong>{day.day}</strong>
-                <small>{accountTracking.days[day.day - 1]?.workoutMissed ? "Perdido" : day.focus}</small>
+                <small>{accountTracking.days[day.day - 1]?.workoutMissed ? translateUiText("Perdido", language) : translateUiText(day.focus, language)}</small>
               </button>
             ))}
           </div>
-          <p className="nutrition-calendar-note">Verde: treino registado. Vermelho: dia terminado sem treino guardado.</p>
+          <p className="nutrition-calendar-note">{translateUiText("Verde: treino registado. Vermelho: dia terminado sem treino guardado.", language)}</p>
         </div>
         <div className="program-choice-block difficulty-choice">
-          <span className="choice-label">Dificuldade</span>
+          <span className="choice-label">{translateUiText("Dificuldade", language)}</span>
           <div className="choice-pills">
             {Object.entries(intensityLabels).filter(([value]) => !(age >= 12 && age < 18 && value === "hard")).map(([value, label]) => (
               <button
@@ -544,21 +544,21 @@ export function Workouts({ plan }) {
         </div>
       )}
       <div className={`intensity-note intensity-${intensity}`}>
-        <b>{intensityLabels[intensity]}</b> · {intensityNotes[intensity]}
+        <b>{translateUiText(intensityLabels[intensity], language)}</b> · {translateUiText(intensityNotes[intensity], language)}
       </div>
       {(today?.progressionNote || today?.skillNote) && (
         <div className="cal-plan-note">
-          {today.progressionNote && <p><b>Progressão do dia:</b> {today.progressionNote}</p>}
-          {today.skillNote && <p><b>Meta técnica:</b> {today.skillNote}</p>}
+          {today.progressionNote && <p><b>{translateUiText("Progressão do dia:", language)}</b> {today.progressionNote}</p>}
+          {today.skillNote && <p><b>{translateUiText("Meta técnica:", language)}</b> {today.skillNote}</p>}
         </div>
       )}
       <section className="exercise-showcase">
         <div className="showcase-heading">
           <div>
-            <span className="eyebrow">MOVIMENTOS DO DIA</span>
-            <h2>{today?.title || "Treino guiado"}</h2>
+            <span className="eyebrow">{translateUiText("MOVIMENTOS DO DIA", language)}</span>
+            <h2>{translateUiText(today?.title || "Treino guiado", language)}</h2>
             <p>
-              {today?.sessionLabel || today?.focus || "Movimentos reais"} · Dia{" "}
+              {translateUiText(today?.sessionLabel || today?.focus || "Movimentos reais", language)} · {language === "pt" ? "Dia" : language === "en" ? "Day" : language === "fr" ? "Jour" : language === "es" ? "Día" : language === "zh" ? "第" : "दिन"}{" "}
               {programDay} de 30 · {intensityLabels[intensity]}
             </p>
           </div>
