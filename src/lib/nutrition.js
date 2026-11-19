@@ -735,7 +735,65 @@ const recipeImages = {
   R26: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R27: "/assets/food/recipes/R27.webp",
   R30: "/assets/food/recipes/fish-with-xima.webp",
+  I01: "/assets/food/user-provided/aveia-banana-leite-canela.webp",
+  I02: "/assets/food/user-provided/frango-grelhado-arroz-salada.webp",
+  I03: "/assets/food/recipes/beef-stew-rice.webp",
+  I04: "/assets/food/recipes/tuna-pasta-salad.webp",
+  I05: "/assets/food/recipes/chicken-spaghetti.webp",
+  I06: "/assets/food/user-provided/arroz-feijao-e-ovo.webp",
+  I07: "/assets/food/recipes/banana-pancakes.webp",
+  I08: "/assets/food/recipes/chicken-spaghetti.webp",
+  I09: "/assets/food/batata-doce-assada.jpg",
+  I10: "/assets/food/recipes/yogurt-fruit-bowl.webp",
+  I11: "/assets/food/recipes/tuna-pasta-salad.webp",
+  M01: "/assets/food/catalog/carapau.webp",
+  M02: "/assets/food/recipes/R19.webp",
+  M03: "/assets/food/matapa.jpg",
+  M04: "/assets/food/recipes/rice-and-beans.webp",
+  M05: "/assets/food/recipes/fish-with-xima.webp",
 };
+const cuisineRecipeRows = {
+  I01: { recipeId:"I01", recipe:"Overnight oats com banana e iogurte", ingredients:"40 g Aveia; 150 g Iogurte natural; 100 ml Leite; 1 Banana; 10 g Amendoim", preparation:"Misture a aveia, o iogurte e o leite. Deixe no frigorífico durante a noite e finalize com banana e amendoim.", purpose:"Pequeno-almoço prático com hidratos, fibra e proteína.", adjustment:"Ajuste a quantidade de aveia e amendoim conforme a porção indicada." },
+  I02: { recipeId:"I02", recipe:"Bowl de frango estilo burrito", ingredients:"130 g Frango; 60 g Arroz; 100 g Feijão; 50 g Alface; 1 Tomate; 40 g Abacate", preparation:"Cozinhe o arroz e o feijão. Grelhe o frango e sirva com tomate, alface e abacate.", purpose:"Refeição completa com proteína, hidratos e fibra.", adjustment:"Pode trocar o abacate por azeite se não estiver disponível." },
+  I03: { recipeId:"I03", recipe:"Chili de carne magra com feijão", ingredients:"120 g Carne magra; 120 g Feijão; 120 g Tomate; 40 g Cebola; 50 g Arroz", preparation:"Doure a carne com cebola, junte tomate e feijão e cozinhe até apurar. Sirva com arroz.", purpose:"Prato rico em proteína e fibra, inspirado na cozinha americana.", adjustment:"Use carne magra e controle o azeite adicionado." },
+  I04: { recipeId:"I04", recipe:"Batata assada recheada com atum", ingredients:"200 g Batata; 100 g Atum; 80 g Iogurte natural; 1 Tomate; 50 g Pepino", preparation:"Asse ou coza a batata. Misture o atum com iogurte e tomate e sirva sobre a batata com pepino.", purpose:"Refeição simples, rica em proteína e fácil de preparar.", adjustment:"Pode substituir o atum por frango desfiado." },
+  I05: { recipeId:"I05", recipe:"Wrap integral de frango e salada", ingredients:"120 g Frango; 2 fatias Pão integral; 50 g Iogurte natural; 1 Tomate; 50 g Alface", preparation:"Grelhe o frango, corte em tiras e envolva no pão integral com iogurte, tomate e alface.", purpose:"Opção portátil, com proteína e vegetais.", adjustment:"Enrole o recheio numa tortilha integral quando disponível." },
+  I06: { recipeId:"I06", recipe:"Prato brasileiro de arroz, feijão e frango", ingredients:"120 g Frango; 60 g Arroz; 120 g Feijão; 60 g Couve; 1 Tomate", preparation:"Sirva o frango grelhado com arroz, feijão e couve refogada com pouco azeite.", purpose:"Refeição familiar acessível, inspirada no prato brasileiro do dia a dia.", adjustment:"Aumente ou reduza arroz e feijão de acordo com a porção calculada." },
+  I07: { recipeId:"I07", recipe:"Panquecas proteicas de aveia e banana", ingredients:"40 g Aveia; 1 Banana; 2 Ovos; 100 ml Leite", preparation:"Triture ou esmague os ingredientes, cozinhe pequenas panquecas numa frigideira antiaderente e sirva.", purpose:"Pequeno-almoço prático, popular em rotinas de musculação.", adjustment:"Evite adicionar açúcar; fruta pode servir de cobertura." },
+  I08: { recipeId:"I08", recipe:"Massa integral com frango e tomate", ingredients:"70 g Esparguete; 120 g Frango; 120 g Tomate; 40 g Cebola; 5 ml Azeite", preparation:"Coza a massa. Grelhe o frango e prepare um molho simples de tomate e cebola.", purpose:"Refeição rica em proteína e hidratos para apoiar treinos de força.", adjustment:"Use massa integral e ajuste a quantidade à meta diária." },
+  I09: { recipeId:"I09", recipe:"Bowl de frango com batata-doce", ingredients:"130 g Frango; 180 g Batata-doce; 80 g Couve; 1 Tomate", preparation:"Asse a batata-doce, grelhe o frango e acompanhe com couve e tomate.", purpose:"Refeição simples, rica em proteína e com hidratos de boa saciedade.", adjustment:"Prepare várias porções para facilitar a semana." },
+  I10: { recipeId:"I10", recipe:"Taça de iogurte, manga e aveia", ingredients:"170 g Iogurte natural; 100 g Manga; 30 g Aveia; 10 g Amendoim", preparation:"Coloque o iogurte numa taça e acrescente manga, aveia e amendoim.", purpose:"Lanche rápido com proteína, fruta e fibra.", adjustment:"Use a fruta da época quando manga não estiver disponível." },
+  I11: { recipeId:"I11", recipe:"Salada de massa com atum", ingredients:"60 g Esparguete; 100 g Atum; 1 Tomate; 50 g Pepino; 40 g Iogurte natural", preparation:"Coza e arrefeça a massa. Misture com atum, tomate, pepino e iogurte natural.", purpose:"Refeição fria e prática, com proteína e hidratos.", adjustment:"Pode usar frango desfiado no lugar do atum." },
+  M01: { recipeId:"M01", recipe:"Carapau grelhado com xima e salada", ingredients:"150 g Carapau; 60 g Farinha de milho; 1 Tomate; 50 g Couve", preparation:"Grelhe o carapau e prepare a xima. Sirva com tomate e couve cozida.", purpose:"Prato moçambicano tradicional com peixe e acompanhamento de milho.", adjustment:"Ajuste a porção de xima conforme a meta diária." },
+  M02: { recipeId:"M02", recipe:"Caril de frango com arroz", ingredients:"130 g Frango; 60 g Arroz; 100 g Tomate; 40 g Cebola; 10 g Amendoim", preparation:"Cozinhe o frango com tomate, cebola e uma pequena quantidade de amendoim. Sirva com arroz.", purpose:"Prato familiar inspirado na cozinha moçambicana.", adjustment:"Use pouco óleo e ajuste o arroz à porção indicada." },
+  M03: { recipeId:"M03", recipe:"Matapa com peixe e xima", ingredients:"120 g Matapa; 120 g Peixe; 50 g Farinha de milho", preparation:"Prepare a matapa bem cozida, acompanhe com peixe grelhado ou cozido e uma porção de xima.", purpose:"Prato tradicional moçambicano com folhas e peixe.", adjustment:"A matapa pode ter mais gordura conforme a receita; controle a quantidade de óleo e amendoim." },
+  M04: { recipeId:"M04", recipe:"Mucapata com peixe", ingredients:"150 g Mucapata; 120 g Peixe; 50 g Couve", preparation:"Sirva a mucapata com peixe grelhado e couve cozida.", purpose:"Alternativa tradicional com leguminosas e peixe.", adjustment:"Ajuste a porção de mucapata à meta diária." },
+  M05: { recipeId:"M05", recipe:"Peixe com mandioca e legumes", ingredients:"150 g Peixe; 120 g Mandioca; 60 g Cenoura; 50 g Couve", preparation:"Coza ou grelhe o peixe. Sirva com mandioca e legumes cozidos.", purpose:"Refeição simples com alimentos comuns em Moçambique.", adjustment:"Prefira peixe grelhado ou cozido em vez de frito." },
+};
+const internationalVariants = {
+  emagrecimento:{R03:["I01","I07"],R10:["I02","I06"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
+  bulking:{R03:["I07","I01"],R10:["I06","I08"],R16:["I03","I08"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
+  definicao:{R03:["I01","I07"],R10:["I02","I06"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
+  manutencao:{R03:["I07","I01"],R10:["I06","I02"],R16:["I03","I09"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
+};
+const mozambicanVariants = {
+  emagrecimento:{R09:["M01","M02"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
+  bulking:{R09:["M02","M01"],R13:["M02","M04"],R14:["M03","M05"],R15:["M04","M02"],R20:["M05","M03"],R21:["M02","M04"]},
+  definicao:{R09:["M01","M02"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
+  manutencao:{R09:["M02","M01"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
+};
+function adaptCuisineDay(day, cuisine, goal, dayNumber) {
+  if (!Array.isArray(day) || cuisine === "mixed") return day || [];
+  const goalKey = ["emagrecimento","bulking","definicao","manutencao"].includes(goal) ? goal : "manutencao";
+  const variants = cuisine === "international" ? internationalVariants[goalKey] : mozambicanVariants[goalKey];
+  return day.map((row, index) => {
+    const options = variants?.[row.recipeId];
+    if (!options?.length) return row;
+    const recipeId = options[(dayNumber + index) % options.length];
+    const replacement = cuisineRecipeRows[recipeId];
+    return replacement ? { ...row, ...replacement, time: row.time, meal: row.meal } : row;
+  });
+}
 const ingredientAliases = [
   [/aveia/i, "Aveia"], [/banana/i, "Banana"], [/ovo/i, "Ovos"],
   [/iogurte/i, "Iogurte natural"], [/leite/i, "Leite"], [/queijo/i, "Queijo fresco"],
@@ -1372,26 +1430,25 @@ export function nutritionPlan(profile = {}) {
   const weight = Number(profile.current_weight),
     height = Number(profile.height),
     sex = String(profile.sex || "").toLowerCase();
-  const bmr =
-    10 * weight +
-    6.25 * height -
-    5 * age +
-    (sex.includes("fem") ? -161 : sex.includes("masc") ? 5 : 0);
+  const sexConstant = sex.includes("fem") ? -161 : sex.includes("masc") ? 5 : -78;
+  const bmr = 10 * weight + 6.25 * height - 5 * age + sexConstant;
   const base =
     bmr * activityFactor(profile) +
     (modalAdjust[String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")] || 0);
-  const estimatedCalories = Math.max(
-    age < 18 ? Math.round(base) : 1400,
-    Math.round(
-      base +
-        objective.calorie +
-        (profile.training_intensity === "hard"
-          ? 120
-          : profile.training_intensity === "easy"
-            ? -80
-            : 0),
-    ),
+  const desiredCalories = Math.round(
+    base +
+      objective.calorie +
+      (profile.training_intensity === "hard"
+        ? 120
+        : profile.training_intensity === "easy"
+          ? -80
+          : 0),
   );
+  const conservativeAdultFloor = Math.round(Math.max(1200, bmr * 1.1));
+  const calorieSafetyNote = age < 18 || desiredCalories >= conservativeAdultFloor
+    ? ""
+    : "A estimativa inicial ficou abaixo de uma faixa conservadora. O aplicativo limita o défice automático e recomenda avaliação individual antes de reduzir mais as calorias.";
+  const estimatedCalories = age < 18 ? Math.round(base) : Math.max(conservativeAdultFloor, desiredCalories);
   const calories = age < 18 ? null : estimatedCalories;
   const dayNumber = Math.min(
       30,
@@ -1414,7 +1471,7 @@ export function nutritionPlan(profile = {}) {
     isAdolescent
       ? "Plano equilibrado para adolescentes, com refeições variadas e porções flexíveis para apoiar crescimento, escola, treino e recuperação. Sem metas calóricas, défice ou suplementos automáticos."
       : age >= 65
-        ? "Priorize hidratação, mastigação confortável e avaliação individual quando necessário."
+        ? "A partir dos 65 anos, a estimativa exige atenção individual. Em caso de doença renal, uso de medicação ou condição clínica, confirme metas de calorias e proteína com um profissional de saúde."
         : "";
   const preferred = String(profile.available_foods || "")
     .split(",")
@@ -1455,7 +1512,11 @@ export function nutritionPlan(profile = {}) {
     if (String(row.meal).toLowerCase().includes("pós-treino")) return shift(75);
     return row.time;
   };
-  const rawMeals = (day || []).map((row) => ({
+  const cuisinePreference = ["mozambican","international","mixed"].includes(profile.cuisine_preference)
+    ? profile.cuisine_preference
+    : "mixed";
+  const selectedDay = adaptCuisineDay(day, cuisinePreference, modality, dayNumber);
+  const rawMeals = selectedDay.map((row) => ({
     row,
     ingredients: parseRecipeIngredients(row.ingredients),
   }));
@@ -1510,11 +1571,18 @@ export function nutritionPlan(profile = {}) {
     modalityLabel: labels[modality] || labels.condicionamento,
     modalityNote:
       ageNote ||
-      "Estimativa ajustada ao seu objetivo, atividade, modalidade e intensidade.",
+      calorieSafetyNote ||
+      (cuisinePreference === "international"
+        ? "Plano internacional com refeições simples e ingredientes comuns; as porções são ajustadas ao objetivo e à atividade."
+        : cuisinePreference === "mozambican"
+          ? "Plano com maior presença de pratos moçambicanos tradicionais, preservando opções locais."
+          : "Plano misto com pratos moçambicanos e internacionais, ajustados ao objetivo e à atividade."),
     ageCategory: ageCategory(age),
     ageNote: ageNote,
+    calorieSafetyNote,
+    cuisinePreference,
     proteinTarget:
-      age !== null && age < 18 ? null : Math.round(weight * objective.protein),
+      age !== null && age < 18 ? null : Math.round(weight * (age >= 65 ? Math.min(1.6, Math.max(1.2, objective.protein)) : objective.protein)),
     carbsTarget: age < 18 ? null : Math.round((calories * 0.45) / 4),
     fatTarget: age < 18 ? null : Math.round((calories * 0.3) / 9),
     fiberTarget: age < 18 ? null : Math.round(Math.max(25, (calories / 1000) * 14)),
