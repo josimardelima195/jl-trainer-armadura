@@ -114,6 +114,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
     birth_date: profile.birth_date || "",
     sex: profile.sex || "",
     current_weight: profile.current_weight || "",
+    target_weight: profile.target_weight || "",
     height: profile.height || "",
     goal: normalizeGoal(profile.goal),
     modality: ["Musculação", "Calistenia"].includes(profile.modality) ? profile.modality : "Musculação",
@@ -186,6 +187,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
       if (!form.birth_date || age === null || age < 12 || age > 100) return copy.ageError;
       if (!Number(form.current_weight) || Number(form.current_weight) < 25 || Number(form.current_weight) > 300) return copy.weightError;
       if (!Number(form.height) || Number(form.height) < 120 || Number(form.height) > 230) return copy.heightError;
+      if (form.target_weight && (Number(form.target_weight) < 25 || Number(form.target_weight) > 300)) return copy.weightError;
     }
     if (currentKey === "goal" && (!form.goal || !form.modality)) return copy.goalError;
     if (currentKey === "routine") {
@@ -217,6 +219,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
         age,
         sex: form.sex || null,
         current_weight: Number(form.current_weight),
+        target_weight: form.target_weight ? Number(form.target_weight) : null,
         initial_weight: Number(profile.initial_weight) || Number(form.current_weight),
         height: Number(form.height),
         goal: form.goal,
@@ -304,6 +307,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
                 <label className="onboarding-single-field">{copy.weight}<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="75" value={form.current_weight} onChange={(e) => update("current_weight", e.target.value)} /></label>
                 <label className="onboarding-single-field">{copy.height}<input type="number" min="120" max="230" step="1" inputMode="numeric" placeholder="175" value={form.height} onChange={(e) => update("height", e.target.value)} /></label>
               </div>
+              <label className="onboarding-single-field">{copy.targetWeight}<input type="number" min="25" max="300" step="0.1" inputMode="decimal" placeholder="70" value={form.target_weight} onChange={(e) => update("target_weight", e.target.value)} /></label>
               {age !== null && <p className="onboarding-inline-note">{copy.ageCalculated}: <b>{age}</b></p>}
             </div>
           )}
