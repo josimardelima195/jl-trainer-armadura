@@ -395,8 +395,10 @@ export default function App() {
   const store = useStore(),
     { profile, data, userId, isDemo, error, setError, loading, mutate, refresh } = store;
   useEffect(() => {
-    if (!localStorage.getItem("jl-language") && profile.language) setLanguage(profile.language);
-  }, [profile.language]);
+    if (profile?.id && ["pt", "en", "fr", "es", "zh", "hi"].includes(profile.language)) {
+      setLanguage(profile.language);
+    }
+  }, [profile?.id, profile?.language]);
   const [tab, setTab] = useState(location.hash.slice(1) || "inicio"),
     [menu, setMenu] = useState(false),
     [search, setSearch] = useState(""),
