@@ -1,5 +1,6 @@
 import { modalityKeyFor } from "./programs.js";
 import { workbookMealPlans } from "./workbookMeals.js";
+import { translateRecipeName, translateFoodName, translateIngredientString, translateMealLabel, translateRecipePreparation, translateRecipePurpose, translateRecipeAdjustment } from "./i18n.js";
 
 // Valores de referência aproximados por porção indicada. São estimativas educativas,
 // não prescrição clínica. Imagens só são usadas quando correspondem ao alimento.
@@ -1516,6 +1517,7 @@ export function nutritionPlan(profile = {}) {
     ? profile.cuisine_preference
     : "mixed";
   const selectedDay = adaptCuisineDay(day, cuisinePreference, modality, dayNumber);
+  const language = ["pt","en","fr","es","zh","hi"].includes(profile.language) ? profile.language : "pt";
   const rawMeals = selectedDay.map((row) => ({
     row,
     ingredients: parseRecipeIngredients(row.ingredients),
@@ -1524,24 +1526,27 @@ export function nutritionPlan(profile = {}) {
     total + sumRecipeFoods(recipeFoodItems(meal.ingredients,1,allergy)).kcal, 0);
   const targetScale = age < 18 ? 1 : Math.min(1.35,Math.max(0.7,calories/(rawDayCalories||calories)));
   const meals = rawMeals.map(({row,ingredients}) => {
-    const foods = recipeFoodItems(ingredients,targetScale,allergy);
-    const totals = sumRecipeFoods(foods);
-    const allergyWarning = foods.some((food)=>food.restricted);
+    const originalFoods = recipeFoodItems(ingredients,targetScale,allergy);
+    const totals = sumRecipeFoods(originalFoods);
+    const allergyWarning = originalFoods.some((food)=>food.restricted);
+    const foods = originalFoods.map((food)=>({ ...food, name: translateFoodName(food.name,language) }));
+    const recipeName = translateRecipeName(row.recipeId,row.recipe,language);
+    const preparation = translateRecipePreparation(row.preparation,language);
     return {
       time: shiftForMeal(row),
-      title: row.meal,
-      recipeName: row.recipe,
+      title: translateMealLabel(row.meal,language),
+      recipeName,
       recipeId: row.recipeId,
-      items: [row.recipe],
+      items: [recipeName],
       foods,
       image: recipeImages[row.recipeId] || null,
       ingredients: foods.map((food)=>food.name+" ("+food.portion+")"),
-      recipeIngredients: row.ingredients,
+      recipeIngredients: translateIngredientString(row.ingredients,language),
       nutrition: totals,
-      purpose: row.purpose,
-      preparation: row.preparation,
-      adjustment: row.adjustment,
-      recipe: row.preparation,
+      purpose: translateRecipePurpose(row.purpose,language),
+      preparation,
+      adjustment: translateRecipeAdjustment(row.adjustment,language),
+      recipe: preparation,
       kcal: totals.kcal,
       protein: totals.protein,
       carbs: totals.carbs,
