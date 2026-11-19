@@ -297,6 +297,37 @@ export function translateRecipeAdjustment(value, language) {
   })[language] || value;
 }
 
+Object.assign(commonTranslations, {
+  "Meus treinos":{en:"My workouts",fr:"Mes entraînements",es:"Mis entrenamientos",zh:"我的训练",hi:"मेरे वर्कआउट"},
+  "PROGRAMA PERSONALIZADO":{en:"PERSONALIZED PROGRAM",fr:"PROGRAMME PERSONNALISÉ",es:"PROGRAMA PERSONALIZADO",zh:"个性化训练计划",hi:"व्यक्तिगत कार्यक्रम"},
+  "30 dias de evolução":{en:"30 days of progress",fr:"30 jours de progression",es:"30 días de progreso",zh:"30天进步计划",hi:"प्रगति के 30 दिन"},
+  "Escolha o dia":{en:"Choose the day",fr:"Choisissez le jour",es:"Elige el día",zh:"选择日期",hi:"दिन चुनें"},
+  "Treino perdido":{en:"Missed workout",fr:"Entraînement manqué",es:"Entrenamiento perdido",zh:"错过的训练",hi:"छूटा हुआ वर्कआउट"},
+  "Treino concluído":{en:"Workout completed",fr:"Entraînement terminé",es:"Entrenamiento completado",zh:"训练已完成",hi:"वर्कआउट पूरा हुआ"},
+  "Dia por cumprir":{en:"Pending day",fr:"Jour à effectuer",es:"Día pendiente",zh:"待完成日期",hi:"बाकी दिन"},
+  "Perdido":{en:"Missed",fr:"Manqué",es:"Perdido",zh:"错过",hi:"छूटा"},
+  "Dificuldade":{en:"Difficulty",fr:"Difficulté",es:"Dificultad",zh:"难度",hi:"कठिनाई"},
+  "MOVIMENTOS DO DIA":{en:"TODAY'S MOVEMENTS",fr:"MOUVEMENTS DU JOUR",es:"MOVIMIENTOS DEL DÍA",zh:"今日动作",hi:"आज के व्यायाम"},
+  "Movimentos reais":{en:"Real movements",fr:"Mouvements réels",es:"Movimientos reales",zh:"真实动作",hi:"वास्तविक गतिविधियाँ"},
+  "Progressão do dia:":{en:"Today's progression:",fr:"Progression du jour :",es:"Progresión del día:",zh:"今日进阶：",hi:"आज की प्रगति:"},
+  "Meta técnica:":{en:"Technique goal:",fr:"Objectif technique :",es:"Objetivo técnico:",zh:"技术目标：",hi:"तकनीक का लक्ष्य:"},
+  "Sem equipamento":{en:"No equipment",fr:"Sans équipement",es:"Sin equipo",zh:"无需器械",hi:"बिना उपकरण"},
+  "Com equipamento":{en:"With equipment",fr:"Avec équipement",es:"Con equipo",zh:"使用器械",hi:"उपकरण के साथ"},
+  "Todos os equipamentos":{en:"All equipment",fr:"Tous les équipements",es:"Todo el equipo",zh:"所有器械",hi:"सभी उपकरण"},
+  "Peito":{en:"Chest",fr:"Pectoraux",es:"Pecho",zh:"胸部",hi:"छाती"},
+  "Costas":{en:"Back",fr:"Dos",es:"Espalda",zh:"背部",hi:"पीठ"},
+  "Ombros":{en:"Shoulders",fr:"Épaules",es:"Hombros",zh:"肩部",hi:"कंधे"},
+  "Bíceps":{en:"Biceps",fr:"Biceps",es:"Bíceps",zh:"肱二头肌",hi:"बाइसेप्स"},
+  "Tríceps":{en:"Triceps",fr:"Triceps",es:"Tríceps",zh:"肱三头肌",hi:"ट्राइसेप्स"},
+  "Abdominais":{en:"Abs",fr:"Abdominaux",es:"Abdominales",zh:"腹肌",hi:"पेट"},
+  "Pernas":{en:"Legs",fr:"Jambes",es:"Piernas",zh:"腿部",hi:"पैर"},
+  "Glúteos":{en:"Glutes",fr:"Fessiers",es:"Glúteos",zh:"臀部",hi:"ग्लूट्स"},
+  "Cardio":{en:"Cardio",fr:"Cardio",es:"Cardio",zh:"有氧",hi:"कार्डियो"},
+  "Mobilidade":{en:"Mobility",fr:"Mobilité",es:"Movilidad",zh:"灵活性",hi:"गतिशीलता"},
+  "Iniciante":{en:"Beginner",fr:"Débutant",es:"Principiante",zh:"初级",hi:"शुरुआती"},
+  "Intermediário":{en:"Intermediate",fr:"Intermédiaire",es:"Intermedio",zh:"中级",hi:"मध्यम"},
+  "Avançado":{en:"Advanced",fr:"Avancé",es:"Avanzado",zh:"高级",hi:"उन्नत"}
+});
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
