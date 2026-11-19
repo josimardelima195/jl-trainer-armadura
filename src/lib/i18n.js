@@ -337,6 +337,17 @@ Object.assign(commonTranslations, {
   "Abdômen":{en:"Core",fr:"Abdominaux",es:"Abdomen",zh:"核心",hi:"कोर"},
   "SEU PROGRAMA":{en:"YOUR PROGRAM",fr:"VOTRE PROGRAMME",es:"TU PROGRAMA",zh:"你的计划",hi:"आपका कार्यक्रम"}
 });
+Object.assign(commonTranslations, {
+  "Altere os textos principais, navegação e instruções do treino guiado.":{en:"Change the main text, navigation and guided-workout instructions.",fr:"Modifiez les textes principaux, la navigation et les instructions de l’entraînement guidé.",es:"Cambia los textos principales, la navegación y las instrucciones del entrenamiento guiado.",zh:"更改主要文本、导航和指导训练说明。",hi:"मुख्य टेक्स्ट, नेविगेशन और निर्देशित वर्कआउट निर्देश बदलें।"},
+  "Personalização visual":{en:"Visual customization",fr:"Personnalisation visuelle",es:"Personalización visual",zh:"外观自定义",hi:"दृश्य अनुकूलन"},
+  "APARÊNCIA":{en:"APPEARANCE",fr:"APPARENCE",es:"APARIENCIA",zh:"外观",hi:"दिखावट"},
+  "Dark":{en:"Dark",fr:"Sombre",es:"Oscuro",zh:"深色",hi:"डार्क"},
+  "Forest":{en:"Forest",fr:"Forêt",es:"Bosque",zh:"森林",hi:"फ़ॉरेस्ट"},
+  "Sprint Energy":{en:"Sprint Energy",fr:"Sprint Energy",es:"Sprint Energy",zh:"冲刺能量",hi:"स्प्रिंट एनर्जी"},
+  "Ocean Light":{en:"Ocean Light",fr:"Lumière Océan",es:"Luz del océano",zh:"海洋浅色",hi:"ओशन लाइट"},
+  "Grafite · lima elétrica":{en:"Graphite · electric lime",fr:"Graphite · citron vert électrique",es:"Grafito · lima eléctrica",zh:"石墨灰 · 荧光青柠",hi:"ग्रेफाइट · इलेक्ट्रिक लाइम"},
+  "Branco · azul · violeta":{en:"White · blue · violet",fr:"Blanc · bleu · violet",es:"Blanco · azul · violeta",zh:"白色 · 蓝色 · 紫色",hi:"सफ़ेद · नीला · बैंगनी"}
+});
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
