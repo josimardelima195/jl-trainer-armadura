@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Provider } from "../lib/store";
+import { useLanguage, authText, languageOptions } from "../lib/i18n";
 export default function Auth({ children }) {
   const [session, setSession] = useState(null),
     [registerStep, setRegisterStep] = useState(1),
@@ -11,6 +12,8 @@ export default function Auth({ children }) {
     [busy, setBusy] = useState(false),
     [preview, setPreview] = useState(false),
     [registerData, setRegisterData] = useState({});
+  const [language, setLanguage] = useLanguage();
+  const labels = authText[language] || authText.pt;
   useEffect(() => {
     if (!supabase) {
       setLoading(false);
@@ -79,6 +82,7 @@ export default function Auth({ children }) {
             emailRedirectTo: redirect,
             data: {
               full_name: f.name,
+              language,
               age: Number(f.age) || null,
               current_weight: Number(f.current_weight) || null,
               initial_weight: Number(f.current_weight) || null,
@@ -122,10 +126,7 @@ export default function Auth({ children }) {
           password: f.password,
         });
       if (r.error) throw r.error;
-      if (mode === "register")
-        setNotice(
-          "Confira seu email para confirmar o cadastro. Sua conta começa no plano grátis.",
-        );
+      if (mode === "register") setNotice(labels.registerNotice);
       if (mode === "forgot")
         setNotice(
           "Se houver uma conta para este email, você receberá o link de recuperação.",
@@ -183,30 +184,32 @@ export default function Auth({ children }) {
         <h2>
           {
             {
-              login: "Bem-vindo de volta",
-              register: "Comece sua jornada",
-              forgot: "Recuperar acesso",
-              reset: "Definir nova senha",
+              login: labels.welcome,
+              register: labels.start,
+              forgot: labels.forgot,
+              reset: labels.reset,
             }[mode]
           }
         </h2>
-        <p>Entre e construa sua consistência.</p>
+        <p>{labels.intro}</p>
         <form onSubmit={submit}>
           {mode === "register" && (
             <>
               <div className="register-stepper">
                 <span className={registerStep === 1 ? "active" : ""}>
-                  1 · Dados
+                  {labels.step1}
                 </span>
                 <span className={registerStep === 2 ? "active" : ""}>
-                  2 · Seu ponto de partida
+                  {labels.step2}
                 </span>
               </div>
               {registerStep === 1 && (
                 <>
-                  <label>Nome completo<input name="name" required maxLength="120" autoComplete="name" /></label>
+                  <label>{labels.chooseLanguage}<select name="language" value={language} onChange={(event) => setLanguage(event.target.value)}>{languageOptions.map(([code, name]) => <option key={code} value={code}>{name}</option>)}</select></label>
+                  <p className="onboarding-hint">{labels.languageHint}</p>
+                  <label>{labels.name}<input name="name" required maxLength="120" autoComplete="name" /></label>
                   <p className="onboarding-hint">Depois de criar a conta, vamos configurar seu perfil em etapas simples. Você poderá alterar as respostas depois.</p>
-                  <button type="button" className="outline" onClick={(event) => { setRegisterData(Object.fromEntries(new FormData(event.currentTarget.form))); setRegisterStep(2); }}>Continuar</button>
+                  <button type="button" className="outline" onClick={(event) => { setRegisterData(Object.fromEntries(new FormData(event.currentTarget.form))); setRegisterStep(2); }}>{labels.continue}</button>
                 </>
               )}
               {registerStep === 2 && (
@@ -220,13 +223,13 @@ export default function Auth({ children }) {
           )}
           {mode !== "reset" && (
             <label>
-              Email
+              {labels.email}
               <input name="email" required type="email" autoComplete="email" />
             </label>
           )}
           {mode !== "forgot" && (
             <label>
-              Senha
+              {labels.password}
               <input
                 name="password"
                 type="password"
@@ -240,7 +243,7 @@ export default function Auth({ children }) {
           )}
           {(mode === "register" || mode === "reset") && (
             <label>
-              Confirmar senha
+              {labels.confirm}
               <input
                 name="confirm"
                 type="password"
@@ -253,19 +256,18 @@ export default function Auth({ children }) {
           {mode === "register" && (
             <label className="checkbox">
               <input type="checkbox" required />
-              Li os termos abaixo e autorizo o armazenamento privado dos dados
-              de treino que eu registrar.
+              {labels.terms}
             </label>
           )}
           {!(mode === "register" && registerStep === 1) && (
             <button className="primary" disabled={busy}>
               {busy
-                ? "Aguarde…"
+                ? labels.wait
                 : {
-                    login: "Entrar",
-                    register: "Criar conta grátis",
-                    forgot: "Enviar link",
-                    reset: "Salvar senha",
+                    login: labels.loginButton,
+                    register: labels.registerButton,
+                    forgot: labels.sendLink,
+                    reset: labels.savePassword,
                   }[mode]}
             </button>
           )}
@@ -288,21 +290,21 @@ export default function Auth({ children }) {
               setError("");
             }}
           >
-            {mode === "login" ? "Criar conta grátis" : "Voltar ao login"}
+            {mode === "login" ? labels.switchToRegister : labels.switchToLogin}
           </button>
           {mode === "login" && (
             <button onClick={() => setMode("forgot")}>
-              Esqueci minha senha
+              {labels.forgotPassword}
             </button>
           )}
         </div>
         {!supabase && (
           <button className="outline" onClick={() => setPreview(true)}>
-            Explorar prévia sem cadastro
+            {labels.preview}
           </button>
         )}
         <details>
-          <summary>Termos e privacidade</summary>
+          <summary>{labels.termsTitle}</summary>
           <p>
             Plataforma de acompanhamento físico. Não substitui orientação médica
             ou nutricional. Dados registrados são acessíveis ao titular, à
