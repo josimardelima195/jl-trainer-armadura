@@ -548,6 +548,10 @@ export default function App() {
     ];
   const whatsapp = (message) =>
     `https://wa.me/${(settings.whatsapp || "258868787572").replace(/\D/g, "")}?text=${encodeURIComponent(message)}`;
+  useEffect(() => {
+    document.body.classList.toggle("theme-blue", theme === "blue");
+    document.documentElement.style.colorScheme = theme === "blue" ? "light" : theme === "dark" ? "dark" : "light";
+  }, [theme]);
   const changeTheme = (value) => {
     setTheme(value);
     localStorage.setItem("jl-theme", value);
