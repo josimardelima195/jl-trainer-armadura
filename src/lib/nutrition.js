@@ -747,6 +747,7 @@ const recipeImages = {
   I09: "/assets/food/batata-doce-assada.jpg",
   I10: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   I11: "/assets/food/recipes/tuna-pasta-salad.webp",
+  I12: "/assets/food/recipes/beef-stew-rice.webp",
   M01: "/assets/food/catalog/carapau.webp",
   M02: "/assets/food/recipes/R19.webp",
   M03: "/assets/food/matapa.jpg",
@@ -765,6 +766,7 @@ const cuisineRecipeRows = {
   I09: { recipeId:"I09", recipe:"Bowl de frango com batata-doce", ingredients:"130 g Frango; 180 g Batata-doce; 80 g Couve; 1 Tomate", preparation:"Asse a batata-doce, grelhe o frango e acompanhe com couve e tomate.", purpose:"Refeição simples, rica em proteína e com hidratos de boa saciedade.", adjustment:"Prepare várias porções para facilitar a semana." },
   I10: { recipeId:"I10", recipe:"Taça de iogurte, manga e aveia", ingredients:"170 g Iogurte natural; 100 g Manga; 30 g Aveia; 10 g Amendoim", preparation:"Coloque o iogurte numa taça e acrescente manga, aveia e amendoim.", purpose:"Lanche rápido com proteína, fruta e fibra.", adjustment:"Use a fruta da época quando manga não estiver disponível." },
   I11: { recipeId:"I11", recipe:"Salada de massa com atum", ingredients:"60 g Esparguete; 100 g Atum; 1 Tomate; 50 g Pepino; 40 g Iogurte natural", preparation:"Coza e arrefeça a massa. Misture com atum, tomate, pepino e iogurte natural.", purpose:"Refeição fria e prática, com proteína e hidratos.", adjustment:"Pode usar frango desfiado no lugar do atum." },
+  I12: { recipeId:"I12", recipe:"Ensopado de carne magra com batata", ingredients:"120 g Carne magra; 180 g Batata; 60 g Cenoura; 40 g Cebola; 5 ml Azeite", preparation:"Doure a carne e a cebola com pouco azeite. Junte a cenoura e a batata, cubra com água e cozinhe até ficarem macias.", purpose:"Refeição familiar simples, com proteína, legumes e uma fonte de hidratos.", adjustment:"Use carne magra e ajuste a batata à porção indicada para o objetivo." },
   M01: { recipeId:"M01", recipe:"Carapau grelhado com xima e salada", ingredients:"150 g Carapau; 60 g Farinha de milho; 1 Tomate; 50 g Couve", preparation:"Grelhe o carapau e prepare a xima. Sirva com tomate e couve cozida.", purpose:"Prato moçambicano tradicional com peixe e acompanhamento de milho.", adjustment:"Ajuste a porção de xima conforme a meta diária." },
   M02: { recipeId:"M02", recipe:"Caril de frango com arroz", ingredients:"130 g Frango; 60 g Arroz; 100 g Tomate; 40 g Cebola; 10 g Amendoim", preparation:"Cozinhe o frango com tomate, cebola e uma pequena quantidade de amendoim. Sirva com arroz.", purpose:"Prato familiar inspirado na cozinha moçambicana.", adjustment:"Use pouco óleo e ajuste o arroz à porção indicada." },
   M03: { recipeId:"M03", recipe:"Matapa com peixe e xima", ingredients:"120 g Matapa; 120 g Peixe; 50 g Farinha de milho", preparation:"Prepare a matapa bem cozida, acompanhe com peixe grelhado ou cozido e uma porção de xima.", purpose:"Prato tradicional moçambicano com folhas e peixe.", adjustment:"A matapa pode ter mais gordura conforme a receita; controle a quantidade de óleo e amendoim." },
@@ -772,10 +774,10 @@ const cuisineRecipeRows = {
   M05: { recipeId:"M05", recipe:"Peixe com mandioca e legumes", ingredients:"150 g Peixe; 120 g Mandioca; 60 g Cenoura; 50 g Couve", preparation:"Coza ou grelhe o peixe. Sirva com mandioca e legumes cozidos.", purpose:"Refeição simples com alimentos comuns em Moçambique.", adjustment:"Prefira peixe grelhado ou cozido em vez de frito." },
 };
 const internationalVariants = {
-  emagrecimento:{R03:["I01","I07"],R10:["I02","I06"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
-  bulking:{R03:["I07","I01"],R10:["I06","I08"],R16:["I03","I08"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
-  definicao:{R03:["I01","I07"],R10:["I02","I06"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
-  manutencao:{R03:["I07","I01"],R10:["I06","I02"],R16:["I03","I09"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
+  emagrecimento:{R03:["I01","I07"],R10:["I02","I06"],R11:["I12","I03"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
+  bulking:{R03:["I07","I01"],R10:["I06","I08"],R11:["I12","I03"],R16:["I03","I08"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
+  definicao:{R03:["I01","I07"],R10:["I02","I06"],R11:["I12","I03"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
+  manutencao:{R03:["I07","I01"],R10:["I06","I02"],R11:["I12","I03"],R16:["I03","I09"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
 };
 const mozambicanVariants = {
   emagrecimento:{R09:["M01","M02"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
