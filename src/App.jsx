@@ -386,23 +386,22 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
 }
 
 export default function App() {
-  const [language] = useLanguage(),
+  const [language, setLanguage] = useLanguage(),
     t = uiText[language] || uiText.pt;
   const store = useStore(),
-    { profile, data, userId, isDemo, error, setError, loading, mutate } = store;
+    { profile, data, userId, isDemo, error, setError, loading, mutate, refresh } = store;
+  useEffect(() => {
+    if (!localStorage.getItem("jl-language") && profile.language) setLanguage(profile.language);
+  }, [profile.language]);
   const [tab, setTab] = useState(location.hash.slice(1) || "inicio"),
     [menu, setMenu] = useState(false),
     [search, setSearch] = useState(""),
     [online, setOnline] = useState(navigator.onLine),
     [theme, setTheme] = useState(() => {
       const saved = localStorage.getItem("jl-theme");
-      return saved === "gold" || saved === "light"
-        ? "dark"
-        : saved === "ocean" || saved === "blue"
-          ? "forest"
-          : saved === "sprint"
-            ? "sprint"
-            : saved || "dark";
+      if (["dark", "forest", "sprint", "blue"].includes(saved)) return saved;
+      if (saved === "ocean") return "blue";
+      return "dark";
     }),
     [tutorial, setTutorial] = useState(
       () => localStorage.getItem("jl-tutorial-done") !== "1",
@@ -413,7 +412,7 @@ export default function App() {
     measures = data.progress_measurements.filter((x) => x.user_id === userId),
     metrics = stats(logs, measures),
     settings = data.settings[0] || {};
-  const homeNutrition = nutritionPlan(profile);
+  const homeNutrition = nutritionPlan({ ...profile, language });
   const currentMinutes = new Date().getHours() * 60 + new Date().getMinutes();
   const upcomingMeal = homeNutrition.incomplete ? null : homeNutrition.meals?.find((meal) => {
     const match = String(meal.time || "").match(/(\d{1,2}):(\d{2})/);
@@ -654,6 +653,13 @@ export default function App() {
                 title="Sprint Energy"
               >
                 <i className="theme-dot theme-dot-sprint" />
+              </button>
+              <button
+                className={theme === "blue" ? "active" : ""}
+                onClick={() => changeTheme("blue")}
+                title="Ocean Light"
+              >
+                <i className="theme-dot theme-dot-blue" />
               </button>
             </div>
             <button
@@ -1085,6 +1091,7 @@ export default function App() {
           profile={profile}
           userId={userId}
           mutate={mutate}
+          refresh={refresh}
         />
       )}
       <nav className="bottom-nav">
