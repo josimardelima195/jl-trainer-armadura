@@ -19,7 +19,7 @@ import { supabase } from "./lib/supabase";
 import { upload } from "./lib/storage";
 import { useStore } from "./lib/store";
 import { activePlan, stats, modalities as modalityCatalog } from "./lib/model";
-import { Title, Stat, Empty, LeoMascot } from "./components/UI";
+import { Title, Stat, Empty, LeoMascot, Localize } from "./components/UI";
 import {
   Workouts,
   Progress,
