@@ -932,7 +932,7 @@ export function Progress({ metrics }) {
   const subscription = (data.subscriptions || [])
     .filter((item) => item.user_id === userId && item.status === "active")
     .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
-  const elapsedDays = Math.min(30, accountTracking.days.length);
+  const elapsedDays = Math.min(30, Math.max(0, accountDayNumber(profile.created_at) - 1));
   const canUploadAfter = elapsedDays >= 30;
   const licenseRemaining = subscription?.expires_at
     ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
