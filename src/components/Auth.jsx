@@ -161,6 +161,7 @@ export default function Auth({ children }) {
   if ((session && mode !== "reset") || (!supabase && preview))
     return <Provider session={session}>{children}</Provider>;
   return (
+    <Localize>
     <div className="auth-page">
       <div className="auth-art">
         <div className="auth-art-image">
@@ -321,6 +322,7 @@ export default function Auth({ children }) {
         </details>
       </section>
     </div>
+    </Localize>
   );
 }
 
