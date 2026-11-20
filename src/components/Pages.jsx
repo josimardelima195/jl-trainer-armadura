@@ -1159,7 +1159,7 @@ export function Profile({ theme, onThemeChange }) {
         <div className="profile-card">
           <div className="profile-avatar-wrap">
             {avatarPreview ? (
-              <img src={avatarPreview} alt="Foto de perfil" />
+              <img src={avatarPreview} alt={t("Foto de perfil")} />
             ) : (
               <CommunityAvatar person={profile} />
             )}
@@ -1254,13 +1254,13 @@ export function Profile({ theme, onThemeChange }) {
               multiple
               defaultValue={profile.training_days || ["Seg", "Qua", "Sex"]}
             >
-              <option>Seg</option>
-              <option>Ter</option>
-              <option>Qua</option>
-              <option>Qui</option>
-              <option>Sex</option>
-              <option>Sáb</option>
-              <option>Dom</option>
+              <option value="Seg">{t("Seg")}</option>
+              <option value="Ter">{t("Ter")}</option>
+              <option value="Qua">{t("Qua")}</option>
+              <option value="Qui">{t("Qui")}</option>
+              <option value="Sex">{t("Sex")}</option>
+              <option value="Sáb">{t("Sáb")}</option>
+              <option value="Dom">{t("Dom")}</option>
             </select>
           </label>
           <label className="checkbox">
@@ -1282,9 +1282,9 @@ export function Profile({ theme, onThemeChange }) {
           <fieldset className="reminder-type-options">
             <legend>{t("Quais lembretes deseja receber?")}</legend>
             {[
-              ["treino", "Treino"],
-              ["agua", "Água"],
-              ["refeicao", "Refeições"],
+              ["treino", t("Treino")],
+              ["agua", t("Água")],
+              ["refeicao", t("Refeições")],
             ].map(([value, label]) => (
               <label className="checkbox" key={value}>
                 <input
