@@ -473,6 +473,16 @@ Object.assign(commonTranslations, {
   "ainda por cumprir":{en:"still to complete",fr:"encore à accomplir",es:"pendiente de completar",zh:"尚待完成",hi:"अभी पूरा करना बाकी"}
 });
 
+Object.assign(commonTranslations, {
+  "Dia":{en:"Day",fr:"Jour",es:"Día",zh:"第",hi:"दिन"},
+  "Bulking (ganho de massa)":{en:"Bulking (muscle gain)",fr:"Prise de masse musculaire",es:"Volumen (ganancia muscular)",zh:"增肌",hi:"मांसपेशियाँ बढ़ाने के लिए"},
+  "Definição (cuting)":{en:"Cutting (definition)",fr:"Sèche (définition)",es:"Definición (cutting)",zh:"减脂塑形",hi:"कटिंग (परिभाषा)"},
+  "Recomposição corporal":{en:"Body recomposition",fr:"Recomposition corporelle",es:"Recomposición corporal",zh:"身体重组",hi:"शरीर पुनर्संरचना"},
+  "Manutenção de peso":{en:"Weight maintenance",fr:"Maintien du poids",es:"Mantenimiento del peso",zh:"体重维持",hi:"वज़न बनाए रखना"},
+  "Idade calculada automaticamente":{en:"Age calculated automatically",fr:"Âge calculé automatiquement",es:"Edad calculada automáticamente",zh:"自动计算年龄",hi:"आयु स्वतः गणना की गई"},
+  "A idade será calculada automaticamente pela data de nascimento.":{en:"Age will be calculated automatically from your date of birth.",fr:"L’âge sera calculé automatiquement à partir de votre date de naissance.",es:"La edad se calculará automáticamente a partir de la fecha de nacimiento.",zh:"系统将根据出生日期自动计算年龄。",hi:"जन्म तिथि से आयु की गणना अपने आप होगी।"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
