@@ -651,8 +651,8 @@ export function Workouts({ plan }) {
               reset();
             }}
           >
-            <option value="ginasio">Gym</option>
-            <option value="casa">Home</option>
+            <option value="ginasio">{t("Gym")}</option>
+            <option value="casa">{t("Home")}</option>
           </select>
         </label>
         <label>
@@ -1106,6 +1106,7 @@ export function Profile({ theme, onThemeChange }) {
   const [notice, setNotice] = useState(""),
     [avatarPreview, setAvatarPreview] = useState("");
   const [language, setLanguage] = useLanguage();
+  const t = (value) => translateUiText(value, language);
   return (
     <>
       <Title tag="SEUS DADOS" title="Meu perfil" />
@@ -1142,7 +1143,7 @@ export function Profile({ theme, onThemeChange }) {
               userId,
             )
           )
-            setNotice("Perfil atualizado.");
+            setNotice(t("Perfil atualizado."));
         }}
       >
         <div className="profile-card">
@@ -1189,30 +1190,30 @@ export function Profile({ theme, onThemeChange }) {
           />
           <details className="profile-advanced">
             <summary>
-              <span><small>DADOS OPCIONAIS</small><b>Rotina de treino e lembretes</b></span>
-              <span className="profile-advanced-hint">Ajustar</span>
+              <span><small>{t("DADOS OPCIONAIS")}</small><b>{t("Rotina de treino e lembretes")}</b></span>
+              <span className="profile-advanced-hint">{t("Ajustar")}</span>
             </summary>
           <label>
-            Sexo
+            {t("Sexo")}
             <select name="sex" defaultValue={profile.sex || ""}>
-              <option value="">Prefiro não informar</option>
-              <option value="feminino">Feminino</option>
-              <option value="masculino">Masculino</option>
+              <option value="">{t("Prefiro não informar")}</option>
+              <option value="feminino">{t("Feminino")}</option>
+              <option value="masculino">{t("Masculino")}</option>
             </select>
           </label>
           <label>
-            Nível
+            {t("Nível")}
             <select
               name="training_level"
               defaultValue={profile.training_level || "beginner"}
             >
-              <option value="beginner">Iniciante</option>
-              <option value="intermediate">Intermédio</option>
-              <option value="advanced">Avançado</option>
+              <option value="beginner">{t("Iniciante")}</option>
+              <option value="intermediate">{t("Intermédio")}</option>
+              <option value="advanced">{t("Avançado")}</option>
             </select>
           </label>
           <label>
-            Objetivo
+            {t("Objetivo")}
             <select
               name="goal"
               defaultValue={profile.goal || "Condicionamento"}
@@ -1238,7 +1239,7 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.training_time || "18:00"}
           />
           <label>
-            Dias de treino
+            {t("Dias de treino")}
             <select
               name="training_days"
               multiple
@@ -1267,10 +1268,10 @@ export function Profile({ theme, onThemeChange }) {
                   Notification.requestPermission();
               }}
             />
-            Ativar lembretes no horário escolhido
+            {t("Ativar lembretes no horário escolhido")}
           </label>
           <fieldset className="reminder-type-options">
-            <legend>Quais lembretes deseja receber?</legend>
+            <legend>{t("Quais lembretes deseja receber?")}</legend>
             {[
               ["treino", "Treino"],
               ["agua", "Água"],
@@ -1292,12 +1293,12 @@ export function Profile({ theme, onThemeChange }) {
           </details>
           <details className="profile-advanced">
             <summary>
-              <span><small>DADOS OPCIONAIS</small><b>Personalizar nutrição e rotina</b></span>
-              <span className="profile-advanced-hint">Ajustar</span>
+              <span><small>{t("DADOS OPCIONAIS")}</small><b>{t("Personalizar nutrição e rotina")}</b></span>
+              <span className="profile-advanced-hint">{t("Ajustar")}</span>
             </summary>
             <div className="profile-section-label">
-              <span className="eyebrow">DADOS DA PERSONALIZAÇÃO</span>
-              <b>Nutrição, rotina e disponibilidade</b>
+              <span className="eyebrow">{t("DADOS DA PERSONALIZAÇÃO")}</span>
+              <b>{t("Nutrição, rotina e disponibilidade")}</b>
             </div>
           <Field
             label="Data de nascimento"
@@ -1307,8 +1308,8 @@ export function Profile({ theme, onThemeChange }) {
           />
           <p className="profile-age-note">
             {profile.age
-              ? <>Idade calculada automaticamente: <b>{profile.age} anos</b>.</>
-              : "A idade será calculada automaticamente pela data de nascimento."}
+              ? <>{t("Idade calculada automaticamente")}: <b>{profile.age} {t("anos")}</b>.</>
+              : t("A idade será calculada automaticamente pela data de nascimento.")}
           </p>
           <Field
             label="Peso inicial (kg)"
@@ -1320,20 +1321,20 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.initial_weight || ""}
           />
           <label>
-            Atividade diária
+            {t("Atividade diária")}
             <select
               name="daily_activity"
               defaultValue={profile.daily_activity || "moderate"}
             >
-              <option value="sedentary">Pouco ativo</option>
-              <option value="light">Levemente ativo</option>
-              <option value="moderate">Moderadamente ativo</option>
-              <option value="active">Muito ativo</option>
-              <option value="very_active">Extremamente ativo</option>
+              <option value="sedentary">{t("Pouco ativo")}</option>
+              <option value="light">{t("Levemente ativo")}</option>
+              <option value="moderate">{t("Moderadamente ativo")}</option>
+              <option value="active">{t("Muito ativo")}</option>
+              <option value="very_active">{t("Extremamente ativo")}</option>
             </select>
           </label>
           <label>
-            Intensidade dos treinos
+            {t("Intensidade dos treinos")}
             <select
               name="training_intensity"
               defaultValue={profile.training_intensity || "moderate"}
@@ -1368,7 +1369,7 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.household_size || profile.people_count || 1}
           />
           <label>
-            Local principal de treino
+            {t("Local principal de treino")}
             <select
               name="training_location"
               defaultValue={profile.training_location === "ginasio" ? "ginasio" : "casa"}
@@ -1378,14 +1379,14 @@ export function Profile({ theme, onThemeChange }) {
             </select>
           </label>
           <label>
-            Orçamento alimentar
+            {t("Orçamento alimentar")}
             <select
               name="food_budget"
               defaultValue={profile.food_budget || "medium"}
             >
-              <option value="low">Económico</option>
+              <option value="low">{t("Económico")}</option>
               <option value="medium">Moderado</option>
-              <option value="high">Flexível</option>
+              <option value="high">{t("Flexível")}</option>
             </select>
           </label>
           <Field
@@ -1412,14 +1413,14 @@ export function Profile({ theme, onThemeChange }) {
             </select>
           </label>
                     <label className="profile-wide-field">
-            Preferências e pratos locais
+            {t("Preferências e pratos locais")}
             <textarea
               name="food_preferences"
               defaultValue={profile.food_preferences || ""}
             />
           </label>
           <label className="profile-wide-field">
-            Suplementos informados
+            {t("Suplementos informados")}
             <textarea
               name="supplements"
               defaultValue={
@@ -1432,22 +1433,19 @@ export function Profile({ theme, onThemeChange }) {
           </details>
         </div>
         <button className="primary" disabled={busy}>
-          Salvar perfil
+          {t("Salvar perfil")}
         </button>
       </form>
       <details className="profile-advanced profile-account-settings">
         <summary>
-          <span><small>DEFINIÇÕES DA CONTA</small><b>Idioma, aparência e privacidade</b></span>
-          <span className="profile-advanced-hint">Ajustar</span>
+          <span><small>{t("DEFINIÇÕES DA CONTA")}</small><b>{t("Idioma, aparência e privacidade")}</b></span>
+          <span className="profile-advanced-hint">{t("Ajustar")}</span>
         </summary>
       <section className="language-settings">
         <div>
           <span className="eyebrow">PREFERÊNCIAS</span>
           <h2>{translateUiText("Idioma do aplicativo", language)}</h2>
-          <p>
-            Altere os textos principais, navegação e instruções do treino
-            guiado.
-          </p>
+          <p>{t("Altere os textos principais, navegação e instruções do treino guiado.")}</p>
         </div>
         <select
           aria-label={translateUiText("Idioma do aplicativo", language)}
@@ -1464,11 +1462,8 @@ export function Profile({ theme, onThemeChange }) {
       <section className="theme-settings">
         <div>
           <span className="eyebrow">{translateUiText("APARÊNCIA", language)}</span>
-          <h2>Tema do aplicativo</h2>
-          <p>
-            Escolha a paleta que deixa o seu treino mais confortável de
-            acompanhar. A preferência fica guardada neste dispositivo.
-          </p>
+          <h2>{t("Tema do aplicativo")}</h2>
+          <p>{t("Escolha a paleta que deixa o seu treino mais confortável de acompanhar. A preferência fica guardada neste dispositivo.")}</p>
         </div>
         <div className="theme-options">
           <button
@@ -1481,8 +1476,8 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Forest Flow</b>
-            <small>Verde floresta · terracota</small>
+            <b>{t("Forest Flow")}</b>
+            <small>{t("Verde floresta · terracota")}</small>
           </button>
           <button
             type="button"
@@ -1494,8 +1489,8 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Dark Fitness</b>
-            <small>Grafite · verde-lima</small>
+            <b>{t("Dark Fitness")}</b>
+            <small>{t("Grafite · verde-lima")}</small>
           </button>
           <button
             type="button"
@@ -1536,7 +1531,7 @@ export function Profile({ theme, onThemeChange }) {
             const url = await openMedia("profile-photos", path);
             if (await mutate("profiles", { avatar_url: path }, userId)) {
               setAvatarPreview(url);
-              setNotice("Foto de perfil atualizada.");
+              setNotice(t("Foto de perfil atualizada."));
             }
           } catch (err) {
             setError(err.message);
@@ -1553,7 +1548,7 @@ export function Profile({ theme, onThemeChange }) {
           />
         </label>
         <button className="outline" disabled={busy}>
-          Guardar foto de perfil
+          {t("Guardar foto de perfil")}
         </button>
       </form>
       {notice && <p className="success">{notice}</p>}
