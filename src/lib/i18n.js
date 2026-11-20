@@ -530,6 +530,21 @@ Object.assign(commonTranslations, {
   "Peso objetivo (kg)":{en:"Target weight (kg)",fr:"Poids cible (kg)",es:"Peso objetivo (kg)",zh:"目标体重（kg）",hi:"लक्ष्य वज़न (kg)"}
 });
 
+Object.assign(commonTranslations, {
+  "COMECE COM O JL TRAINER":{en:"GET STARTED WITH JL TRAINER",fr:"BIENVENUE SUR JL TRAINER",es:"EMPIEZA CON JL TRAINER",zh:"开始使用 JL TRAINER",hi:"JL TRAINER के साथ शुरुआत करें"},
+  "Seu painel inicial":{en:"Your home dashboard",fr:"Votre tableau de bord",es:"Tu panel principal",zh:"你的首页面板",hi:"आपका होम डैशबोर्ड"},
+  "Aqui você acompanha a sequência, o próximo treino e a evolução dos seus dados.":{en:"Track your streak, next workout and personal progress here.",fr:"Suivez ici votre série, votre prochain entraînement et votre progression.",es:"Aquí puedes seguir tu racha, el próximo entrenamiento y tu progreso.",zh:"在这里查看连续记录、下一次训练和个人进度。",hi:"यहाँ अपनी निरंतरता, अगला वर्कआउट और प्रगति देखें।"},
+  "Treinos personalizados":{en:"Personalized workouts",fr:"Entraînements personnalisés",es:"Entrenamientos personalizados",zh:"个性化训练",hi:"व्यक्तिगत वर्कआउट"},
+  "Escolha o dia, a dificuldade e o equipamento. O programa considera seu objetivo, idade e experiência.":{en:"Choose the day, difficulty and equipment. Your plan considers your goal, age and experience.",fr:"Choisissez le jour, la difficulté et l’équipement. Le programme tient compte de votre objectif, de votre âge et de votre expérience.",es:"Elige el día, la dificultad y el equipo. El programa considera tu objetivo, edad y experiencia.",zh:"选择日期、难度和器材。计划会考虑你的目标、年龄和经验。",hi:"दिन, कठिनाई और उपकरण चुनें。 आपका कार्यक्रम लक्ष्य, उम्र और अनुभव को ध्यान में रखता है।"},
+  "Alimentação no seu horário":{en:"Nutrition on your schedule",fr:"Nutrition à votre rythme",es:"Alimentación según tu horario",zh:"按你的时间安排饮食",hi:"आपके समय के अनुसार पोषण"},
+  "Veja refeições, calorias, água e preparo organizados ao redor do horário do seu treino.":{en:"See meals, calories, water and preparation arranged around your workout time.",fr:"Retrouvez les repas, calories, l’eau et la préparation organisés autour de l’heure de votre entraînement.",es:"Consulta comidas, calorías, agua y preparación organizadas según la hora de tu entrenamiento.",zh:"查看围绕训练时间安排的餐食、热量、饮水和做法。",hi:"अपने वर्कआउट समय के अनुसार भोजन, कैलोरी, पानी और तैयारी देखें।"},
+  "Progresso e notificações":{en:"Progress and notifications",fr:"Progression et notifications",es:"Progreso y notificaciones",zh:"进度和通知",hi:"प्रगति और सूचनाएँ"},
+  "Registre seus treinos, fotos e medidas. Ative as notificações no Perfil para receber lembretes.":{en:"Log workouts, photos and measurements. Enable notifications in Profile to receive reminders.",fr:"Enregistrez vos entraînements, photos et mesures. Activez les notifications dans le profil pour recevoir des rappels.",es:"Registra entrenamientos, fotos y medidas. Activa las notificaciones en Perfil para recibir recordatorios.",zh:"记录训练、照片和测量数据。在个人资料中开启通知以接收提醒。",hi:"वर्कआउट, फ़ोटो और माप दर्ज करें। रिमाइंडर पाने के लिए प्रोफ़ाइल में सूचनाएँ चालू करें।"},
+  "Pular tutorial":{en:"Skip tutorial",fr:"Passer le tutoriel",es:"Saltar tutorial",zh:"跳过教程",hi:"ट्यूटोरियल छोड़ें"},
+  "Próximo":{en:"Next",fr:"Suivant",es:"Siguiente",zh:"下一步",hi:"अगला"},
+  "Começar":{en:"Get started",fr:"Commencer",es:"Comenzar",zh:"开始",hi:"शुरू करें"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
