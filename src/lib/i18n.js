@@ -545,6 +545,48 @@ Object.assign(commonTranslations, {
   "Começar":{en:"Get started",fr:"Commencer",es:"Comenzar",zh:"开始",hi:"शुरू करें"}
 });
 
+Object.assign(commonTranslations, {
+  "Todos":{en:"All",fr:"Tous",es:"Todos",zh:"全部",hi:"सभी"},
+  "Proteínas":{en:"Protein",fr:"Protéines",es:"Proteínas",zh:"蛋白质",hi:"प्रोटीन"},
+  "Carboidratos":{en:"Carbohydrates",fr:"Glucides",es:"Carbohidratos",zh:"碳水化合物",hi:"कार्बोहाइड्रेट"},
+  "Frutas":{en:"Fruit",fr:"Fruits",es:"Frutas",zh:"水果",hi:"फल"},
+  "Vegetais":{en:"Vegetables",fr:"Légumes",es:"Verduras",zh:"蔬菜",hi:"सब्ज़ियाँ"},
+  "Laticínios":{en:"Dairy",fr:"Produits laitiers",es:"Lácteos",zh:"乳制品",hi:"डेयरी"},
+  "Cereais":{en:"Grains",fr:"Céréales",es:"Cereales",zh:"谷物",hi:"अनाज"},
+  "Gorduras":{en:"Fats",fr:"Matières grasses",es:"Grasas",zh:"脂肪",hi:"वसा"},
+  "Outros":{en:"Other",fr:"Autres",es:"Otros",zh:"其他",hi:"अन्य"},
+  "Conheça os alimentos":{en:"Explore foods",fr:"Découvrez les aliments",es:"Conoce los alimentos",zh:"认识食物",hi:"खाद्य पदार्थ देखें"},
+  "Fotografias associadas ao alimento correto, com porções e valores estimados.":{en:"Photos matched to the correct food, with estimated portions and nutrition values.",fr:"Photos correspondant au bon aliment, avec portions et valeurs nutritionnelles estimées.",es:"Fotos asociadas al alimento correcto, con porciones y valores estimados.",zh:"照片与食物一一对应，并提供估算份量和营养数据。",hi:"सही खाद्य पदार्थ की तस्वीरें, अनुमानित मात्रा और पोषण मूल्यों के साथ।"},
+  "itens":{en:"items",fr:"articles",es:"elementos",zh:"项",hi:"वस्तुएँ"},
+  "Buscar alimento":{en:"Search foods",fr:"Rechercher des aliments",es:"Buscar alimentos",zh:"搜索食物",hi:"खाद्य पदार्थ खोजें"},
+  "proteína":{en:"protein",fr:"protéines",es:"proteína",zh:"蛋白质",hi:"प्रोटीन"},
+  "carboidratos":{en:"carbohydrates",fr:"glucides",es:"carbohidratos",zh:"碳水化合物",hi:"कार्बोहाइड्रेट"},
+  "gordura":{en:"fat",fr:"lipides",es:"grasa",zh:"脂肪",hi:"वसा"},
+  "fibras":{en:"fiber",fr:"fibres",es:"fibra",zh:"膳食纤维",hi:"फाइबर"},
+  "Valores nutricionais aproximados por porção. As fotografias da biblioteca ficam armazenadas no aplicativo para carregar com mais rapidez.":{en:"Approximate nutrition values per serving. Food library photos are stored in the app for faster loading.",fr:"Valeurs nutritionnelles approximatives par portion. Les photos de la bibliothèque sont stockées dans l’application pour accélérer le chargement.",es:"Valores nutricionales aproximados por porción. Las fotos de la biblioteca se almacenan en la aplicación para cargar más rápido.",zh:"每份营养数据为估算值。食物库图片保存在应用中，以加快加载速度。",hi:"प्रति मात्रा पोषण मूल्य अनुमानित हैं। तेज़ लोडिंग के लिए खाद्य पुस्तकालय की तस्वीरें ऐप में रखी जाती हैं।"},
+  "Créditos e licenças das fotografias":{en:"Photo credits and licenses",fr:"Crédits et licences des photos",es:"Créditos y licencias de las fotos",zh:"照片来源与许可",hi:"फ़ोटो क्रेडिट और लाइसेंस"},
+  "Escolha o dia":{en:"Choose a day",fr:"Choisir un jour",es:"Elige el día",zh:"选择日期",hi:"दिन चुनें"},
+  "Dias do plano alimentar":{en:"Meal plan days",fr:"Jours du programme alimentaire",es:"Días del plan de comidas",zh:"饮食计划天数",hi:"भोजन योजना के दिन"},
+  "Selecionar dia":{en:"Select day",fr:"Sélectionner le jour",es:"Seleccionar día",zh:"选择日期",hi:"दिन चुनें"},
+  "Alimentação perdida":{en:"Missed nutrition",fr:"Repas manqués",es:"Alimentación no registrada",zh:"饮食未完成",hi:"भोजन छूटा"},
+  "Todas as refeições concluídas":{en:"All meals completed",fr:"Tous les repas terminés",es:"Todas las comidas completadas",zh:"所有餐食已完成",hi:"सभी भोजन पूरे"},
+  "Dia por cumprir":{en:"Day to complete",fr:"Jour à terminer",es:"Día pendiente",zh:"待完成日期",hi:"पूरा करना बाकी दिन"},
+  "refeições concluídas":{en:"meals completed",fr:"repas terminés",es:"comidas completadas",zh:"餐已完成",hi:"भोजन पूरे"},
+  "HORÁRIO PERSONALIZADO":{en:"PERSONALIZED SCHEDULE",fr:"HORAIRES PERSONNALISÉS",es:"HORARIO PERSONALIZADO",zh:"个性化时间安排",hi:"व्यक्तिगत समय-सारणी"},
+  "Treino previsto às":{en:"Workout scheduled for",fr:"Entraînement prévu à",es:"Entrenamiento previsto a las",zh:"训练安排在",hi:"वर्कआउट का समय"},
+  "O pré-treino aparece cerca de 75 minutos antes e o pós-treino cerca de 75 minutos depois. Este horário vem do seu cadastro e pode ser alterado no Perfil.":{en:"The pre-workout meal appears about 75 minutes before training and the post-workout meal about 75 minutes after. This time comes from your profile and can be changed there.",fr:"Le repas pré-entraînement apparaît environ 75 minutes avant et le repas post-entraînement environ 75 minutes après. Cet horaire vient de votre profil et peut y être modifié.",es:"La comida preentreno aparece unos 75 minutos antes y la comida postentreno unos 75 minutos después. Este horario viene de tu perfil y puedes cambiarlo allí.",zh:"训练前餐约在训练前75分钟显示，训练后餐约在训练后75分钟显示。时间来自个人资料，可在其中修改。",hi:"प्री-वर्कआउट भोजन प्रशिक्षण से लगभग 75 मिनट पहले और पोस्ट-वर्कआउट भोजन लगभग 75 मिनट बाद दिखता है। यह समय आपकी प्रोफ़ाइल से आता है और वहाँ बदला जा सकता है।"},
+  "Alterar horário":{en:"Change schedule",fr:"Modifier l’horaire",es:"Cambiar horario",zh:"更改时间",hi:"समय बदलें"},
+  "Preparação:":{en:"Preparation:",fr:"Préparation :",es:"Preparación:",zh:"做法：",hi:"तैयारी:"},
+  "Refeição equilibrada":{en:"Balanced meal",fr:"Repas équilibré",es:"Comida equilibrada",zh:"均衡餐食",hi:"संतुलित भोजन"},
+  "Sem contagem ou restrição calórica automática para menores.":{en:"No automatic calorie counting or restriction for minors.",fr:"Aucun comptage ni restriction calorique automatique pour les mineurs.",es:"Sin conteo ni restricción calórica automática para menores.",zh:"未成年人不会自动计算或限制热量。",hi:"नाबालिगों के लिए कैलोरी की स्वचालित गणना या पाबंदी नहीं।"},
+  "Ingredientes e porções estimadas:":{en:"Ingredients and estimated portions:",fr:"Ingrédients et portions estimées :",es:"Ingredientes y porciones estimadas:",zh:"食材和估算份量：",hi:"सामग्री और अनुमानित मात्रा:"},
+  "Estimados hoje":{en:"Estimated today",fr:"Estimation du jour",es:"Estimado hoy",zh:"今日估算",hi:"आज का अनुमान"},
+  "L estimados hoje":{en:"L estimated today",fr:"L estimés aujourd’hui",es:"L estimados hoy",zh:"今日估算升数",hi:"आज अनुमानित लीटर"},
+  "Mensagem":{en:"Message",fr:"Message",es:"Mensaje",zh:"消息",hi:"संदेश"},
+  "Enviar mensagem":{en:"Send message",fr:"Envoyer le message",es:"Enviar mensaje",zh:"发送消息",hi:"संदेश भेजें"},
+  "Não oferece diagnóstico, dieta clínica ou prescrição. Converse com seu coach.":{en:"This does not provide diagnosis, clinical diets or prescriptions. Talk to your coach.",fr:"Ne fournit ni diagnostic, ni régime clinique, ni prescription. Parlez à votre coach.",es:"No ofrece diagnóstico, dieta clínica ni prescripción. Consulta con tu entrenador.",zh:"不提供诊断、临床饮食或处方。请咨询你的教练。",hi:"यह निदान, चिकित्सीय आहार या नुस्खे नहीं देता। अपने कोच से बात करें。"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
