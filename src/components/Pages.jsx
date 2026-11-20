@@ -2605,10 +2605,15 @@ export function Nutrition({ plan, whatsapp }) {
   }, [loading, profile.created_at, profile.birth_date, profile.age, profile.goal, profile.modality, profile.current_weight, profile.height, profile.allergies, profile.foods_to_avoid, profile.available_foods, profile.food_budget, profile.training_intensity, userId, nutritionLogs.length, legacyConsumedKey]);
   const foodGroups = ["Todos", ...new Set(foodLibrary.map((food) => food.group))];
   const visibleFoodLibrary = foodLibrary.filter((food) => {
-    const matchesSearch = food.name.toLowerCase().includes(foodSearch.toLowerCase());
+    const displayName = translateFoodName(food.name, language);
+    const matchesSearch = food.name.toLowerCase().includes(foodSearch.toLowerCase()) || displayName.toLowerCase().includes(foodSearch.toLowerCase());
     const matchesGroup = foodGroup === "Todos" || food.group === foodGroup;
     return matchesSearch && matchesGroup;
-  });
+  }).map((food) => ({
+    ...food,
+    displayName: translateFoodName(food.name, language),
+    displayPortion: translateIngredientString(food.portion, language),
+  }));
   const completedMeals = n.meals.filter((meal) => isMealConsumed(meal, day, consumed)).length;
   const markConsumed = (key) =>
     setConsumed((list) => {
@@ -2630,15 +2635,20 @@ export function Nutrition({ plan, whatsapp }) {
   const mealData = (meal) => {
     const hasReplacement = Boolean(replaced[meal.title]?.length);
     const foods = hasReplacement ? replaced[meal.title] : meal.foods;
+    const displayFoods = foods.map((food) => ({
+      ...food,
+      displayName: translateFoodName(food.sourceName || food.name, language),
+      displayPortion: translateIngredientString(food.portion, language),
+    }));
     const sum = (key) => Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
     const totals = hasReplacement ? null : meal.nutrition;
     return {
       ...meal,
-      foods,
-      items: meal.recipeName ? [meal.recipeName] : foods.map((food) => food.name),
+      foods: displayFoods,
+      items: meal.recipeName ? [meal.recipeName] : displayFoods.map((food) => food.displayName),
       ingredients: hasReplacement
-        ? foods.map((food) => food.name + " (" + food.portion + ")")
-        : meal.ingredients?.length ? meal.ingredients : foods.map((food) => food.name + " (" + food.portion + ")"),
+        ? displayFoods.map((food) => food.displayName + " (" + food.displayPortion + ")")
+        : meal.ingredients?.length ? meal.ingredients : displayFoods.map((food) => food.displayName + " (" + food.displayPortion + ")"),
       image: meal.image || null,
       kcal: totals?.kcal ?? sum("kcal"),
       protein: totals?.protein ?? sum("protein"),
