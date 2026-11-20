@@ -1456,3 +1456,103 @@ body.theme-blue .auth-art h1 em{color:#176fe6}
 body.theme-blue .auth-box input{background:#fff;color:#142744;border-color:#d8e6f7}
 body.theme-blue .auth-box label,body.theme-blue .auth-box>p{color:#62758d}
 body.theme-blue .auth-links button,body.theme-blue .auth-box details summary{color:#176fe6}
+
+
+/* Ocean Light: controlos nativos, calendário, progresso e uploads */
+.shell.theme-blue { color-scheme: light; }
+.shell.theme-blue input[type="date"],
+.shell.theme-blue input[type="time"],
+.shell.theme-blue input[type="datetime-local"],
+.shell.theme-blue input[type="month"],
+.shell.theme-blue input[type="week"] { color-scheme: light; }
+.shell.theme-blue input[type="date"]::-webkit-calendar-picker-indicator,
+.shell.theme-blue input[type="time"]::-webkit-calendar-picker-indicator { opacity: .72; cursor: pointer; }
+.shell.theme-blue select option { background: #fff; color: #142744; }
+.shell.theme-blue input[type="checkbox"],
+.shell.theme-blue input[type="radio"] {
+  accent-color: #1678e8;
+  background: #fff !important;
+  border-color: #b9d5f5 !important;
+}
+.shell.theme-blue input[type="checkbox"]:checked,
+.shell.theme-blue input[type="radio"]:checked {
+  background: #1678e8 !important;
+  border-color: #1678e8 !important;
+}
+.shell.theme-blue input[type="range"] { accent-color: #1678e8; }
+.shell.theme-blue input[type="file"]::file-selector-button {
+  background: #eaf4ff !important;
+  border: 1px solid #b9d5f5 !important;
+  color: #1266ce !important;
+}
+.shell.theme-blue .calendar-card,
+.shell.theme-blue .nutrition-calendar,
+.shell.theme-blue .hydration-card,
+.shell.theme-blue .progress-journey-card,
+.shell.theme-blue .progress-photo-slot,
+.shell.theme-blue .profile-advanced,
+.shell.theme-blue .theme-options button {
+  background: #fff;
+  border-color: #d8e6f7;
+  color: #142744;
+}
+.shell.theme-blue .calendar-card button,
+.shell.theme-blue .calendar-head button,
+.shell.theme-blue .nutrition-day-grid button {
+  background: #f7fbff;
+  border-color: #d8e6f7;
+  color: #49617f;
+}
+.shell.theme-blue .calendar-card button.active,
+.shell.theme-blue .calendar-card button.selected,
+.shell.theme-blue .calendar-head button.active {
+  background: #e3f1ff;
+  border-color: #1688f7;
+  color: #075fca;
+}
+.shell.theme-blue .progress-journey-card p,
+.shell.theme-blue .progress-journey-note,
+.shell.theme-blue .progress-photo-slot > small,
+.shell.theme-blue .progress-photo-upload .file-drop small {
+  color: #61758f;
+}
+.shell.theme-blue .progress-30-grid span {
+  background: #f1f6fc;
+  border-color: #d8e6f7;
+  color: #49617f;
+}
+.shell.theme-blue .progress-30-grid span.done {
+  background: #e5f7ed;
+  border-color: #a9dfbf;
+  color: #187548;
+}
+.shell.theme-blue .progress-30-grid span.missed {
+  background: #fff0f1;
+  border-color: #f0bdc2;
+  color: #ad3440;
+}
+.shell.theme-blue .progress-30-grid span.partial {
+  background: #eaf4ff;
+  border-color: #b9d8fb;
+  color: #1769cf;
+}
+.shell.theme-blue .progress-photo-preview,
+.shell.theme-blue .progress-photo-slot .progress-photo-placeholder {
+  background: #f4f8fd;
+  border-color: #d8e6f7;
+  color: #61758f;
+}
+.shell.theme-blue .progress-photo-slot .progress-photo-upload .file-drop {
+  background: #f8fbff;
+  border-color: #b9d5f5;
+  color: #294563;
+}
+.shell.theme-blue .progress-photo-slot .progress-photo-upload .checkbox {
+  color: #61758f;
+}
+.shell.theme-blue .onboarding-note,
+.shell.theme-blue .nutrition-safety-note {
+  background: #edf6ff;
+  border-left-color: #1688f7;
+  color: #526984;
+}
