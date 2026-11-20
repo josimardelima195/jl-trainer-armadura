@@ -30,6 +30,8 @@ import { useLanguage, translatedInstructions, languageOptions, translateUiText, 
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
+  const [language] = useLanguage();
+  const exerciseName = translateExerciseName(exercise?.name, language);
   const source = exercise?.image_path || exercise?.gifUrl;
   return (
     <div className={`exercise-gif exercise-gif-${variant}`}>
