@@ -587,6 +587,47 @@ Object.assign(commonTranslations, {
   "Não oferece diagnóstico, dieta clínica ou prescrição. Converse com seu coach.":{en:"This does not provide diagnosis, clinical diets or prescriptions. Talk to your coach.",fr:"Ne fournit ni diagnostic, ni régime clinique, ni prescription. Parlez à votre coach.",es:"No ofrece diagnóstico, dieta clínica ni prescripción. Consulta con tu entrenador.",zh:"不提供诊断、临床饮食或处方。请咨询你的教练。",hi:"यह निदान, चिकित्सीय आहार या नुस्खे नहीं देता। अपने कोच से बात करें。"}
 });
 
+Object.assign(commonTranslations, {
+  "PLANO ALIMENTAR":{en:"MEAL PLAN",fr:"PLAN ALIMENTAIRE",es:"PLAN DE ALIMENTACIÓN",zh:"饮食计划",hi:"भोजन योजना"},
+  "PLANO DE 30 DIAS":{en:"30-DAY PLAN",fr:"PROGRAMME DE 30 JOURS",es:"PLAN DE 30 DÍAS",zh:"30天计划",hi:"30-दिन की योजना"},
+  "PERSONALIZADO":{en:"PERSONALIZED",fr:"PERSONNALISÉ",es:"PERSONALIZADO",zh:"个性化",hi:"व्यक्तिगत"},
+  "PERFIL INDIVIDUAL":{en:"INDIVIDUAL PROFILE",fr:"PROFIL INDIVIDUEL",es:"PERFIL INDIVIDUAL",zh:"个人资料",hi:"व्यक्तिगत प्रोफ़ाइल"},
+  "Comer bem para treinar melhor":{en:"Eat well to train better",fr:"Bien manger pour mieux s’entraîner",es:"Come bien para entrenar mejor",zh:"吃得好，训练更好",hi:"बेहतर प्रशिक्षण के लिए अच्छा खाएँ"},
+  "Plano personalizado":{en:"Personalized plan",fr:"Programme personnalisé",es:"Plan personalizado",zh:"个性化计划",hi:"व्यक्तिगत योजना"},
+  "Energia, hidratação e rotina ajustadas aos seus dados.":{en:"Energy, hydration and routine tailored to your details.",fr:"Énergie, hydratation et routine adaptées à vos informations.",es:"Energía, hidratación y rutina adaptadas a tus datos.",zh:"根据你的资料调整能量、饮水和日常安排。",hi:"आपके विवरण के अनुसार ऊर्जा, पानी और दिनचर्या तय की गई है।"},
+  "Não substitui nutricionista.":{en:"This does not replace a dietitian.",fr:"Ne remplace pas un diététicien.",es:"No sustituye a un nutricionista.",zh:"不能替代营养师的建议。",hi:"यह पोषण विशेषज्ञ का विकल्प नहीं है।"},
+  "sem meta calórica automática para menores":{en:"no automatic calorie target for minors",fr:"pas d’objectif calorique automatique pour les mineurs",es:"sin objetivo calórico automático para menores",zh:"未成年人不设自动热量目标",hi:"नाबालिगों के लिए स्वचालित कैलोरी लक्ष्य नहीं"},
+  "complete o perfil":{en:"complete your profile",fr:"complétez votre profil",es:"completa tu perfil",zh:"请完善个人资料",hi:"अपनी प्रोफ़ाइल पूरी करें"},
+  "kcal estimadas/dia":{en:"estimated kcal/day",fr:"kcal estimées/jour",es:"kcal estimadas/día",zh:"估算千卡/天",hi:"अनुमानित किलो कैलोरी/दिन"},
+  "Plano de 30 dias":{en:"30-day plan",fr:"Programme de 30 jours",es:"Plan de 30 días",zh:"30天计划",hi:"30-दिन की योजना"},
+  "Alimentos":{en:"Foods",fr:"Aliments",es:"Alimentos",zh:"食物",hi:"खाद्य पदार्थ"},
+  "Lista de compras":{en:"Shopping list",fr:"Liste de courses",es:"Lista de compras",zh:"购物清单",hi:"खरीदारी सूची"},
+  "BIBLIOTECA VISUAL":{en:"FOOD LIBRARY",fr:"BIBLIOTHÈQUE ALIMENTAIRE",es:"BIBLIOTECA DE ALIMENTOS",zh:"食物库",hi:"खाद्य पुस्तकालय"},
+  "Pesquisar alimento":{en:"Search foods",fr:"Rechercher des aliments",es:"Buscar alimentos",zh:"搜索食物",hi:"खाद्य पदार्थ खोजें"},
+  "Ex.: banana, frango, batata-doce...":{en:"E.g. banana, chicken, sweet potato...",fr:"Ex. : banane, poulet, patate douce...",es:"Ej.: banana, pollo, batata...",zh:"例如：香蕉、鸡肉、红薯……",hi:"जैसे: केला, चिकन, शकरकंद..."},
+  "por porção":{en:"per serving",fr:"par portion",es:"por porción",zh:"每份",hi:"प्रति मात्रा"},
+  "CALENDÁRIO VISUAL":{en:"VISUAL CALENDAR",fr:"CALENDRIER VISUEL",es:"CALENDARIO VISUAL",zh:"可视化日历",hi:"दृश्य कैलेंडर"},
+  "30 DIAS":{en:"30 DAYS",fr:"30 JOURS",es:"30 DÍAS",zh:"30天",hi:"30 दिन"},
+  "Verde: todas as refeições marcadas. Vermelho: dia terminado sem concluir todas as refeições. O dia atual só é avaliado quando terminar.":{en:"Green: all meals checked. Red: the day ended without all meals completed. The current day is evaluated only when it ends.",fr:"Vert : tous les repas sont cochés. Rouge : la journée s’est terminée sans que tous les repas soient terminés. Le jour actuel est évalué uniquement à sa fin.",es:"Verde: todas las comidas marcadas. Rojo: el día terminó sin completar todas las comidas. El día actual solo se evalúa al finalizar.",zh:"绿色：所有餐食均已勾选。红色：当天结束时仍有餐食未完成。当前日期只在结束后评估。",hi:"हरा: सभी भोजन चिह्नित हैं। लाल: दिन समाप्त होने तक सभी भोजन पूरे नहीं हुए। वर्तमान दिन का मूल्यांकन समाप्त होने पर होगा।"},
+  "CONSISTÊNCIA DIÁRIA":{en:"DAILY CONSISTENCY",fr:"RÉGULARITÉ QUOTIDIENNE",es:"CONSTANCIA DIARIA",zh:"每日坚持",hi:"दैनिक निरंतरता"},
+  "Consumida ✓":{en:"Consumed ✓",fr:"Consommé ✓",es:"Consumida ✓",zh:"已食用 ✓",hi:"खाया ✓"},
+  "Marcar como consumida":{en:"Mark as consumed",fr:"Marquer comme consommé",es:"Marcar como consumida",zh:"标记为已食用",hi:"खाया हुआ चिह्नित करें"},
+  "Substituir refeição":{en:"Replace meal",fr:"Remplacer le repas",es:"Sustituir comida",zh:"替换餐食",hi:"भोजन बदलें"},
+  "Substituição inteligente aplicada, respeitando grupos nutricionais. Pode voltar ao plano original ao trocar de dia.":{en:"A smart replacement was applied while preserving nutrition groups. You can return to the original plan by changing the day.",fr:"Un remplacement adapté a été appliqué en respectant les groupes nutritionnels. Vous pouvez retrouver le programme initial en changeant de jour.",es:"Se aplicó una sustitución inteligente respetando los grupos nutricionales. Puedes volver al plan original al cambiar de día.",zh:"已在保持营养类别的前提下替换食物。切换日期即可返回原计划。",hi:"पोषण समूहों को ध्यान में रखते हुए विकल्प लागू किया गया। दिन बदलकर मूल योजना पर लौट सकते हैं।"},
+  "HIDRATAÇÃO INDIVIDUAL":{en:"PERSONALIZED HYDRATION",fr:"HYDRATATION PERSONNALISÉE",es:"HIDRATACIÓN PERSONALIZADA",zh:"个性化补水",hi:"व्यक्तिगत जल सेवन"},
+  "Calculado com peso, idade, atividade, duração, intensidade e calor informado. Não force água em excesso.":{en:"Estimated using weight, age, activity, duration, intensity and reported heat. Do not force excessive water intake.",fr:"Estimation fondée sur le poids, l’âge, l’activité, la durée, l’intensité et la chaleur indiquée. Ne forcez pas une consommation excessive d’eau.",es:"Calculado según peso, edad, actividad, duración, intensidad y calor indicado. No fuerces el consumo excesivo de agua.",zh:"根据体重、年龄、活动、时长、强度和报告的炎热程度估算。不要强迫自己过量饮水。",hi:"वज़न, उम्र, गतिविधि, अवधि, तीव्रता और बताई गई गर्मी के आधार पर अनुमान। ज़रूरत से ज़्यादा पानी पीने के लिए मजबूर न करें।"},
+  " de ": {en:" of ",fr:" sur ",es:" de ",zh:" / ",hi:" में से "},
+  "OPCIONAL · SUPLEMENTAÇÃO":{en:"OPTIONAL · SUPPLEMENTS",fr:"OPTIONNEL · COMPLÉMENTS",es:"OPCIONAL · SUPLEMENTOS",zh:"可选 · 补剂",hi:"वैकल्पिक · सप्लीमेंट"},
+  "Creatina NPL":{en:"NPL Creatine",fr:"Créatine NPL",es:"Creatina NPL",zh:"NPL肌酸",hi:"NPL क्रिएटिन"},
+  "Embalagem NPL Creatine Monohydrate":{en:"NPL Creatine Monohydrate package",fr:"Emballage NPL Creatine Monohydrate",es:"Envase NPL Creatine Monohydrate",zh:"NPL一水肌酸包装",hi:"NPL क्रिएटिन मोनोहाइड्रेट पैकेज"},
+  "Produto opcional. Não substitui refeições nem avaliação profissional.":{en:"Optional product. It does not replace meals or professional assessment.",fr:"Produit facultatif. Il ne remplace ni les repas ni une évaluation professionnelle.",es:"Producto opcional. No sustituye las comidas ni la evaluación profesional.",zh:"可选产品，不能替代正餐或专业评估。",hi:"वैकल्पिक उत्पाद। यह भोजन या पेशेवर मूल्यांकन का विकल्प नहीं है।"},
+  "Ver produto oficial":{en:"View official product",fr:"Voir le produit officiel",es:"Ver producto oficial",zh:"查看官方产品",hi:"आधिकारिक उत्पाद देखें"},
+  "Perguntar no WhatsApp":{en:"Ask on WhatsApp",fr:"Demander sur WhatsApp",es:"Preguntar por WhatsApp",zh:"通过WhatsApp咨询",hi:"WhatsApp पर पूछें"},
+  "ORIENTAÇÃO INDIVIDUAL":{en:"INDIVIDUAL GUIDANCE",fr:"CONSEILS PERSONNALISÉS",es:"ORIENTACIÓN INDIVIDUAL",zh:"个性化指导",hi:"व्यक्तिगत मार्गदर्शन"},
+  "Sem promessas médicas":{en:"No medical promises",fr:"Sans promesses médicales",es:"Sin promesas médicas",zh:"不作医疗承诺",hi:"कोई चिकित्सीय वादा नहीं"},
+  "As calorias e quantidades são estimativas educativas calculadas individualmente. Objetivos de emagrecimento, cutting, bulking e suplementos não são prescrição médica. Consulte um nutricionista para orientação clínica.":{en:"Calories and portions are educational estimates calculated individually. Weight loss, cutting, bulking and supplement goals are not medical prescriptions. Consult a dietitian for clinical guidance.",fr:"Les calories et quantités sont des estimations éducatives calculées individuellement. Les objectifs de perte de poids, sèche, prise de masse et compléments ne constituent pas une prescription médicale. Consultez un diététicien pour un avis clinique.",es:"Las calorías y cantidades son estimaciones educativas calculadas individualmente. Los objetivos de pérdida de peso, definición, volumen y suplementos no son una prescripción médica. Consulta a un nutricionista para orientación clínica.",zh:"热量和份量是根据个人情况计算的教育性估算。减重、减脂、增肌和补剂目标不是医疗处方。如需临床指导，请咨询营养师。",hi:"कैलोरी और मात्रा व्यक्तिगत रूप से गणना किए गए शैक्षिक अनुमान हैं। वज़न घटाना, कटिंग, बल्किंग और सप्लीमेंट लक्ष्य चिकित्सा नुस्खे नहीं हैं। चिकित्सीय सलाह के लिए पोषण विशेषज्ञ से परामर्श करें।"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
