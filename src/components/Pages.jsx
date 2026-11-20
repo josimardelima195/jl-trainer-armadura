@@ -2508,19 +2508,39 @@ export function Nutrition({ plan, whatsapp }) {
   const selectedPlanDate = accountDateForDay(profile.created_at, day);
   const selectedNutritionLog = nutritionLogs.find((log) => String(log.local_date || "").slice(0, 10) === selectedPlanDate);
   const selectedMealKeys = Array.isArray(selectedNutritionLog?.meal_keys) ? selectedNutritionLog.meal_keys : [];
+  const mealStorageKey = (meal, planDay = day) => String(planDay) + "-" + (meal.mealKey || meal.title);
+  const mealStorageAliases = (meal, planDay = day) => Array.from(new Set([
+    mealStorageKey(meal, planDay),
+    String(planDay) + "-" + meal.title,
+    ...["pt", "en", "fr", "es", "zh", "hi"].map((code) => String(planDay) + "-" + translateMealLabel(meal.mealKey || meal.title, code)),
+  ]));
+  const isMealConsumed = (meal, planDay = day, keys = consumed) =>
+    mealStorageAliases(meal, planDay).some((key) => keys.includes(key));
   useEffect(() => {
-    if (!selectedNutritionLog) return;
-    const prefix = `${day}-`;
-    setConsumed((current) => [
-      ...current.filter((key) => !key.startsWith(prefix)),
-      ...selectedMealKeys,
-    ]);
-  }, [selectedPlanDate, selectedNutritionLog?.updated_at, selectedMealKeys.join("|")]);
+    const prefix = String(day) + "-";
+    setConsumed((current) => {
+      const dayKeys = [...current.filter((key) => key.startsWith(prefix)), ...selectedMealKeys];
+      const normalized = n.meals
+        .filter((meal) => isMealConsumed(meal, day, dayKeys))
+        .map((meal) => mealStorageKey(meal, day));
+      return [...current.filter((key) => !key.startsWith(prefix)), ...normalized];
+    });
+  }, [selectedPlanDate, selectedNutritionLog?.updated_at, selectedMealKeys.join("|"), day, language, n.meals.length]);
+  useEffect(() => {
+    const prefix = String(day) + "-";
+    setConsumed((current) => {
+      const dayKeys = current.filter((key) => key.startsWith(prefix));
+      const normalized = n.meals
+        .filter((meal) => isMealConsumed(meal, day, dayKeys))
+        .map((meal) => mealStorageKey(meal, day));
+      return [...current.filter((key) => !key.startsWith(prefix)), ...normalized];
+    });
+  }, [day, language, n.meals.length]);
   const persistNutritionDay = async (nextConsumed) => {
     if (!supabase || !userId || userId === "demo" || !selectedPlanDate || !n.meals.length) return;
     const mealKeys = n.meals
-      .map((meal) => `${day}-${meal.title}`)
-      .filter((key) => nextConsumed.includes(key));
+      .filter((meal) => isMealConsumed(meal, day, nextConsumed))
+      .map((meal) => mealStorageKey(meal, day));
     try {
       const { error } = await supabase.from("daily_nutrition_logs").upsert({
         user_id: userId,
@@ -2540,8 +2560,8 @@ export function Nutrition({ plan, whatsapp }) {
   useEffect(() => {
     if (loading || !supabase || !userId || userId === "demo" || !selectedPlanDate || selectedNutritionLog || !n.meals.length) return;
     const selectedKeys = n.meals
-      .map((meal) => `${day}-${meal.title}`)
-      .filter((key) => consumed.includes(key));
+      .filter((meal) => isMealConsumed(meal, day, consumed))
+      .map((meal) => mealStorageKey(meal, day));
     if (selectedKeys.length) void persistNutritionDay(consumed);
   }, [loading, selectedPlanDate, selectedNutritionLog?.id, n.meals.length]);
   useEffect(() => {
@@ -2561,8 +2581,8 @@ export function Nutrition({ plan, whatsapp }) {
       const meals = dayPlan.meals || [];
       if (!meals.length) continue;
       const mealKeys = meals
-        .map((meal) => `${planDay}-${meal.title}`)
-        .filter((key) => consumed.includes(key));
+        .filter((meal) => isMealConsumed(meal, planDay, consumed))
+        .map((meal) => mealStorageKey(meal, planDay));
       if (!mealKeys.length) continue;
       payloads.push({
         user_id: userId,
@@ -2589,7 +2609,7 @@ export function Nutrition({ plan, whatsapp }) {
     const matchesGroup = foodGroup === "Todos" || food.group === foodGroup;
     return matchesSearch && matchesGroup;
   });
-  const completedMeals = n.meals.filter((meal) => consumed.includes(`${day}-${meal.title}`)).length;
+  const completedMeals = n.meals.filter((meal) => isMealConsumed(meal, day, consumed)).length;
   const markConsumed = (key) =>
     setConsumed((list) => {
       const next = list.includes(key) ? list.filter((item) => item !== key) : [...list, key];
@@ -2598,7 +2618,7 @@ export function Nutrition({ plan, whatsapp }) {
     });
   const replaceMeal = (meal) => {
     const alternatives = meal.foods
-      .flatMap((food) => foodSubstitutions(food.name, profile))
+      .flatMap((food) => foodSubstitutions(food.sourceName || food.name, profile))
       .map((name) => foodLibrary.find((food) => food.name === name))
       .filter(Boolean);
     if (alternatives.length)
@@ -2752,7 +2772,7 @@ export function Nutrition({ plan, whatsapp }) {
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),
-            key = `${day}-${meal.title}`,
+            key = mealStorageKey(meal, day),
             done = consumed.includes(key);
           return (
             <article
