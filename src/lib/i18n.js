@@ -249,6 +249,43 @@ Object.assign(foodNameTranslations, {
   "Alface e pepino":{en:"Lettuce and cucumber",fr:"Laitue et concombre",es:"Lechuga y pepino",zh:"生菜和黄瓜",hi:"सलाद पत्ता और खीरा"},
   "Quiabo":{en:"Okra",fr:"Gombo",es:"Quimbombó",zh:"秋葵",hi:"भिंडी"}
 });
+Object.assign(foodNameTranslations, {
+  "Peito de frango":{en:"Chicken breast",fr:"Blanc de poulet",es:"Pechuga de pollo",zh:"鸡胸肉",hi:"चिकन ब्रेस्ट"},
+  "Vaca magra":{en:"Lean beef",fr:"Bœuf maigre",es:"Carne magra de res",zh:"瘦牛肉",hi:"लीन बीफ़"},
+  "Carne magra picada":{en:"Lean ground beef",fr:"Bœuf haché maigre",es:"Carne molida magra",zh:"瘦牛肉末",hi:"लीन कीमा"},
+  "Cabrito sem gordura visível":{en:"Lean goat meat",fr:"Viande de chèvre maigre",es:"Carne magra de cabrito",zh:"去除可见脂肪的山羊肉",hi:"कम वसा वाला बकरी का मांस"},
+  "Frango sem pele":{en:"Skinless chicken",fr:"Poulet sans peau",es:"Pollo sin piel",zh:"去皮鸡肉",hi:"बिना त्वचा का चिकन"},
+  "Frango cozido":{en:"Cooked chicken",fr:"Poulet cuit",es:"Pollo cocido",zh:"熟鸡肉",hi:"पका हुआ चिकन"},
+  "Atum escorrido":{en:"Drained tuna",fr:"Thon égoutté",es:"Atún escurrido",zh:"沥干的金枪鱼",hi:"पानी निकला हुआ टूना"},
+  "Alface, tomate e cenoura":{en:"Lettuce, tomato and carrot",fr:"Laitue, tomate et carotte",es:"Lechuga, tomate y zanahoria",zh:"生菜、番茄和胡萝卜",hi:"सलाद पत्ता, टमाटर और गाजर"},
+  "Alface, tomate e pepino":{en:"Lettuce, tomato and cucumber",fr:"Laitue, tomate et concombre",es:"Lechuga, tomate y pepino",zh:"生菜、番茄和黄瓜",hi:"सलाद पत्ता, टमाटर और खीरा"},
+  "Alface e tomate":{en:"Lettuce and tomato",fr:"Laitue et tomate",es:"Lechuga y tomate",zh:"生菜和番茄",hi:"सलाद पत्ता और टमाटर"},
+  "Tomate e cebola":{en:"Tomato and onion",fr:"Tomate et oignon",es:"Tomate y cebolla",zh:"番茄和洋葱",hi:"टमाटर और प्याज़"},
+  "Cenoura e couve":{en:"Carrot and collard greens",fr:"Carotte et chou vert",es:"Zanahoria y col",zh:"胡萝卜和绿叶菜",hi:"गाजर और हरी पत्तेदार सब्ज़ी"},
+  "Salada":{en:"Salad",fr:"Salade",es:"Ensalada",zh:"沙拉",hi:"सलाद"},
+  "Pão":{en:"Bread",fr:"Pain",es:"Pan",zh:"面包",hi:"ब्रेड"},
+  "Caril de amendoim":{en:"Peanut curry",fr:"Curry aux arachides",es:"Curry de cacahuete",zh:"花生咖喱",hi:"मूंगफली की करी"},
+  "Limão":{en:"Lemon",fr:"Citron",es:"Limón",zh:"柠檬",hi:"नींबू"},
+  "Sal":{en:"Salt",fr:"Sel",es:"Sal",zh:"盐",hi:"नमक"},
+  "cru":{en:"raw",fr:"cru",es:"crudo",zh:"生",hi:"कच्चा"},
+  "crua":{en:"raw",fr:"crue",es:"cruda",zh:"生",hi:"कच्ची"},
+  "cozido":{en:"cooked",fr:"cuit",es:"cocido",zh:"熟",hi:"पका हुआ"},
+  "cozida":{en:"cooked",fr:"cuite",es:"cocida",zh:"熟",hi:"पकी हुई"},
+  "sem pele":{en:"skinless",fr:"sans peau",es:"sin piel",zh:"去皮",hi:"बिना त्वचा"},
+  "média":{en:"medium",fr:"moyenne",es:"mediana",zh:"中等",hi:"मध्यम"},
+  "médio":{en:"medium",fr:"moyen",es:"mediano",zh:"中等",hi:"मध्यम"},
+  "pequeno":{en:"small",fr:"petit",es:"pequeño",zh:"小",hi:"छोटा"},
+  "pequena":{en:"small",fr:"petite",es:"pequeña",zh:"小",hi:"छोटी"},
+  "fatias":{en:"slices",fr:"tranches",es:"rebanadas",zh:"片",hi:"स्लाइस"},
+  "fatia":{en:"slice",fr:"tranche",es:"rebanada",zh:"片",hi:"स्लाइस"},
+  "colher":{en:"spoon",fr:"cuillère",es:"cucharada",zh:"勺",hi:"चम्मच"},
+  "colheres":{en:"spoons",fr:"cuillères",es:"cucharadas",zh:"勺",hi:"चम्मच"}
+});
+Object.assign(commonTranslations, {
+  "Benefício":{en:"Benefit",fr:"Avantage",es:"Beneficio",zh:"益处",hi:"लाभ"},
+  "Bem":{en:"Well",fr:"Bien",es:"Bien",zh:"好",hi:"अच्छा"}
+});
+
 const mealLabelTranslations = {
   "Pequeno-almoço":{en:"Breakfast",fr:"Petit-déjeuner",es:"Desayuno",zh:"早餐",hi:"नाश्ता"},
   "Lanche da manhã":{en:"Morning snack",fr:"Collation du matin",es:"Tentempié de la mañana",zh:"上午加餐",hi:"सुबह का नाश्ता"},
