@@ -26,7 +26,7 @@ import {
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
-import { useLanguage, translatedInstructions, languageOptions, translateUiText } from "../lib/i18n";
+import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
@@ -2429,10 +2429,13 @@ export function Assistant({ plan, go }) {
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
-const foodPhoto = (food) => foodLibrary.find((known) => known.name === food?.name)?.image || null;
+const foodPhoto = (food) => foodLibrary.find((known) => known.name === (food?.sourceName || food?.name))?.image || null;
 
 export function Nutrition({ plan, whatsapp }) {
   const { profile, userId, data, refresh, setError, loading } = useStore();
+  const [language] = useLanguage();
+  const t = (value) => translateUiText(value, language);
+  const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
   const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
   const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs, new Date(), profile);
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
