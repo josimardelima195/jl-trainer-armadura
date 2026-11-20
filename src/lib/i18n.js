@@ -999,6 +999,13 @@ function translateDynamicUiText(value, language) {
     return labels[language] + " " + amount + ".";
   }
 
+  if (text.endsWith(" dias")) {
+    const count = text.slice(0, -" dias".length);
+    if (/^\d+$/.test(count)) {
+      const labels = {en:"days",fr:"jours",es:"días",zh:"天",hi:"दिन"};
+      return count + " " + labels[language];
+    }
+  }
   const streakSuffix = " dias de sequência";
   if (text.endsWith(streakSuffix)) {
     const count = text.slice(0, -streakSuffix.length);
