@@ -1524,7 +1524,11 @@ export function nutritionPlan(profile = {}) {
   }));
   const rawDayCalories = rawMeals.reduce((total, meal) =>
     total + sumRecipeFoods(recipeFoodItems(meal.ingredients,1,allergy)).kcal, 0);
-  const targetScale = age < 18 ? 1 : Math.min(1.35,Math.max(0.7,calories/(rawDayCalories||calories)));
+  const requestedScale = age < 18 ? 1 : calories / (rawDayCalories || calories);
+  const targetScale = age < 18 ? 1 : Math.min(1.5, Math.max(0.6, requestedScale));
+  const portionSafetyNote = age < 18 || (requestedScale >= 0.6 && requestedScale <= 1.5)
+    ? ""
+    : "A diferença entre a meta energética e as porções-base é elevada. O plano limita o ajuste automático das porções; confirme a meta com um nutricionista.";
   const meals = rawMeals.map(({row,ingredients}) => {
     const originalFoods = recipeFoodItems(ingredients,targetScale,allergy);
     const totals = sumRecipeFoods(originalFoods);
@@ -1556,6 +1560,25 @@ export function nutritionPlan(profile = {}) {
     };
   });
   const finalMeals = meals;
+  const heightMeters = height / 100;
+  const bmi = weight / (heightMeters * heightMeters);
+  const referenceWeight = 25 * heightMeters * heightMeters;
+  const adjustedWeight = bmi >= 30 ? weight - 0.25 * (weight - referenceWeight) : weight;
+  const targetWeight = Number(profile.target_weight);
+  const proteinBasisWeight = targetWeight > 0 && targetWeight < weight
+    ? Math.min(targetWeight, adjustedWeight)
+    : adjustedWeight;
+  const proteinRate = age >= 65
+    ? Math.min(1.6, Math.max(1.2, objective.protein))
+    : objective.protein;
+  const rawProteinTarget = Math.round(proteinBasisWeight * proteinRate);
+  const proteinTarget = age < 18
+    ? null
+    : Math.min(rawProteinTarget, Math.round(calories * 0.35 / 4));
+  const fatTarget = age < 18 ? null : Math.round(calories * 0.25 / 9);
+  const carbsTarget = age < 18
+    ? null
+    : Math.max(0, Math.round((calories - proteinTarget * 4 - fatTarget * 9) / 4));
   const trainingModality = String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const resistanceFocused = ["bulking","definicao","musculacao"].includes(modality) || /muscul|calisten/.test(trainingModality);
   const supplementAdvice = age < 18
@@ -1577,6 +1600,7 @@ export function nutritionPlan(profile = {}) {
     modalityNote: translateUiText(
       ageNote ||
       calorieSafetyNote ||
+      portionSafetyNote ||
       (cuisinePreference === "international"
         ? "Plano internacional com refeições simples e ingredientes comuns; as porções são ajustadas ao objetivo e à atividade."
         : cuisinePreference === "mozambican"
@@ -1587,11 +1611,11 @@ export function nutritionPlan(profile = {}) {
     ageCategory: ageCategory(age),
     ageNote: translateUiText(ageNote, language),
     calorieSafetyNote: translateUiText(calorieSafetyNote, language),
+    portionSafetyNote: translateUiText(portionSafetyNote, language),
     cuisinePreference,
-    proteinTarget:
-      age !== null && age < 18 ? null : Math.round(weight * (age >= 65 ? Math.min(1.6, Math.max(1.2, objective.protein)) : objective.protein)),
-    carbsTarget: age < 18 ? null : Math.round((calories * 0.45) / 4),
-    fatTarget: age < 18 ? null : Math.round((calories * 0.3) / 9),
+    proteinTarget,
+    carbsTarget,
+    fatTarget,
     fiberTarget: age < 18 ? null : Math.round(Math.max(25, (calories / 1000) * 14)),
     hydrationReminders: hydrationReminders(profile),
     budgetNote: translateUiText(
