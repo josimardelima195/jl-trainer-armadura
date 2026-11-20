@@ -483,6 +483,17 @@ Object.assign(commonTranslations, {
   "A idade será calculada automaticamente pela data de nascimento.":{en:"Age will be calculated automatically from your date of birth.",fr:"L’âge sera calculé automatiquement à partir de votre date de naissance.",es:"La edad se calculará automáticamente a partir de la fecha de nacimiento.",zh:"系统将根据出生日期自动计算年龄。",hi:"जन्म तिथि से आयु की गणना अपने आप होगी।"}
 });
 
+Object.assign(commonTranslations, {
+  "anos":{en:"years",fr:"ans",es:"años",zh:"岁",hi:"वर्ष"},
+  "Seg":{en:"Mon",fr:"Lun",es:"Lun",zh:"周一",hi:"सोम"},
+  "Ter":{en:"Tue",fr:"Mar",es:"Mar",zh:"周二",hi:"मंगल"},
+  "Qua":{en:"Wed",fr:"Mer",es:"Mié",zh:"周三",hi:"बुध"},
+  "Qui":{en:"Thu",fr:"Jeu",es:"Jue",zh:"周四",hi:"गुरु"},
+  "Sex":{en:"Fri",fr:"Ven",es:"Vie",zh:"周五",hi:"शुक्र"},
+  "Sáb":{en:"Sat",fr:"Sam",es:"Sáb",zh:"周六",hi:"शनि"},
+  "Dom":{en:"Sun",fr:"Dim",es:"Dom",zh:"周日",hi:"रवि"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
