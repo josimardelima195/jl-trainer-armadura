@@ -628,9 +628,151 @@ Object.assign(commonTranslations, {
   "As calorias e quantidades são estimativas educativas calculadas individualmente. Objetivos de emagrecimento, cutting, bulking e suplementos não são prescrição médica. Consulte um nutricionista para orientação clínica.":{en:"Calories and portions are educational estimates calculated individually. Weight loss, cutting, bulking and supplement goals are not medical prescriptions. Consult a dietitian for clinical guidance.",fr:"Les calories et quantités sont des estimations éducatives calculées individuellement. Les objectifs de perte de poids, sèche, prise de masse et compléments ne constituent pas une prescription médicale. Consultez un diététicien pour un avis clinique.",es:"Las calorías y cantidades son estimaciones educativas calculadas individualmente. Los objetivos de pérdida de peso, definición, volumen y suplementos no son una prescripción médica. Consulta a un nutricionista para orientación clínica.",zh:"热量和份量是根据个人情况计算的教育性估算。减重、减脂、增肌和补剂目标不是医疗处方。如需临床指导，请咨询营养师。",hi:"कैलोरी और मात्रा व्यक्तिगत रूप से गणना किए गए शैक्षिक अनुमान हैं। वज़न घटाना, कटिंग, बल्किंग और सप्लीमेंट लक्ष्य चिकित्सा नुस्खे नहीं हैं। चिकित्सीय सलाह के लिए पोषण विशेषज्ञ से परामर्श करें।"}
 });
 
+Object.assign(commonTranslations, {
+  "ACOMPANHE A MUDANÇA":{en:"TRACK YOUR PROGRESS",fr:"SUIVEZ VOTRE ÉVOLUTION",es:"SIGUE TU PROGRESO",zh:"记录你的进步",hi:"अपनी प्रगति देखें"},
+  "ATIVIDADE REGISTADA":{en:"ACTIVITY LOGGED",fr:"ACTIVITÉ ENREGISTRÉE",es:"ACTIVIDAD REGISTRADA",zh:"活动已记录",hi:"गतिविधि दर्ज की गई"},
+  "COMPRAS CALCULADAS":{en:"SHOPPING LIST CALCULATED",fr:"LISTE DE COURSES CALCULÉE",es:"LISTA DE COMPRAS CALCULADA",zh:"购物清单已计算",hi:"खरीदारी सूची तैयार"},
+  "COMUNIDADE JL":{en:"JL COMMUNITY",fr:"COMMUNAUTÉ JL",es:"COMUNIDAD JL",zh:"JL 社区",hi:"JL समुदाय"},
+  "CONTINUE SUA JORNADA":{en:"KEEP YOUR JOURNEY GOING",fr:"POURSUIVEZ VOTRE PARCOURS",es:"CONTINÚA TU CAMINO",zh:"继续你的旅程",hi:"अपनी यात्रा जारी रखें"},
+  "LEMBRETE DO DIA":{en:"DAILY REMINDER",fr:"RAPPEL DU JOUR",es:"RECORDATORIO DEL DÍA",zh:"每日提醒",hi:"आज का रिमाइंडर"},
+  "PEQUENAS AÇÕES, RESULTADOS REAIS":{en:"SMALL ACTIONS, REAL RESULTS",fr:"DE PETITES ACTIONS, DE VRAIS RÉSULTATS",es:"PEQUEÑAS ACCIONES, RESULTADOS REALES",zh:"小行动，真实成果",hi:"छोटे कदम, वास्तविक परिणाम"},
+  "PRIVACIDADE E RESPONSABILIDADE":{en:"PRIVACY AND RESPONSIBILITY",fr:"CONFIDENTIALITÉ ET RESPONSABILITÉ",es:"PRIVACIDAD Y RESPONSABILIDAD",zh:"隐私与责任",hi:"गोपनीयता और ज़िम्मेदारी"},
+  "SUA JORNADA":{en:"YOUR JOURNEY",fr:"VOTRE PARCOURS",es:"TU CAMINO",zh:"你的旅程",hi:"आपकी यात्रा"},
+  "SUA JORNADA COMEÇA AQUI":{en:"YOUR JOURNEY STARTS HERE",fr:"VOTRE PARCOURS COMMENCE ICI",es:"TU CAMINO COMIENZA AQUÍ",zh:"你的旅程从这里开始",hi:"आपकी यात्रा यहाँ से शुरू होती है"},
+  "HIDRATAÇÃO DE HOJE":{en:"TODAY'S HYDRATION",fr:"HYDRATATION DU JOUR",es:"HIDRATACIÓN DE HOY",zh:"今日饮水",hi:"आज का हाइड्रेशन"},
+  "Como executar":{en:"How to perform",fr:"Comment réaliser",es:"Cómo hacerlo",zh:"动作要领",hi:"कैसे करें"},
+  "Como executar:":{en:"How to perform:",fr:"Comment réaliser :",es:"Cómo hacerlo:",zh:"动作要领：",hi:"कैसे करें:"},
+  "GIF indisponível":{en:"GIF unavailable",fr:"GIF indisponible",es:"GIF no disponible",zh:"GIF 不可用",hi:"GIF उपलब्ध नहीं"},
+  "Faça o movimento de forma contínua, sem dividir em séries.":{en:"Keep moving continuously; do not split the exercise into sets.",fr:"Effectuez le mouvement en continu, sans le diviser en séries.",es:"Mantén el movimiento continuo, sin dividirlo en series.",zh:"连续完成动作，不要拆分成组。",hi:"व्यायाम लगातार करें, इसे सेट में न बाँटें।"},
+  "Faça o movimento devagar, com postura controlada e sem dor.":{en:"Move slowly with controlled form and no pain.",fr:"Effectuez le mouvement lentement, avec une posture maîtrisée et sans douleur.",es:"Realiza el movimiento despacio, con postura controlada y sin dolor.",zh:"缓慢完成动作，保持姿势稳定，不要引起疼痛。",hi:"धीरे और नियंत्रित मुद्रा में व्यायाम करें; दर्द नहीं होना चाहिए।"},
+  "Tempo concluído":{en:"Time complete",fr:"Temps écoulé",es:"Tiempo completado",zh:"时间到",hi:"समय पूरा"},
+  "Tempo restante":{en:"Time remaining",fr:"Temps restant",es:"Tiempo restante",zh:"剩余时间",hi:"शेष समय"},
+  "Temporizador pausado":{en:"Timer paused",fr:"Minuteur en pause",es:"Temporizador en pausa",zh:"计时器已暂停",hi:"टाइमर रुका हुआ"},
+  "Duração prevista":{en:"Planned duration",fr:"Durée prévue",es:"Duración prevista",zh:"预计时长",hi:"निर्धारित अवधि"},
+  "Pausar temporizador":{en:"Pause timer",fr:"Mettre en pause",es:"Pausar temporizador",zh:"暂停计时",hi:"टाइमर रोकें"},
+  "Retomar temporizador":{en:"Resume timer",fr:"Reprendre le minuteur",es:"Reanudar temporizador",zh:"继续计时",hi:"टाइमर फिर शुरू करें"},
+  "Próximo exercício":{en:"Next exercise",fr:"Exercice suivant",es:"Siguiente ejercicio",zh:"下一个动作",hi:"अगला व्यायाम"},
+  "Concluir exercício":{en:"Complete exercise",fr:"Terminer l’exercice",es:"Completar ejercicio",zh:"完成动作",hi:"व्यायाम पूरा करें"},
+  "Concluir série":{en:"Complete set",fr:"Terminer la série",es:"Completar serie",zh:"完成一组",hi:"सेट पूरा करें"},
+  "Concluir treino":{en:"Finish workout",fr:"Terminer l’entraînement",es:"Finalizar entrenamiento",zh:"完成训练",hi:"वर्कआउट समाप्त करें"},
+  "Concluir e próximo exercício":{en:"Complete and go to next exercise",fr:"Terminer et passer à l’exercice suivant",es:"Completar y pasar al siguiente ejercicio",zh:"完成并进入下一个动作",hi:"पूरा करें और अगले व्यायाम पर जाएँ"},
+  "Sair ×":{en:"Exit ×",fr:"Quitter ×",es:"Salir ×",zh:"退出 ×",hi:"बाहर जाएँ ×"},
+  "Excelente":{en:"Excellent",fr:"Excellent",es:"Excelente",zh:"很好",hi:"बहुत बढ़िया"},
+  "Moderado":{en:"Moderate",fr:"Modéré",es:"Moderado",zh:"适中",hi:"मध्यम"},
+  "Cansado":{en:"Tired",fr:"Fatigué",es:"Cansado",zh:"疲惫",hi:"थका हुआ"},
+  "Com desconforto":{en:"Uncomfortable",fr:"Inconfortable",es:"Con molestias",zh:"有不适",hi:"असहज"},
+  "Como você se sente depois do treino?":{en:"How do you feel after your workout?",fr:"Comment vous sentez-vous après l’entraînement ?",es:"¿Cómo te sientes después de entrenar?",zh:"训练后感觉如何？",hi:"वर्कआउट के बाद आप कैसा महसूस करते हैं?"},
+  "Observação opcional":{en:"Optional note",fr:"Remarque facultative",es:"Observación opcional",zh:"备注（选填）",hi:"वैकल्पिक टिप्पणी"},
+  "Limpar marcados":{en:"Clear checked items",fr:"Effacer les éléments cochés",es:"Quitar elementos marcados",zh:"清除已勾选项目",hi:"चिह्नित आइटम हटाएँ"},
+  "O que comprar":{en:"What to buy",fr:"À acheter",es:"Qué comprar",zh:"需要购买",hi:"क्या खरीदें"},
+  "Nenhum alimento encontrado. Tente outra pesquisa.":{en:"No foods found. Try another search.",fr:"Aucun aliment trouvé. Essayez une autre recherche.",es:"No se encontraron alimentos. Prueba otra búsqueda.",zh:"没有找到食物，请尝试其他搜索。",hi:"कोई खाद्य पदार्थ नहीं मिला। दूसरी खोज करें।"},
+  "Registar água":{en:"Log water",fr:"Enregistrer l’eau",es:"Registrar agua",zh:"记录饮水",hi:"पानी दर्ज करें"},
+  "Entre na sua conta para gravar vídeos, concluir desafios e conversar com outros membros.":{en:"Sign in to post videos, complete challenges, and chat with other members.",fr:"Connectez-vous pour publier des vidéos, relever des défis et discuter avec les autres membres.",es:"Inicia sesión para publicar vídeos, completar retos y conversar con otros miembros.",zh:"登录后即可发布视频、完成挑战并与其他成员交流。",hi:"वीडियो साझा करने, चुनौतियाँ पूरी करने और सदस्यों से बात करने के लिए साइन इन करें।"},
+  "Adicione um membro e aguarde a aceitação para começar uma conversa privada.":{en:"Add a member and wait for them to accept before starting a private chat.",fr:"Ajoutez un membre et attendez son acceptation avant de démarrer une conversation privée.",es:"Añade a un miembro y espera a que acepte para iniciar un chat privado.",zh:"添加成员并等待对方接受后，即可开始私人聊天。",hi:"निजी बातचीत शुरू करने से पहले सदस्य जोड़ें और उनकी स्वीकृति की प्रतीक्षा करें।"},
+  "Os membros da comunidade aparecerão aqui.":{en:"Community members will appear here.",fr:"Les membres de la communauté apparaîtront ici.",es:"Los miembros de la comunidad aparecerán aquí.",zh:"社区成员将在这里显示。",hi:"समुदाय के सदस्य यहाँ दिखाई देंगे।"},
+  "Os vídeos enviados pelos membros aparecerão aqui depois da primeira conclusão.":{en:"Videos shared by members will appear here after the first completion.",fr:"Les vidéos partagées par les membres apparaîtront ici après la première réalisation.",es:"Los vídeos compartidos por los miembros aparecerán aquí después de la primera finalización.",zh:"成员分享的视频将在首次完成后显示在这里。",hi:"सदस्यों द्वारा साझा किए गए वीडियो पहली बार पूरा होने के बाद यहाँ दिखेंगे।"},
+  "O ranking aparecerá aqui quando os membros registarem treinos ou desafios.":{en:"The leaderboard will appear here when members log workouts or challenges.",fr:"Le classement apparaîtra lorsque les membres enregistreront des entraînements ou des défis.",es:"La clasificación aparecerá cuando los miembros registren entrenamientos o retos.",zh:"成员记录训练或挑战后，排行榜将在这里显示。",hi:"सदस्यों के वर्कआउट या चुनौतियाँ दर्ज करने पर लीडरबोर्ड यहाँ दिखेगा।"},
+  "Seu coach ainda não publicou um treino.":{en:"Your coach has not published a workout yet.",fr:"Votre coach n’a pas encore publié d’entraînement.",es:"Tu entrenador aún no ha publicado un entrenamiento.",zh:"你的教练尚未发布训练。",hi:"आपके कोच ने अभी तक वर्कआउट प्रकाशित नहीं किया है।"},
+  "Seu placar de hoje":{en:"Your score today",fr:"Votre score du jour",es:"Tu puntuación de hoy",zh:"你今天的得分",hi:"आज आपका स्कोर"},
+  "Seu próximo treino":{en:"Your next workout",fr:"Votre prochain entraînement",es:"Tu próximo entrenamiento",zh:"你的下一次训练",hi:"आपका अगला वर्कआउट"},
+  "Sua semana":{en:"Your week",fr:"Votre semaine",es:"Tu semana",zh:"你的一周",hi:"आपका सप्ताह"},
+  "Ver a minha evolução":{en:"View my progress",fr:"Voir ma progression",es:"Ver mi progreso",zh:"查看我的进步",hi:"मेरी प्रगति देखें"},
+  "Ver alimentação":{en:"View nutrition",fr:"Voir l’alimentation",es:"Ver alimentación",zh:"查看饮食",hi:"पोषण देखें"},
+  "Buscar exercícios ou modalidades…":{en:"Search exercises or training modes…",fr:"Rechercher des exercices ou des modes…",es:"Buscar ejercicios o modalidades…",zh:"搜索动作或训练模式…",hi:"व्यायाम या ट्रेनिंग मोड खोजें…"},
+  "Buscar exercícios ou modalidades":{en:"Search exercises or training modes",fr:"Rechercher des exercices ou des modes",es:"Buscar ejercicios o modalidades",zh:"搜索动作或训练模式",hi:"व्यायाम या ट्रेनिंग मोड खोजें"},
+  "Fechar menu":{en:"Close menu",fr:"Fermer le menu",es:"Cerrar menú",zh:"关闭菜单",hi:"मेनू बंद करें"},
+  "Abrir menu":{en:"Open menu",fr:"Ouvrir le menu",es:"Abrir menú",zh:"打开菜单",hi:"मेनू खोलें"},
+  "Marcar como lida":{en:"Mark as read",fr:"Marquer comme lu",es:"Marcar como leído",zh:"标记为已读",hi:"पढ़ा हुआ चिह्नित करें"},
+  "Nenhuma notificação por enquanto.":{en:"No notifications yet.",fr:"Aucune notification pour le moment.",es:"Todavía no hay notificaciones.",zh:"目前没有通知。",hi:"अभी कोई सूचना नहीं है।"},
+  "Falar no WhatsApp":{en:"Contact on WhatsApp",fr:"Contacter sur WhatsApp",es:"Contactar por WhatsApp",zh:"通过 WhatsApp 联系",hi:"WhatsApp पर संपर्क करें"},
+  "Prévia sem conta":{en:"Preview without an account",fr:"Aperçu sans compte",es:"Vista previa sin cuenta",zh:"无账户预览",hi:"बिना खाते के पूर्वावलोकन"},
+  "Perfil atualizado.":{en:"Profile updated.",fr:"Profil mis à jour.",es:"Perfil actualizado.",zh:"个人资料已更新。",hi:"प्रोफ़ाइल अपडेट की गई।"},
+  "Foto de perfil atualizada.":{en:"Profile photo updated.",fr:"Photo de profil mise à jour.",es:"Foto de perfil actualizada.",zh:"头像已更新。",hi:"प्रोफ़ाइल फ़ोटो अपडेट की गई।"},
+  "A carregar vídeo…":{en:"Loading video…",fr:"Chargement de la vidéo…",es:"Cargando vídeo…",zh:"正在加载视频…",hi:"वीडियो लोड हो रहा है…"},
+  "Pagamento manual":{en:"Manual payment",fr:"Paiement manuel",es:"Pago manual",zh:"手动付款",hi:"मैन्युअल भुगतान"},
+  "Transferência bancária":{en:"Bank transfer",fr:"Virement bancaire",es:"Transferencia bancaria",zh:"银行转账",hi:"बैंक ट्रांसफर"},
+  "Meus pedidos":{en:"My requests",fr:"Mes demandes",es:"Mis solicitudes",zh:"我的请求",hi:"मेरे अनुरोध"},
+  "Ranking":{en:"Leaderboard",fr:"Classement",es:"Clasificación",zh:"排行榜",hi:"लीडरबोर्ड"},
+  "Amigos":{en:"Friends",fr:"Amis",es:"Amigos",zh:"好友",hi:"मित्र"},
+  "Chat com amigos":{en:"Chat with friends",fr:"Discussion avec des amis",es:"Chat con amigos",zh:"好友聊天",hi:"मित्रों से चैट"},
+  "Pedidos recebidos":{en:"Received requests",fr:"Demandes reçues",es:"Solicitudes recibidas",zh:"收到的请求",hi:"प्राप्त अनुरोध"},
+  "Enviar":{en:"Send",fr:"Envoyer",es:"Enviar",zh:"发送",hi:"भेजें"},
+  "Aceitar":{en:"Accept",fr:"Accepter",es:"Aceptar",zh:"接受",hi:"स्वीकार करें"},
+  "Recusar":{en:"Decline",fr:"Refuser",es:"Rechazar",zh:"拒绝",hi:"अस्वीकार करें"},
+  "Adicionar":{en:"Add",fr:"Ajouter",es:"Añadir",zh:"添加",hi:"जोड़ें"},
+  "Amigo":{en:"Friend",fr:"Ami",es:"Amigo",zh:"好友",hi:"मित्र"},
+  "Enviado":{en:"Sent",fr:"Envoyé",es:"Enviado",zh:"已发送",hi:"भेजा गया"},
+  "Recusado":{en:"Declined",fr:"Refusé",es:"Rechazado",zh:"已拒绝",hi:"अस्वीकृत"},
+  "Conteúdo reservado":{en:"Restricted content",fr:"Contenu réservé",es:"Contenido reservado",zh:"受限内容",hi:"प्रतिबंधित सामग्री"},
+  "Olá,":{en:"Hello,",fr:"Bonjour,",es:"Hola,",zh:"你好，",hi:"नमस्ते,"},
+  "MZN / mês":{en:"MZN / month",fr:"MZN / mois",es:"MZN / mes",zh:"MZN / 月",hi:"MZN / माह"},
+  "MP4, WebM ou MOV · máximo 100 MB":{en:"MP4, WebM or MOV · maximum 100 MB",fr:"MP4, WebM ou MOV · 100 Mo maximum",es:"MP4, WebM o MOV · máximo 100 MB",zh:"MP4、WebM 或 MOV · 最大 100 MB",hi:"MP4, WebM या MOV · अधिकतम 100 MB"},
+  "Tema":{en:"Theme",fr:"Thème",es:"Tema",zh:"主题",hi:"थीम"},
+  "Moderado":{en:"Moderate",fr:"Modéré",es:"Moderado",zh:"适中",hi:"मध्यम"},
+});
+
+function translateDynamicUiText(value, language) {
+  const text = String(value || "").trim();
+  let match = text.match(/^Treino previsto às (.+)$/i);
+  if (match) {
+    const labels = {en:"Workout scheduled at",fr:"Entraînement prévu à",es:"Entrenamiento previsto a las",zh:"训练安排在",hi:"वर्कआउट निर्धारित समय"};
+    return labels[language] + " " + match[1];
+  }
+  match = text.match(/^TREINO GUIADO · (\\d+)\\/(\\d+)$/i);
+  if (match) {
+    const labels = {en:"GUIDED WORKOUT",fr:"ENTRAÎNEMENT GUIDÉ",es:"ENTRENAMIENTO GUIADO",zh:"指导训练",hi:"निर्देशित वर्कआउट"};
+    return labels[language] + " · " + match[1] + "/" + match[2];
+  }
+  match = text.match(/^SÉRIE (\\d+) DE (\\d+)$/i);
+  if (match) {
+    const labels = {en:"SET",fr:"SÉRIE",es:"SERIE",zh:"第",hi:"सेट"};
+    return language === "zh"
+      ? "第 " + match[1] + " 组，共 " + match[2] + " 组"
+      : language === "hi"
+        ? "सेट " + match[1] + " / " + match[2]
+        : labels[language] + " " + match[1] + (language === "fr" || language === "es" ? " SUR " : " OF ") + match[2];
+  }
+  match = text.match(/^Iniciar (.+)$/i);
+  if (match) {
+    const labels = {en:"Start",fr:"Commencer",es:"Iniciar",zh:"开始",hi:"शुरू करें"};
+    return labels[language] + " " + match[1];
+  }
+  match = text.match(/^Disponível ao completar 30 dias \\((\\d+)\\/30\\)$/i);
+  if (match) {
+    const labels = {en:"Available after 30 days",fr:"Disponible après 30 jours",es:"Disponible después de 30 días",zh:"完成 30 天后开放",hi:"30 दिन पूरे होने पर उपलब्ध"};
+    return labels[language] + " (" + match[1] + "/30)";
+  }
+  match = text.match(/^PRÓXIMA REFEIÇÃO · (.+)$/i);
+  if (match) {
+    const labels = {en:"NEXT MEAL",fr:"PROCHAIN REPAS",es:"PRÓXIMA COMIDA",zh:"下一餐",hi:"अगला भोजन"};
+    return labels[language] + " · " + match[1];
+  }
+  match = text.match(/^(\\d+)\\/(\\d+) · Concluir exercício$/i);
+  if (match) {
+    const labels = {en:"Complete exercise",fr:"Terminer l’exercice",es:"Completar ejercicio",zh:"完成动作",hi:"व्यायाम पूरा करें"};
+    return match[1] + "/" + match[2] + " · " + labels[language];
+  }
+  match = text.match(/^(\\d+)\\/(\\d+) · Concluir série$/i);
+  if (match) {
+    const labels = {en:"Complete set",fr:"Terminer la série",es:"Completar serie",zh:"完成一组",hi:"सेट पूरा करें"};
+    return match[1] + "/" + match[2] + " · " + labels[language];
+  }
+  match = text.match(/^Não se esqueça da água: meta diária de (.+)\\.$/i);
+  if (match) {
+    const labels = {en:"Remember to drink water: your daily target is",fr:"N’oubliez pas de boire de l’eau : votre objectif quotidien est de",es:"No olvides beber agua: tu objetivo diario es",zh:"别忘记喝水：每日目标为",hi:"पानी पीना न भूलें: आपका दैनिक लक्ष्य है"};
+    return labels[language] + " " + match[1] + ".";
+  }
+  match = text.match(/^(\\d+) dias de sequência$/i);
+  if (match) {
+    const labels = {en:"day streak",fr:"jours consécutifs",es:"días seguidos",zh:"天连续记录",hi:"दिन की लगातार श्रृंखला"};
+    return match[1] + " " + labels[language];
+  }
+  return value;
+}
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
-  return commonTranslations[value.trim()]?.[language] || value;
+  return commonTranslations[value.trim()]?.[language] || translateDynamicUiText(value, language);
 }
 
 const ptRules=[[/\bjust beyond\b/gi,'um pouco além de'],[/\bpalms?\b/gi,'palmas'],[/\bfacing down\b/gi,'voltadas para baixo'],[/\bfacing\b/gi,'voltadas para'],[/\baway\b/gi,'para longe'],[/\bkeeping\b/gi,'mantendo'],[/\btrunk\b/gi,'tronco'],[/\bbraced\b/gi,'ativado'],[/\bwrists?\b/gi,'punhos'],[/\bstacked\b/gi,'alinhados'],[/\bnatural\b/gi,'natural'],[/\binitial height\b/gi,'altura inicial'],[/\bunder control\b/gi,'com controle'],[/\bpressing again\b/gi,'empurrar novamente'],[/\bbarbell\b/gi,'barra'],[/\bbench\b/gi,'banco'],[/\baway from\b/gi,'para longe de'],[/\byour hands\b/gi,'as mãos'],[/\byour feet\b/gi,'os pés'],[/\byour body\b/gi,'o corpo'],[/\byour back\b/gi,'as costas'],[/\bhands on the floor\b/gi,'as mãos no chão'],[/\bwith your feet shoulder width apart\b/gi,'com os pés afastados na largura dos ombros'],[/\byour back straight\b/gi,'as costas retas'],[/\byour body slowly\b/gi,'o corpo devagar'],[/\bto the starting position\b/gi,'à posição inicial'],[/\bBegin by placing your hands\b/gi,'Comece colocando as mãos'],
