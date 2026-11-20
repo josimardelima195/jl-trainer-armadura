@@ -1665,11 +1665,15 @@ export function buildShoppingList(profile = {}, days = 30, portionScale = null) 
   const plan = workbookMealPlans[workbookKeyFor(modality)] || workbookMealPlans.manutencao;
   const scale = Math.min(1.35,Math.max(0.7,Number(portionScale)||1));
   const totals = new Map();
+  const cuisine = ["mozambican", "international", "mixed"].includes(profile.cuisine_preference)
+    ? profile.cuisine_preference
+    : "mixed";
   for (let day = 1; day <= totalDays; day += 1) {
-    for (const row of plan[day] || []) {
+    const dayRows = adaptCuisineDay(plan[day] || [], cuisine, modality, day);
+    for (const row of dayRows) {
       for (const ingredient of parseRecipeIngredients(row.ingredients)) {
-        const quantity=ingredient.quantity*people*scale;
-        const key = shoppingName(ingredient.name)+"|"+ingredient.unit;
+        const quantity = ingredient.quantity * people * scale;
+        const key = shoppingName(ingredient.name) + "|" + ingredient.unit;
         const current = totals.get(key) || { key, name: ingredient.name, quantity: 0, unit: ingredient.unit };
         current.quantity += quantity;
         totals.set(key, current);
