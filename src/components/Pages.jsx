@@ -893,6 +893,9 @@ export function Workouts({ plan }) {
 
 export function Progress({ metrics }) {
   const { data, userId, mutate, busy, setError, refresh, profile } = useStore();
+  const [language] = useLanguage();
+  const t = (value) => translateUiText(value, language);
+  const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
   const [form, setForm] = useState(false);
   const [photo, setPhoto] = useState("");
   const [photoUrls, setPhotoUrls] = useState({});
@@ -973,7 +976,7 @@ export function Progress({ metrics }) {
   return (
     <>
       <Title tag="SUA JORNADA EM NÚMEROS" title="Minha evolução">
-        <button type="button" className="primary small" onClick={() => setForm((value) => !value)}>+ Registrar medida</button>
+        <button type="button" className="primary small" onClick={() => setForm((value) => !value)}>{t("+ Registrar medida")}</button>
       </Title>
       <div className="grid stats">
         <Stat label="Peso atual" value={currentWeight === null ? "—" : currentWeight + " kg"} />
@@ -985,14 +988,14 @@ export function Progress({ metrics }) {
       </div>
       <section className="progress-journey-card">
         <div className="progress-journey-heading">
-          <div><span className="eyebrow">PLANO PERSONALIZADO</span><h2>Os seus 30 dias</h2><p>{profile.modality || "Modalidade"} · {goalLabels[String(profile.goal || "").toLowerCase()] || profile.goal || "Objetivo a definir"}</p></div>
+          <div><span className="eyebrow">{t("PLANO PERSONALIZADO")}</span><h2>{t("Os seus 30 dias")}</h2><p>{t(profile.modality || "Modalidade")} · {t(goalLabels[String(profile.goal || "").toLowerCase()] || profile.goal || "Objetivo a definir")}</p></div>
           <LeoMascot size={78} />
         </div>
         <div className="progress-journey-stats">
-          <div><strong>{completedCount}/30</strong><span>dias concluídos</span></div>
-          <div><strong>{completedWorkoutCount}</strong><span>treinos registados</span></div>
-          <div><strong>{remainingCount}</strong><span>dias por concluir</span></div>
-          <div><strong>{elapsedDays}/30</strong><span>dias desde o início</span></div>
+          <div><strong>{completedCount}/30</strong><span>{t("dias concluídos")}</span></div>
+          <div><strong>{completedWorkoutCount}</strong><span>{t("treinos registados")}</span></div>
+          <div><strong>{remainingCount}</strong><span>{t("dias por concluir")}</span></div>
+          <div><strong>{elapsedDays}/30</strong><span>{t("dias desde o início")}</span></div>
           {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>dias de licença restantes</span></div>}
         </div>
         <div className="progress-journey-track"><i style={{ width: completedCount / 30 * 100 + "%" }} /></div>
@@ -1038,39 +1041,39 @@ export function Progress({ metrics }) {
       )}
       <section className="progress-photo-section">
         <div className="progress-photo-heading">
-          <div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div>
-          <span className="pill">PRIVADO</span>
+          <div><span className="eyebrow">{t("COMPARAÇÃO VISUAL")}</span><h2>{t("Antes e depois")}</h2></div>
+          <span className="pill">{t("PRIVADO")}</span>
         </div>
-        <p className="muted">Guarde a foto inicial no começo do plano. A foto final será liberada depois de completar os 30 dias do programa.</p>
+        <p className="muted">{t("Guarde a foto inicial no começo do plano. A foto final será liberada depois de completar os 30 dias do programa.")}</p>
         <div className="progress-before-after">
           <article className="progress-photo-slot">
-            <span>ANTES · DIA 0</span>
+            <span>{t("ANTES · DIA 0")}</span>
             {firstPhoto ? (
               photoUrls[firstPhoto.id] ? (
                 <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[firstPhoto.id])}>
                   <img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso, corpo inteiro" />
                 </button>
-              ) : <div className="progress-photo-placeholder">A carregar foto inicial…</div>
-            ) : <div className="progress-photo-placeholder">Ainda sem foto inicial</div>}
-            <small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 0"}</small>
+              ) : <div className="progress-photo-placeholder">{t("A carregar foto inicial…")}</div>
+            ) : <div className="progress-photo-placeholder">{t("Ainda sem foto inicial")}</div>}
+            <small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString(dateLocale) : t("Dia 0")}</small>
             <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "before")}>
               <label className="file-drop">
-                <span>{firstPhoto ? "Selecionar outra foto inicial" : "Selecionar foto inicial"}</span>
-                <small>JPG, PNG ou WebP · até 10 MB</small>
+                <span>{t(firstPhoto ? "Selecionar outra foto inicial" : "Selecionar foto inicial")}</span>
+                <small>{t("JPG, PNG ou WebP · até 10 MB")}</small>
                 <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" />
               </label>
-              <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada.</label>
-              <button className="primary" disabled={busy}>{firstPhoto ? "Atualizar foto inicial" : "Guardar foto inicial"}</button>
+              <label className="checkbox"><input type="checkbox" required />{t("Autorizo guardar esta foto privada.")}</label>
+              <button className="primary" disabled={busy}>{t(firstPhoto ? "Atualizar foto inicial" : "Guardar foto inicial")}</button>
             </form>
           </article>
           <article className="progress-photo-slot">
-            <span>DEPOIS · DIA 30</span>
+            <span>{t("DEPOIS · DIA 30")}</span>
             {afterPhoto ? (
               photoUrls[afterPhoto.id] ? (
                 <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[afterPhoto.id])}>
                   <img src={photoUrls[afterPhoto.id]} alt="Fotografia final de progresso após 30 dias, corpo inteiro" />
                 </button>
-              ) : <div className="progress-photo-placeholder">A carregar foto final…</div>
+              ) : <div className="progress-photo-placeholder">{t("A carregar foto final…")}</div>
             ) : (
               <div className="progress-photo-placeholder">
                 {!canUploadAfter
@@ -1078,15 +1081,15 @@ export function Progress({ metrics }) {
                   : "Pronta para receber a foto final"}
               </div>
             )}
-            <small>{afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small>
+            <small>{afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString(dateLocale) : t("Dia 30")}</small>
             <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "after")}>
               <label className="file-drop">
-                <span>{afterPhoto ? "Selecionar outra foto final" : "Selecionar foto final"}</span>
-                <small>{canUploadAfter ? "JPG, PNG ou WebP · até 10 MB" : "Disponível depois dos 30 dias do programa"}</small>
+                <span>{t(afterPhoto ? "Selecionar outra foto final" : "Selecionar foto final")}</span>
+                <small>{canUploadAfter ? t("JPG, PNG ou WebP · até 10 MB") : t("Disponível depois dos 30 dias do programa")}</small>
                 <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" disabled={!canUploadAfter} />
               </label>
-              <label className="checkbox"><input type="checkbox" required disabled={!canUploadAfter} />Autorizo guardar esta foto privada.</label>
-              <button className="primary" disabled={busy || !canUploadAfter}>{afterPhoto ? "Atualizar foto final" : "Guardar foto final"}</button>
+              <label className="checkbox"><input type="checkbox" required disabled={!canUploadAfter} />{t("Autorizo guardar esta foto privada.")}</label>
+              <button className="primary" disabled={busy || !canUploadAfter}>{t(afterPhoto ? "Atualizar foto final" : "Guardar foto final")}</button>
             </form>
           </article>
         </div>
