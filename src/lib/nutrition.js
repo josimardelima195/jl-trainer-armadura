@@ -897,10 +897,18 @@ const recipeNutritionPer100 = {
   Abacate:{kcal:160,protein:2,carbs:8.5,fat:14.7,fiber:6.7},
 };
 const recipeLibraryName = {
-  "Farinha de milho":"Xima", Arroz:"Arroz cozido", Frango:"Frango grelhado",
-  Carapau:"Carapau grelhado", "Carne magra":"Carne magra", Cabrito:"Carne magra",
-  Esparguete:"Massa integral", Tilápia:"Peixe grelhado", Peixe:"Peixe grelhado",
-  Batata:"Batata cozida", Couve:"Couve e tomate", Feijão:"Feijão cozido",
+  "Farinha de milho":"Farinha de milho (peso seco)",
+  Arroz:"Arroz (peso cru)",
+  Frango:"Frango (peso cru)",
+  Carapau:"Carapau (peso cru)",
+  "Carne magra":"Carne magra (peso cru)",
+  Cabrito:"Cabrito (peso cru)",
+  Esparguete:"Massa integral (peso seco)",
+  Tilápia:"Tilápia (peso cru)",
+  Peixe:"Peixe (peso cru)",
+  Batata:"Batata (peso cru)",
+  Couve:"Couve e tomate",
+  Feijão:"Feijão cozido",
 };
 const recipeGramPerUnit = {
   Banana:118, Ovos:50, Laranja:130, "Pão integral":30, Tomate:80,
