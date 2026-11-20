@@ -447,6 +447,32 @@ Object.assign(commonTranslations, {
   "Seu treino. Sua evolução. Sua armadura.":{en:"Your training. Your progress. Your armor.",fr:"Votre entraînement. Votre évolution. Votre armure.",es:"Tu entrenamiento. Tu evolución. Tu armadura.",zh:"你的训练。你的进步。你的铠甲。",hi:"आपका प्रशिक्षण। आपकी प्रगति। आपका कवच।"}
 });
 
+Object.assign(commonTranslations, {
+  "Verde: alimentação concluída e treino feito ou descanso previsto. Vermelho: treino programado ou alimentação ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.":{en:"Green: nutrition completed and the workout done or a scheduled rest day. Red: a scheduled workout or nutrition was missed after the day ended. The current day is evaluated only when it ends.",fr:"Vert : alimentation terminée et entraînement effectué ou repos prévu. Rouge : entraînement programmé ou alimentation non terminée après la fin de la journée. Le jour actuel est évalué uniquement à sa fin.",es:"Verde: alimentación completada y entrenamiento realizado o descanso previsto. Rojo: entrenamiento programado o alimentación incompleta al terminar el día. El día actual solo se evalúa al finalizar.",zh:"绿色：饮食已完成，且训练已完成或当天为计划休息日。红色：计划训练或饮食未在当天结束前完成。当天结束后才评估当前日期。",hi:"हरा: भोजन पूरा हुआ और वर्कआउट किया गया या निर्धारित आराम का दिन था। लाल: दिन समाप्त होने तक निर्धारित वर्कआउट या भोजन अधूरा रहा। वर्तमान दिन का मूल्यांकन दिन समाप्त होने पर होगा।"},
+  "Dia 0":{en:"Day 0",fr:"Jour 0",es:"Día 0",zh:"第0天",hi:"दिन 0"},
+  "Dia 30":{en:"Day 30",fr:"Jour 30",es:"Día 30",zh:"第30天",hi:"दिन 30"},
+  "dias de licença restantes":{en:"license days remaining",fr:"jours de licence restants",es:"días de licencia restantes",zh:"剩余授权天数",hi:"लाइसेंस के शेष दिन"},
+  "Estado dos 30 dias":{en:"30-day status",fr:"État des 30 jours",es:"Estado de los 30 días",zh:"30天进度状态",hi:"30-दिन की स्थिति"},
+  "Fechar foto":{en:"Close photo",fr:"Fermer la photo",es:"Cerrar foto",zh:"关闭照片",hi:"फ़ोटो बंद करें"},
+  "Fotografia de progresso ampliada":{en:"Enlarged progress photo",fr:"Photo de progression agrandie",es:"Foto de progreso ampliada",zh:"放大的进度照片",hi:"बड़ी की गई प्रगति फ़ोटो"},
+  "Modalidade":{en:"Training mode",fr:"Mode d’entraînement",es:"Modalidad",zh:"训练模式",hi:"प्रशिक्षण मोड"},
+  "Musculação":{en:"Strength training",fr:"Musculation",es:"Entrenamiento de fuerza",zh:"力量训练",hi:"शक्ति प्रशिक्षण"},
+  "Calistenia":{en:"Calisthenics",fr:"Callisthénie",es:"Calistenia",zh:"徒手健身",hi:"कैलिस्थेनिक्स"},
+  "Emagrecimento":{en:"Weight loss",fr:"Perte de poids",es:"Pérdida de peso",zh:"减脂",hi:"वज़न घटाना"},
+  "Ganho de massa":{en:"Muscle gain",fr:"Prise de masse",es:"Ganancia muscular",zh:"增肌",hi:"मांसपेशियाँ बढ़ाना"},
+  "Cutting / definição":{en:"Cutting / definition",fr:"Sèche / définition",es:"Definición / cutting",zh:"减脂塑形",hi:"कटिंग / परिभाषा"},
+  "Condicionamento":{en:"Conditioning",fr:"Condition physique",es:"Acondicionamiento",zh:"体能训练",hi:"शारीरिक क्षमता"},
+  "Manutenção":{en:"Maintenance",fr:"Maintien",es:"Mantenimiento",zh:"维持",hi:"बनाए रखना"},
+  "Objetivo a definir":{en:"Goal to be set",fr:"Objectif à définir",es:"Objetivo por definir",zh:"待设定目标",hi:"लक्ष्य तय करना है"},
+  "Atualizar foto inicial":{en:"Update starting photo",fr:"Mettre à jour la photo initiale",es:"Actualizar foto inicial",zh:"更新初始照片",hi:"शुरुआती फ़ोटो अपडेट करें"},
+  "treino e alimentação concluídos":{en:"workout and nutrition completed",fr:"entraînement et alimentation terminés",es:"entrenamiento y alimentación completados",zh:"训练和饮食已完成",hi:"वर्कआउट और भोजन पूरा हुआ"},
+  "rotina e alimentação concluídas":{en:"routine and nutrition completed",fr:"routine et alimentation terminées",es:"rutina y alimentación completadas",zh:"日常安排和饮食已完成",hi:"दिनचर्या और भोजन पूरा हुआ"},
+  "treino programado perdido":{en:"scheduled workout missed",fr:"entraînement prévu manqué",es:"entrenamiento programado perdido",zh:"错过计划训练",hi:"निर्धारित वर्कआउट छूटा"},
+  "alimentação incompleta":{en:"nutrition incomplete",fr:"alimentation incomplète",es:"alimentación incompleta",zh:"饮食未完成",hi:"भोजन अधूरा"},
+  "conclusão parcial":{en:"partially completed",fr:"partiellement terminé",es:"completado parcialmente",zh:"部分完成",hi:"आंशिक रूप से पूरा"},
+  "ainda por cumprir":{en:"still to complete",fr:"encore à accomplir",es:"pendiente de completar",zh:"尚待完成",hi:"अभी पूरा करना बाकी"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
