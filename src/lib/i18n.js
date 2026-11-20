@@ -256,6 +256,20 @@ const mealLabelTranslations = {
   "Lanche / pré-treino":{en:"Snack / pre-workout",fr:"Collation / avant l’entraînement",es:"Merienda / preentreno",zh:"加餐 / 训练前",hi:"स्नैक / वर्कआउट से पहले"},
   "Jantar / pós-treino":{en:"Dinner / post-workout",fr:"Dîner / après l’entraînement",es:"Cena / postentreno",zh:"晚餐 / 训练后",hi:"रात का खाना / वर्कआउट के बाद"}
 };
+Object.assign(foodNameTranslations, {
+  "Peito de frango":{en:"Chicken breast",fr:"Blanc de poulet",es:"Pechuga de pollo",zh:"鸡胸肉",hi:"चिकन ब्रेस्ट"},
+  "Arroz (peso cru)":{en:"Rice (dry weight)",fr:"Riz (poids cru)",es:"Arroz (peso en crudo)",zh:"大米（生重）",hi:"चावल (कच्चा वजन)"},
+  "Frango (peso cru)":{en:"Chicken (raw weight)",fr:"Poulet (poids cru)",es:"Pollo (peso en crudo)",zh:"鸡肉（生重）",hi:"चिकन (कच्चा वजन)"},
+  "Massa integral (peso seco)":{en:"Whole-wheat pasta (dry weight)",fr:"Pâtes complètes (poids sec)",es:"Pasta integral (peso seco)",zh:"全麦意面（干重）",hi:"होल-व्हीट पास्ता (सूखा वजन)"},
+  "Farinha de milho (peso seco)":{en:"Cornmeal (dry weight)",fr:"Farine de maïs (poids sec)",es:"Harina de maíz (peso seco)",zh:"玉米粉（干重）",hi:"मक्के का आटा (सूखा वजन)"},
+  "Carapau (peso cru)":{en:"Horse mackerel (raw weight)",fr:"Chinchard (poids cru)",es:"Jurel (peso en crudo)",zh:"竹荚鱼（生重）",hi:"हॉर्स मैकेरल (कच्चा वजन)"},
+  "Carne magra (peso cru)":{en:"Lean meat (raw weight)",fr:"Viande maigre (poids cru)",es:"Carne magra (peso en crudo)",zh:"瘦肉（生重）",hi:"लीन मीट (कच्चा वजन)"},
+  "Cabrito (peso cru)":{en:"Goat meat (raw weight)",fr:"Viande de chèvre (poids cru)",es:"Carne de cabrito (peso en crudo)",zh:"山羊肉（生重）",hi:"बकरी का मांस (कच्चा वजन)"},
+  "Tilápia (peso cru)":{en:"Tilapia (raw weight)",fr:"Tilapia (poids cru)",es:"Tilapia (peso en crudo)",zh:"罗非鱼（生重）",hi:"तिलापिया (कच्चा वजन)"},
+  "Peixe (peso cru)":{en:"Fish (raw weight)",fr:"Poisson (poids cru)",es:"Pescado (peso en crudo)",zh:"鱼（生重）",hi:"मछली (कच्चा वजन)"},
+  "Batata (peso cru)":{en:"Potato (raw weight)",fr:"Pomme de terre (poids cru)",es:"Patata (peso en crudo)",zh:"土豆（生重）",hi:"आलू (कच्चा वजन)"}
+});
+
 export function translateRecipeName(id, fallback, language) {
   return language === "pt" ? fallback : recipeNameTranslations[id]?.[language] || fallback;
 }
@@ -268,6 +282,19 @@ export function translateIngredientString(value, language) {
   for (const key of Object.keys(foodNameTranslations).sort((a,b)=>b.length-a.length)) {
     const translated = foodNameTranslations[key]?.[language];
     if (translated) result = result.replace(new RegExp(key, "gi"), translated);
+  }
+  const descriptors = {
+    cru:{en:"raw",fr:"cru",es:"crudo",zh:"生",hi:"कच्चा"},
+    crua:{en:"raw",fr:"crue",es:"cruda",zh:"生",hi:"कच्ची"},
+    seco:{en:"dry",fr:"sec",es:"seco",zh:"干",hi:"सूखा"},
+    seca:{en:"dry",fr:"sèche",es:"seca",zh:"干",hi:"सूखी"},
+    cozido:{en:"cooked",fr:"cuit",es:"cocido",zh:"熟",hi:"पका हुआ"},
+    cozida:{en:"cooked",fr:"cuite",es:"cocida",zh:"熟",hi:"पकी हुई"},
+    drenado:{en:"drained",fr:"égoutté",es:"escurrido",zh:"沥干",hi:"छना हुआ"},
+    drenada:{en:"drained",fr:"égouttée",es:"escurrida",zh:"沥干",hi:"छनी हुई"},
+  };
+  for (const [word, translations] of Object.entries(descriptors)) {
+    result = result.replace(new RegExp("\\b" + word + "\\b", "gi"), translations[language] || word);
   }
   return result;
 }
