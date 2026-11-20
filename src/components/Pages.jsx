@@ -948,14 +948,14 @@ export function Progress({ metrics }) {
   const saveProgressPhoto = async (event, stage) => {
     event.preventDefault();
     if (stage === "after" && !canUploadAfter) {
-      setError("A foto final só fica disponível depois de completar os 30 dias do programa.");
+      setError(t("A foto final só fica disponível depois de completar os 30 dias do programa."));
       return;
     }
     const formElement = event.currentTarget;
     const fields = new FormData(formElement);
     const file = fields.get("photo");
     if (!(file instanceof File) || !file.size) {
-      setError("Escolha uma fotografia antes de guardar.");
+      setError(t("Escolha uma fotografia antes de guardar."));
       return;
     }
     let path = "";
@@ -996,10 +996,10 @@ export function Progress({ metrics }) {
           <div><strong>{completedWorkoutCount}</strong><span>{t("treinos registados")}</span></div>
           <div><strong>{remainingCount}</strong><span>{t("dias por concluir")}</span></div>
           <div><strong>{elapsedDays}/30</strong><span>{t("dias desde o início")}</span></div>
-          {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>dias de licença restantes</span></div>}
+          {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>{t("dias de licença restantes")}</span></div>}
         </div>
         <div className="progress-journey-track"><i style={{ width: completedCount / 30 * 100 + "%" }} /></div>
-        <div className="progress-30-grid" aria-label="Estado dos 30 dias">
+        <div className="progress-30-grid" aria-label={t("Estado dos 30 dias")}>
           {Array.from({ length: 30 }, (_, index) => {
             const day = index + 1;
             const status = firstThirtyDays[index];
@@ -1007,17 +1007,18 @@ export function Progress({ metrics }) {
             const missed = Boolean(status?.missed);
             const partial = Boolean(status && !done && !missed && (status.workoutDone || status.nutritionDone));
             const className = done ? "done" : missed ? "missed" : partial ? "partial" : "";
+            const conjunction = ({ pt: " e ", en: " and ", fr: " et ", es: " y ", zh: "；", hi: " और " })[language] || " e ";
             const title = done
-              ? "Dia " + day + ": rotina e alimentação concluídas"
+              ? t("Dia") + " " + day + ": " + t("rotina e alimentação concluídas")
               : missed
-                ? "Dia " + day + ": " + [status.workoutMissed ? "treino programado perdido" : "", status.nutritionMissed ? "alimentação perdida" : ""].filter(Boolean).join(" e ")
+                ? t("Dia") + " " + day + ": " + [status.workoutMissed ? t("treino programado perdido") : "", status.nutritionMissed ? t("alimentação incompleta") : ""].filter(Boolean).join(conjunction)
                 : partial
-                  ? "Dia " + day + ": conclusão parcial"
-                  : "Dia " + day + ": ainda por cumprir";
+                  ? t("Dia") + " " + day + ": " + t("conclusão parcial")
+                  : t("Dia") + " " + day + ": " + t("ainda por cumprir");
             return <span key={day} className={className} title={title}>{day}</span>;
           })}
         </div>
-        <p className="progress-journey-note">Verde: alimentação concluída e treino feito ou descanso previsto. Vermelho: treino programado ou alimentação ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.</p>
+        <p className="progress-journey-note">{t("Verde: alimentação concluída e treino feito ou descanso previsto. Vermelho: treino programado ou alimentação ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.")}</p>
       </section>
       {form && (
         <form className="panel-form progress-measure-form" onSubmit={async (event) => {
@@ -1094,7 +1095,7 @@ export function Progress({ metrics }) {
           </article>
         </div>
       </section>
-      {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label="Fechar foto">×</button><img src={photo} alt="Fotografia de progresso ampliada" /></div>}
+      {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label={t("Fechar foto")}>×</button><img src={photo} alt={t("Fotografia de progresso ampliada")} /></div>}
     </>
   );
 }
