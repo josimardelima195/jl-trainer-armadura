@@ -1,19 +1,54 @@
 import React from 'react';
+import { useLanguage, translateUiText } from '../lib/i18n';
+
+function translateNode(node, language) {
+  if (Array.isArray(node)) return node.map((child) => translateNode(child, language));
+  if (typeof node === "string") {
+    const trimmed = node.trim();
+    if (!trimmed) return node;
+    const translated = translateUiText(trimmed, language);
+    if (translated === trimmed) return node;
+    const leading = node.match(/^\s*/)?.[0] || "";
+    const trailing = node.match(/\s*$/)?.[0] || "";
+    return leading + translated + trailing;
+  }
+  if (!React.isValidElement(node)) return node;
+  const nextProps = {};
+  for (const prop of ["aria-label", "aria-description", "title", "placeholder", "alt"]) {
+    if (typeof node.props[prop] === "string") {
+      nextProps[prop] = translateUiText(node.props[prop], language);
+    }
+  }
+  if (node.props.children !== undefined) {
+    nextProps.children = translateNode(node.props.children, language);
+  }
+  return React.cloneElement(node, nextProps);
+}
+
+export function Localize({ children }) {
+  const [language] = useLanguage();
+  return <>{translateNode(children, language)}</>;
+}
 
 export function Title({ tag, title, children }) {
-  return <div className="page-title"><div><p className="eyebrow">{tag}</p><h1>{title}</h1></div>{children}</div>;
+  const [language] = useLanguage();
+  return <div className="page-title"><div><p className="eyebrow">{translateUiText(tag, language)}</p><h1>{translateUiText(title, language)}</h1></div>{children}</div>;
 }
 export function Stat({ label, value, detail }) {
-  return <div className="stat"><span>{label}</span><strong>{value}</strong><small>{detail}</small></div>;
+  const [language] = useLanguage();
+  return <div className="stat"><span>{translateUiText(label, language)}</span><strong>{value}</strong><small>{translateUiText(detail, language)}</small></div>;
 }
 export function Empty({ children }) {
-  return <div className="empty">{children}</div>;
+  const [language] = useLanguage();
+  return <div className="empty">{typeof children === "string" ? translateUiText(children, language) : children}</div>;
 }
 export function Field({ label, ...props }) {
-  return <label>{label}<input {...props} /></label>;
+  const [language] = useLanguage();
+  return <label>{translateUiText(label, language)}<input {...props} /></label>;
 }
 export function Locked({ go, children }) {
-  return <div className="locked-panel"><div><b>🔒 Conteúdo reservado</b><p>{children}</p></div><button className="outline" onClick={() => go('planos')}>Ver planos</button></div>;
+  const [language] = useLanguage();
+  return <div className="locked-panel"><div><b>🔒 {translateUiText("Conteúdo reservado", language)}</b><p>{typeof children === "string" ? translateUiText(children, language) : children}</p></div><button className="outline" onClick={() => go('planos')}>{translateUiText("Ver planos", language)}</button></div>;
 }
 export function Chart({ rows }) {
   const sorted = [...rows].sort((a, b) => a.measured_at.localeCompare(b.measured_at));

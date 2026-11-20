@@ -1319,3 +1319,240 @@ header{
   font-size: 48px;
   background: linear-gradient(145deg, #30343b, #1b2027);
 }
+
+
+/* Ocean Light: tema claro azul/violeta aplicado à interface inteira. */
+body.theme-blue{
+  --bg:#f3f8ff;--panel:#ffffff;--panel2:#eaf3ff;--line:#d8e6f7;
+  --text:#142744;--muted:#62758d;--gold:#087ff5;--gold2:#2458ee;--purple:#5a61e8;
+  background:var(--bg);color:var(--text);color-scheme:light;
+}
+.shell.theme-blue{background:var(--bg);color:var(--text)}
+.shell.theme-blue aside{background:#fff;border-right-color:var(--line)}
+.shell.theme-blue header{background:rgba(255,255,255,.96);border-bottom-color:var(--line);color:var(--text)}
+.shell.theme-blue .brand-mark{border-color:#1688f7;color:#126de0}
+.shell.theme-blue .brand span,.shell.theme-blue .side-label,.shell.theme-blue .eyebrow{color:#58718f}
+.shell.theme-blue .side-btn{color:#5e718a}
+.shell.theme-blue .side-btn:hover,.shell.theme-blue .side-btn.active{background:#e9f3ff;color:#075fca}
+.shell.theme-blue .side-btn.active{box-shadow:inset 3px 0 #1688f7}
+.shell.theme-blue .search,.shell.theme-blue .stat,.shell.theme-blue .progress-card,.shell.theme-blue .calendar-card,
+.shell.theme-blue .admin-panel,.shell.theme-blue .profile-card,.shell.theme-blue .nutrition-card,
+.shell.theme-blue .today-card,.shell.theme-blue .exercise,.shell.theme-blue .event,.shell.theme-blue .panel-form,
+.shell.theme-blue .plan-card,.shell.theme-blue .locked-panel,.shell.theme-blue .empty,.shell.theme-blue .quick-action,
+.shell.theme-blue .measure-grid>div,.shell.theme-blue .details>div,.shell.theme-blue .nutrition-stat,
+.shell.theme-blue .meal-card,.shell.theme-blue .video-card,.shell.theme-blue .mod-card,.shell.theme-blue .badge{
+  background:#fff;border-color:var(--line);color:var(--text);box-shadow:0 5px 18px rgba(38,91,151,.06)
+}
+.shell.theme-blue .hero,.shell.theme-blue .workout-banner,.shell.theme-blue .achievement-hero,
+.shell.theme-blue .nutrition-hero,.shell.theme-blue .profile-card,.shell.theme-blue .coach-card,
+.shell.theme-blue .chat-head,.shell.theme-blue .program-panel,.shell.theme-blue .upgrade,
+.shell.theme-blue .exercise-showcase,.shell.theme-blue .quote,.shell.theme-blue .meal-training{
+  background:linear-gradient(125deg,#eaf5ff 0%,#ffffff 58%,#edf0ff 100%);
+  border-color:#d5e7fb;color:var(--text)
+}
+.shell.theme-blue .hero h1 span,.shell.theme-blue .hero-stat,.shell.theme-blue .stat.gold strong,
+.shell.theme-blue .nutrition-kcal strong,.shell.theme-blue .nutrition-stat b,.shell.theme-blue .timer,
+.shell.theme-blue .achievement-hero>strong,.shell.theme-blue .text-btn,.shell.theme-blue .mod-card button,
+.shell.theme-blue .calendar-head button,.shell.theme-blue .media-view a{color:#086ee2}
+.shell.theme-blue .hero-stat,.shell.theme-blue .nutrition-kcal{border-color:#b8d8fb}
+.shell.theme-blue .hero-stat span,.shell.theme-blue .nutrition-kcal span{color:#637994}
+.shell.theme-blue .primary,.shell.theme-blue .chat-input button{
+  background:linear-gradient(115deg,#079af4 0%,#176df2 54%,#3b45e8 100%);
+  color:#fff;box-shadow:0 6px 16px rgba(26,105,224,.2)
+}
+.shell.theme-blue .primary:hover{filter:brightness(1.05)}
+.shell.theme-blue .outline{border-color:#b9d5f5;background:#f6fbff;color:#1266ce}
+.shell.theme-blue .pill,.shell.theme-blue .mini-pill,.shell.theme-blue .showcase-mode,
+.shell.theme-blue .program-focus-tags span{background:#e8f3ff;border-color:#c8def8;color:#1769cf}
+.shell.theme-blue .today-icon,.shell.theme-blue .exercise-thumb,.shell.theme-blue .ring,
+.shell.theme-blue .chat-avatar,.shell.theme-blue .video-thumb>span,.shell.theme-blue .lock,
+.shell.theme-blue .coach-avatar,.shell.theme-blue .client-avatar,.shell.theme-blue .food-chip{
+  background:#e7f2ff;color:#126bda;border-color:#d2e6fb
+}
+.shell.theme-blue .ring{border-color:#b9d8fb}
+.shell.theme-blue .quote{border-left-color:#1787f3}
+.shell.theme-blue .quote>span{color:#1684ee}
+.shell.theme-blue .quote p,.shell.theme-blue .coach-info p,.shell.theme-blue .nutrition-card p,
+.shell.theme-blue .nutrition-disclaimer,.shell.theme-blue .today-info p,.shell.theme-blue .mod-card p,
+.shell.theme-blue .exercise-info p,.shell.theme-blue .video-body span,.shell.theme-blue .measure-grid span,
+.shell.theme-blue .measure-grid small,.shell.theme-blue .details span,.shell.theme-blue .stat span,
+.shell.theme-blue .stat small,.shell.theme-blue .nutrition-hero p,.shell.theme-blue .meal-head p,
+.shell.theme-blue .locked-panel p,.shell.theme-blue .client-row small,.shell.theme-blue .row-date{
+  color:#637994
+}
+.shell.theme-blue .success{background:#e8f8ef;color:#197a49;border:1px solid #c8ecd8}
+.shell.theme-blue .error{background:#fff0f0;color:#a72f3a;border-color:#f1c7cb}
+.shell.theme-blue .guardian{background:#edf6ff;border-color:#c9e1fa;color:#245b91}
+.shell.theme-blue .chat-messages{background:#f5f9ff}
+.shell.theme-blue .chat-bubble{background:#e6f1ff;color:#1c3658}
+.shell.theme-blue .chat-row.user .chat-bubble{background:#176fe6;color:#fff}
+.shell.theme-blue .chat-suggestions button{background:#edf6ff;border-color:#c8def8;color:#1266ce}
+.shell.theme-blue .chat-input input,.shell.theme-blue .search input{background:#fff;color:#142744}
+.shell.theme-blue input,.shell.theme-blue select,.shell.theme-blue textarea,
+.shell.theme-blue .panel-form input,.shell.theme-blue .panel-form textarea,
+.shell.theme-blue .filter-row select,.shell.theme-blue .chat-input input{
+  background:#fff!important;color:#142744!important;border:1px solid #d3e3f5!important
+}
+.shell.theme-blue input::placeholder,.shell.theme-blue textarea::placeholder{color:#91a2b7}
+.shell.theme-blue input:focus,.shell.theme-blue select:focus,.shell.theme-blue textarea:focus{outline:2px solid rgba(22,126,235,.15);border-color:#2588ed!important}
+.shell.theme-blue .days div{color:#526984}
+.shell.theme-blue .days div.today{background:#dceeff;color:#075fca}
+.shell.theme-blue .days i{background:#1688f7}
+.shell.theme-blue .bar,.shell.theme-blue .program-progress{background:#dceafa}
+.shell.theme-blue .bar i,.shell.theme-blue .program-progress span{background:linear-gradient(90deg,#0aa2f4,#3849e9)}
+.shell.theme-blue .chart svg{border-bottom-color:#dce6f2;background:repeating-linear-gradient(to bottom,transparent 0,transparent 54px,#e7eef8 55px)}
+.shell.theme-blue .check{border-color:#c7d9ee;color:#1478e5}
+.shell.theme-blue .check.done{border-color:#1688f7;background:#e5f2ff}
+.shell.theme-blue .bottom-nav{background:#fff;border-top-color:var(--line);box-shadow:0 -5px 20px rgba(32,83,138,.08)}
+.shell.theme-blue .bottom-nav button{color:#7a8da5}
+.shell.theme-blue .bottom-nav button.active{color:#086ee2}
+.shell.theme-blue .theme-switcher{color:#5f7693}
+.shell.theme-blue .theme-switcher button{background:#eef6ff;border-color:#d7e7f8;color:#1769cf}
+.shell.theme-blue .theme-switcher button.active{background:#dceeff;border-color:#7fb8f2}
+.shell.theme-blue .theme-dot-blue{background:linear-gradient(135deg,#00a9f4,#3a31e9)}
+.shell.theme-blue .theme-preview-blue{background:linear-gradient(135deg,#00a9f4,#3a31e9)}
+.shell.theme-blue .nutrition-day-grid button{background:#fff;border-color:#d8e6f7;color:#49617f}
+.shell.theme-blue .nutrition-day-grid button.selected{background:#e3f1ff;border-color:#1688f7;color:#075fca}
+.shell.theme-blue .nutrition-disclaimer{border-left-color:#1688f7}
+.shell.theme-blue .meal-training{border-color:#b9d9f8}
+.shell.theme-blue .showcase-card{background:#fff;border-color:#d8e6f7}
+.shell.theme-blue .exercise-preview-card{background:#fff;border-color:#d8e6f7;color:#142744}
+.shell.theme-blue .exercise-preview-info p,.shell.theme-blue .exercise-preview-info li{color:#61758f}
+.shell.theme-blue .media-view,.shell.theme-blue .photo-preview{background:#fff;color:#142744;border-color:#d8e6f7}
+.shell.theme-blue .auth-page{background:#f3f8ff;color:#142744}
+.shell.theme-blue .auth-art{background:radial-gradient(circle at 30% 40%,#d9ecff,transparent 44%),linear-gradient(130deg,#e9f5ff,#f7f9ff)}
+.shell.theme-blue .auth-art h1 em{color:#176fe6}
+.shell.theme-blue .auth-box input{background:#fff;color:#142744;border-color:#d8e6f7}
+.shell.theme-blue .auth-box label,.shell.theme-blue .auth-box>p{color:#62758d}
+.shell.theme-blue .auth-links button,.shell.theme-blue .auth-box details summary{color:#176fe6}
+.shell.theme-blue .nutrition-onboarding{background:#fff;color:#142744;border-color:#d8e6f7;box-shadow:0 18px 60px rgba(22,79,143,.2)}
+.shell.theme-blue .nutrition-onboarding input,.shell.theme-blue .nutrition-onboarding select,.shell.theme-blue .nutrition-onboarding textarea{background:#f8fbff!important;color:#142744!important;border-color:#d3e3f5!important}
+.shell.theme-blue .onboarding-choice{background:#fff;border-color:#d8e6f7;color:#142744}
+.shell.theme-blue .onboarding-choice.selected{background:#e8f4ff;border-color:#1688f7;color:#075fca}
+.shell.theme-blue .onboarding-progress-track{background:#dceafa}
+.shell.theme-blue .onboarding-progress-track span{background:linear-gradient(90deg,#0aa2f4,#3a31e9)}
+.shell.theme-blue .onboarding-photo-card{background:#f8fbff;border-color:#d8e6f7;color:#142744}
+.shell.theme-blue .onboarding-photo-card.locked{background:#f2f5fa;color:#8191a7}
+.shell.theme-blue .onboarding-photo-icon{background:#e5f2ff;color:#1478e5}
+.theme-dot-blue{display:block;width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#00a9f4,#3a31e9)}
+.theme-preview-blue{display:flex;gap:4px;align-items:center;justify-content:center;background:linear-gradient(135deg,#00a9f4,#3a31e9)}
+.theme-preview-blue i{width:20px;height:24px;border-radius:5px;background:rgba(255,255,255,.82)}
+.onboarding-cuisine-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.onboarding-photo-stack{gap:14px}
+.onboarding-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.onboarding-photo-card{min-width:0;min-height:175px;display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);cursor:pointer}
+.onboarding-photo-card strong{font-size:13px}
+.onboarding-photo-card small{font-size:10px;color:var(--muted);overflow-wrap:anywhere}
+.onboarding-photo-card input{width:100%;font-size:10px}
+.onboarding-photo-card .outline.small{margin-top:auto}
+.onboarding-photo-card.locked{opacity:.7;cursor:default}
+.onboarding-photo-icon{width:44px;height:44px;border-radius:12px;background:#25231e;color:var(--gold2);display:grid;place-items:center}
+.locked-pill{margin-top:auto;padding:6px 8px;border-radius:20px;background:rgba(120,130,145,.12);font-size:10px}
+@media(max-width:700px){.onboarding-cuisine-grid,.onboarding-photo-grid{grid-template-columns:1fr}.onboarding-photo-card{min-height:130px}}
+
+body.theme-blue .auth-page{background:#f3f8ff;color:#142744}
+body.theme-blue .auth-art{background:radial-gradient(circle at 30% 40%,#d9ecff,transparent 44%),linear-gradient(130deg,#e9f5ff,#f7f9ff)}
+body.theme-blue .auth-art h1 em{color:#176fe6}
+body.theme-blue .auth-box input{background:#fff;color:#142744;border-color:#d8e6f7}
+body.theme-blue .auth-box label,body.theme-blue .auth-box>p{color:#62758d}
+body.theme-blue .auth-links button,body.theme-blue .auth-box details summary{color:#176fe6}
+
+
+/* Ocean Light: controlos nativos, calendário, progresso e uploads */
+.shell.theme-blue { color-scheme: light; }
+.shell.theme-blue input[type="date"],
+.shell.theme-blue input[type="time"],
+.shell.theme-blue input[type="datetime-local"],
+.shell.theme-blue input[type="month"],
+.shell.theme-blue input[type="week"] { color-scheme: light; }
+.shell.theme-blue input[type="date"]::-webkit-calendar-picker-indicator,
+.shell.theme-blue input[type="time"]::-webkit-calendar-picker-indicator { opacity: .72; cursor: pointer; }
+.shell.theme-blue select option { background: #fff; color: #142744; }
+.shell.theme-blue input[type="checkbox"],
+.shell.theme-blue input[type="radio"] {
+  accent-color: #1678e8;
+  background: #fff !important;
+  border-color: #b9d5f5 !important;
+}
+.shell.theme-blue input[type="checkbox"]:checked,
+.shell.theme-blue input[type="radio"]:checked {
+  background: #1678e8 !important;
+  border-color: #1678e8 !important;
+}
+.shell.theme-blue input[type="range"] { accent-color: #1678e8; }
+.shell.theme-blue input[type="file"]::file-selector-button {
+  background: #eaf4ff !important;
+  border: 1px solid #b9d5f5 !important;
+  color: #1266ce !important;
+}
+.shell.theme-blue .calendar-card,
+.shell.theme-blue .nutrition-calendar,
+.shell.theme-blue .hydration-card,
+.shell.theme-blue .progress-journey-card,
+.shell.theme-blue .progress-photo-slot,
+.shell.theme-blue .profile-advanced,
+.shell.theme-blue .theme-options button {
+  background: #fff;
+  border-color: #d8e6f7;
+  color: #142744;
+}
+.shell.theme-blue .calendar-card button,
+.shell.theme-blue .calendar-head button,
+.shell.theme-blue .nutrition-day-grid button {
+  background: #f7fbff;
+  border-color: #d8e6f7;
+  color: #49617f;
+}
+.shell.theme-blue .calendar-card button.active,
+.shell.theme-blue .calendar-card button.selected,
+.shell.theme-blue .calendar-head button.active {
+  background: #e3f1ff;
+  border-color: #1688f7;
+  color: #075fca;
+}
+.shell.theme-blue .progress-journey-card p,
+.shell.theme-blue .progress-journey-note,
+.shell.theme-blue .progress-photo-slot > small,
+.shell.theme-blue .progress-photo-upload .file-drop small {
+  color: #61758f;
+}
+.shell.theme-blue .progress-30-grid span {
+  background: #f1f6fc;
+  border-color: #d8e6f7;
+  color: #49617f;
+}
+.shell.theme-blue .progress-30-grid span.done {
+  background: #e5f7ed;
+  border-color: #a9dfbf;
+  color: #187548;
+}
+.shell.theme-blue .progress-30-grid span.missed {
+  background: #fff0f1;
+  border-color: #f0bdc2;
+  color: #ad3440;
+}
+.shell.theme-blue .progress-30-grid span.partial {
+  background: #eaf4ff;
+  border-color: #b9d8fb;
+  color: #1769cf;
+}
+.shell.theme-blue .progress-photo-preview,
+.shell.theme-blue .progress-photo-slot .progress-photo-placeholder {
+  background: #f4f8fd;
+  border-color: #d8e6f7;
+  color: #61758f;
+}
+.shell.theme-blue .progress-photo-slot .progress-photo-upload .file-drop {
+  background: #f8fbff;
+  border-color: #b9d5f5;
+  color: #294563;
+}
+.shell.theme-blue .progress-photo-slot .progress-photo-upload .checkbox {
+  color: #61758f;
+}
+.shell.theme-blue .onboarding-note,
+.shell.theme-blue .nutrition-safety-note {
+  background: #edf6ff;
+  border-left-color: #1688f7;
+  color: #526984;
+}

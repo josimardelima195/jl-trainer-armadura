@@ -319,11 +319,11 @@ export function isTimedExercise(exercise = {}) {
   const reps = clean(exercise?.reps);
 
   if (Number(exercise?.duration_seconds || exercise?.work_seconds || exercise?.duration_minutes) > 0) return true;
-  if (bodyParts.includes("cardio") || category === "cardio" || muscles.includes("cardiovascular system")) return true;
-  if (/\b\d+\s*(?:m|metros)\b/.test(reps)) return false;
+  if (bodyParts.some((part) => part.includes("cardio")) || category.includes("cardio") || muscles.includes("cardiovascular system")) return true;
 
-  const continuousMovement = /\b(?:stationary bike|stationary bicycle|exercise bike|hands bike|bike|bicicleta ergonometrica|bicicleta estacionaria|cycling|cycle cross trainer|elliptical|stepmill|treadmill|esteira|running|run|jog|corrida|correr|jump rope|jack jump|star jump|jumping jacks?|polichinelos?|pular corda|high knees|mountain climbers?|bear crawl|burpees?|skater hops|battling ropes|march in place|marcha no lugar|caminhada|walking|sprints?|wind sprints?|farmers walk)\b/.test(name);
+  const continuousMovement = /\b(?:stationary bike|stationary bicycle|exercise bike|hands bike|bike|bicicleta ergonometrica|bicicleta estacionaria|cycling|cycle cross trainer|elliptical|stepmill|treadmill|esteira|running|run|jog|corrida|correr|jump rope|jack jump|star jump|jumping jacks?|polichinelos?|pular corda|high knees|mountain climbers?|bear crawl|burpees?|skater hops|battling ropes|march in place|marcha no lugar|caminhada|walking|sprints?|wind sprints?)\b/.test(name);
   if (continuousMovement) return true;
+  if (/\bfarmer(?:s)? walk\b/.test(name) || /\b\d+\s*(?:m|metros)\b/.test(reps)) return false;
 
   if (/stationary bike|elliptical machine|stepmill machine|treadmill|upper body ergometer/.test(equipment)) return true;
 

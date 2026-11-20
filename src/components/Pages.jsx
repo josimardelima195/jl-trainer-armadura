@@ -26,17 +26,19 @@ import {
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
-import { useLanguage, translatedInstructions } from "../lib/i18n";
+import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
+  const [language] = useLanguage();
+  const exerciseName = translateExerciseName(exercise?.name, language);
   const source = exercise?.image_path || exercise?.gifUrl;
   return (
     <div className={`exercise-gif exercise-gif-${variant}`}>
       {source && !failed ? (
         <img
           src={source}
-          alt={`Demonstração de ${exercise.name}`}
+          alt={exerciseName}
           loading={variant === "guided" ? "eager" : "lazy"}
           fetchPriority={variant === "guided" ? "high" : "low"}
           decoding="async"
@@ -169,7 +171,7 @@ function GuidedWorkout({
         <div className="guided-head">
           <div>
             <span className="eyebrow">TREINO GUIADO · {index + 1}/{exercises.length}</span>
-            <h2>{exercise.name}</h2>
+            <h2>{translateExerciseName(exercise.name, language)}</h2>
           </div>
           <button className="outline" type="button" onClick={onExit}>Sair ×</button>
         </div>
@@ -268,7 +270,7 @@ export function Workouts({ plan }) {
   const userNutritionLogs = (data.daily_nutrition_logs || []).filter(
     (log) => log.user_id === userId,
   );
-  const accountTracking = accountDayStatuses(profile.created_at, trainingLogs, userNutritionLogs);
+  const accountTracking = accountDayStatuses(profile.created_at, trainingLogs, userNutritionLogs, new Date(), profile);
   const [completed, setCompleted] = useState({}),
     [guided, setGuided] = useState(false),
     [timer, setTimer] = useState(0),
@@ -469,16 +471,16 @@ export function Workouts({ plan }) {
       <Title title="Meus treinos" tag={profile.modality || "SEU PROGRAMA"} />
       <section className="program-panel">
         <div>
-          <span className="eyebrow">PROGRAMA PERSONALIZADO</span>
-          <h2>30 dias de evolução</h2>
+          <span className="eyebrow">{translateUiText("PROGRAMA PERSONALIZADO", language)}</span>
+          <h2>{translateUiText("30 dias de evolução", language)}</h2>
           <p>
-            {today?.focus || "Treino guiado"} · {profile.modality || modalityKey} ·{" "}
-            {equipmentTitle}
+            {translateUiText(today?.focus || "Treino guiado", language)} · {translateUiText(profile.modality || modalityKey, language)} ·{" "}
+            {translateUiText(equipmentTitle, language)}
           </p>
           <div className="program-focus-tags">
             {(today?.groups || []).map((group) => (
               <span key={group}>
-                {group
+                {translateUiText(group
                   .replace("chest", "peito")
                   .replace("triceps", "tríceps")
                   .replace("back", "costas")
@@ -488,34 +490,34 @@ export function Workouts({ plan }) {
                   .replace("cardio", "cardio")
                   .replace("core", "abdômen")
                   .replace("shoulders", "ombros")
-                  .replace("mobility", "mobilidade")}
+                  .replace("mobility", "mobilidade"), language)}
               </span>
             ))}
           </div>
         </div>
         <div className="program-choice-block">
-          <span className="choice-label">Escolha o dia</span>
+          <span className="choice-label">{translateUiText("Escolha o dia", language)}</span>
           <div className="day-picker">
             {program.map((day) => (
               <button
                 type="button"
                 className={`day-chip ${programDay === day.day ? "active" : ""} ${accountTracking.days[day.day - 1]?.workoutMissed ? "missed" : accountTracking.days[day.day - 1]?.workoutDone ? "done" : ""}`}
                 key={day.day}
-                title={accountTracking.days[day.day - 1]?.workoutMissed ? "Treino perdido" : accountTracking.days[day.day - 1]?.workoutDone ? "Treino concluído" : "Dia por cumprir"}
+                title={translateUiText(accountTracking.days[day.day - 1]?.workoutMissed ? "Treino perdido" : accountTracking.days[day.day - 1]?.workoutDone ? "Treino concluído" : "Dia por cumprir", language)}
                 onClick={() => {
                   setProgramDay(day.day);
                   reset();
                 }}
               >
                 <strong>{day.day}</strong>
-                <small>{accountTracking.days[day.day - 1]?.workoutMissed ? "Perdido" : day.focus}</small>
+                <small>{accountTracking.days[day.day - 1]?.workoutMissed ? translateUiText("Perdido", language) : translateUiText(day.focus, language)}</small>
               </button>
             ))}
           </div>
-          <p className="nutrition-calendar-note">Verde: treino registado. Vermelho: dia terminado sem treino guardado.</p>
+          <p className="nutrition-calendar-note">{translateUiText("Verde: treino registado. Vermelho: dia terminado sem treino guardado.", language)}</p>
         </div>
         <div className="program-choice-block difficulty-choice">
-          <span className="choice-label">Dificuldade</span>
+          <span className="choice-label">{translateUiText("Dificuldade", language)}</span>
           <div className="choice-pills">
             {Object.entries(intensityLabels).filter(([value]) => !(age >= 12 && age < 18 && value === "hard")).map(([value, label]) => (
               <button
@@ -544,21 +546,21 @@ export function Workouts({ plan }) {
         </div>
       )}
       <div className={`intensity-note intensity-${intensity}`}>
-        <b>{intensityLabels[intensity]}</b> · {intensityNotes[intensity]}
+        <b>{translateUiText(intensityLabels[intensity], language)}</b> · {translateUiText(intensityNotes[intensity], language)}
       </div>
       {(today?.progressionNote || today?.skillNote) && (
         <div className="cal-plan-note">
-          {today.progressionNote && <p><b>Progressão do dia:</b> {today.progressionNote}</p>}
-          {today.skillNote && <p><b>Meta técnica:</b> {today.skillNote}</p>}
+          {today.progressionNote && <p><b>{translateUiText("Progressão do dia:", language)}</b> {today.progressionNote}</p>}
+          {today.skillNote && <p><b>{translateUiText("Meta técnica:", language)}</b> {today.skillNote}</p>}
         </div>
       )}
       <section className="exercise-showcase">
         <div className="showcase-heading">
           <div>
-            <span className="eyebrow">MOVIMENTOS DO DIA</span>
-            <h2>{today?.title || "Treino guiado"}</h2>
+            <span className="eyebrow">{translateUiText("MOVIMENTOS DO DIA", language)}</span>
+            <h2>{translateUiText(today?.title || "Treino guiado", language)}</h2>
             <p>
-              {today?.sessionLabel || today?.focus || "Movimentos reais"} · Dia{" "}
+              {translateUiText(today?.sessionLabel || today?.focus || "Movimentos reais", language)} · {language === "pt" ? "Dia" : language === "en" ? "Day" : language === "fr" ? "Jour" : language === "es" ? "Día" : language === "zh" ? "第" : "दिन"}{" "}
               {programDay} de 30 · {intensityLabels[intensity]}
             </p>
           </div>
@@ -577,12 +579,12 @@ export function Workouts({ plan }) {
                   type="button"
                   className="showcase-media-button"
                   onClick={() => setPreviewExercise(exercise)}
-                  aria-label={`Ver demonstração de ${exercise.name}`}
+                  aria-label={`${translateUiText("Ver demonstração", language)}: ${translateExerciseName(exercise.name, language)}`}
                 >
                   <ExerciseGif exercise={exercise} variant="showcase" />
                 </button>
                 <div className="showcase-card-copy">
-                  <b>{exercise.name}</b>
+                  <b>{translateExerciseName(exercise.name, language)}</b>
                   <small>
                     {muscleLabel(exercise)} · {equipmentLabel(exercise)}
                   </small>
@@ -651,8 +653,8 @@ export function Workouts({ plan }) {
               reset();
             }}
           >
-            <option value="ginasio">Gym</option>
-            <option value="casa">Home</option>
+            <option value="ginasio">{t("Gym")}</option>
+            <option value="casa">{t("Home")}</option>
           </select>
         </label>
         <label>
@@ -703,7 +705,7 @@ export function Workouts({ plan }) {
             </button>
             <div>
               <span className="pill">{exercise.category || "Movimento"}</span>
-              <h3>{exercise.name}</h3>
+              <h3>{translateExerciseName(exercise.name, language)}</h3>
               <p>
                 Faça este movimento devagar, com postura controlada, amplitude
                 confortável e sem dor.
@@ -844,13 +846,13 @@ export function Workouts({ plan }) {
           className="exercise-preview-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label={`Pré-visualização de ${previewExercise.name}`}
+          aria-label={`${translateUiText("Pré-visualização de", language)} ${translateExerciseName(previewExercise.name, language)}`}
         >
           <div className="exercise-preview-card">
             <div className="exercise-preview-head">
               <div>
                 <span className="pill">PRÉ-VISUALIZAÇÃO</span>
-                <h2>{previewExercise.name}</h2>
+                <h2>{translateExerciseName(previewExercise.name, language)}</h2>
               </div>
               <button
                 className="outline"
@@ -893,6 +895,9 @@ export function Workouts({ plan }) {
 
 export function Progress({ metrics }) {
   const { data, userId, mutate, busy, setError, refresh, profile } = useStore();
+  const [language] = useLanguage();
+  const t = (value) => translateUiText(value, language);
+  const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
   const [form, setForm] = useState(false);
   const [photo, setPhoto] = useState("");
   const [photoUrls, setPhotoUrls] = useState({});
@@ -913,9 +918,10 @@ export function Progress({ metrics }) {
   }, [photoKey, userId]);
   const allLogs = (data.training_logs || []).filter((log) => log.user_id === userId);
   const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
-  const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs);
+  const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs, new Date(), profile);
   const firstThirtyDays = accountTracking.days.slice(0, 30);
-  const completedCount = firstThirtyDays.filter((item) => item.workoutDone).length;
+  const completedCount = firstThirtyDays.filter((item) => item.dayComplete).length;
+  const completedWorkoutCount = firstThirtyDays.filter((item) => item.workoutDone).length;
   const remainingCount = Math.max(0, 30 - completedCount);
   const missedWorkoutDays = accountTracking.missedWorkoutDays;
   const missedNutritionDays = accountTracking.missedNutritionDays;
@@ -928,8 +934,9 @@ export function Progress({ metrics }) {
   const subscription = (data.subscriptions || [])
     .filter((item) => item.user_id === userId && item.status === "active")
     .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
-  const elapsedDays = Math.min(30, accountTracking.days.length);
-  const canUploadAfter = completedCount >= 30 && elapsedDays >= 30;
+  const programCreatedAt = profile.created_at ? new Date(profile.created_at).getTime() : NaN;
+  const elapsedDays = Number.isFinite(programCreatedAt) ? Math.min(30, Math.max(0, Math.floor((Date.now() - programCreatedAt) / 86400000))) : 0;
+  const canUploadAfter = elapsedDays >= 30;
   const licenseRemaining = subscription?.expires_at
     ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
     : null;
@@ -944,14 +951,14 @@ export function Progress({ metrics }) {
   const saveProgressPhoto = async (event, stage) => {
     event.preventDefault();
     if (stage === "after" && !canUploadAfter) {
-      setError("A foto final só fica disponível depois de concluir os 30 treinos e completar 30 dias.");
+      setError(t("A foto final só fica disponível depois de completar os 30 dias do programa."));
       return;
     }
     const formElement = event.currentTarget;
     const fields = new FormData(formElement);
     const file = fields.get("photo");
     if (!(file instanceof File) || !file.size) {
-      setError("Escolha uma fotografia antes de guardar.");
+      setError(t("Escolha uma fotografia antes de guardar."));
       return;
     }
     let path = "";
@@ -972,7 +979,7 @@ export function Progress({ metrics }) {
   return (
     <>
       <Title tag="SUA JORNADA EM NÚMEROS" title="Minha evolução">
-        <button type="button" className="primary small" onClick={() => setForm((value) => !value)}>+ Registrar medida</button>
+        <button type="button" className="primary small" onClick={() => setForm((value) => !value)}>{t("+ Registrar medida")}</button>
       </Title>
       <div className="grid stats">
         <Stat label="Peso atual" value={currentWeight === null ? "—" : currentWeight + " kg"} />
@@ -984,35 +991,37 @@ export function Progress({ metrics }) {
       </div>
       <section className="progress-journey-card">
         <div className="progress-journey-heading">
-          <div><span className="eyebrow">PLANO PERSONALIZADO</span><h2>Os seus 30 dias</h2><p>{profile.modality || "Modalidade"} · {goalLabels[String(profile.goal || "").toLowerCase()] || profile.goal || "Objetivo a definir"}</p></div>
+          <div><span className="eyebrow">{t("PLANO PERSONALIZADO")}</span><h2>{t("Os seus 30 dias")}</h2><p>{t(profile.modality || "Modalidade")} · {t(goalLabels[String(profile.goal || "").toLowerCase()] || profile.goal || "Objetivo a definir")}</p></div>
           <LeoMascot size={78} />
         </div>
         <div className="progress-journey-stats">
-          <div><strong>{completedCount}/30</strong><span>treinos/dias concluídos</span></div>
-          <div><strong>{remainingCount}</strong><span>por concluir</span></div>
-          <div><strong>{elapsedDays}/30</strong><span>dias desde o início</span></div>
-          {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>dias de licença restantes</span></div>}
+          <div><strong>{completedCount}/30</strong><span>{t("dias concluídos")}</span></div>
+          <div><strong>{completedWorkoutCount}</strong><span>{t("treinos registados")}</span></div>
+          <div><strong>{remainingCount}</strong><span>{t("dias por concluir")}</span></div>
+          <div><strong>{elapsedDays}/30</strong><span>{t("dias desde o início")}</span></div>
+          {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>{t("dias de licença restantes")}</span></div>}
         </div>
         <div className="progress-journey-track"><i style={{ width: completedCount / 30 * 100 + "%" }} /></div>
-        <div className="progress-30-grid" aria-label="Estado dos 30 dias">
+        <div className="progress-30-grid" aria-label={t("Estado dos 30 dias")}>
           {Array.from({ length: 30 }, (_, index) => {
             const day = index + 1;
             const status = firstThirtyDays[index];
-            const done = Boolean(status?.workoutDone && status?.nutritionDone);
+            const done = Boolean(status?.dayComplete);
             const missed = Boolean(status?.missed);
             const partial = Boolean(status && !done && !missed && (status.workoutDone || status.nutritionDone));
             const className = done ? "done" : missed ? "missed" : partial ? "partial" : "";
+            const conjunction = ({ pt: " e ", en: " and ", fr: " et ", es: " y ", zh: "；", hi: " और " })[language] || " e ";
             const title = done
-              ? "Dia " + day + ": treino e alimentação concluídos"
+              ? t("Dia") + " " + day + ": " + t("rotina e alimentação concluídas")
               : missed
-                ? "Dia " + day + ": " + [status.workoutMissed ? "treino perdido" : "", status.nutritionMissed ? "alimentação perdida" : ""].filter(Boolean).join(" e ")
+                ? t("Dia") + " " + day + ": " + [status.workoutMissed ? t("treino programado perdido") : "", status.nutritionMissed ? t("alimentação incompleta") : ""].filter(Boolean).join(conjunction)
                 : partial
-                  ? "Dia " + day + ": conclusão parcial"
-                  : "Dia " + day + ": ainda por cumprir";
+                  ? t("Dia") + " " + day + ": " + t("conclusão parcial")
+                  : t("Dia") + " " + day + ": " + t("ainda por cumprir");
             return <span key={day} className={className} title={title}>{day}</span>;
           })}
         </div>
-        <p className="progress-journey-note">Verde: treino e alimentação concluídos. Vermelho: pelo menos uma das duas partes ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.</p>
+        <p className="progress-journey-note">{t("Verde: alimentação concluída e treino feito ou descanso previsto. Vermelho: treino programado ou alimentação ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.")}</p>
       </section>
       {form && (
         <form className="panel-form progress-measure-form" onSubmit={async (event) => {
@@ -1036,62 +1045,60 @@ export function Progress({ metrics }) {
       )}
       <section className="progress-photo-section">
         <div className="progress-photo-heading">
-          <div><span className="eyebrow">COMPARAÇÃO VISUAL</span><h2>Antes e depois</h2></div>
-          <span className="pill">PRIVADO</span>
+          <div><span className="eyebrow">{t("COMPARAÇÃO VISUAL")}</span><h2>{t("Antes e depois")}</h2></div>
+          <span className="pill">{t("PRIVADO")}</span>
         </div>
-        <p className="muted">Guarde a foto inicial no começo do plano. A foto final será liberada somente após 30/30 treinos e 30 dias decorridos.</p>
+        <p className="muted">{t("Guarde a foto inicial no começo do plano. A foto final será liberada depois de completar os 30 dias do programa.")}</p>
         <div className="progress-before-after">
           <article className="progress-photo-slot">
-            <span>ANTES · DIA 0</span>
+            <span>{t("ANTES · DIA 0")}</span>
             {firstPhoto ? (
               photoUrls[firstPhoto.id] ? (
                 <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[firstPhoto.id])}>
                   <img src={photoUrls[firstPhoto.id]} alt="Fotografia inicial de progresso, corpo inteiro" />
                 </button>
-              ) : <div className="progress-photo-placeholder">A carregar foto inicial…</div>
-            ) : <div className="progress-photo-placeholder">Ainda sem foto inicial</div>}
-            <small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 0"}</small>
+              ) : <div className="progress-photo-placeholder">{t("A carregar foto inicial…")}</div>
+            ) : <div className="progress-photo-placeholder">{t("Ainda sem foto inicial")}</div>}
+            <small>{firstPhoto ? new Date(firstPhoto.created_at).toLocaleDateString(dateLocale) : t("Dia 0")}</small>
             <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "before")}>
               <label className="file-drop">
-                <span>{firstPhoto ? "Selecionar outra foto inicial" : "Selecionar foto inicial"}</span>
-                <small>JPG, PNG ou WebP · até 10 MB</small>
+                <span>{t(firstPhoto ? "Selecionar outra foto inicial" : "Selecionar foto inicial")}</span>
+                <small>{t("JPG, PNG ou WebP · até 10 MB")}</small>
                 <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" />
               </label>
-              <label className="checkbox"><input type="checkbox" required />Autorizo guardar esta foto privada.</label>
-              <button className="primary" disabled={busy}>{firstPhoto ? "Atualizar foto inicial" : "Guardar foto inicial"}</button>
+              <label className="checkbox"><input type="checkbox" required />{t("Autorizo guardar esta foto privada.")}</label>
+              <button className="primary" disabled={busy}>{t(firstPhoto ? "Atualizar foto inicial" : "Guardar foto inicial")}</button>
             </form>
           </article>
           <article className="progress-photo-slot">
-            <span>DEPOIS · DIA 30</span>
+            <span>{t("DEPOIS · DIA 30")}</span>
             {afterPhoto ? (
               photoUrls[afterPhoto.id] ? (
                 <button type="button" className="progress-photo-preview" onClick={() => setPhoto(photoUrls[afterPhoto.id])}>
                   <img src={photoUrls[afterPhoto.id]} alt="Fotografia final de progresso após 30 dias, corpo inteiro" />
                 </button>
-              ) : <div className="progress-photo-placeholder">A carregar foto final…</div>
+              ) : <div className="progress-photo-placeholder">{t("A carregar foto final…")}</div>
             ) : (
               <div className="progress-photo-placeholder">
                 {!canUploadAfter
-                  ? completedCount < 30
-                    ? `Bloqueada até concluir os 30 treinos (${completedCount}/30)`
-                    : `Disponível ao completar 30 dias (${elapsedDays}/30)`
+                  ? `Disponível ao completar 30 dias (${elapsedDays}/30)`
                   : "Pronta para receber a foto final"}
               </div>
             )}
-            <small>{afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString("pt-MZ") : "Dia 30"}</small>
+            <small>{afterPhoto ? new Date(afterPhoto.created_at).toLocaleDateString(dateLocale) : t("Dia 30")}</small>
             <form className="panel-form progress-photo-upload" onSubmit={(event) => saveProgressPhoto(event, "after")}>
               <label className="file-drop">
-                <span>{afterPhoto ? "Selecionar outra foto final" : "Selecionar foto final"}</span>
-                <small>{canUploadAfter ? "JPG, PNG ou WebP · até 10 MB" : "Disponível depois dos 30 dias de treino"}</small>
+                <span>{t(afterPhoto ? "Selecionar outra foto final" : "Selecionar foto final")}</span>
+                <small>{canUploadAfter ? t("JPG, PNG ou WebP · até 10 MB") : t("Disponível depois dos 30 dias do programa")}</small>
                 <input name="photo" type="file" required accept="image/jpeg,image/png,image/webp" capture="user" disabled={!canUploadAfter} />
               </label>
-              <label className="checkbox"><input type="checkbox" required disabled={!canUploadAfter} />Autorizo guardar esta foto privada.</label>
-              <button className="primary" disabled={busy || !canUploadAfter}>{afterPhoto ? "Atualizar foto final" : "Guardar foto final"}</button>
+              <label className="checkbox"><input type="checkbox" required disabled={!canUploadAfter} />{t("Autorizo guardar esta foto privada.")}</label>
+              <button className="primary" disabled={busy || !canUploadAfter}>{t(afterPhoto ? "Atualizar foto final" : "Guardar foto final")}</button>
             </form>
           </article>
         </div>
       </section>
-      {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label="Fechar foto">×</button><img src={photo} alt="Fotografia de progresso ampliada" /></div>}
+      {photo && <div className="progress-photo-lightbox" role="dialog" aria-modal="true" onClick={() => setPhoto("")}><button type="button" aria-label={t("Fechar foto")}>×</button><img src={photo} alt={t("Fotografia de progresso ampliada")} /></div>}
     </>
   );
 }
@@ -1102,6 +1109,14 @@ export function Profile({ theme, onThemeChange }) {
   const [notice, setNotice] = useState(""),
     [avatarPreview, setAvatarPreview] = useState("");
   const [language, setLanguage] = useLanguage();
+  const t = (value) => translateUiText(value, language);
+  const storedGoal = String(profile.goal || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const goalValue = storedGoal.includes("emagrec") ? "emagrecimento"
+    : storedGoal.includes("defini") || storedGoal.includes("cut") ? "definicao"
+      : storedGoal.includes("bulking") || storedGoal.includes("massa") || storedGoal.includes("ganho") ? "bulking"
+        : storedGoal.includes("manut") || storedGoal.includes("recompos") ? "manutencao"
+          : "condicionamento";
+  const modalityValue = String(profile.modality || "").toLowerCase().includes("calist") ? "Calistenia" : "Musculação";
   return (
     <>
       <Title tag="SEUS DADOS" title="Meu perfil" />
@@ -1110,7 +1125,11 @@ export function Profile({ theme, onThemeChange }) {
         onSubmit={async (e) => {
           e.preventDefault();
           const f = Object.fromEntries(new FormData(e.currentTarget));
-          delete f.training_location;
+          const selectedTrainingDays = Array.from(
+            e.currentTarget.elements.training_days?.selectedOptions || [],
+          ).map((option) => option.value);
+          const trainingDaysCount = selectedTrainingDays.length || Number(f.training_frequency) || Number(profile.training_days_count) || 3;
+          const trainingLocation = f.training_location || profile.training_location || "casa";
           if (
             await mutate(
               "profiles",
@@ -1118,16 +1137,17 @@ export function Profile({ theme, onThemeChange }) {
                 ...f,
                 height: f.height ? Number(f.height) : null,
                 household_size: f.household_size ? Number(f.household_size) : 1,
-                training_frequency: f.training_frequency ? Number(f.training_frequency) : 3,
-                training_days_count: f.training_frequency ? Number(f.training_frequency) : (profile.training_days_count || 3),
+                training_frequency: trainingDaysCount,
+                training_days_count: trainingDaysCount,
+                training_location: trainingLocation,
                 current_weight: f.current_weight ? Number(f.current_weight) : profile.current_weight,
+                target_weight: f.target_weight ? Number(f.target_weight) : null,
+                initial_weight: f.initial_weight ? Number(f.initial_weight) : profile.initial_weight,
                 age: f.birth_date ? (() => { const birth = new Date(f.birth_date + "T00:00:00"); const today = new Date(); let years = today.getFullYear() - birth.getFullYear(); if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) years -= 1; return years; })() : profile.age,
-                equipment_preference: f.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
+                equipment_preference: trainingLocation === "ginasio" ? "Com equipamento" : "Sem equipamento",
                 supplements: String(f.supplements || "").split(",").map((value) => value.trim()).filter(Boolean),
                 food_dislikes: f.foods_to_avoid || "",
-                training_days: Array.from(
-                  e.currentTarget.elements.training_days?.selectedOptions || [],
-                ).map((o) => o.value),
+                training_days: selectedTrainingDays,
                 reminders_enabled: f.reminders_enabled === "on",
                 reminder_types: Array.from(
                   e.currentTarget.querySelectorAll(
@@ -1138,13 +1158,13 @@ export function Profile({ theme, onThemeChange }) {
               userId,
             )
           )
-            setNotice("Perfil atualizado.");
+            setNotice(t("Perfil atualizado."));
         }}
       >
         <div className="profile-card">
           <div className="profile-avatar-wrap">
             {avatarPreview ? (
-              <img src={avatarPreview} alt="Foto de perfil" />
+              <img src={avatarPreview} alt={t("Foto de perfil")} />
             ) : (
               <CommunityAvatar person={profile} />
             )}
@@ -1183,47 +1203,55 @@ export function Profile({ theme, onThemeChange }) {
             step="0.1"
             defaultValue={profile.current_weight || ""}
           />
+          <Field
+            label="Peso objetivo (kg)"
+            name="target_weight"
+            type="number"
+            min="25"
+            max="300"
+            step="0.1"
+            defaultValue={profile.target_weight || ""}
+          />
           <details className="profile-advanced">
             <summary>
-              <span><small>DADOS OPCIONAIS</small><b>Rotina de treino e lembretes</b></span>
-              <span className="profile-advanced-hint">Ajustar</span>
+              <span><small>{t("DADOS OPCIONAIS")}</small><b>{t("Rotina de treino e lembretes")}</b></span>
+              <span className="profile-advanced-hint">{t("Ajustar")}</span>
             </summary>
           <label>
-            Sexo
+            {t("Sexo")}
             <select name="sex" defaultValue={profile.sex || ""}>
-              <option value="">Prefiro não informar</option>
-              <option value="feminino">Feminino</option>
-              <option value="masculino">Masculino</option>
+              <option value="">{t("Prefiro não informar")}</option>
+              <option value="feminino">{t("Feminino")}</option>
+              <option value="masculino">{t("Masculino")}</option>
             </select>
           </label>
           <label>
-            Nível
+            {t("Nível")}
             <select
               name="training_level"
               defaultValue={profile.training_level || "beginner"}
             >
-              <option value="beginner">Iniciante</option>
-              <option value="intermediate">Intermédio</option>
-              <option value="advanced">Avançado</option>
+              <option value="beginner">{t("Iniciante")}</option>
+              <option value="intermediate">{t("Intermédio")}</option>
+              <option value="advanced">{t("Avançado")}</option>
             </select>
           </label>
           <label>
-            Objetivo
-            <select
-              name="goal"
-              defaultValue={profile.goal || "Condicionamento"}
-            >
-              {[
-                "Musculação",
-                "Bulking (ganho de massa)",
-                "Definição (cuting)",
-                "Emagrecimento",
-                "Recomposição corporal",
-                "Manutenção de peso",
-                "Condicionamento",
-              ].map((x) => (
-                <option key={x}>{x}</option>
-              ))}
+            {t("Modalidade")}
+            <select name="modality" defaultValue={modalityValue}>
+              <option value="Musculação">{t("Musculação")}</option>
+              <option value="Calistenia">{t("Calistenia")}</option>
+            </select>
+          </label>
+          <label>
+            {t("Objetivo")}
+            <select name="goal" defaultValue={goalValue}>
+              <option value="emagrecimento">{t("Emagrecimento")}</option>
+              <option value="bulking">{t("Bulking (ganho de massa)")}</option>
+              <option value="definicao">{t("Definição (cuting)")}</option>
+              <option value="recomposicao">{t("Recomposição corporal")}</option>
+              <option value="manutencao">{t("Manutenção de peso")}</option>
+              <option value="condicionamento">{t("Condicionamento")}</option>
             </select>
           </label>
           <Field label="Cidade" name="city" defaultValue={profile.city || ""} />
@@ -1234,19 +1262,19 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.training_time || "18:00"}
           />
           <label>
-            Dias de treino
+            {t("Dias de treino")}
             <select
               name="training_days"
               multiple
               defaultValue={profile.training_days || ["Seg", "Qua", "Sex"]}
             >
-              <option>Seg</option>
-              <option>Ter</option>
-              <option>Qua</option>
-              <option>Qui</option>
-              <option>Sex</option>
-              <option>Sáb</option>
-              <option>Dom</option>
+              <option value="Seg">{t("Seg")}</option>
+              <option value="Ter">{t("Ter")}</option>
+              <option value="Qua">{t("Qua")}</option>
+              <option value="Qui">{t("Qui")}</option>
+              <option value="Sex">{t("Sex")}</option>
+              <option value="Sáb">{t("Sáb")}</option>
+              <option value="Dom">{t("Dom")}</option>
             </select>
           </label>
           <label className="checkbox">
@@ -1263,14 +1291,14 @@ export function Profile({ theme, onThemeChange }) {
                   Notification.requestPermission();
               }}
             />
-            Ativar lembretes no horário escolhido
+            {t("Ativar lembretes no horário escolhido")}
           </label>
           <fieldset className="reminder-type-options">
-            <legend>Quais lembretes deseja receber?</legend>
+            <legend>{t("Quais lembretes deseja receber?")}</legend>
             {[
-              ["treino", "Treino"],
-              ["agua", "Água"],
-              ["refeicao", "Refeições"],
+              ["treino", t("Treino")],
+              ["agua", t("Água")],
+              ["refeicao", t("Refeições")],
             ].map(([value, label]) => (
               <label className="checkbox" key={value}>
                 <input
@@ -1288,12 +1316,12 @@ export function Profile({ theme, onThemeChange }) {
           </details>
           <details className="profile-advanced">
             <summary>
-              <span><small>DADOS OPCIONAIS</small><b>Personalizar nutrição e rotina</b></span>
-              <span className="profile-advanced-hint">Ajustar</span>
+              <span><small>{t("DADOS OPCIONAIS")}</small><b>{t("Personalizar nutrição e rotina")}</b></span>
+              <span className="profile-advanced-hint">{t("Ajustar")}</span>
             </summary>
             <div className="profile-section-label">
-              <span className="eyebrow">DADOS DA PERSONALIZAÇÃO</span>
-              <b>Nutrição, rotina e disponibilidade</b>
+              <span className="eyebrow">{t("DADOS DA PERSONALIZAÇÃO")}</span>
+              <b>{t("Nutrição, rotina e disponibilidade")}</b>
             </div>
           <Field
             label="Data de nascimento"
@@ -1303,8 +1331,8 @@ export function Profile({ theme, onThemeChange }) {
           />
           <p className="profile-age-note">
             {profile.age
-              ? <>Idade calculada automaticamente: <b>{profile.age} anos</b>.</>
-              : "A idade será calculada automaticamente pela data de nascimento."}
+              ? <>{t("Idade calculada automaticamente")}: <b>{profile.age} {t("anos")}</b>.</>
+              : t("A idade será calculada automaticamente pela data de nascimento.")}
           </p>
           <Field
             label="Peso inicial (kg)"
@@ -1316,20 +1344,20 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.initial_weight || ""}
           />
           <label>
-            Atividade diária
+            {t("Atividade diária")}
             <select
               name="daily_activity"
               defaultValue={profile.daily_activity || "moderate"}
             >
-              <option value="sedentary">Pouco ativo</option>
-              <option value="light">Levemente ativo</option>
-              <option value="moderate">Moderadamente ativo</option>
-              <option value="active">Muito ativo</option>
-              <option value="very_active">Extremamente ativo</option>
+              <option value="sedentary">{t("Pouco ativo")}</option>
+              <option value="light">{t("Levemente ativo")}</option>
+              <option value="moderate">{t("Moderadamente ativo")}</option>
+              <option value="active">{t("Muito ativo")}</option>
+              <option value="very_active">{t("Extremamente ativo")}</option>
             </select>
           </label>
           <label>
-            Intensidade dos treinos
+            {t("Intensidade dos treinos")}
             <select
               name="training_intensity"
               defaultValue={profile.training_intensity || "moderate"}
@@ -1364,7 +1392,7 @@ export function Profile({ theme, onThemeChange }) {
             defaultValue={profile.household_size || profile.people_count || 1}
           />
           <label>
-            Local principal de treino
+            {t("Local principal de treino")}
             <select
               name="training_location"
               defaultValue={profile.training_location === "ginasio" ? "ginasio" : "casa"}
@@ -1374,14 +1402,14 @@ export function Profile({ theme, onThemeChange }) {
             </select>
           </label>
           <label>
-            Orçamento alimentar
+            {t("Orçamento alimentar")}
             <select
               name="food_budget"
               defaultValue={profile.food_budget || "medium"}
             >
-              <option value="low">Económico</option>
+              <option value="low">{t("Económico")}</option>
               <option value="medium">Moderado</option>
-              <option value="high">Flexível</option>
+              <option value="high">{t("Flexível")}</option>
             </select>
           </label>
           <Field
@@ -1399,15 +1427,23 @@ export function Profile({ theme, onThemeChange }) {
             name="foods_to_avoid"
             defaultValue={profile.foods_to_avoid || profile.food_dislikes || ""}
           />
-          <label className="profile-wide-field">
-            Preferências e pratos locais
+          <label>
+            {translateUiText("Preferência de cozinha", language)}
+            <select name="cuisine_preference" defaultValue={profile.cuisine_preference || "mixed"}>
+              <option value="mozambican">{translateUiText("Cozinha moçambicana", language)}</option>
+              <option value="international">{translateUiText("Cozinha internacional", language)}</option>
+              <option value="mixed">{translateUiText("Misturar as duas", language)}</option>
+            </select>
+          </label>
+                    <label className="profile-wide-field">
+            {t("Preferências e pratos locais")}
             <textarea
               name="food_preferences"
               defaultValue={profile.food_preferences || ""}
             />
           </label>
           <label className="profile-wide-field">
-            Suplementos informados
+            {t("Suplementos informados")}
             <textarea
               name="supplements"
               defaultValue={
@@ -1420,41 +1456,37 @@ export function Profile({ theme, onThemeChange }) {
           </details>
         </div>
         <button className="primary" disabled={busy}>
-          Salvar perfil
+          {t("Salvar perfil")}
         </button>
       </form>
       <details className="profile-advanced profile-account-settings">
         <summary>
-          <span><small>DEFINIÇÕES DA CONTA</small><b>Idioma, aparência e privacidade</b></span>
-          <span className="profile-advanced-hint">Ajustar</span>
+          <span><small>{t("DEFINIÇÕES DA CONTA")}</small><b>{t("Idioma, aparência e privacidade")}</b></span>
+          <span className="profile-advanced-hint">{t("Ajustar")}</span>
         </summary>
       <section className="language-settings">
         <div>
           <span className="eyebrow">PREFERÊNCIAS</span>
-          <h2>Idioma do aplicativo</h2>
-          <p>
-            Altere os textos principais, navegação e instruções do treino
-            guiado.
-          </p>
+          <h2>{translateUiText("Idioma do aplicativo", language)}</h2>
+          <p>{t("Altere os textos principais, navegação e instruções do treino guiado.")}</p>
         </div>
         <select
-          aria-label="Idioma do aplicativo"
+          aria-label={translateUiText("Idioma do aplicativo", language)}
           value={language}
-          onChange={(event) => setLanguage(event.target.value)}
+          onChange={async (event) => {
+            const value = event.target.value;
+            setLanguage(value);
+            await mutate("profiles", { language: value }, userId);
+          }}
         >
-          <option value="pt">Português</option>
-          <option value="en">English</option>
-          <option value="fr">Français</option>
+          {languageOptions.map(([code, label]) => <option key={code} value={code}>{label}</option>)}
         </select>
       </section>
       <section className="theme-settings">
         <div>
-          <span className="eyebrow">APARÊNCIA</span>
-          <h2>Tema do aplicativo</h2>
-          <p>
-            Escolha a paleta que deixa o seu treino mais confortável de
-            acompanhar. A preferência fica guardada neste dispositivo.
-          </p>
+          <span className="eyebrow">{translateUiText("APARÊNCIA", language)}</span>
+          <h2>{t("Tema do aplicativo")}</h2>
+          <p>{t("Escolha a paleta que deixa o seu treino mais confortável de acompanhar. A preferência fica guardada neste dispositivo.")}</p>
         </div>
         <div className="theme-options">
           <button
@@ -1467,8 +1499,8 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Forest Flow</b>
-            <small>Verde floresta · terracota</small>
+            <b>{t("Forest Flow")}</b>
+            <small>{t("Verde floresta · terracota")}</small>
           </button>
           <button
             type="button"
@@ -1480,8 +1512,8 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Dark Fitness</b>
-            <small>Grafite · verde-lima</small>
+            <b>{t("Dark Fitness")}</b>
+            <small>{t("Grafite · verde-lima")}</small>
           </button>
           <button
             type="button"
@@ -1493,8 +1525,21 @@ export function Profile({ theme, onThemeChange }) {
               <i />
               <i />
             </span>
-            <b>Sprint Energy</b>
-            <small>Grafite · lima elétrica</small>
+            <b>{translateUiText("Sprint Energy", language)}</b>
+            <small>{translateUiText("Grafite · lima elétrica", language)}</small>
+          </button>
+          <button
+            type="button"
+            className={theme === "blue" ? "selected" : ""}
+            onClick={() => onThemeChange?.("blue")}
+          >
+            <span className="theme-preview theme-preview-blue">
+              <i />
+              <i />
+              <i />
+            </span>
+            <b>{translateUiText("Ocean Light", language)}</b>
+            <small>{translateUiText("Branco · azul · violeta", language)}</small>
           </button>
         </div>
       </section>
@@ -1509,7 +1554,7 @@ export function Profile({ theme, onThemeChange }) {
             const url = await openMedia("profile-photos", path);
             if (await mutate("profiles", { avatar_url: path }, userId)) {
               setAvatarPreview(url);
-              setNotice("Foto de perfil atualizada.");
+              setNotice(t("Foto de perfil atualizada."));
             }
           } catch (err) {
             setError(err.message);
@@ -1526,7 +1571,7 @@ export function Profile({ theme, onThemeChange }) {
           />
         </label>
         <button className="outline" disabled={busy}>
-          Guardar foto de perfil
+          {t("Guardar foto de perfil")}
         </button>
       </form>
       {notice && <p className="success">{notice}</p>}
@@ -2387,12 +2432,15 @@ export function Assistant({ plan, go }) {
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
-const foodPhoto = (food) => foodLibrary.find((known) => known.name === food?.name)?.image || null;
+const foodPhoto = (food) => foodLibrary.find((known) => known.name === (food?.sourceName || food?.name))?.image || null;
 
 export function Nutrition({ plan, whatsapp }) {
   const { profile, userId, data, refresh, setError, loading } = useStore();
+  const [language] = useLanguage();
+  const t = (value) => translateUiText(value, language);
+  const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
   const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
-  const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs);
+  const nutritionTracking = accountDayStatuses(profile.created_at, [], nutritionLogs, new Date(), profile);
   const consumedStorageKey = `jl-meals-consumed-${profile.id || "guest"}`;
   const hydrationStorageKey = `jl-hydration-${profile.id || "guest"}-${new Date().toLocaleDateString("en-CA")}`;
   const [day, setDay] = useState(() => Math.max(1, Math.min(30, Number(profile.nutrition_day) || accountDayNumber(profile.created_at)))),
@@ -2454,27 +2502,48 @@ export function Nutrition({ plan, whatsapp }) {
   }, [waterMl, hydrationStorageKey]);
   const n = nutritionPlan({
       ...profile,
+      language,
       training_intensity: intensity,
       nutrition_day: Number(day),
     }),
-    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays, n.portionScale),
+    shoppingList = buildShoppingList({ ...profile, language, training_intensity: intensity }, shoppingDays, n.portionScale),
     allowed = (plan?.tier || 0) >= 3;
   const selectedPlanDate = accountDateForDay(profile.created_at, day);
   const selectedNutritionLog = nutritionLogs.find((log) => String(log.local_date || "").slice(0, 10) === selectedPlanDate);
   const selectedMealKeys = Array.isArray(selectedNutritionLog?.meal_keys) ? selectedNutritionLog.meal_keys : [];
+  const mealStorageKey = (meal, planDay = day) => String(planDay) + "-" + (meal.mealKey || meal.title);
+  const mealStorageAliases = (meal, planDay = day) => Array.from(new Set([
+    mealStorageKey(meal, planDay),
+    String(planDay) + "-" + meal.title,
+    ...["pt", "en", "fr", "es", "zh", "hi"].map((code) => String(planDay) + "-" + translateMealLabel(meal.mealKey || meal.title, code)),
+  ]));
+  const isMealConsumed = (meal, planDay = day, keys = consumed) =>
+    mealStorageAliases(meal, planDay).some((key) => keys.includes(key));
   useEffect(() => {
-    if (!selectedNutritionLog) return;
-    const prefix = `${day}-`;
-    setConsumed((current) => [
-      ...current.filter((key) => !key.startsWith(prefix)),
-      ...selectedMealKeys,
-    ]);
-  }, [selectedPlanDate, selectedNutritionLog?.updated_at, selectedMealKeys.join("|")]);
+    const prefix = String(day) + "-";
+    setConsumed((current) => {
+      const dayKeys = [...current.filter((key) => key.startsWith(prefix)), ...selectedMealKeys];
+      const normalized = n.meals
+        .filter((meal) => isMealConsumed(meal, day, dayKeys))
+        .map((meal) => mealStorageKey(meal, day));
+      return [...current.filter((key) => !key.startsWith(prefix)), ...normalized];
+    });
+  }, [selectedPlanDate, selectedNutritionLog?.updated_at, selectedMealKeys.join("|"), day, language, n.meals.length]);
+  useEffect(() => {
+    const prefix = String(day) + "-";
+    setConsumed((current) => {
+      const dayKeys = current.filter((key) => key.startsWith(prefix));
+      const normalized = n.meals
+        .filter((meal) => isMealConsumed(meal, day, dayKeys))
+        .map((meal) => mealStorageKey(meal, day));
+      return [...current.filter((key) => !key.startsWith(prefix)), ...normalized];
+    });
+  }, [day, language, n.meals.length]);
   const persistNutritionDay = async (nextConsumed) => {
     if (!supabase || !userId || userId === "demo" || !selectedPlanDate || !n.meals.length) return;
     const mealKeys = n.meals
-      .map((meal) => `${day}-${meal.title}`)
-      .filter((key) => nextConsumed.includes(key));
+      .filter((meal) => isMealConsumed(meal, day, nextConsumed))
+      .map((meal) => mealStorageKey(meal, day));
     try {
       const { error } = await supabase.from("daily_nutrition_logs").upsert({
         user_id: userId,
@@ -2494,8 +2563,8 @@ export function Nutrition({ plan, whatsapp }) {
   useEffect(() => {
     if (loading || !supabase || !userId || userId === "demo" || !selectedPlanDate || selectedNutritionLog || !n.meals.length) return;
     const selectedKeys = n.meals
-      .map((meal) => `${day}-${meal.title}`)
-      .filter((key) => consumed.includes(key));
+      .filter((meal) => isMealConsumed(meal, day, consumed))
+      .map((meal) => mealStorageKey(meal, day));
     if (selectedKeys.length) void persistNutritionDay(consumed);
   }, [loading, selectedPlanDate, selectedNutritionLog?.id, n.meals.length]);
   useEffect(() => {
@@ -2508,14 +2577,15 @@ export function Nutrition({ plan, whatsapp }) {
       if (!localDate || existingDates.has(localDate)) continue;
       const dayPlan = nutritionPlan({
         ...profile,
+        language,
         training_intensity: intensity,
         nutrition_day: planDay,
       });
       const meals = dayPlan.meals || [];
       if (!meals.length) continue;
       const mealKeys = meals
-        .map((meal) => `${planDay}-${meal.title}`)
-        .filter((key) => consumed.includes(key));
+        .filter((meal) => isMealConsumed(meal, planDay, consumed))
+        .map((meal) => mealStorageKey(meal, planDay));
       if (!mealKeys.length) continue;
       payloads.push({
         user_id: userId,
@@ -2538,11 +2608,16 @@ export function Nutrition({ plan, whatsapp }) {
   }, [loading, profile.created_at, profile.birth_date, profile.age, profile.goal, profile.modality, profile.current_weight, profile.height, profile.allergies, profile.foods_to_avoid, profile.available_foods, profile.food_budget, profile.training_intensity, userId, nutritionLogs.length, legacyConsumedKey]);
   const foodGroups = ["Todos", ...new Set(foodLibrary.map((food) => food.group))];
   const visibleFoodLibrary = foodLibrary.filter((food) => {
-    const matchesSearch = food.name.toLowerCase().includes(foodSearch.toLowerCase());
+    const displayName = translateFoodName(food.name, language);
+    const matchesSearch = food.name.toLowerCase().includes(foodSearch.toLowerCase()) || displayName.toLowerCase().includes(foodSearch.toLowerCase());
     const matchesGroup = foodGroup === "Todos" || food.group === foodGroup;
     return matchesSearch && matchesGroup;
-  });
-  const completedMeals = n.meals.filter((meal) => consumed.includes(`${day}-${meal.title}`)).length;
+  }).map((food) => ({
+    ...food,
+    displayName: translateFoodName(food.name, language),
+    displayPortion: translateIngredientString(food.portion, language),
+  }));
+  const completedMeals = n.meals.filter((meal) => isMealConsumed(meal, day, consumed)).length;
   const markConsumed = (key) =>
     setConsumed((list) => {
       const next = list.includes(key) ? list.filter((item) => item !== key) : [...list, key];
@@ -2551,7 +2626,7 @@ export function Nutrition({ plan, whatsapp }) {
     });
   const replaceMeal = (meal) => {
     const alternatives = meal.foods
-      .flatMap((food) => foodSubstitutions(food.name, profile))
+      .flatMap((food) => foodSubstitutions(food.sourceName || food.name, profile))
       .map((name) => foodLibrary.find((food) => food.name === name))
       .filter(Boolean);
     if (alternatives.length)
@@ -2563,15 +2638,20 @@ export function Nutrition({ plan, whatsapp }) {
   const mealData = (meal) => {
     const hasReplacement = Boolean(replaced[meal.title]?.length);
     const foods = hasReplacement ? replaced[meal.title] : meal.foods;
+    const displayFoods = foods.map((food) => ({
+      ...food,
+      displayName: translateFoodName(food.sourceName || food.name, language),
+      displayPortion: translateIngredientString(food.portion, language),
+    }));
     const sum = (key) => Math.round(foods.reduce((total, food) => total + (food[key] || 0), 0));
     const totals = hasReplacement ? null : meal.nutrition;
     return {
       ...meal,
-      foods,
-      items: meal.recipeName ? [meal.recipeName] : foods.map((food) => food.name),
+      foods: displayFoods,
+      items: meal.recipeName ? [meal.recipeName] : displayFoods.map((food) => food.displayName),
       ingredients: hasReplacement
-        ? foods.map((food) => food.name + " (" + food.portion + ")")
-        : meal.ingredients?.length ? meal.ingredients : foods.map((food) => food.name + " (" + food.portion + ")"),
+        ? displayFoods.map((food) => food.displayName + " (" + food.displayPortion + ")")
+        : meal.ingredients?.length ? meal.ingredients : displayFoods.map((food) => food.displayName + " (" + food.displayPortion + ")"),
       image: meal.image || null,
       kcal: totals?.kcal ?? sum("kcal"),
       protein: totals?.protein ?? sum("protein"),
@@ -2705,7 +2785,7 @@ export function Nutrition({ plan, whatsapp }) {
       <section className="meal-timeline">
         {n.meals.map((rawMeal, i) => {
           const meal = mealData(rawMeal),
-            key = `${day}-${meal.title}`,
+            key = mealStorageKey(meal, day),
             done = consumed.includes(key);
           return (
             <article

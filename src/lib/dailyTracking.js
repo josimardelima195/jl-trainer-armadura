@@ -31,7 +31,39 @@ export function accountDayNumber(createdAt, now = new Date()) {
   return Math.max(1, ordinal(current) - ordinal(start) + 1);
 }
 
-export function accountDayStatuses(createdAt, workoutLogs = [], nutritionLogs = [], now = new Date()) {
+function trainingWeekdays(profile = {}) {
+  const aliases = {
+    dom:0, domingo:0, sun:0,
+    seg:1, segunda:1, "segunda-feira":1, mon:1, monday:1,
+    ter:2, terça:2, terca:2, "terça-feira":2, "terca-feira":2, tue:2, tuesday:2,
+    qua:3, quarta:3, "quarta-feira":3, wed:3, wednesday:3,
+    qui:4, quinta:4, "quinta-feira":4, thu:4, thursday:4,
+    sex:5, sexta:5, "sexta-feira":5, fri:5, friday:5,
+    sáb:6, sab:6, sábado:6, sabado:6, "sábado-feira":6, sat:6, saturday:6,
+  };
+  const selected = Array.isArray(profile.training_days) ? profile.training_days : [];
+  const parsed = selected.map((value) => {
+    if (Number.isInteger(value) && value >= 0 && value <= 6) return value;
+    const key = String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+    return aliases[key] ?? aliases[key.slice(0, 3)];
+  }).filter((value) => Number.isInteger(value));
+  if (parsed.length) return new Set(parsed);
+  const schedules = {
+    2: [1, 4],
+    3: [1, 3, 5],
+    4: [1, 2, 4, 6],
+    5: [1, 2, 3, 5, 6],
+    6: [1, 2, 3, 4, 5, 6],
+  };
+  const count = Math.min(6, Math.max(2, Number(profile.training_days_count || profile.training_frequency) || 3));
+  return new Set(schedules[count] || schedules[3]);
+}
+
+export function accountDayStatuses(createdAt, workoutLogs = [], nutritionLogs = [], now = new Date(), profile = {}) {
   const startKey = localDateKey(createdAt);
   const todayKey = localDateKey(now);
   const start = localNoon(startKey);
@@ -56,22 +88,32 @@ export function accountDayStatuses(createdAt, workoutLogs = [], nutritionLogs = 
 
   const days = [];
   const cursor = start;
+  const scheduledDays = trainingWeekdays(profile);
   while (days.length < 30 && localDateKey(cursor) <= todayKey) {
     const date = localDateKey(cursor);
+    const weekday = localNoon(date)?.getDay();
+    const workoutExpected = scheduledDays.has(weekday);
     const workoutDone = workoutDates.has(date);
+    const workoutComplete = !workoutExpected || workoutDone;
     const nutrition = nutritionByDate.get(date);
     const nutritionDone = Boolean(
       nutrition && nutrition.expected > 0 && nutrition.completed >= nutrition.expected,
     );
     const past = date < todayKey;
+    const dayComplete = workoutComplete && nutritionDone;
+    const workoutMissed = past && workoutExpected && !workoutDone;
+    const nutritionMissed = past && !nutritionDone;
     days.push({
       day: days.length + 1,
       date,
+      workoutExpected,
       workoutDone,
+      workoutComplete,
       nutritionDone,
-      workoutMissed: past && !workoutDone,
-      nutritionMissed: past && !nutritionDone,
-      missed: past && (!workoutDone || !nutritionDone),
+      dayComplete,
+      workoutMissed,
+      nutritionMissed,
+      missed: past && (workoutMissed || nutritionMissed),
       isToday: date === todayKey,
     });
     cursor.setDate(cursor.getDate() + 1);
