@@ -1541,11 +1541,12 @@ export function nutritionPlan(profile = {}) {
     const originalFoods = recipeFoodItems(ingredients,targetScale,allergy);
     const totals = sumRecipeFoods(originalFoods);
     const allergyWarning = originalFoods.some((food)=>food.restricted);
-    const foods = originalFoods.map((food)=>({ ...food, name: translateFoodName(food.name,language) }));
+    const foods = originalFoods.map((food)=>({ ...food, sourceName: food.name, name: translateFoodName(food.name,language) }));
     const recipeName = translateRecipeName(row.recipeId,row.recipe,language);
     const preparation = translateRecipePreparation(row.preparation,language);
     return {
       time: shiftForMeal(row),
+      mealKey: row.meal,
       title: translateMealLabel(row.meal,language),
       recipeName,
       recipeId: row.recipeId,
