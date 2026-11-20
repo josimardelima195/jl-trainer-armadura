@@ -1,6 +1,35 @@
 import React from 'react';
 import { useLanguage, translateUiText } from '../lib/i18n';
 
+function translateNode(node, language) {
+  if (Array.isArray(node)) return node.map((child) => translateNode(child, language));
+  if (typeof node === "string") {
+    const trimmed = node.trim();
+    if (!trimmed) return node;
+    const translated = translateUiText(trimmed, language);
+    if (translated === trimmed) return node;
+    const leading = node.match(/^\\s*/)?.[0] || "";
+    const trailing = node.match(/\\s*$/)?.[0] || "";
+    return leading + translated + trailing;
+  }
+  if (!React.isValidElement(node)) return node;
+  const nextProps = {};
+  for (const prop of ["aria-label", "aria-description", "title", "placeholder", "alt"]) {
+    if (typeof node.props[prop] === "string") {
+      nextProps[prop] = translateUiText(node.props[prop], language);
+    }
+  }
+  if (node.props.children !== undefined) {
+    nextProps.children = translateNode(node.props.children, language);
+  }
+  return React.cloneElement(node, nextProps);
+}
+
+export function Localize({ children }) {
+  const [language] = useLanguage();
+  return <>{translateNode(children, language)}</>;
+}
+
 export function Title({ tag, title, children }) {
   const [language] = useLanguage();
   return <div className="page-title"><div><p className="eyebrow">{translateUiText(tag, language)}</p><h1>{translateUiText(title, language)}</h1></div>{children}</div>;
