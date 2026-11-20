@@ -26,7 +26,7 @@ import {
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
-import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel } from "../lib/i18n";
+import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
@@ -36,7 +36,7 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
       {source && !failed ? (
         <img
           src={source}
-          alt={`Demonstração de ${exercise.name}`}
+          alt={exerciseName}
           loading={variant === "guided" ? "eager" : "lazy"}
           fetchPriority={variant === "guided" ? "high" : "low"}
           decoding="async"
@@ -169,7 +169,7 @@ function GuidedWorkout({
         <div className="guided-head">
           <div>
             <span className="eyebrow">TREINO GUIADO · {index + 1}/{exercises.length}</span>
-            <h2>{exercise.name}</h2>
+            <h2>{translateExerciseName(exercise.name, language)}</h2>
           </div>
           <button className="outline" type="button" onClick={onExit}>Sair ×</button>
         </div>
@@ -577,12 +577,12 @@ export function Workouts({ plan }) {
                   type="button"
                   className="showcase-media-button"
                   onClick={() => setPreviewExercise(exercise)}
-                  aria-label={`Ver demonstração de ${exercise.name}`}
+                  aria-label={`${translateUiText("Ver demonstração", language)}: ${translateExerciseName(exercise.name, language)}`}
                 >
                   <ExerciseGif exercise={exercise} variant="showcase" />
                 </button>
                 <div className="showcase-card-copy">
-                  <b>{exercise.name}</b>
+                  <b>{translateExerciseName(exercise.name, language)}</b>
                   <small>
                     {muscleLabel(exercise)} · {equipmentLabel(exercise)}
                   </small>
@@ -703,7 +703,7 @@ export function Workouts({ plan }) {
             </button>
             <div>
               <span className="pill">{exercise.category || "Movimento"}</span>
-              <h3>{exercise.name}</h3>
+              <h3>{translateExerciseName(exercise.name, language)}</h3>
               <p>
                 Faça este movimento devagar, com postura controlada, amplitude
                 confortável e sem dor.
@@ -844,13 +844,13 @@ export function Workouts({ plan }) {
           className="exercise-preview-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label={`Pré-visualização de ${previewExercise.name}`}
+          aria-label={`${translateUiText("Pré-visualização de", language)} ${translateExerciseName(previewExercise.name, language)}`}
         >
           <div className="exercise-preview-card">
             <div className="exercise-preview-head">
               <div>
                 <span className="pill">PRÉ-VISUALIZAÇÃO</span>
-                <h2>{previewExercise.name}</h2>
+                <h2>{translateExerciseName(previewExercise.name, language)}</h2>
               </div>
               <button
                 className="outline"
