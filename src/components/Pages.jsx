@@ -1138,6 +1138,8 @@ export function Profile({ theme, onThemeChange }) {
                 training_days_count: trainingDaysCount,
                 training_location: trainingLocation,
                 current_weight: f.current_weight ? Number(f.current_weight) : profile.current_weight,
+                target_weight: f.target_weight ? Number(f.target_weight) : null,
+                initial_weight: f.initial_weight ? Number(f.initial_weight) : profile.initial_weight,
                 age: f.birth_date ? (() => { const birth = new Date(f.birth_date + "T00:00:00"); const today = new Date(); let years = today.getFullYear() - birth.getFullYear(); if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) years -= 1; return years; })() : profile.age,
                 equipment_preference: trainingLocation === "ginasio" ? "Com equipamento" : "Sem equipamento",
                 supplements: String(f.supplements || "").split(",").map((value) => value.trim()).filter(Boolean),
@@ -1197,6 +1199,15 @@ export function Profile({ theme, onThemeChange }) {
             max="300"
             step="0.1"
             defaultValue={profile.current_weight || ""}
+          />
+          <Field
+            label="Peso objetivo (kg)"
+            name="target_weight"
+            type="number"
+            min="25"
+            max="300"
+            step="0.1"
+            defaultValue={profile.target_weight || ""}
           />
           <details className="profile-advanced">
             <summary>
