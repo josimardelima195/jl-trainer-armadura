@@ -1107,6 +1107,13 @@ export function Profile({ theme, onThemeChange }) {
     [avatarPreview, setAvatarPreview] = useState("");
   const [language, setLanguage] = useLanguage();
   const t = (value) => translateUiText(value, language);
+  const storedGoal = String(profile.goal || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const goalValue = storedGoal.includes("emagrec") ? "emagrecimento"
+    : storedGoal.includes("defini") || storedGoal.includes("cut") ? "definicao"
+      : storedGoal.includes("bulking") || storedGoal.includes("massa") || storedGoal.includes("ganho") ? "bulking"
+        : storedGoal.includes("manut") || storedGoal.includes("recompos") ? "manutencao"
+          : "condicionamento";
+  const modalityValue = String(profile.modality || "").toLowerCase().includes("calist") ? "Calistenia" : "Musculação";
   return (
     <>
       <Title tag="SEUS DADOS" title="Meu perfil" />
@@ -1115,7 +1122,11 @@ export function Profile({ theme, onThemeChange }) {
         onSubmit={async (e) => {
           e.preventDefault();
           const f = Object.fromEntries(new FormData(e.currentTarget));
-          delete f.training_location;
+          const selectedTrainingDays = Array.from(
+            e.currentTarget.elements.training_days?.selectedOptions || [],
+          ).map((option) => option.value);
+          const trainingDaysCount = selectedTrainingDays.length || Number(f.training_frequency) || Number(profile.training_days_count) || 3;
+          const trainingLocation = f.training_location || profile.training_location || "casa";
           if (
             await mutate(
               "profiles",
@@ -1123,16 +1134,15 @@ export function Profile({ theme, onThemeChange }) {
                 ...f,
                 height: f.height ? Number(f.height) : null,
                 household_size: f.household_size ? Number(f.household_size) : 1,
-                training_frequency: f.training_frequency ? Number(f.training_frequency) : 3,
-                training_days_count: f.training_frequency ? Number(f.training_frequency) : (profile.training_days_count || 3),
+                training_frequency: trainingDaysCount,
+                training_days_count: trainingDaysCount,
+                training_location: trainingLocation,
                 current_weight: f.current_weight ? Number(f.current_weight) : profile.current_weight,
                 age: f.birth_date ? (() => { const birth = new Date(f.birth_date + "T00:00:00"); const today = new Date(); let years = today.getFullYear() - birth.getFullYear(); if (today.getMonth() < birth.getMonth() || (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate())) years -= 1; return years; })() : profile.age,
-                equipment_preference: f.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
+                equipment_preference: trainingLocation === "ginasio" ? "Com equipamento" : "Sem equipamento",
                 supplements: String(f.supplements || "").split(",").map((value) => value.trim()).filter(Boolean),
                 food_dislikes: f.foods_to_avoid || "",
-                training_days: Array.from(
-                  e.currentTarget.elements.training_days?.selectedOptions || [],
-                ).map((o) => o.value),
+                training_days: selectedTrainingDays,
                 reminders_enabled: f.reminders_enabled === "on",
                 reminder_types: Array.from(
                   e.currentTarget.querySelectorAll(
@@ -1213,22 +1223,21 @@ export function Profile({ theme, onThemeChange }) {
             </select>
           </label>
           <label>
+            {t("Modalidade")}
+            <select name="modality" defaultValue={modalityValue}>
+              <option value="Musculação">{t("Musculação")}</option>
+              <option value="Calistenia">{t("Calistenia")}</option>
+            </select>
+          </label>
+          <label>
             {t("Objetivo")}
-            <select
-              name="goal"
-              defaultValue={profile.goal || "Condicionamento"}
-            >
-              {[
-                "Musculação",
-                "Bulking (ganho de massa)",
-                "Definição (cuting)",
-                "Emagrecimento",
-                "Recomposição corporal",
-                "Manutenção de peso",
-                "Condicionamento",
-              ].map((x) => (
-                <option key={x}>{x}</option>
-              ))}
+            <select name="goal" defaultValue={goalValue}>
+              <option value="emagrecimento">{t("Emagrecimento")}</option>
+              <option value="bulking">{t("Bulking (ganho de massa)")}</option>
+              <option value="definicao">{t("Definição (cuting)")}</option>
+              <option value="recomposicao">{t("Recomposição corporal")}</option>
+              <option value="manutencao">{t("Manutenção de peso")}</option>
+              <option value="condicionamento">{t("Condicionamento")}</option>
             </select>
           </label>
           <Field label="Cidade" name="city" defaultValue={profile.city || ""} />
