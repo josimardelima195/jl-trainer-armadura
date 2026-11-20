@@ -494,6 +494,10 @@ Object.assign(commonTranslations, {
   "Dom":{en:"Sun",fr:"Dim",es:"Dom",zh:"周日",hi:"रवि"}
 });
 
+Object.assign(commonTranslations, {
+  "A diferença entre a meta energética e as porções-base é elevada. O plano limita o ajuste automático das porções; confirme a meta com um nutricionista.":{en:"The difference between the energy target and the base portions is large. Automatic portion changes are limited; confirm the target with a registered dietitian.",fr:"L’écart entre l’objectif énergétique et les portions de base est important. L’ajustement automatique est limité ; confirmez l’objectif avec un diététicien.",es:"La diferencia entre el objetivo energético y las porciones base es elevada. El ajuste automático se limita; confirma el objetivo con un nutricionista.",zh:"能量目标与基础份量差异较大。系统限制自动调整份量；请与营养师确认目标。",hi:"ऊर्जा लक्ष्य और मूल हिस्सों में बड़ा अंतर है। स्वचालित मात्रा समायोजन सीमित है; लक्ष्य की पुष्टि पोषण विशेषज्ञ से करें。"}
+});
+
 export function translateUiText(value, language) {
   if (typeof value !== "string" || !language || language === "pt") return value;
   return commonTranslations[value.trim()]?.[language] || value;
