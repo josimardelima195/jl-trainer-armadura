@@ -2499,10 +2499,11 @@ export function Nutrition({ plan, whatsapp }) {
   }, [waterMl, hydrationStorageKey]);
   const n = nutritionPlan({
       ...profile,
+      language,
       training_intensity: intensity,
       nutrition_day: Number(day),
     }),
-    shoppingList = buildShoppingList({ ...profile, training_intensity: intensity }, shoppingDays, n.portionScale),
+    shoppingList = buildShoppingList({ ...profile, language, training_intensity: intensity }, shoppingDays, n.portionScale),
     allowed = (plan?.tier || 0) >= 3;
   const selectedPlanDate = accountDateForDay(profile.created_at, day);
   const selectedNutritionLog = nutritionLogs.find((log) => String(log.local_date || "").slice(0, 10) === selectedPlanDate);
@@ -2553,6 +2554,7 @@ export function Nutrition({ plan, whatsapp }) {
       if (!localDate || existingDates.has(localDate)) continue;
       const dayPlan = nutritionPlan({
         ...profile,
+        language,
         training_intensity: intensity,
         nutrition_day: planDay,
       });
