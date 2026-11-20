@@ -575,6 +575,7 @@ export default function App() {
     onThemeChange: changeTheme,
   };
   return (
+    <Localize>
     <div className={`shell theme-${theme}`}>
       {menu && (
         <button
@@ -1119,6 +1120,7 @@ export default function App() {
         ))}
       </nav>
     </div>
+    </Localize>
   );
 }
 
