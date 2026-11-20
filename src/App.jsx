@@ -30,29 +30,31 @@ import {
   Challenges,
 } from "./components/Pages";
 import Admin from "./components/Admin";
-import { useLanguage, uiText, onboardingText } from "./lib/i18n";
+import { useLanguage, uiText, onboardingText, translateUiText } from "./lib/i18n";
 import { foodLibrary, nutritionPlan } from "./lib/nutrition";
 function WelcomeTutorial({ onClose, go }) {
   const [step, setStep] = useState(0);
+  const [language] = useLanguage();
+  const t = (value) => translateUiText(value, language);
   const items = [
     [
-      "Seu painel inicial",
-      "Aqui você acompanha a sequência, o próximo treino e a evolução dos seus dados.",
+      t("Seu painel inicial"),
+      t("Aqui você acompanha a sequência, o próximo treino e a evolução dos seus dados."),
       "inicio",
     ],
     [
-      "Treinos personalizados",
-      "Escolha o dia, a dificuldade e o equipamento. O programa considera seu objetivo, idade e experiência.",
+      t("Treinos personalizados"),
+      t("Escolha o dia, a dificuldade e o equipamento. O programa considera seu objetivo, idade e experiência."),
       "treinos",
     ],
     [
-      "Alimentação no seu horário",
-      "Veja refeições, calorias, água e preparo organizados ao redor do horário do seu treino.",
+      t("Alimentação no seu horário"),
+      t("Veja refeições, calorias, água e preparo organizados ao redor do horário do seu treino."),
       "nutricao",
     ],
     [
-      "Progresso e notificações",
-      "Registre seus treinos, fotos e medidas. Ative as notificações no Perfil para receber lembretes.",
+      t("Progresso e notificações"),
+      t("Registre seus treinos, fotos e medidas. Ative as notificações no Perfil para receber lembretes."),
       "progresso",
     ],
   ];
@@ -63,7 +65,7 @@ function WelcomeTutorial({ onClose, go }) {
         <div className="tutorial-mascot">
           <LeoMascot size={100} />
         </div>
-        <span className="eyebrow">COMECE COM O JL TRAINER</span>
+        <span className="eyebrow">{t("COMECE COM O JL TRAINER")}</span>
         <h2>{current[0]}</h2>
         <p>{current[1]}</p>
         <div className="tutorial-dots">
@@ -73,7 +75,7 @@ function WelcomeTutorial({ onClose, go }) {
         </div>
         <div className="tutorial-actions">
           <button className="text-btn" onClick={onClose}>
-            Pular tutorial
+            {t("Pular tutorial")}
           </button>
           {step < items.length - 1 ? (
             <button
@@ -83,7 +85,7 @@ function WelcomeTutorial({ onClose, go }) {
                 setStep(step + 1);
               }}
             >
-              Próximo <ChevronRight size={16} />
+              {t("Próximo")} <ChevronRight size={16} />
             </button>
           ) : (
             <button
@@ -94,7 +96,7 @@ function WelcomeTutorial({ onClose, go }) {
                 go("inicio");
               }}
             >
-              Começar <ChevronRight size={16} />
+              {t("Começar")} <ChevronRight size={16} />
             </button>
           )}
         </div>
