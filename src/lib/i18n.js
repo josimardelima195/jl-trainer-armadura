@@ -281,7 +281,10 @@ export function translateIngredientString(value, language) {
   let result = String(value);
   for (const key of Object.keys(foodNameTranslations).sort((a,b)=>b.length-a.length)) {
     const translated = foodNameTranslations[key]?.[language];
-    if (translated) result = result.replace(new RegExp(key, "gi"), translated);
+    if (translated) {
+      const escapedKey = key.replace(/[.*+?^$()|[\]\\]/g, "\\    if (translated) result = result.replace(new RegExp(key, "gi"), translated);");
+      result = result.replace(new RegExp(escapedKey, "gi"), translated);
+    }
   }
   const descriptors = {
     cru:{en:"raw",fr:"cru",es:"crudo",zh:"生",hi:"कच्चा"},
