@@ -772,6 +772,24 @@ Object.assign(commonTranslations, {
   "Suspensão":{en:"Suspension trainer",fr:"Sangles de suspension",es:"Entrenador de suspensión",zh:"悬挂训练器",hi:"सस्पेंशन ट्रेनर"},
 });
 
+Object.assign(commonTranslations, {
+  "Ver demonstração":{en:"View demonstration",fr:"Voir la démonstration",es:"Ver demostración",zh:"查看演示",hi:"डेमो देखें"},
+  "Pré-visualização de":{en:"Preview of",fr:"Aperçu de",es:"Vista previa de",zh:"预览：",hi:"पूर्वावलोकन:"},
+  "peito":{en:"chest",fr:"poitrine",es:"pecho",zh:"胸部",hi:"छाती"},
+  "costas":{en:"back",fr:"dos",es:"espalda",zh:"背部",hi:"पीठ"},
+  "ombros":{en:"shoulders",fr:"épaules",es:"hombros",zh:"肩部",hi:"कंधे"},
+  "bíceps":{en:"biceps",fr:"biceps",es:"bíceps",zh:"肱二头肌",hi:"बाइसेप्स"},
+  "tríceps":{en:"triceps",fr:"triceps",es:"tríceps",zh:"肱三头肌",hi:"ट्राइसेप्स"},
+  "lombar":{en:"lower back",fr:"bas du dos",es:"zona lumbar",zh:"下背部",hi:"कमर"},
+  "quadríceps":{en:"quadriceps",fr:"quadriceps",es:"cuádriceps",zh:"股四头肌",hi:"क्वाड्रिसेप्स"},
+  "posterior":{en:"hamstrings",fr:"ischio-jambiers",es:"isquiotibiales",zh:"腘绳肌",hi:"हैमस्ट्रिंग"},
+  "glúteos":{en:"glutes",fr:"fessiers",es:"glúteos",zh:"臀肌",hi:"ग्लूट्स"},
+  "panturrilhas":{en:"calves",fr:"mollets",es:"pantorrillas",zh:"小腿",hi:"पिंडलियाँ"},
+  "abdômen":{en:"abdomen",fr:"abdominaux",es:"abdomen",zh:"腹部",hi:"पेट"},
+  "antebraços":{en:"forearms",fr:"avant-bras",es:"antebrazos",zh:"前臂",hi:"फोरआर्म"},
+  "Movimento":{en:"Movement",fr:"Mouvement",es:"Movimiento",zh:"动作",hi:"मूवमेंट"}
+});
+
 const exerciseNameExact = {
   "bicycle crunch":{pt:"Abdominal bicicleta",fr:"Crunch à vélo",es:"Abdominal bicicleta",zh:"自行车卷腹",hi:"साइकिल क्रंच"},
   "barbell bench press":{pt:"Supino reto com barra",fr:"Développé couché à la barre",es:"Press de banca con barra",zh:"杠铃卧推",hi:"बारबेल बेंच प्रेस"},
