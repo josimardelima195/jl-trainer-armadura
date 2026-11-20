@@ -713,59 +713,60 @@ Object.assign(commonTranslations, {
 
 function translateDynamicUiText(value, language) {
   const text = String(value || "").trim();
-  let match = text.match(/^Treino previsto às (.+)$/i);
-  if (match) {
-    const labels = {en:"Workout scheduled at",fr:"Entraînement prévu à",es:"Entrenamiento previsto a las",zh:"训练安排在",hi:"वर्कआउट निर्धारित समय"};
-    return labels[language] + " " + match[1];
-  }
-  match = text.match(/^TREINO GUIADO · (\\d+)\\/(\\d+)$/i);
-  if (match) {
+  const withValue = (prefix, labels) => text.startsWith(prefix) ? labels[language] + text.slice(prefix.length) : null;
+  let translated = withValue("Treino previsto às ", {
+    en:"Workout scheduled at ",fr:"Entraînement prévu à ",es:"Entrenamiento previsto a las ",zh:"训练安排在 ",hi:"वर्कआउट निर्धारित समय "
+  });
+  if (translated) return translated;
+
+  const guided = text.startsWith("TREINO GUIADO · ") ? text.slice("TREINO GUIADO · ".length).split("/") : [];
+  if (guided.length === 2) {
     const labels = {en:"GUIDED WORKOUT",fr:"ENTRAÎNEMENT GUIDÉ",es:"ENTRENAMIENTO GUIADO",zh:"指导训练",hi:"निर्देशित वर्कआउट"};
-    return labels[language] + " · " + match[1] + "/" + match[2];
+    return labels[language] + " · " + guided[0] + "/" + guided[1];
   }
-  match = text.match(/^SÉRIE (\\d+) DE (\\d+)$/i);
-  if (match) {
+
+  const series = text.startsWith("SÉRIE ") ? text.slice("SÉRIE ".length).split(" DE ") : [];
+  if (series.length === 2) {
     const labels = {en:"SET",fr:"SÉRIE",es:"SERIE",zh:"第",hi:"सेट"};
     return language === "zh"
-      ? "第 " + match[1] + " 组，共 " + match[2] + " 组"
+      ? "第 " + series[0] + " 组，共 " + series[1] + " 组"
       : language === "hi"
-        ? "सेट " + match[1] + " / " + match[2]
-        : labels[language] + " " + match[1] + (language === "fr" || language === "es" ? " SUR " : " OF ") + match[2];
+        ? "सेट " + series[0] + " / " + series[1]
+        : labels[language] + " " + series[0] + (language === "fr" || language === "es" ? " SUR " : " OF ") + series[1];
   }
-  match = text.match(/^Iniciar (.+)$/i);
-  if (match) {
-    const labels = {en:"Start",fr:"Commencer",es:"Iniciar",zh:"开始",hi:"शुरू करें"};
-    return labels[language] + " " + match[1];
-  }
-  match = text.match(/^Disponível ao completar 30 dias \\((\\d+)\\/30\\)$/i);
-  if (match) {
+
+  translated = withValue("Iniciar ", {en:"Start ",fr:"Commencer ",es:"Iniciar ",zh:"开始 ",hi:"शुरू करें "});
+  if (translated) return translated;
+
+  const day30 = text.startsWith("Disponível ao completar 30 dias (") && text.endsWith(")");
+  if (day30) {
+    const count = text.slice("Disponível ao completar 30 dias (".length, -1).split("/")[0];
     const labels = {en:"Available after 30 days",fr:"Disponible après 30 jours",es:"Disponible después de 30 días",zh:"完成 30 天后开放",hi:"30 दिन पूरे होने पर उपलब्ध"};
-    return labels[language] + " (" + match[1] + "/30)";
+    return labels[language] + " (" + count + "/30)";
   }
-  match = text.match(/^PRÓXIMA REFEIÇÃO · (.+)$/i);
-  if (match) {
-    const labels = {en:"NEXT MEAL",fr:"PROCHAIN REPAS",es:"PRÓXIMA COMIDA",zh:"下一餐",hi:"अगला भोजन"};
-    return labels[language] + " · " + match[1];
+
+  translated = withValue("PRÓXIMA REFEIÇÃO · ", {en:"NEXT MEAL · ",fr:"PROCHAIN REPAS · ",es:"PRÓXIMA COMIDA · ",zh:"下一餐 · ",hi:"अगला भोजन · "});
+  if (translated) return translated;
+
+  for (const [source, labels] of [
+    [" · Concluir exercício", {en:" · Complete exercise",fr:" · Terminer l’exercice",es:" · Completar ejercicio",zh:" · 完成动作",hi:" · व्यायाम पूरा करें"}],
+    [" · Concluir série", {en:" · Complete set",fr:" · Terminer la série",es:" · Completar serie",zh:" · 完成一组",hi:" · सेट पूरा करें"}],
+  ]) {
+    if (text.endsWith(source)) return text.slice(0, -source.length) + labels[language];
   }
-  match = text.match(/^(\\d+)\\/(\\d+) · Concluir exercício$/i);
-  if (match) {
-    const labels = {en:"Complete exercise",fr:"Terminer l’exercice",es:"Completar ejercicio",zh:"完成动作",hi:"व्यायाम पूरा करें"};
-    return match[1] + "/" + match[2] + " · " + labels[language];
-  }
-  match = text.match(/^(\\d+)\\/(\\d+) · Concluir série$/i);
-  if (match) {
-    const labels = {en:"Complete set",fr:"Terminer la série",es:"Completar serie",zh:"完成一组",hi:"सेट पूरा करें"};
-    return match[1] + "/" + match[2] + " · " + labels[language];
-  }
-  match = text.match(/^Não se esqueça da água: meta diária de (.+)\\.$/i);
-  if (match) {
+
+  const waterPrefix = "Não se esqueça da água: meta diária de ";
+  if (text.startsWith(waterPrefix) && text.endsWith(".")) {
+    const amount = text.slice(waterPrefix.length, -1);
     const labels = {en:"Remember to drink water: your daily target is",fr:"N’oubliez pas de boire de l’eau : votre objectif quotidien est de",es:"No olvides beber agua: tu objetivo diario es",zh:"别忘记喝水：每日目标为",hi:"पानी पीना न भूलें: आपका दैनिक लक्ष्य है"};
-    return labels[language] + " " + match[1] + ".";
+    return labels[language] + " " + amount + ".";
   }
-  match = text.match(/^(\\d+) dias de sequência$/i);
-  if (match) {
+
+  const streakSuffix = " dias de sequência";
+  if (text.endsWith(streakSuffix)) {
+    const count = text.slice(0, -streakSuffix.length);
     const labels = {en:"day streak",fr:"jours consécutifs",es:"días seguidos",zh:"天连续记录",hi:"दिन की लगातार श्रृंखला"};
-    return match[1] + " " + labels[language];
+    return count + " " + labels[language];
   }
   return value;
 }
