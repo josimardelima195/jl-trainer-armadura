@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Provider } from "../lib/store";
-import { useLanguage, authText, languageOptions } from "../lib/i18n";
+import { useLanguage, authText, languageOptions, translateUiText } from "../lib/i18n";
 export default function Auth({ children }) {
   const [session, setSession] = useState(null),
     [registerStep, setRegisterStep] = useState(1),
@@ -14,6 +14,7 @@ export default function Auth({ children }) {
     [registerData, setRegisterData] = useState({});
   const [language, setLanguage] = useLanguage();
   const labels = authText[language] || authText.pt;
+  const t = (value) => translateUiText(value, language);
   useEffect(() => {
     const savedTheme = localStorage.getItem("jl-theme");
     document.body.classList.toggle("theme-blue", savedTheme === "blue" || savedTheme === "ocean");
@@ -165,15 +166,15 @@ export default function Auth({ children }) {
         <div className="auth-art-image">
           <img src="/assets/hero-athlete.jpeg" alt="Atleta treinando" />
         </div>
-        <span className="pill">DISCIPLINA • FORÇA • EVOLUÇÃO</span>
+        <span className="pill">{t("DISCIPLINA • FORÇA • EVOLUÇÃO")}</span>
         <h1>
-          Sua melhor versão.
+          {t("Sua melhor versão.")}
           <br />
-          <em>Uma escolha por dia.</em>
+          <em>{t("Uma escolha por dia.")}</em>
         </h1>
-        <p>Seu treino. Sua evolução. Sua armadura.</p>
+        <p>{t("Seu treino. Sua evolução. Sua armadura.")}</p>
         <div className="guardian">
-          🦁 <span>Eu sou o Leo. Um passo de cada vez também é progresso.</span>
+          🦁 <span>{t("Eu sou o Leo. Um passo de cada vez também é progresso.")}</span>
         </div>
       </div>
       <section className="auth-box">
@@ -211,14 +212,14 @@ export default function Auth({ children }) {
                   <label>{labels.chooseLanguage}<select name="language" value={language} onChange={(event) => setLanguage(event.target.value)}>{languageOptions.map(([code, name]) => <option key={code} value={code}>{name}</option>)}</select></label>
                   <p className="onboarding-hint">{labels.languageHint}</p>
                   <label>{labels.name}<input name="name" required maxLength="120" autoComplete="name" /></label>
-                  <p className="onboarding-hint">Depois de criar a conta, vamos configurar seu perfil em etapas simples. Você poderá alterar as respostas depois.</p>
+                  <p className="onboarding-hint">{t("Depois de criar a conta, vamos configurar seu perfil em etapas simples. Você poderá alterar as respostas depois.")}</p>
                   <button type="button" className="outline" onClick={(event) => { setRegisterData(Object.fromEntries(new FormData(event.currentTarget.form))); setRegisterStep(2); }}>{labels.continue}</button>
                 </>
               )}
               {registerStep === 2 && (
                 <>
                   <input type="hidden" name="name" value={registerData.name || ""} readOnly />
-                  <p className="onboarding-hint">Sua conta está quase pronta. Peso, altura, objetivo, modalidade e rotina serão perguntados depois do primeiro acesso.</p>
+                  <p className="onboarding-hint">{t("Sua conta está quase pronta. Peso, altura, objetivo, modalidade e rotina serão perguntados depois do primeiro acesso.")}</p>
                   <button type="button" className="text-btn" onClick={() => setRegisterStep(1)}>← Voltar</button>
                 </>
               )}
