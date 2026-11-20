@@ -8,8 +8,8 @@ function translateNode(node, language) {
     if (!trimmed) return node;
     const translated = translateUiText(trimmed, language);
     if (translated === trimmed) return node;
-    const leading = node.match(/^\\s*/)?.[0] || "";
-    const trailing = node.match(/\\s*$/)?.[0] || "";
+    const leading = node.match(/^\s*/)?.[0] || "";
+    const trailing = node.match(/\s*$/)?.[0] || "";
     return leading + translated + trailing;
   }
   if (!React.isValidElement(node)) return node;
