@@ -1513,7 +1513,7 @@ export function Profile({ theme, onThemeChange }) {
               <i />
             </span>
             <b>{t("Dark Fitness")}</b>
-            <small>{t("Grafite · verde-lima")}</small>
+            <small>{t("Grafite · laranja")}</small>
           </button>
           <button
             type="button"

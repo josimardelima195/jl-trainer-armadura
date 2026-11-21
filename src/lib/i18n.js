@@ -74,6 +74,17 @@ Object.assign(onboardingText.hi,{photoConsent:"मैं अपनी शार�
 
 const commonTranslations = {
   "Acessos rápidos":{en:"Quick access",fr:"Accès rapides",es:"Accesos rápidos",zh:"快捷入口",hi:"त्वरित पहुँच"},
+  "Hoje":{en:"Today",fr:"Aujourd’hui",es:"Hoy",zh:"今天",hi:"आज"},
+  "Calorias":{en:"Calories",fr:"Calories",es:"Calorías",zh:"卡路里",hi:"कैलोरी"},
+  "Água":{en:"Water",fr:"Eau",es:"Agua",zh:"饮水",hi:"पानी"},
+  "Treino hoje":{en:"Workout today",fr:"Entraînement aujourd’hui",es:"Entrenamiento de hoy",zh:"今日训练",hi:"आज का वर्कआउट"},
+  "Concluído":{en:"Completed",fr:"Terminé",es:"Completado",zh:"已完成",hi:"पूरा हुआ"},
+  "Sem registo":{en:"No entry yet",fr:"Aucun enregistrement",es:"Sin registro",zh:"暂无记录",hi:"अभी कोई रिकॉर्ड नहीं"},
+  "Meta diária estimada":{en:"Estimated daily target",fr:"Objectif quotidien estimé",es:"Meta diaria estimada",zh:"每日估算目标",hi:"अनुमानित दैनिक लक्ष्य"},
+  "Consumida / meta diária":{en:"Consumed / daily target",fr:"Consommée / objectif quotidien",es:"Consumida / meta diaria",zh:"已饮用 / 每日目标",hi:"पिया गया / दैनिक लक्ष्य"},
+  "Treinos registados hoje":{en:"Workouts logged today",fr:"Entraînements enregistrés aujourd’hui",es:"Entrenamientos registrados hoy",zh:"今日已记录训练",hi:"आज दर्ज वर्कआउट"},
+  "Água registada hoje / meta estimada.":{en:"Water logged today / estimated target.",fr:"Eau enregistrée aujourd’hui / objectif estimé.",es:"Agua registrada hoy / meta estimada.",zh:"今日饮水量 / 估算目标。",hi:"आज दर्ज पानी / अनुमानित लक्ष्य।"},
+  "Grafite · laranja":{en:"Graphite · orange",fr:"Graphite · orange",es:"Grafito · naranja",zh:"石墨灰 · 橙色",hi:"ग्रेफाइट · नारंगी"},
   "Preferência de cozinha":{en:"Cuisine preference",fr:"Préférence de cuisine",es:"Preferencia de cocina",zh:"饮食偏好",hi:"भोजन पसंद"},
   "A escolha altera as refeições e a lista de compras.":{en:"This choice updates meals and the shopping list.",fr:"Ce choix met à jour les repas et la liste de courses.",es:"Esta elección actualiza las comidas y la lista de compras.",zh:"此选项会更新餐食和购物清单。",hi:"यह विकल्प भोजन और खरीदारी सूची अपडेट करता है।"},
   "Não foi possível atualizar a preferência de cozinha.":{en:"Could not update the cuisine preference.",fr:"Impossible de mettre à jour la préférence culinaire.",es:"No se pudo actualizar la preferencia de cocina.",zh:"无法更新饮食偏好。",hi:"भोजन पसंद अपडेट नहीं हो सकी।"},

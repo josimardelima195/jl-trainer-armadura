@@ -10,11 +10,12 @@ import {
   Bell,
   Search,
   ArrowUpRight,
-  Menu,
   Utensils,
   Palette,
   Activity,
   CalendarDays,
+  Droplets,
+  MoreVertical,
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "./lib/supabase";
@@ -430,8 +431,16 @@ export default function App() {
   const homeNutrition = nutritionPlan({ ...profile, language });
   const todayKey = new Date().toLocaleDateString("en-CA");
   const todayNutritionLog = (data.daily_nutrition_logs || []).find((log) => log.user_id === userId && String(log.local_date || "").slice(0, 10) === todayKey);
-  const mealsToday = Array.isArray(todayNutritionLog?.meal_keys) ? todayNutritionLog.meal_keys.length : 0;
-  const expectedMealsToday = Number(todayNutritionLog?.expected_meals) || homeNutrition.meals?.length || 5;
+  const todayProgramDay = Math.max(1, Math.min(30, Number(profile.nutrition_day) || (profile.created_at ? Math.floor((Date.now() - new Date(profile.created_at).getTime()) / 86400000) + 1 : 1)));
+  const homeConsumedMeals = (() => { try { return JSON.parse(localStorage.getItem(`jl-meals-consumed-${profile.id || "guest"}`) || "[]"); } catch { return []; } })();
+  const dbMealKeys = Array.isArray(todayNutritionLog?.meal_keys) ? todayNutritionLog.meal_keys : [];
+  const mealsToday = (homeNutrition.meals || []).filter((meal) => {
+    const key = meal.mealKey || meal.title;
+    return homeConsumedMeals.includes(`${todayProgramDay}-${key}`) || dbMealKeys.includes(key) || dbMealKeys.includes(`${todayProgramDay}-${key}`);
+  }).length;
+  const expectedMealsToday = homeNutrition.meals?.length || 5;
+  const waterConsumedMl = (() => { try { return Math.max(0, Number(localStorage.getItem(`jl-hydration-${profile.id || "guest"}-${todayKey}`)) || 0); } catch { return 0; } })();
+  const todayWorkoutDone = logs.some((log) => new Date(log.completed_at).toLocaleDateString("en-CA") === todayKey);
   const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
   const todayDateLabel = new Intl.DateTimeFormat(dateLocale, { weekday: "long", day: "numeric", month: "long" }).format(new Date());
   const currentMinutes = new Date().getHours() * 60 + new Date().getMinutes();
@@ -643,7 +652,7 @@ export default function App() {
             aria-controls="primary-navigation"
             onClick={() => setMenu(!menu)}
           >
-            <Menu />
+            <MoreVertical />
           </button>
           <div className="search">
             <Search size={17} />
@@ -789,7 +798,7 @@ export default function App() {
                         </div>
                       </div>
                     </section>
-                    <div className="home-date-strip"><CalendarDays size={18} /><span><b>{t.calendar}</b><small>{todayDateLabel}</small></span></div>
+                    <div className="home-date-strip"><CalendarDays size={18} /><span><b>{translateUiText("Hoje", language)}</b><small>{todayDateLabel}</small></span></div>
                     <section className="leo-reminder-card" aria-live="polite">
                       <div className="leo-reminder-mascot"><LeoMascot size={74} /></div>
                       <div className="leo-reminder-copy">
@@ -809,10 +818,10 @@ export default function App() {
                     {theme !== "blue" && <section className="home-theme-callout"><div><span className="eyebrow">NOVA PALETA</span><strong>Experimente o tema branco e azul</strong><p>Ocean Light aplica branco, azul e controlos claros em todas as páginas.</p></div><button type="button" className="outline" onClick={() => changeTheme("blue")}>Experimentar Ocean Light</button></section>}
                     <div className="home-section-heading"><span className="eyebrow">Resumo do dia</span></div>
                     <div className="grid stats home-stats">
-                      <Stat label="Treinos este mês" value={metrics.month} detail="Treinos registados no mês atual" />
-                      <Stat label="Refeições hoje" value={expectedMealsToday ? `${mealsToday}/${expectedMealsToday}` : "—"} detail="Refeições marcadas no plano" />
-                      <Stat label="Sequência atual" value={`${metrics.streak} dias`} detail="Dias consecutivos registados" />
-                      <Stat label="Peso atual" value={metrics.current === null ? "—" : `${metrics.current} kg`} detail={metrics.delta === null ? "Registe uma medida" : `${metrics.delta > 0 ? "+" : ""}${metrics.delta.toFixed(1)} kg desde o primeiro registo`} />
+                      <Stat label={translateUiText("Calorias", language)} value={homeNutrition.calories ? `${homeNutrition.calories} kcal` : "—"} detail={translateUiText("Meta diária estimada", language)} />
+                      <Stat label={translateUiText("Água", language)} value={homeNutrition.waterMl ? `${(waterConsumedMl / 1000).toFixed(1)} / ${(homeNutrition.waterMl / 1000).toFixed(1)} L` : "—"} detail={translateUiText("Consumida / meta diária", language)} />
+                      <Stat label={translateUiText("Treino hoje", language)} value={translateUiText(todayWorkoutDone ? "Concluído" : "Sem registo", language)} detail={translateUiText("Treinos registados hoje", language)} />
+                      <Stat label={translateUiText("Refeições hoje", language)} value={expectedMealsToday ? `${mealsToday}/${expectedMealsToday}` : "—"} detail={translateUiText("Refeições marcadas no plano", language)} />
                     </div>
                     <section className="home-focus-grid">
                       <article className="home-focus-card home-next-meal">
@@ -827,10 +836,10 @@ export default function App() {
                         </div>
                       </article>
                       <article className="home-focus-card home-water-card">
-                        <span className="home-focus-icon">💧</span>
+                        <span className="home-focus-icon"><Droplets size={22} /></span>
                         <span className="eyebrow">HIDRATAÇÃO DE HOJE</span>
-                        <strong>{!homeNutrition.incomplete && homeNutrition.waterMl ? `${(homeNutrition.waterMl / 1000).toFixed(1)} L` : "—"}</strong>
-                        <p>{homeNutrition.incomplete ? "Complete o perfil para calcular a meta de hidratação." : "Meta estimada de água, ajustada ao seu perfil e à atividade."}</p>
+                        <strong>{!homeNutrition.incomplete && homeNutrition.waterMl ? `${(waterConsumedMl / 1000).toFixed(1)} / ${(homeNutrition.waterMl / 1000).toFixed(1)} L` : "—"}</strong>
+                        <p>{homeNutrition.incomplete ? translateUiText("Complete o perfil para calcular a meta de hidratação.", language) : translateUiText("Água registada hoje / meta estimada.", language)}</p>
                         <button className="outline" onClick={() => go("nutricao")}>Registar água</button>
                       </article>
                       <article className="home-focus-card home-motivation-card">
