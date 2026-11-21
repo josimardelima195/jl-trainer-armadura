@@ -699,7 +699,7 @@ export default function App() {
               <span className="notification-label">Avisos</span>
             </button>
             <button
-              className="avatar"
+              className="avatar avatar-photo-button"
               onClick={() => go("perfil")}
               aria-label="Perfil"
             >
@@ -799,6 +799,7 @@ export default function App() {
                       </div>
                       <button type="button" className="outline" onClick={() => go("nutricao")}>Ver alimentação</button>
                     </section>
+                    <div className="home-section-heading"><span className="eyebrow">Acessos rápidos</span></div>
                     <section className="home-quick-actions" aria-label="Acessos rápidos">
                       <button type="button" onClick={() => go("treinos")}><span className="home-quick-icon"><Dumbbell size={20} /></span><b>{t.workouts}</b><ChevronRight size={16} /></button>
                       <button type="button" onClick={() => go("nutricao")}><span className="home-quick-icon"><Utensils size={20} /></span><b>{t.nutrition}</b><ChevronRight size={16} /></button>
@@ -806,6 +807,7 @@ export default function App() {
                       <button type="button" onClick={() => go("progresso")}><span className="home-quick-icon"><CalendarDays size={20} /></span><b>{t.calendar}</b><ChevronRight size={16} /></button>
                     </section>
                     {theme !== "blue" && <section className="home-theme-callout"><div><span className="eyebrow">NOVA PALETA</span><strong>Experimente o tema branco e azul</strong><p>Ocean Light aplica branco, azul e controlos claros em todas as páginas.</p></div><button type="button" className="outline" onClick={() => changeTheme("blue")}>Experimentar Ocean Light</button></section>}
+                    <div className="home-section-heading"><span className="eyebrow">Resumo do dia</span></div>
                     <div className="grid stats home-stats">
                       <Stat label="Treinos este mês" value={metrics.month} detail="Treinos registados no mês atual" />
                       <Stat label="Refeições hoje" value={expectedMealsToday ? `${mealsToday}/${expectedMealsToday}` : "—"} detail="Refeições marcadas no plano" />

@@ -74,6 +74,9 @@ Object.assign(onboardingText.hi,{photoConsent:"मैं अपनी शार�
 
 const commonTranslations = {
   "Acessos rápidos":{en:"Quick access",fr:"Accès rapides",es:"Accesos rápidos",zh:"快捷入口",hi:"त्वरित पहुँच"},
+  "Preferência de cozinha":{en:"Cuisine preference",fr:"Préférence de cuisine",es:"Preferencia de cocina",zh:"饮食偏好",hi:"भोजन पसंद"},
+  "A escolha altera as refeições e a lista de compras.":{en:"This choice updates meals and the shopping list.",fr:"Ce choix met à jour les repas et la liste de courses.",es:"Esta elección actualiza las comidas y la lista de compras.",zh:"此选项会更新餐食和购物清单。",hi:"यह विकल्प भोजन और खरीदारी सूची अपडेट करता है।"},
+  "Não foi possível atualizar a preferência de cozinha.":{en:"Could not update the cuisine preference.",fr:"Impossible de mettre à jour la préférence culinaire.",es:"No se pudo actualizar la preferencia de cocina.",zh:"无法更新饮食偏好。",hi:"भोजन पसंद अपडेट नहीं हो सकी।"},
   "Resumo do dia":{en:"Daily summary",fr:"Résumé du jour",es:"Resumen del día",zh:"每日摘要",hi:"दैनिक सारांश"},
   "Treinos este mês":{en:"Workouts this month",fr:"Entraînements ce mois-ci",es:"Entrenamientos este mes",zh:"本月训练",hi:"इस महीने के वर्कआउट"},
   "Refeições hoje":{en:"Meals today",fr:"Repas aujourd’hui",es:"Comidas de hoy",zh:"今日餐食",hi:"आज के भोजन"},

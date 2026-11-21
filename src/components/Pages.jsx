@@ -2684,8 +2684,8 @@ export function Nutrition({ plan, whatsapp }) {
             <div className="nutrition-safety-note">{n.ageNote}</div>
           )}
           <div className="nutrition-cuisine-control">
-            <div><span className="eyebrow">PREFERÊNCIA DE COZINHA</span><p>A escolha altera as refeições e a lista de compras.</p></div>
-            <label><span>{t("Preferência de cozinha")}</span><select value={["mozambican", "international", "mixed"].includes(profile.cuisine_preference) ? profile.cuisine_preference : "mixed"} onChange={async (event) => { const saved = await mutate("profiles", { cuisine_preference: event.target.value }, userId); if (saved) await refresh?.(); else setError("Não foi possível atualizar a preferência de cozinha."); }}><option value="mozambican">{t("Cozinha moçambicana")}</option><option value="international">{t("Cozinha internacional")}</option><option value="mixed">{t("Misturar as duas")}</option></select></label>
+            <div><span className="eyebrow">{t("Preferência de cozinha")}</span><p>{t("A escolha altera as refeições e a lista de compras.")}</p></div>
+            <label><span>{t("Preferência de cozinha")}</span><select value={["mozambican", "international", "mixed"].includes(profile.cuisine_preference) ? profile.cuisine_preference : "mixed"} onChange={async (event) => { const saved = await mutate("profiles", { cuisine_preference: event.target.value }, userId); if (saved) await refresh?.(); else setError(t("Não foi possível atualizar a preferência de cozinha.")); }}><option value="mozambican">{t("Cozinha moçambicana")}</option><option value="international">{t("Cozinha internacional")}</option><option value="mixed">{t("Misturar as duas")}</option></select></label>
           </div>
         </div>
         <div className="nutrition-kcal">

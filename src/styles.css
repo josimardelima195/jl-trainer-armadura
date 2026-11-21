@@ -1610,3 +1610,7 @@ body.theme-blue .nutrition-onboarding{background:#fff;color:#172b45;border-color
 @media(max-width:1000px){.home-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.theme-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.home-quick-actions{gap:8px}.home-quick-actions button{min-height:62px;padding:10px}.home-quick-icon{width:34px;height:34px;flex-basis:34px}.home-quick-actions button>b{font-size:11px}.home-theme-callout{display:grid;gap:12px;padding:14px}.home-theme-callout button{width:100%}.nutrition-cuisine-control{display:grid;gap:10px}.nutrition-cuisine-control label{min-width:0;width:100%}.theme-options{grid-template-columns:1fr 1fr}.progress-photo-preview{min-height:190px}.progress-photo-preview img{max-height:320px}.nutrition-day-strip .nutrition-day-button{flex-basis:40px}}
 @media(prefers-reduced-motion:reduce){.home-quick-actions button{transition:none}.home-quick-actions button:hover{transform:none}}
+
+.home-section-heading{display:flex;align-items:center;justify-content:space-between;margin:18px 0 8px}
+.home-section-heading .eyebrow{color:var(--muted);font-size:10px;letter-spacing:.12em}
+.shell.theme-blue .home-section-heading .eyebrow{color:#60758f}
