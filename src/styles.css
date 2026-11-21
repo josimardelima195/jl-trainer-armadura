@@ -1556,3 +1556,57 @@ body.theme-blue .auth-links button,body.theme-blue .auth-box details summary{col
   border-left-color: #1688f7;
   color: #526984;
 }
+
+/* JL Trainer — acabamento final, acessibilidade e consistência entre páginas */
+.food-photo-placeholder[hidden],.food-library-image img[hidden],.food-chip-media img[hidden]{display:none!important}
+.shell.theme-dark{--gold:#f28a00;--gold2:#ffb12b}.shell.theme-dark .primary{background:linear-gradient(135deg,#f28a00,#ffb12b);color:#17191c}
+.home-date-strip{display:flex;align-items:center;gap:12px;margin:16px 0 12px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--gold2)}
+.home-date-strip span{display:grid;gap:2px}.home-date-strip b{font-size:12px;color:var(--text)}.home-date-strip small{font-size:11px;color:var(--muted);text-transform:capitalize}
+.home-quick-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0 18px}
+.home-quick-actions button{display:flex;align-items:center;gap:11px;min-width:0;min-height:72px;padding:13px 14px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,var(--panel2),var(--panel));color:var(--text);text-align:left;transition:transform .18s ease,border-color .18s ease}
+.home-quick-actions button:hover{transform:translateY(-2px);border-color:var(--gold)}.home-quick-actions button>b{flex:1;font-size:12px;line-height:1.3}.home-quick-actions button>svg{flex:0 0 auto;color:var(--muted)}
+.home-quick-icon{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:11px;background:color-mix(in srgb,var(--gold) 15%,var(--panel));color:var(--gold2)}
+.home-theme-callout{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:14px 0 18px;padding:16px 18px;border:1px solid #1688f755;border-radius:16px;background:linear-gradient(110deg,#1688f71f,var(--panel))}
+.home-theme-callout>div{display:grid;gap:4px}.home-theme-callout strong{font:600 15px 'Space Grotesk';color:var(--text)}.home-theme-callout p{margin:0;color:var(--muted);font-size:11px;line-height:1.45}.home-theme-callout .eyebrow{color:#1688f7}.home-theme-callout button{white-space:nowrap}
+.avatar-photo-button{display:grid;place-items:center;padding:0!important;overflow:hidden;border:2px solid var(--gold)!important;background:var(--panel2)!important}
+.avatar-photo-button .community-avatar{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;overflow:hidden;font-size:11px}.avatar-photo-button .community-avatar img{width:100%;height:100%;object-fit:cover}
+.nutrition-cuisine-control{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--panel)}
+.nutrition-cuisine-control>div{display:grid;gap:4px}.nutrition-cuisine-control p{margin:0;font-size:10px;color:var(--muted)}.nutrition-cuisine-control label{display:grid;gap:5px;min-width:min(250px,45%)}.nutrition-cuisine-control label>span{font-size:10px;color:var(--muted)}
+.food-photo-placeholder{display:grid;place-items:center;width:100%;height:100%;min-height:76px;padding:10px;border:1px dashed var(--line);border-radius:10px;background:var(--panel2);color:var(--muted);font-size:10px;text-align:center;line-height:1.4}
+.food-photo-placeholder.small{width:54px;min-width:54px;height:54px;min-height:54px;padding:4px;font-size:8px}.home-focus-image .food-photo-placeholder{min-height:150px;border:0}
+.food-library-image img,.meal-recipe-thumb,.meal-photo,.home-focus-image img{object-fit:contain;object-position:center}.food-library-image{display:grid;place-items:center;overflow:hidden}.food-library-image .food-photo-placeholder{min-height:150px;border:0}.food-chip-media{display:grid;place-items:center;overflow:hidden}.food-chip-media .food-photo-placeholder{width:54px;height:54px}
+.food-check{grid-template-columns:1fr!important;text-align:left}.food-check b{font-size:11px}
+.onboarding-photo-consent{display:flex;align-items:flex-start;gap:10px;margin:12px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text);font-size:11px;line-height:1.45}.onboarding-photo-consent input{flex:0 0 auto;margin-top:2px}
+.progress-photo-preview{display:grid;place-items:center;width:100%;min-height:230px;background:var(--panel2)}.progress-photo-preview img{display:block;width:100%;height:100%;max-height:420px;object-fit:contain;object-position:center}
+.exercise-gif img,.showcase-media-button img,.exercise-media img{object-fit:contain!important;object-position:center}
+.nutrition-day-strip{display:flex;flex-wrap:nowrap;gap:7px;overflow-x:auto;overflow-y:hidden;padding:3px 2px 8px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}.nutrition-day-strip .nutrition-day-button{flex:0 0 44px;scroll-snap-align:start}
+.theme-options{grid-template-columns:repeat(4,minmax(0,1fr))}.theme-options button{min-width:0}.theme-options button.selected{border-color:var(--gold2)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 20%,transparent)}
+.mod-emoji{display:grid;place-items:center}button,a,input,select,textarea{touch-action:manipulation}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--gold) 42%,transparent);outline-offset:2px}
+.shell.theme-blue{color-scheme:light;--bg:#f4f8fd;--panel:#fff;--panel2:#edf4fc;--line:#d9e5f3;--text:#172b45;--muted:#60758f;--gold:#1878e8;--gold2:#125fc8;--purple:#7068d9;background:var(--bg);color:var(--text)}
+body.theme-blue{color-scheme:light;--bg:#f4f8fd;--panel:#fff;--panel2:#edf4fc;--line:#d9e5f3;--text:#172b45;--muted:#60758f;--gold:#1878e8;--gold2:#125fc8}
+.shell.theme-blue .home-date-strip,.shell.theme-blue .home-quick-actions button,.shell.theme-blue .nutrition-cuisine-control{background:#fff;border-color:#d9e5f3;color:#172b45}
+.shell.theme-blue .home-date-strip{color:#1878e8}.shell.theme-blue .home-date-strip b,.shell.theme-blue .home-quick-actions button>b{color:#172b45}
+.shell.theme-blue .home-quick-icon{background:#e7f2ff;color:#1267d3}.shell.theme-blue .home-quick-actions button>svg{color:#70849e}
+.shell.theme-blue .home-theme-callout{background:linear-gradient(110deg,#e7f2ff,#fff);border-color:#c9def7}.shell.theme-blue .home-theme-callout strong{color:#172b45}.shell.theme-blue .home-theme-callout p{color:#60758f}.shell.theme-blue .home-theme-callout .eyebrow{color:#1267d3}
+.shell.theme-blue .home-theme-callout button{background:#fff;border-color:#b9d5f5;color:#1266ce}.shell.theme-blue .avatar-photo-button{border-color:#1878e8!important;background:#fff!important}
+.shell.theme-blue .nutrition-cuisine-control{background:#fff}.shell.theme-blue .nutrition-cuisine-control select{background:#f8fbff!important;color:#172b45!important;border-color:#d3e3f5!important}
+.shell.theme-blue .food-photo-placeholder{background:#f2f7fd;border-color:#d3e3f5;color:#647b96}.shell.theme-blue .onboarding-photo-consent{background:#f4f8fd;border-color:#d3e3f5;color:#172b45}
+.shell.theme-blue .progress-photo-preview{background:#f2f7fd}.shell.theme-blue .theme-options button.selected{background:#e7f2ff!important;border-color:#1878e8!important}
+.shell.theme-blue .home-week-card,.shell.theme-blue .home-progress-callout,.shell.theme-blue .home-focus-card{background:#fff;border-color:#d9e5f3;color:#172b45}
+.shell.theme-blue .home-focus-copy h3,.shell.theme-blue .home-week-heading h2,.shell.theme-blue .home-progress-callout b{color:#172b45}.shell.theme-blue .home-focus-copy p,.shell.theme-blue .home-progress-callout p,.shell.theme-blue .home-week-empty{color:#60758f}
+.shell.theme-blue .primary,.shell.theme-blue .chat-input button{background:linear-gradient(135deg,#1688f7,#2459d6);color:#fff;border-color:#1688f7}
+.shell.theme-blue .outline,.shell.theme-blue .exercise-info-button,.shell.theme-blue .exercise-swap-button{background:#f7fbff;color:#1266ce;border-color:#b9d5f5}
+.shell.theme-blue .nutrition-tabs button,.shell.theme-blue .food-library-filters button,.shell.theme-blue .nutrition-day-button,.shell.theme-blue .calendar-card button{background:#fff;color:#536b88;border-color:#d9e5f3}
+.shell.theme-blue .nutrition-tabs button.active,.shell.theme-blue .food-library-filters button.active,.shell.theme-blue .nutrition-day-button.selected,.shell.theme-blue .calendar-card button.active,.shell.theme-blue .calendar-card button.selected{background:#e7f2ff;color:#1266ce;border-color:#1878e8}
+.shell.theme-blue input,.shell.theme-blue select,.shell.theme-blue textarea{background:#fff!important;color:#172b45!important;border-color:#d3e3f5!important;color-scheme:light}.shell.theme-blue input[type=date],.shell.theme-blue input[type=time],.shell.theme-blue input[type=datetime-local],.shell.theme-blue input[type=month],.shell.theme-blue input[type=week]{color-scheme:light}
+.shell.theme-blue select option{background:#fff;color:#172b45}.shell.theme-blue input[type=checkbox],.shell.theme-blue input[type=radio]{accent-color:#1878e8}
+.shell.theme-blue .notification-button{color:#526a87}.shell.theme-blue .side-btn.active{background:#e7f2ff;color:#1266ce}.shell.theme-blue .bottom-nav{background:#fff;border-color:#d9e5f3}.shell.theme-blue .bottom-nav button.active{color:#1266ce}
+.shell.theme-blue .pill,.shell.theme-blue .mini-pill,.shell.theme-blue .showcase-mode{background:#e7f2ff;border-color:#c9def7;color:#1266ce}
+.shell.theme-blue .food-library-card,.shell.theme-blue .showcase-card,.shell.theme-blue .meal-card,.shell.theme-blue .profile-card,.shell.theme-blue .progress-photo-slot,.shell.theme-blue .nutrition-calendar,.shell.theme-blue .hydration-card{background:#fff;border-color:#d9e5f3;color:#172b45}
+body.theme-blue .auth-page{background:#f4f8fd;color:#172b45}body.theme-blue .auth-box{background:#fff;color:#172b45;border-color:#d9e5f3}
+body.theme-blue .auth-box input,body.theme-blue .nutrition-onboarding input,body.theme-blue .nutrition-onboarding select,body.theme-blue .nutrition-onboarding textarea{background:#fff!important;color:#172b45!important;border-color:#d3e3f5!important;color-scheme:light}
+body.theme-blue .nutrition-onboarding{background:#fff;color:#172b45;border-color:#d9e5f3}body.theme-blue .onboarding-choice{background:#fff;color:#172b45;border-color:#d9e5f3}body.theme-blue .onboarding-choice.selected{background:#e7f2ff;color:#1266ce;border-color:#1878e8}
+@media(max-width:1000px){.home-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}.theme-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.home-quick-actions{gap:8px}.home-quick-actions button{min-height:62px;padding:10px}.home-quick-icon{width:34px;height:34px;flex-basis:34px}.home-quick-actions button>b{font-size:11px}.home-theme-callout{display:grid;gap:12px;padding:14px}.home-theme-callout button{width:100%}.nutrition-cuisine-control{display:grid;gap:10px}.nutrition-cuisine-control label{min-width:0;width:100%}.theme-options{grid-template-columns:1fr 1fr}.progress-photo-preview{min-height:190px}.progress-photo-preview img{max-height:320px}.nutrition-day-strip .nutrition-day-button{flex-basis:40px}}
+@media(prefers-reduced-motion:reduce){.home-quick-actions button{transition:none}.home-quick-actions button:hover{transform:none}}

@@ -65,8 +65,28 @@ Object.assign(onboardingText.fr,{targetWeight:"Poids cible (facultatif)"});
 Object.assign(onboardingText.es,{targetWeight:"Peso objetivo (opcional)"});
 Object.assign(onboardingText.zh,{targetWeight:"目标体重（选填）"});
 Object.assign(onboardingText.hi,{targetWeight:"लक्ष्य वज़न (वैकल्पिक)"});
+Object.assign(onboardingText.pt,{photoConsent:"Autorizo o armazenamento privado da minha foto do físico.",photoConsentError:"Autorize o armazenamento privado da foto do físico ou retire a foto selecionada."});
+Object.assign(onboardingText.en,{photoConsent:"I authorize private storage of my physique photo.",photoConsentError:"Authorize private storage of the physique photo or remove the selected photo."});
+Object.assign(onboardingText.fr,{photoConsent:"J’autorise le stockage privé de ma photo corporelle.",photoConsentError:"Autorisez le stockage privé de la photo corporelle ou retirez la photo sélectionnée."});
+Object.assign(onboardingText.es,{photoConsent:"Autorizo el almacenamiento privado de mi foto corporal.",photoConsentError:"Autoriza el almacenamiento privado de la foto corporal o retira la foto seleccionada."});
+Object.assign(onboardingText.zh,{photoConsent:"我授权私密保存我的身体照片。",photoConsentError:"请授权私密保存身体照片，或移除已选择的照片。"});
+Object.assign(onboardingText.hi,{photoConsent:"मैं अपनी शारीरिक फ़ोटो के निजी संग्रह की अनुमति देता/देती हूँ।",photoConsentError:"शारीरिक फ़ोटो के निजी संग्रह की अनुमति दें या चुनी गई फ़ोटो हटाएँ।"});
 
 const commonTranslations = {
+  "Acessos rápidos":{en:"Quick access",fr:"Accès rapides",es:"Accesos rápidos",zh:"快捷入口",hi:"त्वरित पहुँच"},
+  "Resumo do dia":{en:"Daily summary",fr:"Résumé du jour",es:"Resumen del día",zh:"每日摘要",hi:"दैनिक सारांश"},
+  "Treinos este mês":{en:"Workouts this month",fr:"Entraînements ce mois-ci",es:"Entrenamientos este mes",zh:"本月训练",hi:"इस महीने के वर्कआउट"},
+  "Refeições hoje":{en:"Meals today",fr:"Repas aujourd’hui",es:"Comidas de hoy",zh:"今日餐食",hi:"आज के भोजन"},
+  "Treinos registados no mês atual":{en:"Workouts logged this month",fr:"Entraînements enregistrés ce mois-ci",es:"Entrenamientos registrados este mes",zh:"本月已记录训练",hi:"इस महीने दर्ज वर्कआउट"},
+  "Refeições marcadas no plano":{en:"Meals checked off in the plan",fr:"Repas cochés dans le programme",es:"Comidas marcadas en el plan",zh:"计划中已勾选餐食",hi:"योजना में चिह्नित भोजन"},
+  "NOVA PALETA":{en:"NEW PALETTE",fr:"NOUVELLE PALETTE",es:"NUEVA PALETA",zh:"新配色",hi:"नई रंग योजना"},
+  "Experimente o tema branco e azul":{en:"Try the white and blue theme",fr:"Essayez le thème blanc et bleu",es:"Prueba el tema blanco y azul",zh:"试试白蓝主题",hi:"सफेद और नीली थीम आज़माएँ"},
+  "Ocean Light aplica branco, azul e controlos claros em todas as páginas.":{en:"Ocean Light applies white, blue, and light controls across every page.",fr:"Ocean Light applique le blanc, le bleu et des commandes claires à toutes les pages.",es:"Ocean Light aplica blanco, azul y controles claros en todas las páginas.",zh:"Ocean Light 会在所有页面应用白色、蓝色和浅色控件。",hi:"Ocean Light सभी पृष्ठों पर सफेद, नीले और हल्के नियंत्रण लागू करता है।"},
+  "Experimentar Ocean Light":{en:"Try Ocean Light",fr:"Essayer Ocean Light",es:"Probar Ocean Light",zh:"试用 Ocean Light",hi:"Ocean Light आज़माएँ"},
+  "Fotografia indisponível":{en:"Photo unavailable",fr:"Photo indisponible",es:"Fotografía no disponible",zh:"照片不可用",hi:"फ़ोटो उपलब्ध नहीं"},
+
+  "Gym":{pt:"Ginásio",en:"Gym",fr:"Salle de sport",es:"Gimnasio",zh:"健身房",hi:"जिम"},
+  "Home":{pt:"Em casa",en:"At home",fr:"À la maison",es:"En casa",zh:"在家",hi:"घर पर"},
   "SUA JORNADA EM NÚMEROS":{en:"YOUR JOURNEY IN NUMBERS",fr:"VOTRE PARCOURS EN CHIFFRES",es:"TU CAMINO EN CIFRAS",zh:"你的进度数据",hi:"आपकी प्रगति के आँकड़े"},
   "Minha evolução":{en:"My progress",fr:"Ma progression",es:"Mi progreso",zh:"我的进度",hi:"मेरी प्रगति"},
   "SEUS DADOS":{en:"YOUR DETAILS",fr:"VOS INFORMATIONS",es:"TUS DATOS",zh:"你的资料",hi:"आपकी जानकारी"},

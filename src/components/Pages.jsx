@@ -301,12 +301,12 @@ export function Workouts({ plan }) {
       else clearTimeout(task);
     };
   }, [ensureExerciseLibrary]);
-  const allAvailable = (data.workouts || []).filter(
-    (workout) =>
-      workout.active !== false &&
-      (!workout.user_id || workout.user_id === userId) &&
-      !/\\b(?:karat[eê]|futsal|nata[cç][aã]o|swimming|soccer)\\b/i.test(`${workout.title || ""} ${workout.description || ""}`),
-  );
+  const allAvailable = (data.workouts || []).filter((workout) => {
+    const linkedModality = (data.modalities || []).find((item) => item.id === workout.modality_id)?.name || "";
+    const descriptor = `${workout.title || ""} ${workout.description || ""} ${linkedModality}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    return workout.active !== false && (!workout.user_id || workout.user_id === userId) &&
+      !["karate", "futsal", "natacao", "swimming", "soccer", "football"].some((term) => descriptor.includes(term));
+  });
   const personalized = allAvailable.filter((workout) => {
     const modality = data.modalities.find(
       (item) => item.id === workout.modality_id,
@@ -1397,8 +1397,8 @@ export function Profile({ theme, onThemeChange }) {
               name="training_location"
               defaultValue={profile.training_location === "ginasio" ? "ginasio" : "casa"}
             >
-              <option value="ginasio">Gym</option>
-              <option value="casa">Home</option>
+              <option value="ginasio">{t("Gym")}</option>
+              <option value="casa">{t("Home")}</option>
             </select>
           </label>
           <label>
@@ -1567,6 +1567,7 @@ export function Profile({ theme, onThemeChange }) {
             name="avatar"
             type="file"
             accept="image/jpeg,image/png,image/webp"
+            capture="user"
             required
           />
         </label>
@@ -1674,7 +1675,7 @@ const defaultChallenges = [
     points: 10,
   },
 ];
-function CommunityAvatar({ person }) {
+export function CommunityAvatar({ person }) {
   const raw = String(person?.avatar_url || "");
   const [src, setSrc] = useState("");
   const [failed, setFailed] = useState(false);
@@ -2432,10 +2433,10 @@ export function Assistant({ plan, go }) {
 // Só exibimos uma fotografia quando ela pertence de facto ao alimento indicado.
 // Uma foto genérica/repetida é pior do que mostrar o nome do ingrediente com clareza.
 // Fotografias verificadas por identificador: não reutilizar uma imagem de outro alimento.
-const foodPhoto = (food) => foodLibrary.find((known) => known.name === (food?.sourceName || food?.name))?.image || null;
+const foodPhoto = (food) => { const known = foodLibrary.find((item) => item.name === (food?.sourceName || food?.name)); return known?.image_path || known?.image || food?.image_path || food?.image || null; };
 
 export function Nutrition({ plan, whatsapp }) {
-  const { profile, userId, data, refresh, setError, loading } = useStore();
+  const { profile, userId, data, refresh, setError, loading, mutate } = useStore();
   const [language] = useLanguage();
   const t = (value) => translateUiText(value, language);
   const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
@@ -2682,6 +2683,10 @@ export function Nutrition({ plan, whatsapp }) {
           {n.ageNote && (
             <div className="nutrition-safety-note">{n.ageNote}</div>
           )}
+          <div className="nutrition-cuisine-control">
+            <div><span className="eyebrow">PREFERÊNCIA DE COZINHA</span><p>A escolha altera as refeições e a lista de compras.</p></div>
+            <label><span>{t("Preferência de cozinha")}</span><select value={["mozambican", "international", "mixed"].includes(profile.cuisine_preference) ? profile.cuisine_preference : "mixed"} onChange={async (event) => { const saved = await mutate("profiles", { cuisine_preference: event.target.value }, userId); if (saved) await refresh?.(); else setError("Não foi possível atualizar a preferência de cozinha."); }}><option value="mozambican">{t("Cozinha moçambicana")}</option><option value="international">{t("Cozinha internacional")}</option><option value="mixed">{t("Misturar as duas")}</option></select></label>
+          </div>
         </div>
         <div className="nutrition-kcal">
           <strong>{n.calories ?? "—"}</strong>
@@ -2725,8 +2730,8 @@ export function Nutrition({ plan, whatsapp }) {
               <article className="food-library-card" key={food.id}>
                 <div className="food-library-image" style={foodPhoto(food) ? { "--food-image": `url("${foodPhoto(food)}")` } : undefined}>
                   {foodPhoto(food) ? (
-                    <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" style={{ "--food-image": `url("${foodPhoto(food)}")` }} onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
-                  ) : <span className="food-library-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>}
+                    <><img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" style={{ "--food-image": `url("${foodPhoto(food)}")` }} onError={(event) => { event.currentTarget.hidden = true; event.currentTarget.nextElementSibling.hidden = false; }} /><span className="food-photo-placeholder" hidden>Fotografia indisponível</span></>
+                  ) : <span className="food-photo-placeholder">Fotografia indisponível</span>}
                 </div>
                 <div className="food-library-copy">
                   <span className="food-library-group">{food.group}</span>
@@ -2835,9 +2840,9 @@ export function Nutrition({ plan, whatsapp }) {
                     <div className={`food-chip ${foodPhoto(food) ? "has-photo" : "no-photo"}`} key={food.name}>
                       {foodPhoto(food) ? (
                         <span className="food-chip-media" style={{ "--food-image": `url("${foodPhoto(food)}")` }}>
-                          <img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => event.currentTarget.replaceWith(document.createTextNode(food.emoji || "🍽️"))} />
+                          <><img src={foodPhoto(food)} alt={`Fotografia de ${food.name}`} loading="lazy" onError={(event) => { event.currentTarget.hidden = true; event.currentTarget.nextElementSibling.hidden = false; }} /><span className="food-photo-placeholder small" hidden>Fotografia indisponível</span></>
                         </span>
-                      ) : <span className="food-chip-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span>}
+                      ) : <span className="food-photo-placeholder small">Fotografia indisponível</span>}
                       <div>
                         <b>{food.name}</b>
                         <small>{food.portion}{n.ageCategory === "adolescente" ? "" : ` · ${food.kcal} kcal · ${food.protein} g proteína`}</small>

@@ -13,6 +13,8 @@ import {
   Menu,
   Utensils,
   Palette,
+  Activity,
+  CalendarDays,
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "./lib/supabase";
@@ -28,6 +30,7 @@ import {
   Assistant,
   Nutrition,
   Challenges,
+  CommunityAvatar,
 } from "./components/Pages";
 import Admin from "./components/Admin";
 import { useLanguage, uiText, onboardingText, translateUiText } from "./lib/i18n";
@@ -112,6 +115,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
   const [error, setError] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [bodyPhoto, setBodyPhoto] = useState(null);
+  const [photoConsent, setPhotoConsent] = useState(false);
   const [form, setForm] = useState({
     birth_date: profile.birth_date || "",
     sex: profile.sex || "",
@@ -201,6 +205,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
   async function finish() {
     const validation = validate();
     if (validation) { setError(validation); return; }
+    if (bodyPhoto && !photoConsent) { setError(copy.photoConsentError); return; }
     setSaving(true);
     setError("");
     const count = Number(form.training_days_count) || 3;
@@ -226,6 +231,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
         height: Number(form.height),
         goal: form.goal,
         modality: form.modality,
+        training_location: form.training_location || profile.training_location || "casa",
         equipment_preference: form.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
         training_level: form.training_level,
         training_days_count: count,
@@ -344,7 +350,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
           )}
           {currentKey === "foods" && (
             <div className="onboarding-field-stack">
-              <div className="onboarding-choice-block"><span>{copy.available} <small>({copy.optional})</small></span><div className="food-check-grid onboarding-food-grid">{foodChoices.map((food) => <button type="button" key={food.id} className={foods.includes(food.name) ? "food-check selected" : "food-check"} onClick={() => setFoods((current) => current.includes(food.name) ? current.filter((item) => item !== food.name) : [...current, food.name])}><span className="food-choice-emoji" aria-hidden="true">{food.emoji || "🍽️"}</span><b>{food.name}</b></button>)}</div></div>
+              <div className="onboarding-choice-block"><span>{copy.available} <small>({copy.optional})</small></span><div className="food-check-grid onboarding-food-grid">{foodChoices.map((food) => <button type="button" key={food.id} className={foods.includes(food.name) ? "food-check selected" : "food-check"} onClick={() => setFoods((current) => current.includes(food.name) ? current.filter((item) => item !== food.name) : [...current, food.name])}><b>{food.name}</b></button>)}</div></div>
               <label className="onboarding-single-field">{copy.preferences}<textarea rows="2" placeholder={copy.optional} value={form.food_preferences} onChange={(e) => update("food_preferences", e.target.value)} /></label>
               <p className="onboarding-inline-note">{copy.blank}</p>
             </div>
@@ -357,14 +363,14 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
                   <strong>{copy.profilePhoto}</strong>
                   <small>{profilePhoto ? profilePhoto.name : copy.optional}</small>
                   <span className="outline small">{copy.addPhoto}</span>
-                  <input type="file" accept={photoAccept} onChange={(event) => setProfilePhoto(event.target.files?.[0] || null)} />
+                  <input type="file" accept={photoAccept} capture="user" onChange={(event) => setProfilePhoto(event.target.files?.[0] || null)} />
                 </label>
                 <label className="onboarding-photo-card">
                   <span className="onboarding-photo-icon"><Dumbbell size={26} /></span>
                   <strong>{copy.bodyPhoto}</strong>
                   <small>{bodyPhoto ? bodyPhoto.name : copy.optional}</small>
                   <span className="outline small">{copy.upload}</span>
-                  <input type="file" accept={photoAccept} onChange={(event) => setBodyPhoto(event.target.files?.[0] || null)} />
+                  <input type="file" accept={photoAccept} capture="user" onChange={(event) => setBodyPhoto(event.target.files?.[0] || null)} />
                 </label>
                 <div className="onboarding-photo-card locked">
                   <span className="onboarding-photo-icon"><Trophy size={26} /></span>
@@ -373,6 +379,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
                   <span className="locked-pill">{copy.locked}</span>
                 </div>
               </div>
+              <label className="checkbox onboarding-photo-consent"><input type="checkbox" checked={photoConsent} onChange={(event) => setPhotoConsent(event.target.checked)} /><span>{copy.photoConsent}</span></label>
               <p className="onboarding-inline-note">{copy.photosProgress}</p>
               <p className="onboarding-inline-note">{copy.photoPrivacy}</p>
               <p className="onboarding-inline-note">{copy.skip}: {copy.optional}</p>
@@ -421,12 +428,17 @@ export default function App() {
     metrics = stats(logs, measures),
     settings = data.settings[0] || {};
   const homeNutrition = nutritionPlan({ ...profile, language });
+  const todayKey = new Date().toLocaleDateString("en-CA");
+  const todayNutritionLog = (data.daily_nutrition_logs || []).find((log) => log.user_id === userId && String(log.local_date || "").slice(0, 10) === todayKey);
+  const mealsToday = Array.isArray(todayNutritionLog?.meal_keys) ? todayNutritionLog.meal_keys.length : 0;
+  const expectedMealsToday = Number(todayNutritionLog?.expected_meals) || homeNutrition.meals?.length || 5;
+  const dateLocale = ({ pt: "pt-MZ", en: "en-US", fr: "fr-FR", es: "es-ES", zh: "zh-CN", hi: "hi-IN" })[language] || "pt-MZ";
+  const todayDateLabel = new Intl.DateTimeFormat(dateLocale, { weekday: "long", day: "numeric", month: "long" }).format(new Date());
   const currentMinutes = new Date().getHours() * 60 + new Date().getMinutes();
   const upcomingMeal = homeNutrition.incomplete ? null : homeNutrition.meals?.find((meal) => {
     const match = String(meal.time || "").match(/(\d{1,2}):(\d{2})/);
     return match && Number(match[1]) * 60 + Number(match[2]) >= currentMinutes;
   }) || homeNutrition.meals?.[0] || null;
-  const homeFoodFallback = "/assets/food/user-provided/plano-alimentar.webp";
   const leoReminder = upcomingMeal
     ? "Sua próxima refeição é " + String(upcomingMeal.title || "").toLowerCase() + " às " + upcomingMeal.time + "."
     : "Complete os seus dados para o Leo personalizar os lembretes.";
@@ -691,7 +703,7 @@ export default function App() {
               onClick={() => go("perfil")}
               aria-label="Perfil"
             >
-              {profile.full_name.slice(0, 2).toUpperCase()}
+              <CommunityAvatar person={profile} />
             </button>
           </div>
         </header>
@@ -777,6 +789,7 @@ export default function App() {
                         </div>
                       </div>
                     </section>
+                    <div className="home-date-strip"><CalendarDays size={18} /><span><b>{t.calendar}</b><small>{todayDateLabel}</small></span></div>
                     <section className="leo-reminder-card" aria-live="polite">
                       <div className="leo-reminder-mascot"><LeoMascot size={74} /></div>
                       <div className="leo-reminder-copy">
@@ -786,26 +799,23 @@ export default function App() {
                       </div>
                       <button type="button" className="outline" onClick={() => go("nutricao")}>Ver alimentação</button>
                     </section>
+                    <section className="home-quick-actions" aria-label="Acessos rápidos">
+                      <button type="button" onClick={() => go("treinos")}><span className="home-quick-icon"><Dumbbell size={20} /></span><b>{t.workouts}</b><ChevronRight size={16} /></button>
+                      <button type="button" onClick={() => go("nutricao")}><span className="home-quick-icon"><Utensils size={20} /></span><b>{t.nutrition}</b><ChevronRight size={16} /></button>
+                      <button type="button" onClick={() => go("progresso")}><span className="home-quick-icon"><TrendingUp size={20} /></span><b>{t.progress}</b><ChevronRight size={16} /></button>
+                      <button type="button" onClick={() => go("progresso")}><span className="home-quick-icon"><CalendarDays size={20} /></span><b>{t.calendar}</b><ChevronRight size={16} /></button>
+                    </section>
+                    {theme !== "blue" && <section className="home-theme-callout"><div><span className="eyebrow">NOVA PALETA</span><strong>Experimente o tema branco e azul</strong><p>Ocean Light aplica branco, azul e controlos claros em todas as páginas.</p></div><button type="button" className="outline" onClick={() => changeTheme("blue")}>Experimentar Ocean Light</button></section>}
                     <div className="grid stats home-stats">
-                      <Stat label="Dias com treino" value={metrics.total} detail={`${metrics.month} neste mês`} />
+                      <Stat label="Treinos este mês" value={metrics.month} detail="Treinos registados no mês atual" />
+                      <Stat label="Refeições hoje" value={expectedMealsToday ? `${mealsToday}/${expectedMealsToday}` : "—"} detail="Refeições marcadas no plano" />
                       <Stat label="Sequência atual" value={`${metrics.streak} dias`} detail="Dias consecutivos registados" />
                       <Stat label="Peso atual" value={metrics.current === null ? "—" : `${metrics.current} kg`} detail={metrics.delta === null ? "Registe uma medida" : `${metrics.delta > 0 ? "+" : ""}${metrics.delta.toFixed(1)} kg desde o primeiro registo`} />
-                      <Stat label="Meta de energia" value={homeNutrition.calories ? `${homeNutrition.calories} kcal` : "—"} detail={homeNutrition.incomplete ? "Estimativa provisória" : "Meta diária estimada"} />
                     </div>
                     <section className="home-focus-grid">
                       <article className="home-focus-card home-next-meal">
                         <div className="home-focus-image">
-                          <img
-                            src={upcomingMeal?.image || homeFoodFallback}
-                            alt={upcomingMeal ? "Fotografia de " + (upcomingMeal.recipeName || upcomingMeal.title || "refeição") : "Plano alimentar"}
-                            loading="lazy"
-                            onError={(event) => {
-                              if (event.currentTarget.dataset.fallback !== "true") {
-                                event.currentTarget.dataset.fallback = "true";
-                                event.currentTarget.src = homeFoodFallback;
-                              } else event.currentTarget.style.display = "none";
-                            }}
-                          />
+                          {upcomingMeal?.image ? <><img src={upcomingMeal.image} alt={"Fotografia de " + (upcomingMeal.recipeName || upcomingMeal.title || "refeição")} loading="lazy" onError={(event) => { event.currentTarget.hidden = true; event.currentTarget.nextElementSibling.hidden = false; }} /><span className="food-photo-placeholder" hidden>Fotografia indisponível</span></> : <span className="food-photo-placeholder">Fotografia indisponível</span>}
                         </div>
                         <div className="home-focus-copy">
                           <span className="eyebrow">PRÓXIMA REFEIÇÃO · {upcomingMeal?.time || "PLANO DIÁRIO"}</span>
@@ -911,9 +921,7 @@ export default function App() {
                           className="mod-card"
                           onClick={() => go("modalidades")}
                         >
-                          <div className="mod-emoji">
-                            {["🏋️", "💪", "⚡", "🔥"][i]}
-                          </div>
+                          <div className="mod-emoji">{i === 0 ? <Dumbbell size={25} /> : <Activity size={25} />}</div>
                           <h3>{m.name}</h3>
                           <p>{m.description}</p>
                         </button>
@@ -951,21 +959,7 @@ export default function App() {
                     <div className="modalities">
                       {visibleModalities.map((m, i) => (
                         <div key={m.id} className="mod-card">
-                          <div className="mod-emoji">
-                            {
-                              [
-                                "🏋️",
-                                "💪",
-                                "⚡",
-                                "🔥",
-                                "⚖️",
-                                "🏠",
-                                "🥋",
-                                "⚽",
-                                "🏊",
-                              ][i % 9]
-                            }
-                          </div>
+                          <div className="mod-emoji">{i === 0 ? <Dumbbell size={25} /> : <Activity size={25} />}</div>
                           <h3>{m.name}</h3>
                           <p>{m.description}</p>
                           <button

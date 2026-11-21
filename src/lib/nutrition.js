@@ -119,6 +119,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥩",
+    image: "/assets/food/recipes/beef-stew-rice.webp",
   },
   {
     id: "tuna",
@@ -208,6 +209,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🍚",
+    image: "/assets/food/recipes/fish-with-xima.webp",
   },
   {
     id: "beans",
@@ -285,6 +287,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
+    image: "/assets/food/reference-crops/laranja.webp",
   },
   {
     id: "mango",
@@ -426,6 +429,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Prato moçambicano",
     emoji: "🍲",
+    image: "/assets/food/recipes/rice-and-beans.webp",
   },
   {
     id: "zambeziana",
@@ -505,6 +509,7 @@ export const foodLibrary = [
     fiber: 6,
     group: "Prato simples",
     emoji: "🍲",
+    image: "/assets/food/recipes/chicken-vegetable-soup.webp",
   },
   {
     id: "chicken-peanut",
@@ -530,7 +535,7 @@ export const foodLibrary = [
     fiber: 7,
     group: "Prato simples",
     emoji: "🥔",
-    image: "/assets/food/recipes/R09.webp",
+    image: "/assets/food/recipes/mozambique-typical-lunch.webp",
   },
   {
     id: "carapau",
@@ -634,6 +639,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Vegetais",
     emoji: "🥬",
+    image: "/assets/food/user-provided/alface.webp",
   },
   {
     id: "carrot",
@@ -710,7 +716,7 @@ const recipeFoodNames = {
 const recipeImages = {
   R01: "/assets/food/user-provided/aveia-banana-leite-canela.webp",
   R02: "/assets/food/recipes/R02.webp",
-  R03: "/assets/food/recipes/banana-oatmeal.webp",
+  R03: null,
   R04: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R05: "/assets/food/recipes/banana-pancakes.webp",
   R06: "/assets/food/recipes/cheese-on-toast.webp",
@@ -725,7 +731,7 @@ const recipeImages = {
   R15: "/assets/food/recipes/hamburger-plate.webp",
   R16: "/assets/food/recipes/beef-stew-rice.webp",
   R17: "/assets/food/matapa.jpg",
-  R18: "/assets/food/recipes/rice-and-beans.webp",
+  R18: "/assets/food/recipes/mozambique-typical-lunch.webp",
   R19: "/assets/food/recipes/R19.webp",
   R20: "/assets/food/recipes/tuna-pasta-salad.webp",
   R21: "/assets/food/recipes/chicken-vegetable-soup.webp",
@@ -735,12 +741,12 @@ const recipeImages = {
   R25: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R26: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R27: "/assets/food/recipes/R27.webp",
-  R30: "/assets/food/recipes/fish-with-xima.webp",
+  R30: "/assets/food/recipes/mozambique-tilapia.webp",
   I01: "/assets/food/user-provided/aveia-banana-leite-canela.webp",
   I02: "/assets/food/user-provided/frango-grelhado-arroz-salada.webp",
   I03: "/assets/food/recipes/beef-stew-rice.webp",
-  I04: "/assets/food/recipes/tuna-pasta-salad.webp",
-  I05: "/assets/food/recipes/chicken-spaghetti.webp",
+  I04: null,
+  I05: null,
   I06: "/assets/food/user-provided/arroz-feijao-e-ovo.webp",
   I07: "/assets/food/recipes/banana-pancakes.webp",
   I08: "/assets/food/recipes/chicken-spaghetti.webp",
@@ -749,10 +755,10 @@ const recipeImages = {
   I11: "/assets/food/recipes/tuna-pasta-salad.webp",
   I12: "/assets/food/recipes/beef-stew-rice.webp",
   M01: "/assets/food/catalog/carapau.webp",
-  M02: "/assets/food/recipes/R19.webp",
+  M02: "/assets/food/catalog/peanut-chicken.webp",
   M03: "/assets/food/matapa.jpg",
   M04: "/assets/food/recipes/rice-and-beans.webp",
-  M05: "/assets/food/recipes/fish-with-xima.webp",
+  M05: "/assets/food/recipes/mozambique-tilapia.webp",
 };
 const cuisineRecipeRows = {
   I01: { recipeId:"I01", recipe:"Overnight oats com banana e iogurte", ingredients:"40 g Aveia; 150 g Iogurte natural; 100 ml Leite; 1 Banana; 10 g Amendoim", preparation:"Misture a aveia, o iogurte e o leite. Deixe no frigorífico durante a noite e finalize com banana e amendoim.", purpose:"Pequeno-almoço prático com hidratos, fibra e proteína.", adjustment:"Ajuste a quantidade de aveia e amendoim conforme a porção indicada." },
@@ -773,17 +779,29 @@ const cuisineRecipeRows = {
   M04: { recipeId:"M04", recipe:"Mucapata com peixe", ingredients:"150 g Mucapata; 120 g Peixe; 50 g Couve", preparation:"Sirva a mucapata com peixe grelhado e couve cozida.", purpose:"Alternativa tradicional com leguminosas e peixe.", adjustment:"Ajuste a porção de mucapata à meta diária." },
   M05: { recipeId:"M05", recipe:"Peixe com mandioca e legumes", ingredients:"150 g Peixe; 120 g Mandioca; 60 g Cenoura; 50 g Couve", preparation:"Coza ou grelhe o peixe. Sirva com mandioca e legumes cozidos.", purpose:"Refeição simples com alimentos comuns em Moçambique.", adjustment:"Prefira peixe grelhado ou cozido em vez de frito." },
 };
+const internationalMainMealVariants = {
+  R09:["I02","I06"],R10:["I06","I02"],R11:["I12","I03"],R12:["I06","I03"],
+  R13:["I08","I05"],R14:["I09","I04"],R15:["I12","I05"],R16:["I03","I12"],
+  R17:["I02","I06"],R18:["I04","I11"],R19:["I06","I02"],R20:["I11","I04"],
+  R21:["I12","I03"],R30:["I09","I05"],
+};
+const mozambicanMainMealVariants = {
+  R09:["M01","M02"],R10:["M01","M05"],R11:["M05","M03"],R12:["M04","M01"],
+  R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R16:["M02","M04"],
+  R17:["M03","M01"],R18:["M04","M05"],R19:["M01","M02"],R20:["M05","M03"],
+  R21:["M02","M04"],R30:["M05","M01"],
+};
 const internationalVariants = {
-  emagrecimento:{R03:["I01","I07"],R10:["I02","I06"],R11:["I12","I03"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
-  bulking:{R03:["I07","I01"],R10:["I06","I08"],R11:["I12","I03"],R16:["I03","I08"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
-  definicao:{R03:["I01","I07"],R10:["I02","I06"],R11:["I12","I03"],R16:["I03","I09"],R17:["I02","I06"],R18:["I04","I11"],R30:["I09","I05"]},
-  manutencao:{R03:["I07","I01"],R10:["I06","I02"],R11:["I12","I03"],R16:["I03","I09"],R17:["I02","I06"],R18:["I08","I11"],R30:["I09","I05"]},
+  emagrecimento: internationalMainMealVariants,
+  bulking: internationalMainMealVariants,
+  definicao: internationalMainMealVariants,
+  manutencao: internationalMainMealVariants,
 };
 const mozambicanVariants = {
-  emagrecimento:{R09:["M01","M02"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
-  bulking:{R09:["M02","M01"],R13:["M02","M04"],R14:["M03","M05"],R15:["M04","M02"],R20:["M05","M03"],R21:["M02","M04"]},
-  definicao:{R09:["M01","M02"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
-  manutencao:{R09:["M02","M01"],R13:["M02","M05"],R14:["M03","M05"],R15:["M04","M01"],R20:["M05","M03"],R21:["M02","M04"]},
+  emagrecimento: mozambicanMainMealVariants,
+  bulking: mozambicanMainMealVariants,
+  definicao: mozambicanMainMealVariants,
+  manutencao: mozambicanMainMealVariants,
 };
 function adaptCuisineDay(day, cuisine, goal, dayNumber) {
   if (!Array.isArray(day) || cuisine === "mixed") return day || [];
