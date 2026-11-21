@@ -11,9 +11,6 @@ export const planMatrix = [
 export const hiddenModalityNames = ['ganho de massa','treino em casa'];
 export const modalities = [
   {id:'1',name:'Musculação',description:'Força com técnica e consistência'},
-  {id:'2',name:'Bulking (ganho de massa)',description:'Volume progressivo para ganho de massa'},
-  {id:'3',name:'Definição (cutting)',description:'Preservação de força e condicionamento'},
-  {id:'4',name:'Emagrecimento',description:'Condicionamento e hábitos sustentáveis'},
   {id:'5',name:'Calistenia',description:'Força relativa, controle corporal e progressões técnicas'}
 ];
 export const demoExercises = [
