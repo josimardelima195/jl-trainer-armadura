@@ -432,7 +432,7 @@ export default function App() {
   const todayKey = new Date().toLocaleDateString("en-CA");
   const todayNutritionLog = (data.daily_nutrition_logs || []).find((log) => log.user_id === userId && String(log.local_date || "").slice(0, 10) === todayKey);
   const todayProgramDay = Math.max(1, Math.min(30, Number(profile.nutrition_day) || (profile.created_at ? Math.floor((Date.now() - new Date(profile.created_at).getTime()) / 86400000) + 1 : 1)));
-  const homeConsumedMeals = (() => { try { return JSON.parse(localStorage.getItem(`jl-meals-consumed-${profile.id || "guest"}`) || "[]"); } catch { return []; } })();
+  const homeConsumedMeals = (() => { try { const saved = JSON.parse(localStorage.getItem(`jl-meals-consumed-${profile.id || "guest"}`) || "[]"); return Array.isArray(saved) ? saved : []; } catch { return []; } })();
   const dbMealKeys = Array.isArray(todayNutritionLog?.meal_keys) ? todayNutritionLog.meal_keys : [];
   const mealsToday = (homeNutrition.meals || []).filter((meal) => {
     const key = meal.mealKey || meal.title;
