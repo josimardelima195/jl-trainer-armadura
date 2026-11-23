@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { Provider } from "../lib/store";
 import { useLanguage, authText, languageOptions, translateUiText } from "../lib/i18n";
+import { Localize } from "./UI";
 export default function Auth({ children }) {
   const [session, setSession] = useState(null),
     [registerStep, setRegisterStep] = useState(1),
