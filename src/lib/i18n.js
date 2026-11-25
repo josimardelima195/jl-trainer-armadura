@@ -1124,3 +1124,11 @@ export function translateInstruction(text, language) {
 export function translatedInstructions(exercise, language) {
   return (exercise?.instructions || []).slice(0, 6).map((step) => translateInstruction(step, language));
 }
+
+
+Object.assign(onboardingText.pt,{boxing:"Boxe",karate:"Karatê"});
+Object.assign(onboardingText.en,{boxing:"Boxing",karate:"Karate"});
+Object.assign(onboardingText.fr,{boxing:"Boxe",karate:"Karaté"});
+Object.assign(onboardingText.es,{boxing:"Boxeo",karate:"Karate"});
+Object.assign(onboardingText.zh,{boxing:"拳击",karate:"空手道"});
+Object.assign(onboardingText.hi,{boxing:"मुक्केबाज़ी",karate:"कराटे"});

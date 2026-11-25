@@ -124,7 +124,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
     target_weight: profile.target_weight || "",
     height: profile.height || "",
     goal: normalizeGoal(profile.goal),
-    modality: ["Musculação", "Calistenia"].includes(profile.modality) ? profile.modality : "Musculação",
+    modality: ["Musculação", "Calistenia", "Boxe", "Karatê"].includes(profile.modality) ? profile.modality : "Musculação",
     training_location: profile.training_location === "ginasio" ? "ginasio" : "casa",
     training_level: profile.training_level || "beginner",
     training_days_count: Number(profile.training_days_count || profile.training_frequency || 3),
@@ -282,7 +282,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
     ["condicionamento", copy.conditioning, copy.conditioningDesc],
     ["manutencao", copy.maintenance, copy.maintenanceDesc],
   ];
-  const modalityOptions = [["Musculação", copy.bodybuilding], ["Calistenia", copy.calisthenics]];
+  const modalityOptions = [["Musculação", copy.bodybuilding], ["Calistenia", copy.calisthenics], ["Boxe", copy.boxing], ["Karatê", copy.karate]];
   const cuisineOptions = [
     ["mozambican", copy.mozambican, copy.mozambicanDesc],
     ["international", copy.international, copy.internationalDesc],
@@ -409,6 +409,12 @@ export default function App() {
       setLanguage(profile.language);
     }
   }, [profile?.id, profile?.language]);
+  useEffect(() => {
+    if (!loading && profile?.id && !profile.onboarding_completed) {
+      setTheme("dark");
+      localStorage.setItem("jl-theme", "dark");
+    }
+  }, [loading, profile?.id, profile?.onboarding_completed]);
   const [tab, setTab] = useState(location.hash.slice(1) || "inicio"),
     [menu, setMenu] = useState(false),
     [search, setSearch] = useState(""),
@@ -665,37 +671,15 @@ export default function App() {
           </div>
           <div className="header-actions">
             <span className="pill">{plan.name}</span>
-            <div className="theme-switcher" aria-label="Tema do aplicativo">
-              <span className="theme-label">Tema</span>
-              <button
-                className={theme === "dark" ? "active" : ""}
-                onClick={() => changeTheme("dark")}
-                title="Dark Fitness"
-              >
-                <Palette size={14} />
-              </button>
-              <button
-                className={theme === "forest" ? "active" : ""}
-                onClick={() => changeTheme("forest")}
-                title="Forest Flow"
-              >
-                <i className="theme-dot theme-dot-forest" />
-              </button>
-              <button
-                className={theme === "sprint" ? "active" : ""}
-                onClick={() => changeTheme("sprint")}
-                title="Sprint Energy"
-              >
-                <i className="theme-dot theme-dot-sprint" />
-              </button>
-              <button
-                className={theme === "blue" ? "active" : ""}
-                onClick={() => changeTheme("blue")}
-                title="Ocean Light"
-              >
-                <i className="theme-dot theme-dot-blue" />
-              </button>
-            </div>
+            {!loading && profile.onboarding_completed && (
+              <div className="theme-switcher" aria-label="Tema do aplicativo">
+                <span className="theme-label">Tema</span>
+                <button className={theme === "dark" ? "active" : ""} onClick={() => changeTheme("dark")} title="Dark Fitness"><Palette size={14} /></button>
+                <button className={theme === "forest" ? "active" : ""} onClick={() => changeTheme("forest")} title="Forest Flow"><i className="theme-dot theme-dot-forest" /></button>
+                <button className={theme === "sprint" ? "active" : ""} onClick={() => changeTheme("sprint")} title="Sprint Energy"><i className="theme-dot theme-dot-sprint" /></button>
+                <button className={theme === "blue" ? "active" : ""} onClick={() => changeTheme("blue")} title="Ocean Light"><i className="theme-dot theme-dot-blue" /></button>
+              </div>
+            )}
             <button
               className="notification-button"
               aria-label="Abrir notificações"
@@ -799,15 +783,17 @@ export default function App() {
                       </div>
                     </section>
                     <div className="home-date-strip"><CalendarDays size={18} /><span><b>{translateUiText("Hoje", language)}</b><small>{todayDateLabel}</small></span></div>
-                    <section className="leo-reminder-card" aria-live="polite">
-                      <div className="leo-reminder-mascot"><LeoMascot size={74} /></div>
-                      <div className="leo-reminder-copy">
-                        <span className="eyebrow">LEO · LEMBRETE PERSONALIZADO</span>
-                        <strong>{leoReminder}</strong>
-                        <p>Não se esqueça da água: meta diária de {leoWaterTarget}.</p>
-                      </div>
-                      <button type="button" className="outline" onClick={() => go("nutricao")}>Ver alimentação</button>
-                    </section>
+                    {!profile.onboarding_completed && (
+                      <section className="leo-reminder-card" aria-live="polite">
+                        <div className="leo-reminder-mascot"><LeoMascot size={74} /></div>
+                        <div className="leo-reminder-copy">
+                          <span className="eyebrow">LEO · LEMBRETE PERSONALIZADO</span>
+                          <strong>{leoReminder}</strong>
+                          <p>Não se esqueça da água: meta diária de {leoWaterTarget}.</p>
+                        </div>
+                        <button type="button" className="outline" onClick={() => go("nutricao")}>Ver alimentação</button>
+                      </section>
+                    )}
                     <div className="home-section-heading"><span className="eyebrow">Acessos rápidos</span></div>
                     <section className="home-quick-actions" aria-label="Acessos rápidos">
                       <button type="button" onClick={() => go("treinos")}><span className="home-quick-icon"><Dumbbell size={20} /></span><b>{t.workouts}</b><ChevronRight size={16} /></button>
@@ -815,7 +801,7 @@ export default function App() {
                       <button type="button" onClick={() => go("progresso")}><span className="home-quick-icon"><TrendingUp size={20} /></span><b>{t.progress}</b><ChevronRight size={16} /></button>
                       <button type="button" onClick={() => go("progresso")}><span className="home-quick-icon"><CalendarDays size={20} /></span><b>{t.calendar}</b><ChevronRight size={16} /></button>
                     </section>
-                    {theme !== "blue" && <section className="home-theme-callout"><div><span className="eyebrow">NOVA PALETA</span><strong>Experimente o tema branco e azul</strong><p>Ocean Light aplica branco, azul e controlos claros em todas as páginas.</p></div><button type="button" className="outline" onClick={() => changeTheme("blue")}>Experimentar Ocean Light</button></section>}
+                    {profile.onboarding_completed && theme !== "blue" && <section className="home-theme-callout"><div><span className="eyebrow">NOVA PALETA</span><strong>Experimente o tema branco e azul</strong><p>Ocean Light aplica branco, azul e controlos claros em todas as páginas.</p></div><button type="button" className="outline" onClick={() => changeTheme("blue")}>Experimentar Ocean Light</button></section>}
                     <div className="home-section-heading"><span className="eyebrow">Resumo do dia</span></div>
                     <div className="grid stats home-stats">
                       <Stat label={translateUiText("Calorias", language)} value={homeNutrition.calories ? `${homeNutrition.calories} kcal` : "—"} detail={translateUiText("Meta diária estimada", language)} />
@@ -963,35 +949,53 @@ export default function App() {
                 {tab === "desafios" && <Challenges {...common} />}
                 {tab === "modalidades" && (
                   <>
-                    <Title
-                      tag="OBJETIVO E MOVIMENTO"
-                      title="Escolha sua modalidade"
-                    />
-                    <div className="modalities">
-                      {visibleModalities.map((m, i) => (
-                        <div key={m.id} className="mod-card">
-                          <div className="mod-emoji">{i === 0 ? <Dumbbell size={25} /> : <Activity size={25} />}</div>
-                          <h3>{m.name}</h3>
-                          <p>{m.description}</p>
+                    <Title tag="OBJETIVO E MOVIMENTO" title="Objetivo e modalidade" />
+                    <section className="modality-goal-section">
+                      <div className="section-head">
+                        <div><span className="eyebrow">OBJETIVO DO PROGRAMA</span><h2>O que pretende alcançar?</h2><p>O objetivo ajusta o foco do plano; a modalidade define o tipo de treino.</p></div>
+                      </div>
+                      <div className="goal-selector-grid">
+                        {[
+                          ["emagrecimento", "Emagrecimento", "Redução gradual de gordura e melhoria dos hábitos."],
+                          ["bulking", "Bulking", "Ganho progressivo de massa muscular e força."],
+                          ["definicao", "Cutting / definição", "Redução de gordura com atenção à manutenção da força."],
+                          ["condicionamento", "Condicionamento", "Treino geral para resistência, mobilidade e saúde."],
+                        ].map(([value, label, description]) => (
                           <button
-                            onClick={async () => {
-                              if (
-                                await mutate(
-                                  "profiles",
-                                  { modality: m.name },
-                                  userId,
-                                )
-                              )
-                                go("treinos");
-                            }}
+                            type="button"
+                            key={value}
+                            className={(() => {
+                              const stored = String(profile.goal || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                              const current = stored.includes("emagrec") ? "emagrecimento"
+                                : stored.includes("bulking") || stored.includes("massa") ? "bulking"
+                                  : stored.includes("defini") || stored.includes("cut") ? "definicao"
+                                    : "condicionamento";
+                              return current === value ? "goal-option active" : "goal-option";
+                            })()}
+                            onClick={async () => { await mutate("profiles", { goal: value }, userId); }}
                           >
-                            {profile.modality === m.name
-                              ? "Selecionada ✓"
-                              : "Escolher →"}
+                            <strong>{translateUiText(label, language)}</strong>
+                            <small>{translateUiText(description, language)}</small>
                           </button>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    </section>
+                    <section className="modality-choice-section">
+                      <div className="section-head">
+                        <div><span className="eyebrow">MODALIDADE DE TREINO</span><h2>Escolha como quer treinar</h2><p>O JL Trainer adapta a sequência de exercícios à modalidade escolhida.</p></div>
+                      </div>
+                      <div className="modalities">
+                        {visibleModalities.map((m) => (
+                          <div key={m.id} className="mod-card">
+                            <div className="mod-emoji">{m.name === "Boxe" ? "🥊" : m.name === "Karatê" ? "🥋" : m.name === "Calistenia" ? <Activity size={25} /> : <Dumbbell size={25} />}</div>
+                            <h3>{m.name}</h3><p>{m.description}</p>
+                            <button type="button" onClick={async () => { if (await mutate("profiles", { modality: m.name }, userId)) go("treinos"); }}>
+                              {profile.modality === m.name ? "Selecionada ✓" : "Escolher →"}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
                   </>
                 )}
                 {tab === "conquistas" && (

@@ -249,6 +249,8 @@ const modalitySchedules = {
     "recovery",
   ],
   calistenia: ["chest_triceps", "back_biceps", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "recovery"],
+  boxe: ["cardio_core", "chest_triceps", "legs_glutes", "cardio_core", "full_body", "shoulders_mobility", "recovery"],
+  karate: ["full_body", "legs_glutes", "shoulders_mobility", "cardio_core", "full_body", "legs_glutes", "recovery"],
 };
 function trainingDaysForCount(count) {
   const schedules = {
@@ -386,6 +388,8 @@ export function exerciseDurationSeconds(exercise = {}, profile = {}, intensity =
 
 export function modalityKeyFor(value) {
   const text = clean(typeof value === "object" ? value?.modality || "" : value);
+  if (text.includes("box") || text.includes("boxing")) return "boxe";
+  if (text.includes("karate")) return "karate";
   if (text.includes("calisten")) return "calistenia";
   if (text.includes("casa")) return "casa";
   if (text.includes("muscul") || text.includes("bulking") || text.includes("defini") || text.includes("emagrec") || text.includes("massa")) return "musculacao";
@@ -469,7 +473,7 @@ export function isRemovedModalityExercise(exercise = {}) {
     exercise?.description,
     exercise?.equipment,
   ].join(" "));
-  return /\b(?:karate|futsal|soccer|football|swimming|swim|natacao)\b/.test(text);
+  return /\b(?:futsal|soccer|football|swimming|swim|natacao)\b/.test(text);
 }
 
 export function suitableForProfile(exercise, profile = {}) {
@@ -765,6 +769,152 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
   });
 }
 
+const martialArtsBlocks = {
+  boxe: [
+    { title: "Base, guarda e coordenação", focus: "Fundamentos do boxe", items: [
+      ["Aquecimento com marcha e mobilidade", "4–5 min", 30, "Aqueça de forma gradual e movimente ombros, quadris e tornozelos."],
+      ["Base e guarda de boxe", "20–30 s", 30, "Mantenha os pés estáveis, mãos protegendo o rosto e ombros relaxados."],
+      ["Sombra: jab e direto", "20–30 s", 45, "Execute os golpes no ar, sem impacto, voltando à guarda a cada repetição."],
+      ["Deslocamento frontal e lateral", "20–30 s", 45, "Use passos curtos e mantenha equilíbrio, sem cruzar os pés."],
+      ["Prancha inclinada", "10–12 repetições", 45, "Apoie as mãos numa superfície firme e mantenha o tronco alinhado."]
+    ]},
+    { title: "Combinações simples e deslocamento", focus: "Coordenação e ritmo", items: [
+      ["Sombra: jab, direto e retorno à guarda", "30–40 s", 45, "Faça a sequência devagar, com controle e sem contato."],
+      ["Deslocamento com passos curtos", "30–40 s", 45, "Avance e recue mantendo a base e a distância confortável."],
+      ["Esquiva leve sem impacto", "20–30 s", 45, "Faça pequenas flexões de joelhos e movimentos controlados do tronco."],
+      ["Agachamento livre controlado", "8–10 repetições", 60, "Desça apenas até uma amplitude confortável, mantendo os pés apoiados."],
+      ["Prancha inclinada", "12–15 repetições", 45, "Mantenha o abdômen ativo e evite arquear a lombar."]
+    ]},
+    { title: "Sequências e condicionamento", focus: "Técnica e resistência", items: [
+      ["Sombra: combinações simples", "35–45 s", 60, "Alterne jab e direto no ar, sem acelerar além do controle técnico."],
+      ["Passos laterais e mudança de direção", "30–40 s", 45, "Mude de direção com passos pequenos e estáveis."],
+      ["Esquiva e retorno à base", "25–35 s", 45, "Incline o tronco de forma leve e recupere a posição inicial."],
+      ["Flexão inclinada", "6–10 repetições", 60, "Escolha uma altura que permita manter a postura."],
+      ["Agachamento livre controlado", "10–12 repetições", 60, "Suba sem impulso e mantenha os joelhos alinhados com os pés."]
+    ]},
+    { title: "Consolidação técnica", focus: "Revisão e controle", items: [
+      ["Sombra técnica com ritmo controlado", "30–40 s", 45, "Priorize precisão, respiração e retorno à guarda."],
+      ["Base, guarda e deslocamento", "30–40 s", 45, "Combine passos curtos com postura equilibrada."],
+      ["Coordenação: jab e direto", "30–40 s", 45, "Faça os movimentos no ar, sem atingir objetos ou pessoas."],
+      ["Mobilidade de ombros e quadril", "3–5 min", 30, "Faça movimentos suaves e sem forçar as articulações."],
+      ["Prancha inclinada", "10–12 repetições", 45, "Termine com controle e sem prender a respiração."]
+    ]}
+  ],
+  karate: [
+    { title: "Bases e fundamentos", focus: "Preparação do karatê", items: [
+      ["Aquecimento com marcha e mobilidade", "4–5 min", 30, "Aqueça gradualmente e prepare tornozelos, quadris e ombros."],
+      ["Base zenkutsu-dachi com apoio", "15–25 s", 30, "Pratique a posição com amplitude confortável e apoio próximo, se necessário."],
+      ["Kihon: soco reto no ar", "6–8 por lado", 45, "Estenda o braço sem travar o cotovelo e retorne à posição inicial."],
+      ["Kihon: bloqueio baixo no ar", "6–8 por lado", 45, "Faça o bloqueio lentamente, sem movimentos bruscos."],
+      ["Deslocamento curto em base", "20–30 s", 45, "Mantenha o equilíbrio e evite passos longos."]
+    ]},
+    { title: "Kihon e deslocamentos", focus: "Coordenação e postura", items: [
+      ["Base e guarda com troca controlada", "20–30 s", 30, "Alterne a base sem perder o equilíbrio."],
+      ["Kihon: oi-zuki no ar", "8–10 por lado", 45, "Execute o soco no ar com controle e sem hiperestender o braço."],
+      ["Kihon: bloqueio médio no ar", "6–8 por lado", 45, "Pratique o caminho do braço lentamente e sem impacto."],
+      ["Deslocamento em base", "25–35 s", 45, "Avance e recue com passos curtos."],
+      ["Agachamento até cadeira", "8–10 repetições", 60, "Use uma cadeira estável como referência e mantenha os pés apoiados."]
+    ]},
+    { title: "Sequências técnicas e estabilidade", focus: "Kihon, coordenação e core", items: [
+      ["Kihon: soco e bloqueio alternados", "30–40 s", 45, "Alterne os movimentos no ar, mantendo a postura."],
+      ["Sequência introdutória de kata", "25–35 s", 60, "Revise apenas movimentos básicos já conhecidos, sem acelerar."],
+      ["Deslocamento e giro controlado", "20–30 s", 45, "Gire com passos pequenos, sem torcer o joelho."],
+      ["Elevação de gémeos", "10–12 repetições", 45, "Suba e desça lentamente, usando apoio se necessário."],
+      ["Prancha inclinada", "10–15 repetições", 45, "Mantenha o tronco alinhado e respire normalmente."]
+    ]},
+    { title: "Revisão e consolidação", focus: "Fundamentos e mobilidade", items: [
+      ["Revisão de bases e guarda", "25–35 s", 30, "Revise as posições com estabilidade e sem forçar os joelhos."],
+      ["Kihon: oi-zuki e bloqueios", "30–40 s", 45, "Execute os fundamentos no ar e com velocidade confortável."],
+      ["Sequência técnica sem contato", "25–35 s", 60, "Junte movimentos básicos que já domina, sem sparring."],
+      ["Mobilidade de quadril e tornozelo", "3–5 min", 30, "Faça movimentos suaves, sem dor."],
+      ["Agachamento até cadeira", "8–10 repetições", 60, "Controle a descida e use uma cadeira firme."]
+    ]}
+  ]
+};
+
+export function buildMartialArts30DayPlan(profile = {}, modality = "boxe", goalKey = "condicionamento") {
+  const age = ageFromProfile(profile);
+  const level = clean(profile.training_level || "beginner");
+  const youth = age >= 12 && age < 18;
+  const senior = age >= 60;
+  const requestedIntensity = profile.training_intensity || (senior || level.includes("beginner") ? "easy" : "moderate");
+  const intensity = youth && requestedIntensity === "hard" ? "moderate" : requestedIntensity;
+  const daysPerWeek = Math.min(6, Math.max(2, Number(profile.training_days_count || profile.training_frequency) || 3));
+  const trainingWeekDays = trainingDaysForCount(daysPerWeek);
+  const baseSets = youth || senior || level.includes("beginner")
+    ? 2
+    : intensity === "hard" ? 4 : intensity === "easy" ? 2 : 3;
+  const blocks = martialArtsBlocks[modality] || martialArtsBlocks.boxe;
+  const modalityName = modality === "karate" ? "Karatê" : "Boxe";
+
+  return Array.from({ length: 30 }, (_, index) => {
+    const day = index + 1;
+    const week = Math.min(3, Math.floor((day - 1) / 8));
+    const rest = !trainingWeekDays.has(((day - 1) % 7) + 1);
+    const block = blocks[week];
+    const rawExercises = rest
+      ? [{
+          name: "Caminhada leve e mobilidade",
+          reps: "10–20 min",
+          rest_seconds: 0,
+          description: "Recuperação em ritmo confortável, com movimentos suaves e sem dor.",
+          equipment: "Sem equipamento",
+          category: "Recuperação"
+        }]
+      : block.items.map(([name, reps, restSeconds, description]) => ({
+          name, reps, rest_seconds: restSeconds, description,
+          equipment: "Sem equipamento", category: modalityName
+        }));
+
+    if (!rest && goalKey === "bulking") {
+      rawExercises.push({
+        name: "Flexão inclinada", reps: "6–10 repetições", rest_seconds: 60,
+        description: "Use uma superfície firme e uma inclinação adequada ao seu nível.",
+        equipment: "Sem equipamento", category: "Força complementar"
+      });
+    } else if (!rest && ["emagrecimento", "definicao", "condicionamento"].includes(goalKey) && day % 2 === 0) {
+      rawExercises.push({
+        name: "Marcha acelerada no lugar", reps: "2–3 min", rest_seconds: 0,
+        description: "Mantenha um ritmo sustentável, respire normalmente e reduza a velocidade se necessário.",
+        equipment: "Sem equipamento", category: "Condicionamento"
+      });
+    }
+
+    const exercises = rawExercises.map((exercise, order) => {
+      const timed = isTimedExercise(exercise);
+      return {
+        ...exercise,
+        id: `${modality}-${day}-${order}`,
+        sets: timed ? 1 : (senior ? Math.min(2, baseSets) : baseSets),
+        reps: timed ? null : exercise.reps,
+        duration_seconds: timed ? exerciseDurationSeconds(exercise, profile, intensity) : null,
+        rest_seconds: timed ? 0 : exercise.rest_seconds,
+        day_number: day, sort_order: order
+      };
+    });
+    const timedCount = exercises.filter(isTimedExercise).length;
+    return {
+      day,
+      title: `Dia ${day} · ${rest ? "Recuperação" : block.title}`,
+      focus: rest ? "Mobilidade e recuperação" : block.focus,
+      focus_key: rest ? "recovery" : "full_body",
+      groups: rest ? ["mobility"] : ["cardio", "core", "full_body"],
+      level, intensity, rest, equipment_mode: "bodyweight",
+      sessionType: timedCount === 0 ? "sets" : timedCount === exercises.length ? "timed" : "mixed",
+      sessionLabel: rest ? "Recuperação ativa" : `${modalityName} · fundamentos e condicionamento sem contato`,
+      progressionNote: week === 0
+        ? "Comece devagar e aprenda a postura de cada movimento."
+        : week === 1
+          ? "Aumente o ritmo apenas se mantiver a técnica."
+          : week === 2
+            ? "Consolide coordenação, equilíbrio e controle da respiração."
+            : "Revise os fundamentos com qualidade e reduza o ritmo se necessário.",
+      skillNote: "Plano introdutório sem contato. Aprenda golpes, bloqueios e kata com orientação de um instrutor; não faça sparring sem supervisão.",
+      exercises
+    };
+  });
+}
+
 export function focusForDay(day, modality = "musculacao") {
   const directKey = clean(typeof modality === "object" ? modality?.modality || "" : modality);
   const schedule =
@@ -794,6 +944,11 @@ export function build30DayPlan(
   const requestedCount = Math.max(2, Math.round((counts[safeIntensity] || counts.moderate) * experienceFactor * ageFactor));
   const modality = modalityKeyFor(profile);
   const goalKey = exerciseGoalKeyFor(profile, goal);
+  if (["boxe", "karate"].includes(modality)) return buildMartialArts30DayPlan(
+    { ...profile, training_level: level, training_intensity: safeIntensity },
+    modality,
+    goalKey,
+  );
   if (modality === "calistenia") return buildCalisthenics30DayPlan(
     { ...profile, training_level: level, training_intensity: safeIntensity },
     exercises,

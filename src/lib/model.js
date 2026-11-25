@@ -10,8 +10,10 @@ export const planMatrix = [
 ];
 export const hiddenModalityNames = ['ganho de massa','treino em casa'];
 export const modalities = [
-  {id:'1',name:'Musculação',description:'Força com técnica e consistência'},
-  {id:'5',name:'Calistenia',description:'Força relativa, controle corporal e progressões técnicas'}
+  {id:'1',name:'Musculação',description:'Treino tradicional de força com máquinas, barras e pesos livres'},
+  {id:'5',name:'Calistenia',description:'Força relativa, controle corporal e progressões técnicas'},
+  {id:'6',name:'Boxe',description:'Base, guarda, deslocamentos, sombra e condicionamento sem contato'},
+  {id:'7',name:'Karatê',description:'Fundamentos, bases, bloqueios e sequências técnicas sem contato'}
 ];
 export const demoExercises = [
 {id:'1',name:'Agachamento na cadeira',category:'Pernas',equipment:'Sem equipamento',sets:3,reps:'8–12',rest_seconds:60,min_tier:0,image_path:'/assets/exercises/bodyweight-squat.jpg',description:'Sente-se e levante-se de uma cadeira estável. Mantenha os pés apoiados e mova-se sem dor.'},

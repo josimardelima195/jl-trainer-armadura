@@ -45,7 +45,7 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
           onError={() => setFailed(true)}
         />
       ) : (
-        <span className="exercise-gif-fallback">GIF indisponível</span>
+        <span className="exercise-gif-fallback">{/boxe|boxing|jab|sombra/i.test(String(exercise?.name || "")) ? "🥊 Boxe" : /karate|karatê|kihon|kata|bloqueio/i.test(String(exercise?.name || "")) ? "🥋 Karatê" : "GIF indisponível"}</span>
       )}
     </div>
   );
@@ -278,7 +278,9 @@ export function Workouts({ plan }) {
     [saved, setSaved] = useState(false),
     [logId, setLogId] = useState(() => crypto.randomUUID()),
     [equipment, setEquipment] = useState(
-      profile.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
+      ["boxe", "karate"].includes(modalityKeyFor(profile))
+        ? "Sem equipamento"
+        : profile.training_location === "ginasio" ? "Com equipamento" : "Sem equipamento",
     ),
     [place, setPlace] = useState(profile.training_location === "ginasio" ? "ginasio" : "casa"),
     [previewExercise, setPreviewExercise] = useState(null),
@@ -287,6 +289,7 @@ export function Workouts({ plan }) {
     [intensity, setIntensity] = useState("moderate"),
     [libraryLimit, setLibraryLimit] = useState(12);
   const [language] = useLanguage();
+  const t = (value) => translateUiText(value, language);
   useEffect(() => {
     if (profile.created_at && programDay === 1) {
       setProgramDay(Math.min(30, accountDayNumber(profile.created_at)));
@@ -305,7 +308,7 @@ export function Workouts({ plan }) {
     const linkedModality = (data.modalities || []).find((item) => item.id === workout.modality_id)?.name || "";
     const descriptor = `${workout.title || ""} ${workout.description || ""} ${linkedModality}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
     return workout.active !== false && (!workout.user_id || workout.user_id === userId) &&
-      !["karate", "futsal", "natacao", "swimming", "soccer", "football"].some((term) => descriptor.includes(term));
+      !["futsal", "natacao", "swimming", "soccer", "football"].some((term) => descriptor.includes(term));
   });
   const personalized = allAvailable.filter((workout) => {
     const modality = data.modalities.find(
@@ -338,13 +341,15 @@ export function Workouts({ plan }) {
   const modalityKey = modalityKeyFor(profile);
   const goalKey = exerciseGoalKeyFor(profile);
   const age = ageFor(profile);
-  const programEquipment =
-    equipment ||
-    (place === "casa"
-      ? "Sem equipamento"
-      : place === "ginasio"
-        ? "Com equipamento"
-        : "");
+  const isMartialArts = ["boxe", "karate"].includes(modalityKey);
+  const programEquipment = isMartialArts
+    ? "Sem equipamento"
+    : equipment ||
+      (place === "casa"
+        ? "Sem equipamento"
+        : place === "ginasio"
+          ? "Com equipamento"
+          : "");
   const selectedEquipmentMode = normalizeEquipmentSelection(programEquipment);
   const program = useMemo(
     () =>
@@ -660,7 +665,8 @@ export function Workouts({ plan }) {
         <label>
           Equipamento
           <select
-            value={equipment}
+            value={isMartialArts ? "Sem equipamento" : equipment}
+            disabled={isMartialArts}
             onChange={(event) => {
               setEquipment(event.target.value);
               reset();
@@ -1116,7 +1122,11 @@ export function Profile({ theme, onThemeChange }) {
       : storedGoal.includes("bulking") || storedGoal.includes("massa") || storedGoal.includes("ganho") ? "bulking"
         : storedGoal.includes("manut") || storedGoal.includes("recompos") ? "manutencao"
           : "condicionamento";
-  const modalityValue = String(profile.modality || "").toLowerCase().includes("calist") ? "Calistenia" : "Musculação";
+  const storedModality = String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const modalityValue = storedModality.includes("calisten") ? "Calistenia"
+    : storedModality.includes("box") ? "Boxe"
+      : storedModality.includes("karate") ? "Karatê"
+        : "Musculação";
   return (
     <>
       <Title tag="SEUS DADOS" title="Meu perfil" />
@@ -1241,6 +1251,8 @@ export function Profile({ theme, onThemeChange }) {
             <select name="modality" defaultValue={modalityValue}>
               <option value="Musculação">{t("Musculação")}</option>
               <option value="Calistenia">{t("Calistenia")}</option>
+              <option value="Boxe">{t("Boxe")}</option>
+              <option value="Karatê">{t("Karatê")}</option>
             </select>
           </label>
           <label>
@@ -1248,7 +1260,7 @@ export function Profile({ theme, onThemeChange }) {
             <select name="goal" defaultValue={goalValue}>
               <option value="emagrecimento">{t("Emagrecimento")}</option>
               <option value="bulking">{t("Bulking (ganho de massa)")}</option>
-              <option value="definicao">{t("Definição (cuting)")}</option>
+              <option value="definicao">{t("Cutting (definição)")}</option>
               <option value="recomposicao">{t("Recomposição corporal")}</option>
               <option value="manutencao">{t("Manutenção de peso")}</option>
               <option value="condicionamento">{t("Condicionamento")}</option>
@@ -1427,14 +1439,6 @@ export function Profile({ theme, onThemeChange }) {
             name="foods_to_avoid"
             defaultValue={profile.foods_to_avoid || profile.food_dislikes || ""}
           />
-          <label>
-            {translateUiText("Preferência de cozinha", language)}
-            <select name="cuisine_preference" defaultValue={profile.cuisine_preference || "mixed"}>
-              <option value="mozambican">{translateUiText("Cozinha moçambicana", language)}</option>
-              <option value="international">{translateUiText("Cozinha internacional", language)}</option>
-              <option value="mixed">{translateUiText("Misturar as duas", language)}</option>
-            </select>
-          </label>
                     <label className="profile-wide-field">
             {t("Preferências e pratos locais")}
             <textarea
@@ -1482,6 +1486,7 @@ export function Profile({ theme, onThemeChange }) {
           {languageOptions.map(([code, label]) => <option key={code} value={code}>{label}</option>)}
         </select>
       </section>
+      {profile.onboarding_completed && (
       <section className="theme-settings">
         <div>
           <span className="eyebrow">{translateUiText("APARÊNCIA", language)}</span>
@@ -1543,6 +1548,7 @@ export function Profile({ theme, onThemeChange }) {
           </button>
         </div>
       </section>
+      )}
       <form
         className="avatar-upload"
         onSubmit={async (e) => {
@@ -2683,10 +2689,6 @@ export function Nutrition({ plan, whatsapp }) {
           {n.ageNote && (
             <div className="nutrition-safety-note">{n.ageNote}</div>
           )}
-          <div className="nutrition-cuisine-control">
-            <div><span className="eyebrow">{t("Preferência de cozinha")}</span><p>{t("A escolha altera as refeições e a lista de compras.")}</p></div>
-            <label><span>{t("Preferência de cozinha")}</span><select value={["mozambican", "international", "mixed"].includes(profile.cuisine_preference) ? profile.cuisine_preference : "mixed"} onChange={async (event) => { const saved = await mutate("profiles", { cuisine_preference: event.target.value }, userId); if (saved) await refresh?.(); else setError(t("Não foi possível atualizar a preferência de cozinha.")); }}><option value="mozambican">{t("Cozinha moçambicana")}</option><option value="international">{t("Cozinha internacional")}</option><option value="mixed">{t("Misturar as duas")}</option></select></label>
-          </div>
         </div>
         <div className="nutrition-kcal">
           <strong>{n.calories ?? "—"}</strong>

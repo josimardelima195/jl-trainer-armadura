@@ -17,9 +17,8 @@ export default function Auth({ children }) {
   const labels = authText[language] || authText.pt;
   const t = (value) => translateUiText(value, language);
   useEffect(() => {
-    const savedTheme = localStorage.getItem("jl-theme");
-    document.body.classList.toggle("theme-blue", savedTheme === "blue" || savedTheme === "ocean");
-    document.documentElement.style.colorScheme = savedTheme === "blue" || savedTheme === "ocean" ? "light" : "dark";
+    document.body.classList.remove("theme-blue");
+    document.documentElement.style.colorScheme = "dark";
     if (!supabase) {
       setLoading(false);
       return;
@@ -64,6 +63,12 @@ export default function Auth({ children }) {
       data.subscription.unsubscribe();
     };
   }, []);
+  useEffect(() => {
+    if (!session) {
+      document.body.classList.remove("theme-blue");
+      document.documentElement.style.colorScheme = "dark";
+    }
+  }, [session]);
   async function submit(e) {
     e.preventDefault();
     setBusy(true);

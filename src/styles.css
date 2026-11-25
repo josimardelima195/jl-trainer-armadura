@@ -1614,3 +1614,118 @@ body.theme-blue .nutrition-onboarding{background:#fff;color:#172b45;border-color
 .home-section-heading{display:flex;align-items:center;justify-content:space-between;margin:18px 0 8px}
 .home-section-heading .eyebrow{color:var(--muted);font-size:10px;letter-spacing:.12em}
 .shell.theme-blue .home-section-heading .eyebrow{color:#60758f}
+
+
+/* Componentes dos objetivos no tema escuro e no tema claro. */
+.goal-selector-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+.goal-option {
+  display:grid; gap:8px; min-height:112px; padding:15px; text-align:left;
+  border:1px solid var(--line); border-radius:12px; background:var(--panel); color:var(--text);
+}
+.goal-option strong { font:600 14px 'Space Grotesk'; }
+.goal-option small { color:var(--muted); font-size:11px; line-height:1.45; }
+.goal-option.active { border-color:var(--gold); background:var(--panel2); box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 18%,transparent); }
+@media(max-width:1000px){.goal-selector-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.goal-selector-grid{grid-template-columns:1fr}}
+
+/* Ocean Light refinado: branco azulado, contraste e blocos de destaque azuis. */
+body.theme-blue {
+  --bg:#e7eef8; --panel:#f3f7fd; --panel2:#dce8f7; --line:#bfd1e6;
+  --text:#152c49; --muted:#536b87; --gold:#176fda; --gold2:#0e57b5;
+  background:#e7eef8; color:#152c49;
+}
+.shell.theme-blue {
+  --bg:#e7eef8; --panel:#f3f7fd; --panel2:#dce8f7; --line:#bfd1e6;
+  --text:#152c49; --muted:#536b87;
+  background:linear-gradient(180deg,#e7eef8 0%,#edf3fb 100%); color:#152c49;
+}
+.shell.theme-blue aside { background:#f1f6fd; border-right:1px solid #b8cde5; }
+.shell.theme-blue header { background:#eef4fc; border-bottom-color:#bfd1e6; }
+.shell.theme-blue .search,.shell.theme-blue .stat,.shell.theme-blue .progress-card,
+.shell.theme-blue .calendar-card,.shell.theme-blue .admin-panel,.shell.theme-blue .nutrition-card,
+.shell.theme-blue .today-card,.shell.theme-blue .exercise,.shell.theme-blue .event,
+.shell.theme-blue .panel-form,.shell.theme-blue .plan-card,.shell.theme-blue .locked-panel,
+.shell.theme-blue .empty,.shell.theme-blue .measure-grid>div,.shell.theme-blue .details>div,
+.shell.theme-blue .nutrition-stat,.shell.theme-blue .meal-card,.shell.theme-blue .food-library-card,
+.shell.theme-blue .showcase-card,.shell.theme-blue .exercise-detail,.shell.theme-blue .progress-journey-card,
+.shell.theme-blue .progress-photo-slot,.shell.theme-blue .nutrition-calendar,.shell.theme-blue .hydration-card,
+.shell.theme-blue .home-focus-card,.shell.theme-blue .home-week-card,.shell.theme-blue .home-quick-actions button,
+.shell.theme-blue .home-date-strip,.shell.theme-blue .mod-card {
+  background:linear-gradient(145deg,#f5f9ff 0%,#eaf2fc 100%);
+  border-color:#bfd2e9; color:#152c49; box-shadow:0 7px 20px rgba(31,77,130,.08);
+}
+.shell.theme-blue .hero,.shell.theme-blue .workout-banner,.shell.theme-blue .achievement-hero,
+.shell.theme-blue .nutrition-hero,.shell.theme-blue .coach-card,.shell.theme-blue .chat-head,
+.shell.theme-blue .program-panel,.shell.theme-blue .upgrade,.shell.theme-blue .exercise-showcase,
+.shell.theme-blue .meal-training {
+  background:linear-gradient(125deg,#d6e7fb 0%,#edf4fd 58%,#dce8fb 100%);
+  border-color:#a9c8ec; color:#152c49;
+}
+.shell.theme-blue .nutrition-hero { box-shadow:0 12px 28px rgba(33,86,146,.10); }
+.shell.theme-blue .nutrition-kcal,.shell.theme-blue .nutrition-stat,.shell.theme-blue .home-quick-icon,
+.shell.theme-blue .today-icon,.shell.theme-blue .exercise-thumb,.shell.theme-blue .food-chip,
+.shell.theme-blue .coach-avatar,.shell.theme-blue .client-avatar,.shell.theme-blue .chat-avatar {
+  background:#cfe2fb; border:1px solid #a9c9ef; color:#0e5fc4;
+}
+.shell.theme-blue .nutrition-kcal { border-radius:14px; box-shadow:inset 0 1px 0 rgba(255,255,255,.8); }
+.shell.theme-blue .nutrition-kcal strong,.shell.theme-blue .nutrition-stat b,
+.shell.theme-blue .hero-stat,.shell.theme-blue .timer,.shell.theme-blue .stat strong { color:#0e5fc4; }
+.shell.theme-blue .nutrition-tabs { background:#183653; border:1px solid #102b47; box-shadow:0 6px 16px rgba(17,48,79,.16); }
+.shell.theme-blue .nutrition-tabs button { background:#eaf2fc; border-color:#b8d0ec; color:#244362; }
+.shell.theme-blue .nutrition-tabs button.active { background:linear-gradient(135deg,#247fe4,#1559bf); border-color:#1b6fd0; color:#fff; }
+.shell.theme-blue .nutrition-day-button,.shell.theme-blue .nutrition-day-grid button,
+.shell.theme-blue .food-library-filters button,.shell.theme-blue .calendar-card button {
+  background:#dfeafa; border-color:#b8cee8; color:#294969;
+}
+.shell.theme-blue .nutrition-day-button.selected,.shell.theme-blue .nutrition-day-grid button.selected,
+.shell.theme-blue .food-library-filters button.active,.shell.theme-blue .calendar-card button.active,
+.shell.theme-blue .calendar-card button.selected {
+  background:#c6defb; border-color:#237be0; color:#0d55ad; box-shadow:0 0 0 2px rgba(35,123,224,.12);
+}
+.shell.theme-blue .meal-card { border-left:4px solid #2a7ddd; }
+.shell.theme-blue .food-chip { background:#dceafe; border-color:#b3cff0; }
+.shell.theme-blue .food-chip b,.shell.theme-blue .food-chip small,.shell.theme-blue .meal-card h3,
+.shell.theme-blue .showcase-card b,.shell.theme-blue .exercise-detail h3 { color:#183452; }
+.shell.theme-blue .food-photo-placeholder,.shell.theme-blue .exercise-gif,.shell.theme-blue .exercise-gif-fallback {
+  background:#dce9f9; border-color:#b9d1ed; color:#315d8d;
+}
+.shell.theme-blue .pill,.shell.theme-blue .mini-pill,.shell.theme-blue .showcase-mode,
+.shell.theme-blue .program-focus-tags span { background:#d6e8ff; border-color:#a9c9ef; color:#145fb8; }
+.shell.theme-blue .primary,.shell.theme-blue .chat-input button {
+  background:linear-gradient(135deg,#247fe4,#1559bf); border-color:#1b6fd0; color:#fff;
+  box-shadow:0 7px 16px rgba(25,103,196,.2);
+}
+.shell.theme-blue .outline,.shell.theme-blue .exercise-info-button,.shell.theme-blue .exercise-swap-button {
+  background:#e7f0fc; border-color:#9dbfe8; color:#145fb8;
+}
+.shell.theme-blue .home-date-strip { background:#dce9fa; color:#176bd0; }
+.shell.theme-blue .home-quick-icon { background:#c9e0fc; border-color:#a6c8ef; color:#0c5ec3; }
+.shell.theme-blue .goal-option { background:linear-gradient(145deg,#f4f8fe,#e4eefb); border-color:#b9cee8; color:#183452; }
+.shell.theme-blue .goal-option strong { color:#174f91; }
+.shell.theme-blue .goal-option small { color:#536b87; }
+.shell.theme-blue .goal-option.active { background:linear-gradient(145deg,#d1e5ff,#e4efff); border-color:#247fe4; box-shadow:0 0 0 2px rgba(36,127,228,.14); }
+.shell.theme-blue .mod-card .mod-emoji { width:48px; height:48px; border-radius:10px; background:#cfe2fb; color:#145fb8; }
+.shell.theme-blue .side-btn.active { background:#d7e8fc; color:#0d5fbe; box-shadow:inset 3px 0 #247fe4; }
+.shell.theme-blue input,.shell.theme-blue select,.shell.theme-blue textarea {
+  background:#f6f9fe !important; color:#152c49 !important; border-color:#b9cee8 !important;
+}
+.shell.theme-blue .theme-switcher { background:#e1ebf8; border-color:#bfd1e6; }
+.shell.theme-blue .theme-switcher button.active { background:#c6defb !important; border-color:#8eb8e8 !important; }
+.shell.theme-blue .home-focus-card p,.shell.theme-blue .home-week-empty,.shell.theme-blue .nutrition-hero p,
+.shell.theme-blue .meal-card p,.shell.theme-blue .meal-card small,.shell.theme-blue .exercise-detail p,
+.shell.theme-blue .mod-card p { color:#536b87; }
+
+/* Login e cadastro mantêm a identidade preta e dourada. */
+.auth-page { background:#09090b !important; color:#f5f3ee !important; }
+.auth-art {
+  background:radial-gradient(circle at 28% 35%,rgba(214,168,79,.18),transparent 42%),linear-gradient(130deg,#191713,#0b0b0d) !important;
+  color:#f5f3ee !important;
+}
+.auth-art h1 em { color:#d6a84f !important; }
+.auth-box { background:#131316 !important; color:#f5f3ee !important; border-color:#554321 !important; }
+.auth-box label,.auth-box>p { color:#aaa6a0 !important; }
+.auth-box input { background:#1b1a1d !important; color:#f5f3ee !important; border-color:#554321 !important; }
+.auth-page .primary { background:linear-gradient(135deg,#d6a84f,#f0d18a) !important; color:#17130b !important; border-color:#d6a84f !important; }
+.auth-links button,.auth-box details summary { color:#e0bd73 !important; }
+body.theme-blue .auth-page { background:#09090b !important; color:#f5f3ee !important; }
+body.theme-blue .auth-box { background:#131316 !important; color:#f5f3ee !important; border-color:#554321 !important; }
