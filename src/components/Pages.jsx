@@ -930,6 +930,11 @@ export function Progress({ metrics }) {
   const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs, new Date(), profile);
   const missedWorkoutDays = accountTracking.missedWorkoutDays;
   const missedNutritionDays = accountTracking.missedNutritionDays;
+  const programCreatedAt = profile.created_at ? new Date(profile.created_at).getTime() : NaN;
+  const elapsedDays = Number.isFinite(programCreatedAt)
+    ? Math.min(30, Math.max(0, Math.floor((Date.now() - programCreatedAt) / 86400000)))
+    : 0;
+  const canUploadAfter = elapsedDays >= 30;
   const finalPhotoPattern = /(?:dia\s*30|foto\s*final|after)/i;
   const initialPhotoPattern = /(?:dia\s*0|foto\s*inicial|antes)/i;
   const firstPhoto = userPhotos.filter((item) => initialPhotoPattern.test(String(item.note || ""))).at(-1)
