@@ -146,6 +146,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
     if (goal.includes("emagrec")) return "emagrecimento";
     if (goal.includes("bulking") || goal.includes("ganho") || goal.includes("massa")) return "bulking";
     if (goal.includes("cutting") || goal.includes("defini")) return "definicao";
+    if (goal.includes("muscul")) return "musculacao";
     if (goal.includes("manut")) return "manutencao";
     return "condicionamento";
   }
@@ -279,6 +280,7 @@ function NutritionOnboarding({ profile, userId, mutate, refresh }) {
     ["emagrecimento", copy.lose, copy.loseDesc],
     ["bulking", copy.gain, copy.gainDesc],
     ["definicao", copy.cut, copy.cutDesc],
+    ["musculacao", translateUiText("Musculação normal / manutenção", language), translateUiText("Treino de força equilibrado sem foco em ganho ou perda de peso.", language)],
     ["condicionamento", copy.conditioning, copy.conditioningDesc],
     ["manutencao", copy.maintenance, copy.maintenanceDesc],
   ];

@@ -664,8 +664,8 @@ export function Workouts({ plan }) {
               reset();
             }}
           >
-            <option value="ginasio">{t("Gym")}</option>
-            <option value="casa">{t("Home")}</option>
+            <option value="ginasio">{translateUiText("Gym", language)}</option>
+            <option value="casa">{translateUiText("Home", language)}</option>
           </select>
         </label>
         <label>
@@ -1126,7 +1126,8 @@ export function Profile({ theme, onThemeChange }) {
   const goalValue = storedGoal.includes("emagrec") ? "emagrecimento"
     : storedGoal.includes("defini") || storedGoal.includes("cut") ? "definicao"
       : storedGoal.includes("bulking") || storedGoal.includes("massa") || storedGoal.includes("ganho") ? "bulking"
-        : storedGoal.includes("manut") || storedGoal.includes("recompos") ? "manutencao"
+        : storedGoal.includes("muscul") ? "musculacao"
+          : storedGoal.includes("manut") || storedGoal.includes("recompos") ? "manutencao"
           : "condicionamento";
   const storedModality = String(profile.modality || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const modalityValue = storedModality.includes("calisten") ? "Calistenia"
@@ -1267,6 +1268,7 @@ export function Profile({ theme, onThemeChange }) {
               <option value="emagrecimento">{t("Emagrecimento")}</option>
               <option value="bulking">{t("Bulking (ganho de massa)")}</option>
               <option value="definicao">{t("Cutting (definição)")}</option>
+              <option value="musculacao">{t("Musculação normal / manutenção")}</option>
               <option value="recomposicao">{t("Recomposição corporal")}</option>
               <option value="manutencao">{t("Manutenção de peso")}</option>
               <option value="condicionamento">{t("Condicionamento")}</option>
