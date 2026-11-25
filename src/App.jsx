@@ -961,6 +961,7 @@ export default function App() {
                           ["emagrecimento", "Emagrecimento", "Redução gradual de gordura e melhoria dos hábitos."],
                           ["bulking", "Bulking", "Ganho progressivo de massa muscular e força."],
                           ["definicao", "Cutting / definição", "Redução de gordura com atenção à manutenção da força."],
+                          ["musculacao", "Musculação normal / manutenção", "Treino de força equilibrado sem foco em ganho ou perda de peso."],
                           ["condicionamento", "Condicionamento", "Treino geral para resistência, mobilidade e saúde."],
                           ["manutencao", "Manutenção de peso", "Manter o peso com treino equilibrado e hábitos consistentes."],
                         ].map(([value, label, description]) => (
@@ -972,8 +973,9 @@ export default function App() {
                               const current = stored.includes("emagrec") ? "emagrecimento"
                                 : stored.includes("bulking") || stored.includes("massa") ? "bulking"
                                   : stored.includes("defini") || stored.includes("cut") ? "definicao"
-                                    : stored.includes("manut") || stored.includes("recompos") ? "manutencao"
-                                      : "condicionamento";
+                                    : stored.includes("muscul") ? "musculacao"
+                                      : stored.includes("manut") || stored.includes("recompos") ? "manutencao"
+                                        : "condicionamento";
                               return current === value ? "goal-option active" : "goal-option";
                             })()}
                             onClick={async () => { await mutate("profiles", { goal: value }, userId); }}

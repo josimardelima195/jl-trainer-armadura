@@ -1,0 +1,134 @@
+/* Ocean Light refinements: balanced blue surfaces and clear nutrition accents. */
+body.theme-blue {
+  --bg: #edf4fc;
+  --panel: #f8fbff;
+  --panel2: #e5effb;
+  --line: #c8daf0;
+  --text: #142b48;
+  --muted: #5c718b;
+  --gold: #0d76dc;
+  --gold2: #155ac2;
+}
+
+.shell.theme-blue .nutrition-calendar,
+.shell.theme-blue .meal-progress-strip,
+.shell.theme-blue .training-schedule-card,
+.shell.theme-blue .meal-card,
+.shell.theme-blue .hydration-card,
+.shell.theme-blue .nutrition-card,
+.shell.theme-blue .food-library-card {
+  color: #142b48;
+  background: linear-gradient(145deg, #f9fcff 0%, #eaf3ff 100%);
+  border-color: #c6d9f0;
+  box-shadow: 0 7px 20px rgba(25, 82, 145, .08);
+}
+
+.shell.theme-blue .nutrition-calendar,
+.shell.theme-blue .meal-progress-strip,
+.shell.theme-blue .training-schedule-card,
+.shell.theme-blue .hydration-card {
+  border-left: 4px solid #1688f7;
+}
+
+.shell.theme-blue .nutrition-day-button {
+  background: #f8fbff;
+  border-color: #c7d9ef;
+  color: #58708d;
+}
+.shell.theme-blue .nutrition-day-button:hover,
+.shell.theme-blue .nutrition-day-button.selected {
+  background: #176fe6;
+  border-color: #176fe6;
+  color: #fff;
+}
+.shell.theme-blue .nutrition-day-button.done:not(.selected) {
+  background: #e4f6ed;
+  border-color: #b7e3ca;
+  color: #197447;
+}
+
+.shell.theme-blue .meal-time {
+  display: grid;
+  place-items: center;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid #b8d4f3;
+  border-radius: 12px;
+  background: #dcecff;
+  color: #0b5fb8;
+}
+.shell.theme-blue .meal-progress-strip > strong,
+.shell.theme-blue .training-schedule-card b {
+  color: #155fba;
+}
+.shell.theme-blue .meal-progress-track {
+  background: #d5e5f8;
+}
+.shell.theme-blue .meal-progress-track i {
+  background: linear-gradient(90deg, #1688f7, #3159dc);
+}
+
+.shell.theme-blue .food-library-card {
+  overflow: hidden;
+}
+.shell.theme-blue .food-library-card:hover {
+  border-color: #73afea;
+}
+.shell.theme-blue .food-library-image {
+  background: #dcecff;
+}
+.shell.theme-blue .food-library-group,
+.shell.theme-blue .food-library-kcal {
+  color: #155fba;
+}
+.shell.theme-blue .food-library-macros b {
+  color: #24557f;
+}
+.shell.theme-blue .food-chip {
+  background: #e3efff;
+  border: 1px solid #cbdff6;
+  color: #183a60;
+}
+.shell.theme-blue .food-chip small,
+.shell.theme-blue .food-library-copy > small {
+  color: #60758f;
+}
+.shell.theme-blue .meal-training {
+  background: linear-gradient(135deg, #e4f0ff, #f8fbff);
+  border-color: #bcd6f3;
+}
+.shell.theme-blue .meal-total,
+.shell.theme-blue .meal-ingredients {
+  color: #294967;
+}
+.shell.theme-blue .nutrition-tabs button.active,
+.shell.theme-blue .food-library-filters button.active {
+  background: #176fe6;
+  border-color: #176fe6;
+  color: #fff;
+}
+.shell.theme-blue .nutrition-calendar .eyebrow::before,
+.shell.theme-blue .meal-progress-strip .eyebrow::before,
+.shell.theme-blue .training-schedule-card .eyebrow::before,
+.shell.theme-blue .hydration-card .eyebrow::before,
+.shell.theme-blue .nutrition-card .eyebrow::before,
+.shell.theme-blue .food-library-heading .eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 7px;
+  border-radius: 2px;
+  background: #1688f7;
+  vertical-align: 1px;
+}
+
+@media (max-width: 700px) {
+  .shell.theme-blue .meal-time {
+    flex-basis: 46px;
+    width: 46px;
+    height: 46px;
+  }
+}

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import Auth from "./components/Auth";
 import App from "./App";
 import "./styles.css";
+import "./theme-ocean.css";
 
 class AppStartupBoundary extends React.Component {
   constructor(props) {
