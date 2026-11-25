@@ -33,6 +33,12 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
   const [language] = useLanguage();
   const exerciseName = translateExerciseName(exercise?.name, language);
   const source = exercise?.image_path || exercise?.gifUrl;
+  const exerciseLabel = `${exercise?.name || ""} ${exercise?.category || ""}`;
+  const fallbackLabel = /boxe|boxing/i.test(exerciseLabel)
+    ? "🥊 Boxe"
+    : /karate|karatê/i.test(exerciseLabel)
+      ? "🥋 Karatê"
+      : "GIF indisponível";
   return (
     <div className={`exercise-gif exercise-gif-${variant}`}>
       {source && !failed ? (
@@ -45,7 +51,7 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
           onError={() => setFailed(true)}
         />
       ) : (
-        <span className="exercise-gif-fallback">{/boxe|boxing|jab|sombra/i.test(String(exercise?.name || "")) ? "🥊 Boxe" : /karate|karatê|kihon|kata|bloqueio/i.test(String(exercise?.name || "")) ? "🥋 Karatê" : "GIF indisponível"}</span>
+        <span className="exercise-gif-fallback">{fallbackLabel}</span>
       )}
     </div>
   );
