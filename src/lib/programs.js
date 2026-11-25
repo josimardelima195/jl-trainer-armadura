@@ -8,18 +8,23 @@ const goalWords = {
   emagrecimento: [
     "cardio",
     "cardiovascular",
-    "hiit",
-    "jump",
-    "burpee",
-    "run",
-    "running",
-    "mountain",
+    "walking",
+    "walk",
+    "caminhada",
+    "march",
+    "marcha",
+    "stationary bike",
+    "exercise bike",
+    "bike",
+    "bicicleta",
+    "cycling",
+    "elliptical",
+    "cross trainer",
+    "stepmill",
     "step",
-    "rope",
-    "jack",
-    "sprint",
     "treadmill",
-    "jog",
+    "low impact",
+    "aerobic",
   ],
   definicao: [
     "cardio",
@@ -298,9 +303,15 @@ const higherSkillWords = [
   "box jump",
   "burpee",
   "sprint",
+  "windmill",
+  "turkish get up",
+  "sissy squat",
+  "single leg deadlift",
+  "depth jump",
+  "drop jump",
 ];
 const excludedExercisePattern = /\b(?:swing\s*360|front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\b/;
-const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|burpee|sprint|wind sprint|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\b/;
+const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|drop jump|burpee|sprint|wind sprint|run|running|jog|jogging|corrida|correr|mountain climbers?|bear crawl|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\b/;
 
 export function ageFromProfile(profile = {}) {
   if (profile.birth_date) {
