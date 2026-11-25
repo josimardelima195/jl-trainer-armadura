@@ -299,6 +299,8 @@ const higherSkillWords = [
   "burpee",
   "sprint",
 ];
+const excludedExercisePattern = /\\b(?:swing\\s*360|front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\\b/;
+const highImpactExercisePattern = /\\b(?:jump squat|box jump|depth jump|burpee|sprint|wind sprint|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\\b/;
 
 export function ageFromProfile(profile = {}) {
   if (profile.birth_date) {
@@ -473,21 +475,25 @@ export function isRemovedModalityExercise(exercise = {}) {
     exercise?.description,
     exercise?.equipment,
   ].join(" "));
-  return /\b(?:futsal|soccer|football|swimming|swim|natacao)\b/.test(text);
+  const removedSport = /\\b(?:futsal|soccer|football|swimming|swim|natacao)\\b/.test(text);
+  return removedSport || excludedExercisePattern.test(text);
 }
 
 export function suitableForProfile(exercise, profile = {}) {
   const age = ageFromProfile(profile);
   const level = clean(profile.training_level || "beginner");
   const text = textFor(exercise);
+  const goal = clean(profile.goal || profile.objective || "");
+  const weightLossGoal = /emagrec|perda de peso|weight loss|fat loss/.test(goal);
   if (isRemovedModalityExercise(exercise)) return false;
+  if (weightLossGoal && highImpactExercisePattern.test(text)) return false;
   const avoidAdvanced = age < 18 || age >= 65 || level.includes("beginner") || level.includes("iniciante");
   if (avoidAdvanced && higherSkillWords.some((word) => text.includes(clean(word))))
     return false;
   if (
     age >= 12 &&
     age < 18 &&
-    /\b(?:snatch|clean and jerk|power clean|jerk|one rep max|1rm|maximal lift|maximum load)\b/.test(text)
+    /\\b(?:jerk|one rep max|1rm|maximal lift|maximum load)\\b/.test(text)
   ) return false;
   return true;
 }
@@ -631,38 +637,40 @@ function rotatePick(list, count, day) {
 
 
 const calisthenicsBlocks = [
- {title:"Fundamentos e controlo",focus:"Técnica e preparação",items:[
- ["Flexão inclinada","2–3 × 6–10",60,"Mãos numa superfície firme; corpo alinhado."],
- ["Remada australiana assistida","2–3 × 6–10",75,"Use barra baixa estável e mantenha escápulas controladas."],
- ["Agachamento livre","2–3 × 10–15",60,"Amplitude confortável, sem dor."],
- ["Hollow hold regressivo","3 × 10–20 s",45,"Lombar apoiada; encurte a alavanca se arquear."],
- ["Scapular push-up","2 × 8–12",45,"Movimento controlado das escápulas."]
- ]},
- {title:"Força fundamental",focus:"Empurrar, puxar e pernas",items:[
- ["Flexão adaptada","3 × 6–12",90,"Escolha a variante que permite técnica estável."],
- ["Remada australiana","3 × 6–10",90,"Sem balanço; use altura adequada."],
- ["Afundo alternado","3 × 8/lado",75,"Joelho acompanha a direção dos pés."],
- ["Prancha frontal","3 × 20–35 s",45,"Respire e mantenha alinhamento."],
- ["Dead bug","2 × 8/lado",45,"Controle a lombar."]
- ]},
- {title:"Pré-habilidades",focus:"Estabilidade de ombros e core",items:[
- ["Pike push-up regressiva","3 × 5–8",90,"Amplitude confortável; não treine com dor."],
- ["Scapular pull-up assistida","3 × 5–8",90,"Use apoio dos pés se necessário."],
- ["Frog stand com apoio","3 × 8–15 s",60,"Somente com punhos preparados e espaço livre."],
- ["L-sit tuck com apoio","3 × 8–12 s",60,"Use paralelas estáveis; não force."],
- ["Elevação de gémeos","3 × 12–18",45,"Subida e descida controladas."]
- ]},
- {title:"Consolidação e descarga",focus:"Técnica, mobilidade e recuperação",items:[
- ["Flexão técnica","2 × 6–10",90,"Pare com 2–3 repetições em reserva."],
- ["Remada australiana assistida","2 × 6–10",90,"Sem balanço."],
- ["Agachamento pausado","2 × 8–12",60,"Pausa curta em amplitude confortável."],
- ["Hollow hold regressivo","2 × 15–20 s",45,"Sem perder a posição lombar."],
- ["Mobilidade de punho e ombro","1 × 5–7 min",30,"Movimentos suaves, sem dor."]
- ]}
+  {title:"Fundamentos e controlo",focus:"Força básica e postura",items:[
+    ["Agachamento até à cadeira","2–3 × 8–10",60,"Use uma cadeira firme como referência. Sente-se e levante-se com os pés bem apoiados."],
+    ["Flexão na parede","2–3 × 8–10",60,"Mantenha o corpo alinhado e aproxime o peito da parede sem forçar os ombros."],
+    ["Ponte de glúteos","2–3 × 10–12",45,"Eleve a bacia sem arquear a lombar e desça devagar."],
+    ["Bird dog","2 × 6/lado",45,"Estenda braço e perna opostos sem rodar a bacia."],
+    ["Marcha no lugar","3–5 min",30,"Mantenha um ritmo confortável e contínuo."]
+  ]},
+  {title:"Força fundamental",focus:"Pernas, empurrar e estabilidade",items:[
+    ["Agachamento livre controlado","3 × 8–12",60,"Desça apenas até uma amplitude confortável, mantendo os joelhos alinhados."],
+    ["Flexão inclinada","3 × 6–10",60,"Apoie as mãos numa bancada firme ou parede e mantenha o tronco alinhado."],
+    ["Ponte de glúteos","3 × 10–15",45,"Faça uma pausa curta no topo sem arquear a lombar."],
+    ["Dead bug","2 × 8/lado",45,"Mantenha a lombar apoiada e mova braços e pernas de forma alternada."],
+    ["Elevação de gémeos","3 × 12–15",45,"Use uma parede como apoio e suba e desça sem balanço."]
+  ]},
+  {title:"Resistência e coordenação",focus:"Movimentos contínuos de baixo impacto",items:[
+    ["Sentar e levantar da cadeira","3 × 10–12",60,"Controle a descida e use uma cadeira estável."],
+    ["Flexão inclinada","3 × 8–12",60,"Escolha uma altura que permita completar as repetições com boa técnica."],
+    ["Marcha no lugar","3–5 min",30,"Aumente o ritmo apenas se conseguir falar e respirar normalmente."],
+    ["Bird dog","2 × 8/lado",45,"Evite rodar o tronco e mantenha o movimento controlado."],
+    ["Prancha inclinada","2 × 15–25 s",45,"Apoie as mãos numa superfície firme e mantenha o abdómen ativo."]
+  ]},
+  {title:"Consolidação e descarga",focus:"Revisão técnica e recuperação",items:[
+    ["Agachamento até à cadeira","2 × 8–10",60,"Repita com amplitude confortável e sem impulso."],
+    ["Flexão na parede","2 × 8–10",60,"Priorize alinhamento e movimento suave."],
+    ["Ponte de glúteos","2 × 10–12",45,"Suba e desça com controlo."],
+    ["Dead bug","2 × 6/lado",45,"Mantenha a lombar apoiada e respire normalmente."],
+    ["Mobilidade de ombros e quadril","5–7 min",30,"Faça movimentos suaves, sem forçar as articulações."]
+  ]}
 ];
+
 export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey = "condicionamento") {
-  const age = ageFromProfile(profile);
-  const level = profile.training_level || "beginner";
+  const safeProfile = { ...profile, goal: goalKey };
+  const age = ageFromProfile(safeProfile);
+  const level = safeProfile.training_level || "beginner";
   const beginner = level === "beginner" || level === "iniciante";
   const senior = age >= 60;
   const youth = age >= 12 && age < 18;
@@ -724,13 +732,13 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
       const cardioOptions = uniqueExercises(exercises).filter(
         (exercise) =>
           isTimedExercise(exercise) &&
-          suitableForProfile(exercise, profile) &&
+          suitableForProfile(exercise, safeProfile) &&
           exerciseEquipmentMode(exercise) === "bodyweight" &&
           exerciseMatchesFocus(exercise, "cardio_core"),
       );
       rawExercises.push(...rotatePick(cardioOptions, 1, day));
     }
-    const exercises = rawExercises.filter((exercise) => suitableForProfile(exercise, profile)).map((exercise) => {
+    const exercises = rawExercises.filter((exercise) => suitableForProfile(exercise, safeProfile)).map((exercise) => {
       const timed = isTimedExercise(exercise);
       const durationSeconds = timed
         ? exerciseDurationSeconds(exercise, profile, intensity)
@@ -763,7 +771,7 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
           : week === 2
             ? "Consolide estabilidade escapular, punhos e core."
             : "Reduza o volume e revise a qualidade do movimento.",
-      skillNote: "Planche é uma habilidade avançada. Este ciclo prepara punhos, ombros, escápulas e core; não garante planche em 30 dias.",
+      skillNote: "Plano com movimentos básicos e escaláveis. Ajuste a amplitude e use parede ou cadeira como apoio quando necessário; não treine com dor.",
       exercises,
     };
   });
@@ -955,8 +963,9 @@ export function build30DayPlan(
     goalKey,
   );
 
+  const planningProfile = { ...profile, goal: goalKey };
   const source = uniqueExercises(exercises).filter(
-    (exercise) => (exercise?.image_path || exercise?.gifUrl) && suitableForProfile(exercise, profile),
+    (exercise) => (exercise?.image_path || exercise?.gifUrl) && suitableForProfile(exercise, planningProfile),
   );
   const filtered = source.filter(
     (exercise) => requestedMode === "all" || exerciseEquipmentMode(exercise) === requestedMode,

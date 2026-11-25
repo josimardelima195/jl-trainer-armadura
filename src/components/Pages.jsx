@@ -334,11 +334,8 @@ export function Workouts({ plan }) {
               .some((previous) => previous.id === exercise.id),
         )
         .filter((exercise) => !isRemovedModalityExercise(exercise))
-        .filter((exercise) => {
-          const name = String(exercise.name || "").toLowerCase();
-          return !/front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|suspend row|l[- ]?sit|bar spin|release catch/i.test(name);
-        }),
-    [exerciseLibrary, data.exercises, profile.age, profile.training_level],
+        .filter((exercise) => suitableForProfile(exercise, profile)),
+    [exerciseLibrary, data.exercises, profile.age, profile.birth_date, profile.training_level, profile.goal],
   );
   const bmi =
     profile.current_weight && profile.height
@@ -931,10 +928,6 @@ export function Progress({ metrics }) {
   const allLogs = (data.training_logs || []).filter((log) => log.user_id === userId);
   const nutritionLogs = (data.daily_nutrition_logs || []).filter((log) => log.user_id === userId);
   const accountTracking = accountDayStatuses(profile.created_at, allLogs, nutritionLogs, new Date(), profile);
-  const firstThirtyDays = accountTracking.days.slice(0, 30);
-  const completedCount = firstThirtyDays.filter((item) => item.dayComplete).length;
-  const completedWorkoutCount = firstThirtyDays.filter((item) => item.workoutDone).length;
-  const remainingCount = Math.max(0, 30 - completedCount);
   const missedWorkoutDays = accountTracking.missedWorkoutDays;
   const missedNutritionDays = accountTracking.missedNutritionDays;
   const finalPhotoPattern = /(?:dia\s*30|foto\s*final|after)/i;
@@ -943,22 +936,6 @@ export function Progress({ metrics }) {
     || userPhotos.find((item) => !finalPhotoPattern.test(String(item.note || "")))
     || null;
   const afterPhoto = userPhotos.filter((item) => finalPhotoPattern.test(String(item.note || ""))).at(-1) || null;
-  const subscription = (data.subscriptions || [])
-    .filter((item) => item.user_id === userId && item.status === "active")
-    .sort((a, b) => new Date(b.started_at || b.created_at || 0) - new Date(a.started_at || a.created_at || 0))[0];
-  const programCreatedAt = profile.created_at ? new Date(profile.created_at).getTime() : NaN;
-  const elapsedDays = Number.isFinite(programCreatedAt) ? Math.min(30, Math.max(0, Math.floor((Date.now() - programCreatedAt) / 86400000))) : 0;
-  const canUploadAfter = elapsedDays >= 30;
-  const licenseRemaining = subscription?.expires_at
-    ? Math.max(0, Math.ceil((new Date(subscription.expires_at + "T23:59:59").getTime() - Date.now()) / 86400000))
-    : null;
-  const goalLabels = {
-    emagrecimento: "Emagrecimento",
-    bulking: "Ganho de massa",
-    definicao: "Cutting / definição",
-    condicionamento: "Condicionamento",
-    manutencao: "Manutenção",
-  };
   const currentWeight = metrics.current ?? (profile.current_weight ? Number(profile.current_weight) : null);
   const saveProgressPhoto = async (event, stage) => {
     event.preventDefault();
@@ -1001,40 +978,6 @@ export function Progress({ metrics }) {
         <Stat label="Sequência" value={metrics.streak + " dias"} />
         <Stat label="Variação" value={metrics.delta === null ? "—" : metrics.delta.toFixed(1) + " kg"} />
       </div>
-      <section className="progress-journey-card">
-        <div className="progress-journey-heading">
-          <div><span className="eyebrow">{t("PLANO PERSONALIZADO")}</span><h2>{t("Os seus 30 dias")}</h2><p>{t(profile.modality || "Modalidade")} · {t(goalLabels[String(profile.goal || "").toLowerCase()] || profile.goal || "Objetivo a definir")}</p></div>
-          <LeoMascot size={78} />
-        </div>
-        <div className="progress-journey-stats">
-          <div><strong>{completedCount}/30</strong><span>{t("dias concluídos")}</span></div>
-          <div><strong>{completedWorkoutCount}</strong><span>{t("treinos registados")}</span></div>
-          <div><strong>{remainingCount}</strong><span>{t("dias por concluir")}</span></div>
-          <div><strong>{elapsedDays}/30</strong><span>{t("dias desde o início")}</span></div>
-          {licenseRemaining !== null && <div><strong>{licenseRemaining}</strong><span>{t("dias de licença restantes")}</span></div>}
-        </div>
-        <div className="progress-journey-track"><i style={{ width: completedCount / 30 * 100 + "%" }} /></div>
-        <div className="progress-30-grid" aria-label={t("Estado dos 30 dias")}>
-          {Array.from({ length: 30 }, (_, index) => {
-            const day = index + 1;
-            const status = firstThirtyDays[index];
-            const done = Boolean(status?.dayComplete);
-            const missed = Boolean(status?.missed);
-            const partial = Boolean(status && !done && !missed && (status.workoutDone || status.nutritionDone));
-            const className = done ? "done" : missed ? "missed" : partial ? "partial" : "";
-            const conjunction = ({ pt: " e ", en: " and ", fr: " et ", es: " y ", zh: "；", hi: " और " })[language] || " e ";
-            const title = done
-              ? t("Dia") + " " + day + ": " + t("rotina e alimentação concluídas")
-              : missed
-                ? t("Dia") + " " + day + ": " + [status.workoutMissed ? t("treino programado perdido") : "", status.nutritionMissed ? t("alimentação incompleta") : ""].filter(Boolean).join(conjunction)
-                : partial
-                  ? t("Dia") + " " + day + ": " + t("conclusão parcial")
-                  : t("Dia") + " " + day + ": " + t("ainda por cumprir");
-            return <span key={day} className={className} title={title}>{day}</span>;
-          })}
-        </div>
-        <p className="progress-journey-note">{t("Verde: alimentação concluída e treino feito ou descanso previsto. Vermelho: treino programado ou alimentação ficou incompleta após o dia terminar. O dia atual só é avaliado quando terminar.")}</p>
-      </section>
       {form && (
         <form className="panel-form progress-measure-form" onSubmit={async (event) => {
           event.preventDefault();

@@ -1729,3 +1729,240 @@ body.theme-blue {
 .auth-links button,.auth-box details summary { color:#e0bd73 !important; }
 body.theme-blue .auth-page { background:#09090b !important; color:#f5f3ee !important; }
 body.theme-blue .auth-box { background:#131316 !important; color:#f5f3ee !important; border-color:#554321 !important; }
+
+
+/* JL Trainer 2026: Sprint Green as the primary theme, with lighter readable surfaces. */
+.shell.theme-sprint {
+  --bg: #1d2421;
+  --panel: #29312e;
+  --panel2: #35403b;
+  --line: #59665f;
+  --text: #f3f6f1;
+  --muted: #c0cac3;
+  --gold: #b9e84d;
+  --gold2: #dcf98a;
+}
+.shell.theme-sprint aside,
+.shell.theme-sprint header {
+  background: #252e2a;
+  border-color: #59665f;
+}
+.shell.theme-sprint .side-btn { color: #c0cac3; }
+.shell.theme-sprint .side-btn:hover,
+.shell.theme-sprint .side-btn.active {
+  background: #39453f;
+  color: #e2fa9a;
+}
+.shell.theme-sprint .hero,
+.shell.theme-sprint .nutrition-hero,
+.shell.theme-sprint .workout-banner {
+  background: linear-gradient(115deg, #3b4942 0%, #29312e 72%);
+  border-color: #65736b;
+}
+.shell.theme-sprint .stat,
+.shell.theme-sprint .today-card,
+.shell.theme-sprint .meal-card,
+.shell.theme-sprint .exercise-detail,
+.shell.theme-sprint .progress-card,
+.shell.theme-sprint .profile-card,
+.shell.theme-sprint .nutrition-card,
+.shell.theme-sprint .plan-card,
+.shell.theme-sprint .progress-photo-section,
+.shell.theme-sprint .progress-photo-slot {
+  background: #29312e;
+  border-color: #59665f;
+}
+.shell.theme-sprint .theme-preview-sprint { background: #35403b; }
+.shell.theme-sprint .theme-dot-sprint {
+  background: #b9e84d;
+  border-color: #e2fa9a;
+}
+
+/* Ocean Light: azul gelo em vez de branco puro, mantendo contraste. */
+body.theme-blue {
+  --bg: #e4edf8;
+  --panel: #eaf2fb;
+  --panel2: #dce8f6;
+  --line: #bfd1e6;
+  --text: #18334f;
+  --muted: #5c7189;
+  --gold: #1674d4;
+  --gold2: #145db5;
+  background: var(--bg);
+  color: var(--text);
+}
+.shell.theme-blue {
+  background: var(--bg);
+  color: var(--text);
+}
+.shell.theme-blue aside,
+.shell.theme-blue header {
+  background: #e1ebf7;
+  border-color: #bfd1e6;
+}
+.shell.theme-blue .search,
+.shell.theme-blue .stat,
+.shell.theme-blue .progress-card,
+.shell.theme-blue .calendar-card,
+.shell.theme-blue .admin-panel,
+.shell.theme-blue .profile-card,
+.shell.theme-blue .nutrition-card,
+.shell.theme-blue .today-card,
+.shell.theme-blue .exercise,
+.shell.theme-blue .event,
+.shell.theme-blue .panel-form,
+.shell.theme-blue .plan-card,
+.shell.theme-blue .locked-panel,
+.shell.theme-blue .empty,
+.shell.theme-blue .quick-action,
+.shell.theme-blue .measure-grid > div,
+.shell.theme-blue .details > div,
+.shell.theme-blue .nutrition-stat,
+.shell.theme-blue .meal-card,
+.shell.theme-blue .video-card,
+.shell.theme-blue .mod-card,
+.shell.theme-blue .badge,
+.shell.theme-blue .progress-photo-section,
+.shell.theme-blue .progress-photo-slot,
+.shell.theme-blue .nutrition-calendar,
+.shell.theme-blue .meal-progress-strip,
+.shell.theme-blue .training-schedule-card,
+.shell.theme-blue .hydration-card,
+.shell.theme-blue .food-library-card {
+  background: #eaf2fb;
+  border-color: #bfd1e6;
+  color: #18334f;
+  box-shadow: 0 5px 18px rgba(38, 91, 151, .07);
+}
+.shell.theme-blue .hero,
+.shell.theme-blue .workout-banner,
+.shell.theme-blue .achievement-hero,
+.shell.theme-blue .nutrition-hero,
+.shell.theme-blue .coach-card,
+.shell.theme-blue .chat-head,
+.shell.theme-blue .program-panel,
+.shell.theme-blue .upgrade,
+.shell.theme-blue .exercise-showcase,
+.shell.theme-blue .quote,
+.shell.theme-blue .meal-training {
+  background: linear-gradient(125deg, #d4e5f7 0%, #eaf2fb 60%, #dce8f7 100%);
+  border-color: #b9d0e9;
+  color: #18334f;
+}
+.shell.theme-blue .nutrition-calendar,
+.shell.theme-blue .meal-progress-strip,
+.shell.theme-blue .training-schedule-card,
+.shell.theme-blue .hydration-card {
+  border-left: 4px solid #3988d8;
+}
+.shell.theme-blue input,
+.shell.theme-blue select,
+.shell.theme-blue textarea,
+.shell.theme-blue .panel-form input,
+.shell.theme-blue .panel-form textarea,
+.shell.theme-blue .filter-row select,
+.shell.theme-blue .chat-input input {
+  background: #dce8f6 !important;
+  color: #18334f !important;
+  border-color: #b9cee5 !important;
+}
+.shell.theme-blue .nutrition-day-button,
+.shell.theme-blue .nutrition-day-grid button {
+  background: #e0ebf8;
+  border-color: #bfd1e6;
+  color: #526b86;
+}
+.shell.theme-blue .nutrition-day-button.selected,
+.shell.theme-blue .nutrition-day-grid button.selected {
+  background: #176fe6;
+  border-color: #176fe6;
+  color: #fff;
+}
+.shell.theme-blue .meal-time {
+  display: grid;
+  place-items: center;
+  background: #d4e5f7;
+  border: 1px solid #b8d0eb;
+  color: #155fae;
+  border-radius: 12px;
+}
+.shell.theme-blue .food-chip {
+  background: #dce9f8;
+  border: 1px solid #bfd4eb;
+  color: #183b5d;
+}
+.shell.theme-blue .progress-photo-slot .progress-photo-preview {
+  background: #d7e4f3;
+  border-color: #b9cee5;
+}
+.shell.theme-blue .nutrition-day-button.done:not(.selected) {
+  background: #d9eee3;
+  border-color: #b4d9c3;
+  color: #216a43;
+}
+
+/* O login mantém sempre o visual preto e dourado, mesmo após escolher azul. */
+body.theme-blue .auth-page {
+  --bg: #09090b;
+  --panel: #131316;
+  --panel2: #19191d;
+  --line: #28282e;
+  --text: #f5f3ee;
+  --muted: #96949a;
+  --gold: #d6a84f;
+  --gold2: #f3d48c;
+  background: #0b0b0d;
+  color: #f5f3ee;
+}
+body.theme-blue .auth-art {
+  background: radial-gradient(circle at 30% 40%, #3d2e16, transparent 44%), linear-gradient(130deg, #17130d, #0b0b0d);
+}
+body.theme-blue .auth-art h1 em { color: #f3d48c; }
+body.theme-blue .auth-box input {
+  background: #1b1a1d !important;
+  color: #fff !important;
+  border-color: #28282e !important;
+}
+
+/* Antes e depois: caixa estável e foto inteira centrada, sem cortes. */
+.progress-photo-slot .progress-photo-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 260px);
+  max-width: 260px;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+  margin: 10px auto 0;
+  padding: 8px;
+  overflow: hidden;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.progress-photo-slot .progress-photo-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain !important;
+  object-position: 50% 50% !important;
+}
+.progress-photo-slot .progress-photo-placeholder {
+  display: grid;
+  place-items: center;
+  width: min(100%, 260px);
+  aspect-ratio: 3 / 4;
+  min-height: 0;
+  margin: 10px auto 0;
+  padding: 12px;
+  text-align: center;
+}
+.progress-photo-lightbox img {
+  max-width: min(94vw, 820px);
+  max-height: 86vh;
+  object-fit: contain;
+  object-position: center;
+}

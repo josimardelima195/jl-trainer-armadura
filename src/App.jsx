@@ -413,8 +413,8 @@ export default function App() {
   }, [profile?.id, profile?.language]);
   useEffect(() => {
     if (!loading && profile?.id && !profile.onboarding_completed) {
-      setTheme("dark");
-      localStorage.setItem("jl-theme", "dark");
+      setTheme("sprint");
+      localStorage.setItem("jl-theme", "sprint");
     }
   }, [loading, profile?.id, profile?.onboarding_completed]);
   const [tab, setTab] = useState(location.hash.slice(1) || "inicio"),
@@ -423,9 +423,15 @@ export default function App() {
     [online, setOnline] = useState(navigator.onLine),
     [theme, setTheme] = useState(() => {
       const saved = localStorage.getItem("jl-theme");
+      const userSelected = localStorage.getItem("jl-theme-user-selected") === "1";
+      if (saved === "dark" && !userSelected) {
+        localStorage.setItem("jl-theme", "sprint");
+        return "sprint";
+      }
       if (["dark", "forest", "sprint", "blue"].includes(saved)) return saved;
       if (saved === "ocean") return "blue";
-      return "dark";
+      localStorage.setItem("jl-theme", "sprint");
+      return "sprint";
     }),
     [tutorial, setTutorial] = useState(
       () => localStorage.getItem("jl-tutorial-done") !== "1",
@@ -592,6 +598,7 @@ export default function App() {
   const changeTheme = (value) => {
     setTheme(value);
     localStorage.setItem("jl-theme", value);
+    localStorage.setItem("jl-theme-user-selected", "1");
     window.dispatchEvent(new CustomEvent("jl-theme-change", { detail: value }));
   };
   const common = {
@@ -678,7 +685,7 @@ export default function App() {
                 <span className="theme-label">Tema</span>
                 <button className={theme === "dark" ? "active" : ""} onClick={() => changeTheme("dark")} title="Dark Fitness"><Palette size={14} /></button>
                 <button className={theme === "forest" ? "active" : ""} onClick={() => changeTheme("forest")} title="Forest Flow"><i className="theme-dot theme-dot-forest" /></button>
-                <button className={theme === "sprint" ? "active" : ""} onClick={() => changeTheme("sprint")} title="Sprint Energy"><i className="theme-dot theme-dot-sprint" /></button>
+                <button className={theme === "sprint" ? "active" : ""} onClick={() => changeTheme("sprint")} title="Verde · tema padrão"><i className="theme-dot theme-dot-sprint" /></button>
                 <button className={theme === "blue" ? "active" : ""} onClick={() => changeTheme("blue")} title="Ocean Light"><i className="theme-dot theme-dot-blue" /></button>
               </div>
             )}
