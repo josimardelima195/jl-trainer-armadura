@@ -299,8 +299,8 @@ const higherSkillWords = [
   "burpee",
   "sprint",
 ];
-const excludedExercisePattern = /\\b(?:swing\\s*360|front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\\b/;
-const highImpactExercisePattern = /\\b(?:jump squat|box jump|depth jump|burpee|sprint|wind sprint|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\\b/;
+const excludedExercisePattern = /\b(?:swing\s*360|front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\b/;
+const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|burpee|sprint|wind sprint|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\b/;
 
 export function ageFromProfile(profile = {}) {
   if (profile.birth_date) {
@@ -475,7 +475,7 @@ export function isRemovedModalityExercise(exercise = {}) {
     exercise?.description,
     exercise?.equipment,
   ].join(" "));
-  const removedSport = /\\b(?:futsal|soccer|football|swimming|swim|natacao)\\b/.test(text);
+  const removedSport = /\b(?:futsal|soccer|football|swimming|swim|natacao)\b/.test(text);
   return removedSport || excludedExercisePattern.test(text);
 }
 
@@ -493,7 +493,7 @@ export function suitableForProfile(exercise, profile = {}) {
   if (
     age >= 12 &&
     age < 18 &&
-    /\\b(?:jerk|one rep max|1rm|maximal lift|maximum load)\\b/.test(text)
+    /\b(?:jerk|one rep max|1rm|maximal lift|maximum load)\b/.test(text)
   ) return false;
   return true;
 }
