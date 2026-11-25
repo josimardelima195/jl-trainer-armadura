@@ -962,6 +962,7 @@ export default function App() {
                           ["bulking", "Bulking", "Ganho progressivo de massa muscular e força."],
                           ["definicao", "Cutting / definição", "Redução de gordura com atenção à manutenção da força."],
                           ["condicionamento", "Condicionamento", "Treino geral para resistência, mobilidade e saúde."],
+                          ["manutencao", "Manutenção de peso", "Manter o peso com treino equilibrado e hábitos consistentes."],
                         ].map(([value, label, description]) => (
                           <button
                             type="button"
@@ -971,7 +972,8 @@ export default function App() {
                               const current = stored.includes("emagrec") ? "emagrecimento"
                                 : stored.includes("bulking") || stored.includes("massa") ? "bulking"
                                   : stored.includes("defini") || stored.includes("cut") ? "definicao"
-                                    : "condicionamento";
+                                    : stored.includes("manut") || stored.includes("recompos") ? "manutencao"
+                                      : "condicionamento";
                               return current === value ? "goal-option active" : "goal-option";
                             })()}
                             onClick={async () => { await mutate("profiles", { goal: value }, userId); }}
@@ -990,7 +992,7 @@ export default function App() {
                         {visibleModalities.map((m) => (
                           <div key={m.id} className="mod-card">
                             <div className="mod-emoji">{m.name === "Boxe" ? "🥊" : m.name === "Karatê" ? "🥋" : m.name === "Calistenia" ? <Activity size={25} /> : <Dumbbell size={25} />}</div>
-                            <h3>{m.name}</h3><p>{m.description}</p>
+                            <h3>{translateUiText(m.name, language)}</h3><p>{translateUiText(m.description, language)}</p>
                             <button type="button" onClick={async () => { if (await mutate("profiles", { modality: m.name }, userId)) go("treinos"); }}>
                               {profile.modality === m.name ? "Selecionada ✓" : "Escolher →"}
                             </button>

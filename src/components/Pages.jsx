@@ -317,7 +317,7 @@ export function Workouts({ plan }) {
       !["futsal", "natacao", "swimming", "soccer", "football"].some((term) => descriptor.includes(term));
   });
   const personalized = allAvailable.filter((workout) => {
-    const modality = data.modalities.find(
+    const modality = (data.modalities || []).find(
       (item) => item.id === workout.modality_id,
     );
     return !profile.modality || !modality || modality.name === profile.modality;
