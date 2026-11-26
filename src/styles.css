@@ -1987,3 +1987,121 @@ body.theme-blue .auth-box input {
 .guided-workout-circuit .guided-actions small {
   line-height: 1.5;
 }
+
+
+/* Language picker with country flags and a clear selected state. */
+.language-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  width: min(100%, 440px);
+}
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 54px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel2);
+  color: var(--text);
+  text-align: left;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+.language-option:hover {
+  border-color: var(--gold);
+  transform: translateY(-1px);
+}
+.language-option.active {
+  border-color: var(--gold);
+  background: linear-gradient(145deg, rgba(214,168,79,.18), rgba(214,168,79,.06));
+  box-shadow: inset 0 0 0 1px rgba(214,168,79,.16);
+}
+.language-option-flag {
+  font-size: 23px;
+  line-height: 1;
+}
+.language-option-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 700;
+}
+.language-option-check {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #17130c;
+  font-size: 12px;
+  font-weight: 900;
+}
+@media(max-width:700px) {
+  .language-options { width: 100%; margin-top: 14px; }
+}
+@media(max-width:360px) {
+  .language-options { grid-template-columns: 1fr; }
+}
+
+/* Local animated demonstration used when a custom marching exercise has no GIF. */
+.exercise-gif-demo {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  padding: 8px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f7f9f5, #e8eee7);
+}
+.exercise-gif-demo svg {
+  display: block;
+  width: min(100%, 220px);
+  height: calc(100% - 18px);
+  max-height: 170px;
+}
+.exercise-gif-demo span {
+  color: #617064;
+  font-size: 10px;
+  font-weight: 700;
+}
+.march-demo .march-torso,
+.march-demo .march-arm path,
+.march-demo .march-leg path,
+.march-demo .march-foot {
+  fill: none;
+  stroke: #42594b;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.march-demo .march-arm,
+.march-demo .march-leg {
+  transform-box: view-box;
+}
+.march-demo .march-arm-left {
+  transform-origin: 110px 57px;
+  animation: march-arm-left .72s ease-in-out infinite alternate;
+}
+.march-demo .march-arm-right {
+  transform-origin: 110px 57px;
+  animation: march-arm-right .72s ease-in-out infinite alternate;
+}
+.march-demo .march-leg-left {
+  transform-origin: 110px 94px;
+  animation: march-leg-left .72s ease-in-out infinite alternate;
+}
+.march-demo .march-leg-right {
+  transform-origin: 110px 94px;
+  animation: march-leg-right .72s ease-in-out infinite alternate;
+}
+@keyframes march-arm-left { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+@keyframes march-arm-right { from { transform: rotate(16deg); } to { transform: rotate(-16deg); } }
+@keyframes march-leg-left { from { transform: rotate(18deg); } to { transform: rotate(-18deg); } }
+@keyframes march-leg-right { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }

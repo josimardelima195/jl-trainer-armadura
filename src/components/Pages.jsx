@@ -28,21 +28,63 @@ import {
 } from "../lib/nutrition";
 import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
+const exerciseGifFallbacks = [
+  { match: /marcha no lugar|caminhada leve|marching in place|march in place/, url: "https://static.exercisedb.dev/media/ealLwvX.gif" },
+  { match: /agachamento|sentar e levantar da cadeira/, url: "https://static.exercisedb.dev/media/6YUfHPL.gif" },
+  { match: /flexao na parede|flexao inclinada/, url: "https://static.exercisedb.dev/media/B1EVP9F.gif" },
+  { match: /ponte de gluteos/, url: "https://static.exercisedb.dev/media/u0cNiij.gif" },
+  { match: /dead bug/, url: "https://static.exercisedb.dev/media/iny3m5y.gif" },
+  { match: /elevacao de gemeos/, url: "https://static.exercisedb.dev/media/bJYHBIN.gif" },
+];
+
+function MarchingExerciseDemo() {
+  return (
+    <div className="exercise-gif-demo march-demo" role="img" aria-label="Demonstração animada de marcha no lugar">
+      <svg viewBox="0 0 220 180" aria-hidden="true">
+        <ellipse cx="110" cy="164" rx="43" ry="6" fill="#d9e2d8" />
+        <circle cx="110" cy="28" r="14" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
+        <path className="march-torso" d="M110 47 L110 94" />
+        <g className="march-arm march-arm-left"><path d="M110 57 L86 76 L91 96" /></g>
+        <g className="march-arm march-arm-right"><path d="M110 57 L134 76 L129 96" /></g>
+        <g className="march-leg march-leg-left"><path d="M110 94 L93 120 L108 137 L104 156" /></g>
+        <g className="march-leg march-leg-right"><path d="M110 94 L128 120 L127 156" /></g>
+        <path className="march-foot" d="M104 156 L92 159 M127 156 L140 159" />
+        <circle cx="93" cy="120" r="4" fill="#b7df4b" />
+        <circle cx="128" cy="120" r="4" fill="#b7df4b" />
+      </svg>
+      <span>Marcha alternada</span>
+    </div>
+  );
+}
+
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
   const [language] = useLanguage();
   const exerciseName = translateExerciseName(exercise?.name, language);
-  const source = exercise?.image_path || exercise?.gifUrl;
+  const normalizedName = String(exercise?.name || "")
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .toLowerCase();
+  const matchedFallback = exerciseGifFallbacks.find((item) => item.match.test(normalizedName));
+  const source = exercise?.image_path || exercise?.gifUrl || matchedFallback?.url || null;
+  const isMarchDemo = /marcha no lugar|caminhada leve|marching in place|march in place/.test(normalizedName);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [exercise?.id, exercise?.name, exercise?.image_path, exercise?.gifUrl, source]);
+
   const exerciseLabel = `${exercise?.name || ""} ${exercise?.category || ""}`;
   const fallbackLabel = /boxe|boxing/i.test(exerciseLabel)
     ? "🥊 Boxe"
     : /karate|karatê/i.test(exerciseLabel)
       ? "🥋 Karatê"
-      : "GIF indisponível";
+      : "Demonstração não disponível";
+
   return (
     <div className={`exercise-gif exercise-gif-${variant}`}>
       {source && !failed ? (
         <img
+          key={source}
           src={source}
           alt={exerciseName}
           loading={variant === "guided" ? "eager" : "lazy"}
@@ -50,6 +92,8 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
           decoding="async"
           onError={() => setFailed(true)}
         />
+      ) : isMarchDemo ? (
+        <MarchingExerciseDemo />
       ) : (
         <span className="exercise-gif-fallback">{fallbackLabel}</span>
       )}
@@ -1487,17 +1531,25 @@ export function Profile({ theme, onThemeChange }) {
           <h2>{translateUiText("Idioma do aplicativo", language)}</h2>
           <p>{t("Altere os textos principais, navegação e instruções do treino guiado.")}</p>
         </div>
-        <select
-          aria-label={translateUiText("Idioma do aplicativo", language)}
-          value={language}
-          onChange={async (event) => {
-            const value = event.target.value;
-            setLanguage(value);
-            await mutate("profiles", { language: value }, userId);
-          }}
-        >
-          {languageOptions.map(([code, label]) => <option key={code} value={code}>{label}</option>)}
-        </select>
+        <div className="language-options" role="group" aria-label={translateUiText("Idioma do aplicativo", language)}>
+          {languageOptions.map(([code, label, flag]) => (
+            <button
+              key={code}
+              type="button"
+              className={`language-option${language === code ? " active" : ""}`}
+              aria-pressed={language === code}
+              onClick={async () => {
+                if (language === code) return;
+                setLanguage(code);
+                await mutate("profiles", { language: code }, userId);
+              }}
+            >
+              <span className="language-option-flag" aria-hidden="true">{flag}</span>
+              <span className="language-option-label">{label}</span>
+              {language === code && <span className="language-option-check" aria-hidden="true">✓</span>}
+            </button>
+          ))}
+        </div>/select>
       </section>
       {profile.onboarding_completed && (
       <section className="theme-settings">

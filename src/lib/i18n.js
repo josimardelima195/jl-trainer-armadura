@@ -1,11 +1,11 @@
 import {useEffect,useState} from 'react';
 export const languageOptions = [
-  ["pt", "Português"],
-  ["en", "English"],
-  ["fr", "Français"],
-  ["es", "Español"],
-  ["zh", "中文（普通话）"],
-  ["hi", "हिन्दी"],
+  ["pt", "Português", "🇲🇿"],
+  ["en", "English", "🇬🇧"],
+  ["fr", "Français", "🇫🇷"],
+  ["es", "Español", "🇪🇸"],
+  ["zh", "中文（普通话）", "🇨🇳"],
+  ["hi", "हिन्दी", "🇮🇳"],
 ];
 
 export const uiText = {
