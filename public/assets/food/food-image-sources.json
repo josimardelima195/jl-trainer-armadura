@@ -374,6 +374,36 @@
       "path": "/assets/food/user-provided/aveia-banana-leite-canela.webp",
       "source_type": "user_provided",
       "source_note": "Imagem fornecida pelo utilizador para o alimento ou receita correspondente."
+    },
+    {
+      "path": "/assets/food/user-provided/mucapata.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem enviada pelo utilizador para o JL Trainer."
+    },
+    {
+      "path": "/assets/food/user-provided/peixe.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem enviada pelo utilizador para o JL Trainer."
+    },
+    {
+      "path": "/assets/food/user-provided/pepino.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem enviada pelo utilizador para o JL Trainer."
+    },
+    {
+      "path": "/assets/food/user-provided/batata-doce-e-ovo-cozido.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem enviada pelo utilizador para o JL Trainer."
+    },
+    {
+      "path": "/assets/food/user-provided/queijo-fresco.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem enviada pelo utilizador para o JL Trainer."
+    },
+    {
+      "path": "/assets/food/user-provided/laranja.webp",
+      "source_type": "user_provided",
+      "source_note": "Imagem enviada pelo utilizador para o JL Trainer."
     }
   ],
   "commercial_use_note": "Cada fotografia externa tem a sua licença e atribuição registadas em remote_images. Respeitar a licença individual, incluindo atribuição e share-alike quando aplicável.",

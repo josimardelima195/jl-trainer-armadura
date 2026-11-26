@@ -291,14 +291,20 @@ const bodyweightValues = [
 ];
 const higherSkillWords = [
   "front lever",
+  "back lever",
   "muscle up",
   "handstand",
+  "handstand push up",
   "clap",
   "pistol",
   "human flag",
   "planche",
   "frog stand",
   "l-sit",
+  "hanging knee raise",
+  "hanging leg raise",
+  "straight leg raise",
+  "toes to bar",
   "jump squat",
   "box jump",
   "burpee",
@@ -310,8 +316,9 @@ const higherSkillWords = [
   "depth jump",
   "drop jump",
 ];
-const excludedExercisePattern = /\b(?:swing\s*360|front lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\b/;
+const excludedExercisePattern = /\b(?:swing\s*360|full maltese|maltese|suspended abdominal fallout|suspended inverso abdominal|suspended inverse abdominal|suspended reverse crunch|abdominal fallout|iron cross|dragon flag|front lever|back lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\b|(?:suspended|suspension).{0,36}\b(?:abdominal|abs|crunch|fallout)\b/;
 const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|drop jump|burpee|sprint|wind sprint|run|running|jog|jogging|corrida|correr|mountain climbers?|bear crawl|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\b/;
+
 
 export function ageFromProfile(profile = {}) {
   if (profile.birth_date) {
@@ -496,16 +503,16 @@ export function suitableForProfile(exercise, profile = {}) {
   const text = textFor(exercise);
   const goal = clean(profile.goal || profile.objective || "");
   const weightLossGoal = /emagrec|perda de peso|weight loss|fat loss/.test(goal);
+  const beginnerOrOlder = age < 18 || age >= 65 || level.includes("beginner") || level.includes("iniciante");
+  const weight = Number(profile.current_weight);
+  const rawHeight = Number(profile.height);
+  const height = rawHeight > 3 ? rawHeight / 100 : rawHeight;
+  const bmi = weight > 0 && height > 0 ? weight / (height * height) : null;
+  const needsLowImpact = weightLossGoal || beginnerOrOlder || (Number.isFinite(bmi) && bmi >= 30);
   if (isRemovedModalityExercise(exercise)) return false;
-  if (weightLossGoal && highImpactExercisePattern.test(text)) return false;
-  const avoidAdvanced = age < 18 || age >= 65 || level.includes("beginner") || level.includes("iniciante");
-  if (avoidAdvanced && higherSkillWords.some((word) => text.includes(clean(word))))
+  if (needsLowImpact && highImpactExercisePattern.test(text)) return false;
+  if (beginnerOrOlder && higherSkillWords.some((word) => text.includes(clean(word))))
     return false;
-  if (
-    age >= 12 &&
-    age < 18 &&
-    /\b(?:jerk|one rep max|1rm|maximal lift|maximum load)\b/.test(text)
-  ) return false;
   return true;
 }
 
@@ -739,27 +746,40 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
         });
 
     const cardioGoalDay = !rest && ["emagrecimento", "definicao", "condicionamento"].includes(goalKey) && runningDays.has(day);
+    const circuitRounds = intensity === "hard" && !beginner && !senior && !youth ? 4 : 3;
+    const circuitWorkSeconds = beginner || senior || youth || intensity === "easy" ? 30 : intensity === "hard" ? 60 : 45;
+    let isCircuitDay = false;
     if (cardioGoalDay) {
       const cardioOptions = uniqueExercises(exercises).filter(
         (exercise) =>
-          isTimedExercise(exercise) &&
           suitableForProfile(exercise, safeProfile) &&
           exerciseEquipmentMode(exercise) === "bodyweight" &&
           exerciseMatchesFocus(exercise, "cardio_core"),
       );
-      rawExercises.push(...rotatePick(cardioOptions, 1, day));
+      const cardioCandidates = cardioOptions.filter((exercise) => primaryMuscleKey(exercise) === "cardio");
+      const coreCandidates = cardioOptions.filter((exercise) => primaryMuscleKey(exercise) === "core");
+      const circuitSelection = [
+        ...rotatePick(cardioCandidates, Math.min(2, cardioCandidates.length), day),
+        ...rotatePick(coreCandidates, Math.min(2, coreCandidates.length), day + 2),
+      ];
+      if (cardioCandidates.length && coreCandidates.length && circuitSelection.length >= 3) {
+        rawExercises.splice(0, rawExercises.length, ...circuitSelection);
+        isCircuitDay = true;
+      }
     }
     const exercises = rawExercises.filter((exercise) => suitableForProfile(exercise, safeProfile)).map((exercise) => {
-      const timed = isTimedExercise(exercise);
+      const timed = isCircuitDay || isTimedExercise(exercise);
       const durationSeconds = timed
-        ? exerciseDurationSeconds(exercise, profile, intensity)
+        ? isCircuitDay ? circuitWorkSeconds : exerciseDurationSeconds(exercise, safeProfile, intensity)
         : null;
       return {
         ...exercise,
-        sets: timed ? 1 : exercise.sets,
+        sets: isCircuitDay ? circuitRounds : timed ? 1 : exercise.sets,
         reps: timed ? null : exercise.reps,
         duration_seconds: durationSeconds,
-        rest_seconds: timed ? 0 : exercise.rest_seconds,
+        rest_seconds: isCircuitDay ? 15 : timed ? 0 : exercise.rest_seconds,
+        circuit_rounds: isCircuitDay ? circuitRounds : undefined,
+        round_rest_seconds: isCircuitDay ? 45 : undefined,
       };
     });
     const timedCount = exercises.filter((exercise) => isTimedExercise(exercise)).length;
@@ -767,14 +787,18 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
     return {
       day,
       title: "Dia " + day + " · " + (rest ? "Recuperação" : block.title),
-      focus: rest ? "Mobilidade e recuperação" : block.focus,
-      focus_key: rest ? "recovery" : "full_body",
+      focus: rest ? "Mobilidade e recuperação" : isCircuitDay ? "Cardio e abdômen" : block.focus,
+      focus_key: rest ? "recovery" : isCircuitDay ? "cardio_core" : "full_body",
       level,
       intensity,
       rest,
       equipment_mode: "bodyweight",
-      sessionType: timedCount === 0 ? "sets" : timedCount === exercises.length ? "timed" : "mixed",
-      sessionLabel: rest ? "Recuperação ativa por tempo" : "Progressão de calistenia",
+      sessionType: isCircuitDay ? "circuit" : timedCount === 0 ? "sets" : timedCount === exercises.length ? "timed" : "mixed",
+      sessionLabel: rest ? "Recuperação ativa por tempo" : isCircuitDay ? "Circuito de cardio e abdômen · " + circuitRounds + " voltas" : "Progressão de calistenia",
+      circuit_rounds: isCircuitDay ? circuitRounds : null,
+      circuit_work_seconds: isCircuitDay ? circuitWorkSeconds : null,
+      circuit_rest_seconds: isCircuitDay ? 15 : null,
+      round_rest_seconds: isCircuitDay ? 45 : null,
       progressionNote: week === 0
         ? "Aprenda a técnica e encontre uma variante controlada."
         : week === 1
@@ -994,16 +1018,27 @@ export function build30DayPlan(
     const isRecovery = !scheduledWorkoutDay || focus.key === "recovery";
     const exact = filtered.filter((exercise) => exerciseMatchesFocus(exercise, focus.key));
     const ranked = rankedForDay(exact, focus.key, goalKey, day, requestedMode);
-    const cardioFirst = focus.key === "cardio_core";
-    const selected = rotatePick(
-      ranked,
-      isRecovery
-        ? Math.min(3, ranked.length)
-        : cardioFirst
-          ? Math.min(5, requestedCount, ranked.length)
-          : requestedCount,
-      day,
-    );
+    let selected;
+    if (focus.key === "cardio_core" && !isRecovery) {
+      const cardioCandidates = ranked.filter((exercise) => primaryMuscleKey(exercise) === "cardio");
+      let coreCandidates = ranked.filter((exercise) => primaryMuscleKey(exercise) === "core");
+      if (coreCandidates.length < 2) {
+        const existing = new Set(coreCandidates.map((exercise) => exercise.id || exercise.name));
+        coreCandidates = [
+          ...coreCandidates,
+          ...source.filter((exercise) => primaryMuscleKey(exercise) === "core" && !existing.has(exercise.id || exercise.name)),
+        ];
+      }
+      const cardioCount = Math.max(1, Math.floor(requestedCount / 2));
+      const cardioPick = rotatePick(cardioCandidates, Math.min(cardioCount, cardioCandidates.length), day);
+      const corePick = rotatePick(coreCandidates, Math.min(requestedCount - cardioPick.length, coreCandidates.length), day + 2);
+      const picked = [...cardioPick, ...corePick];
+      const pickedKeys = new Set(picked.map((exercise) => exercise.id || exercise.name));
+      const remaining = ranked.filter((exercise) => !pickedKeys.has(exercise.id || exercise.name));
+      selected = [...picked, ...rotatePick(remaining, Math.max(0, requestedCount - picked.length), day + 4)].slice(0, requestedCount);
+    } else {
+      selected = rotatePick(ranked, isRecovery ? Math.min(3, ranked.length) : requestedCount, day);
+    }
 
     const isRunDay = scheduledWorkoutDay && goalKey === "emagrecimento" && runningDays.has(day);
     const age = ageFromProfile(profile);
@@ -1036,11 +1071,19 @@ export function build30DayPlan(
       image_path: null,
     };
     const exercisesForDay = selected.length ? selected : [recoveryFallback];
+    const hasCardio = exercisesForDay.some((exercise) => primaryMuscleKey(exercise) === "cardio");
+    const hasCore = exercisesForDay.some((exercise) => primaryMuscleKey(exercise) === "core");
+    const isCircuitDay = focus.key === "cardio_core" && !isRecovery && hasCardio && hasCore;
+    const beginnerOrOlder = youth || age >= 65 || clean(level).includes("beginner") || clean(level).includes("iniciante");
+    const circuitRounds = safeIntensity === "hard" && !beginnerOrOlder ? 4 : 3;
+    const circuitWorkSeconds = beginnerOrOlder || safeIntensity === "easy" ? 30 : safeIntensity === "hard" ? 60 : 45;
+    const circuitRestSeconds = 15;
+    const roundRestSeconds = 45;
 
     const plannedExercises = exercisesForDay.map((exercise, order) => {
-      const timed = isTimedExercise(exercise);
+      const timed = isCircuitDay || isTimedExercise(exercise);
       const durationSeconds = timed
-        ? exerciseDurationSeconds(exercise, profile, safeIntensity)
+        ? isCircuitDay ? circuitWorkSeconds : exerciseDurationSeconds(exercise, planningProfile, safeIntensity)
         : null;
       const isDefaultExerciseDbDose = exercise.source === "ExerciseDB gratuito" || !exercise.reps || exercise.reps === "8–12";
       const reps = timed
@@ -1051,20 +1094,24 @@ export function build30DayPlan(
 
       return {
         ...exercise,
-        sets: timed ? 1 : defaultSets,
+        sets: isCircuitDay ? circuitRounds : timed ? 1 : defaultSets,
         reps,
         duration_seconds: durationSeconds,
-        rest_seconds: timed ? 0 : exercise.rest_seconds || 60,
+        rest_seconds: isCircuitDay ? circuitRestSeconds : timed ? 0 : exercise.rest_seconds || 60,
+        circuit_rounds: isCircuitDay ? circuitRounds : undefined,
+        round_rest_seconds: isCircuitDay ? roundRestSeconds : undefined,
         day_number: day,
         sort_order: order,
       };
     });
-    const timedCount = plannedExercises.filter((exercise) => isTimedExercise(exercise)).length;
-    const sessionType = timedCount === 0
-      ? "sets"
-      : timedCount === plannedExercises.length
-        ? "timed"
-        : "mixed";
+    const timedCount = plannedExercises.filter((exercise) => isTimedExercise(exercise) || isCircuitDay).length;
+    const sessionType = isCircuitDay
+      ? "circuit"
+      : timedCount === 0
+        ? "sets"
+        : timedCount === plannedExercises.length
+          ? "timed"
+          : "mixed";
 
     return {
       day,
@@ -1078,13 +1125,19 @@ export function build30DayPlan(
       equipment_mode: requestedMode,
       isRunDay,
       sessionType,
-      sessionLabel: isRunDay || (timedCount > 0 && timedCount === plannedExercises.length)
-        ? "Treino contínuo por tempo"
-        : timedCount > 0
-          ? "Treino misto: tempo e repetições"
-          : isRecovery
-            ? "Recuperação ativa"
-            : "Treino específico da modalidade",
+      sessionLabel: isCircuitDay
+        ? "Circuito de cardio e abdômen · " + circuitRounds + " voltas"
+        : isRunDay || (timedCount > 0 && timedCount === plannedExercises.length)
+          ? "Treino contínuo por tempo"
+          : timedCount > 0
+            ? "Treino misto: tempo e repetições"
+            : isRecovery
+              ? "Recuperação ativa"
+              : "Treino específico da modalidade",
+      circuit_rounds: isCircuitDay ? circuitRounds : null,
+      circuit_work_seconds: isCircuitDay ? circuitWorkSeconds : null,
+      circuit_rest_seconds: isCircuitDay ? circuitRestSeconds : null,
+      round_rest_seconds: isCircuitDay ? roundRestSeconds : null,
       exercises: plannedExercises,
     };
   });

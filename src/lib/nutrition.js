@@ -81,6 +81,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🧀",
+    image: "/assets/food/user-provided/queijo-fresco.webp",
   },
   {
     id: "chicken",
@@ -106,7 +107,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🐟",
-    image: "/assets/food/peixe-grelhado.jpg",
+    image: "/assets/food/user-provided/peixe.webp",
   },
   {
     id: "beef",
@@ -287,7 +288,7 @@ export const foodLibrary = [
     fiber: 4,
     group: "Fruta",
     emoji: "🍊",
-    image: "/assets/food/reference-crops/laranja.webp",
+    image: "/assets/food/user-provided/laranja.webp",
   },
   {
     id: "mango",
@@ -390,6 +391,7 @@ export const foodLibrary = [
     fiber: 1,
     group: "Vegetais",
     emoji: "🥒",
+    image: "/assets/food/user-provided/pepino.webp",
   },
   {
     id: "pumpkin",
@@ -429,7 +431,7 @@ export const foodLibrary = [
     fiber: 8,
     group: "Prato moçambicano",
     emoji: "🍲",
-    image: "/assets/food/recipes/rice-and-beans.webp",
+    image: "/assets/food/user-provided/mucapata.webp",
   },
   {
     id: "zambeziana",
@@ -720,18 +722,18 @@ const recipeImages = {
   R04: "/assets/food/recipes/yogurt-fruit-bowl.webp",
   R05: "/assets/food/recipes/banana-pancakes.webp",
   R06: "/assets/food/recipes/cheese-on-toast.webp",
-  R07: "/assets/food/batata-doce-assada.jpg",
+  R07: "/assets/food/user-provided/batata-doce-e-ovo-cozido.webp",
   R08: "/assets/food/user-provided/iogurte-com-manga.webp",
   R09: "/assets/food/user-provided/frango-grelhado-arroz-salada.webp",
   R10: "/assets/food/catalog/carapau.webp",
   R11: "/assets/food/recipes/beef-stew-rice.webp",
   R12: "/assets/food/user-provided/arroz-feijao-e-ovo.webp",
   R13: "/assets/food/recipes/chicken-spaghetti.webp",
-  R14: "/assets/food/peixe-grelhado.jpg",
+  R14: "/assets/food/user-provided/peixe.webp",
   R15: "/assets/food/recipes/hamburger-plate.webp",
   R16: "/assets/food/recipes/beef-stew-rice.webp",
   R17: "/assets/food/matapa.jpg",
-  R18: "/assets/food/recipes/mozambique-typical-lunch.webp",
+  R18: "/assets/food/user-provided/mucapata.webp",
   R19: "/assets/food/recipes/R19.webp",
   R20: "/assets/food/recipes/tuna-pasta-salad.webp",
   R21: "/assets/food/recipes/chicken-vegetable-soup.webp",
@@ -757,7 +759,7 @@ const recipeImages = {
   M01: "/assets/food/catalog/carapau.webp",
   M02: "/assets/food/catalog/peanut-chicken.webp",
   M03: "/assets/food/matapa.jpg",
-  M04: "/assets/food/recipes/rice-and-beans.webp",
+  M04: "/assets/food/user-provided/mucapata.webp",
   M05: "/assets/food/recipes/mozambique-tilapia.webp",
 };
 const cuisineRecipeRows = {

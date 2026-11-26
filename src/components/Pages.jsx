@@ -120,33 +120,65 @@ function GuidedWorkout({
   repsFor,
   durationFor,
   isTimedFor,
+  circuit = false,
+  rounds = 3,
+  restSeconds = 15,
+  roundRestSeconds = 45,
   onExit,
   onSeriesComplete,
   language,
 }) {
   const [index, setIndex] = useState(0);
   const [setNumber, setSetNumber] = useState(1);
+  const [roundNumber, setRoundNumber] = useState(1);
   const [timeLeft, setTimeLeft] = useState(0);
   const [timerState, setTimerState] = useState("idle");
+  const [timerPhase, setTimerPhase] = useState("work");
   const exercise = exercises[index];
   const timed = Boolean(exercise && isTimedFor(exercise));
   const totalSets = exercise ? setsFor(exercise) : 1;
   const durationSeconds = timed ? Math.max(10, Number(durationFor(exercise)) || 60) : 0;
+  const phaseSeconds = timerPhase === "rest" ? restSeconds : timerPhase === "round-rest" ? roundRestSeconds : durationSeconds;
+  const phaseLabel = timerPhase === "work" ? "EXERCÍCIO" : timerPhase === "rest" ? "DESCANSO" : timerPhase === "round-rest" ? "DESCANSO ENTRE VOLTAS" : "CONCLUÍDO";
   const instructions = exercise ? translatedInstructions(exercise, language) : [];
 
   useEffect(() => {
     if (!timed || timerState !== "running") return;
-    const interval = setInterval(() => {
-      setTimeLeft((value) => Math.max(0, value - 1));
-    }, 1000);
+    const interval = setInterval(() => setTimeLeft((value) => Math.max(0, value - 1)), 1000);
     return () => clearInterval(interval);
   }, [timed, timerState]);
 
   useEffect(() => {
     if (!timed || timerState !== "running" || timeLeft > 0) return;
+    if (circuit) {
+      if (timerPhase === "work") {
+        onSeriesComplete?.(exercise);
+        if (index < exercises.length - 1) {
+          setTimerPhase("rest");
+          setTimeLeft(restSeconds);
+        } else if (roundNumber < rounds) {
+          setTimerPhase("round-rest");
+          setTimeLeft(roundRestSeconds);
+        } else {
+          setTimerPhase("done");
+          setTimerState("done");
+        }
+      } else if (timerPhase === "rest") {
+        const nextIndex = index + 1;
+        setIndex(nextIndex);
+        setTimerPhase("work");
+        setTimeLeft(Math.max(10, Number(durationFor(exercises[nextIndex])) || 60));
+      } else if (timerPhase === "round-rest") {
+        setIndex(0);
+        setRoundNumber((value) => value + 1);
+        setTimerPhase("work");
+        setTimeLeft(Math.max(10, Number(durationFor(exercises[0])) || 60));
+      }
+      return;
+    }
     setTimerState("done");
     onSeriesComplete?.(exercise);
-  }, [timed, timerState, timeLeft, exercise?.id]);
+  }, [timed, timerState, timeLeft, circuit, timerPhase, index, roundNumber, rounds, restSeconds, roundRestSeconds, exercise?.id, durationFor, exercises]);
 
   if (!exercise) return null;
 
@@ -156,9 +188,7 @@ function GuidedWorkout({
       setSetNumber(1);
       setTimeLeft(0);
       setTimerState("idle");
-    } else {
-      onExit();
-    }
+    } else onExit();
   };
   const completeSet = () => {
     onSeriesComplete?.(exercise);
@@ -166,6 +196,11 @@ function GuidedWorkout({
     else advance();
   };
   const startTimer = () => {
+    if (circuit) {
+      setIndex(0);
+      setRoundNumber(1);
+      setTimerPhase("work");
+    }
     setTimeLeft(durationSeconds);
     setTimerState("running");
   };
@@ -173,10 +208,10 @@ function GuidedWorkout({
 
   return (
     <div className="guided-workout-backdrop" role="dialog" aria-modal="true">
-      <div className="guided-workout">
+      <div className={`guided-workout ${circuit ? "guided-workout-circuit" : ""}`}>
         <div className="guided-head">
           <div>
-            <span className="eyebrow">TREINO GUIADO · {index + 1}/{exercises.length}</span>
+            <span className="eyebrow">{circuit ? `CIRCUITO · VOLTA ${roundNumber}/${rounds} · ${index + 1}/${exercises.length}` : `TREINO GUIADO · ${index + 1}/${exercises.length}`}</span>
             <h2>{translateExerciseName(exercise.name, language)}</h2>
           </div>
           <button className="outline" type="button" onClick={onExit}>Sair ×</button>
@@ -185,7 +220,13 @@ function GuidedWorkout({
           <ExerciseGif exercise={exercise} variant="guided" />
         </div>
         <div className="guided-meta">
-          {timed ? (
+          {circuit ? (
+            <>
+              <span className="pill">VOLTA {roundNumber} DE {rounds}</span>
+              <span className="pill">{phaseLabel}</span>
+              <span className="pill">{formatExerciseDuration(durationSeconds)}</span>
+            </>
+          ) : timed ? (
             <>
               <span className="pill">TEMPO CONTÍNUO</span>
               <span className="pill">{formatExerciseDuration(durationSeconds)}</span>
@@ -199,40 +240,30 @@ function GuidedWorkout({
           <span className="pill">{equipmentLabel(exercise)}</span>
         </div>
         {timed && (
-          <div className="interval-display" aria-live="assertive">
-            <span>{timerState === "done" ? "Tempo concluído" : timerState === "running" ? "Tempo restante" : timerState === "paused" ? "Temporizador pausado" : "Duração prevista"}</span>
-            <strong>{formatCountdown(timerState === "idle" ? durationSeconds : timeLeft)}</strong>
-            <small>Faça o movimento de forma contínua, sem dividir em séries.</small>
+          <div className={`interval-display ${circuit ? "circuit-phase-" + timerPhase : ""}`} aria-live="assertive">
+            <span>{timerState === "done" ? circuit ? "Circuito concluído" : "Tempo concluído" : timerState === "running" ? circuit ? phaseLabel : "Tempo restante" : timerState === "paused" ? "Temporizador pausado" : circuit ? "Próximo bloco" : "Duração prevista"}</span>
+            <strong>{formatCountdown(timerState === "idle" ? phaseSeconds : timeLeft)}</strong>
+            <small>{circuit ? `Volta ${roundNumber}/${rounds} · exercício ${index + 1} de ${exercises.length} · pausa ${restSeconds}s · entre voltas ${roundRestSeconds}s` : "Faça o movimento de forma controlada, respeitando o tempo previsto."}</small>
           </div>
         )}
         <div className="guided-instructions">
           <h3>Como executar</h3>
           <ol>
-            {instructions.length ? (
-              instructions.map((step, i) => <li key={i}>{step}</li>)
-            ) : (
-              <li>Faça o movimento devagar, com postura controlada e sem dor.</li>
-            )}
+            {instructions.length ? instructions.map((step, i) => <li key={i}>{step}</li>) : <li>Faça o movimento devagar, com postura controlada, amplitude confortável e sem dor.</li>}
           </ol>
         </div>
         <div className="guided-actions">
           {timed ? (
             <>
-              {timerState === "idle" && <button className="primary" type="button" onClick={startTimer}>Iniciar {formatExerciseDuration(durationSeconds)}</button>}
+              {timerState === "idle" && <button className="primary" type="button" onClick={startTimer}>{circuit ? "Iniciar circuito" : "Iniciar " + formatExerciseDuration(durationSeconds)}</button>}
               {timerState === "running" && <button className="outline" type="button" onClick={() => setTimerState("paused")}>Pausar temporizador</button>}
               {timerState === "paused" && <button className="primary" type="button" onClick={() => setTimerState("running")}>Retomar temporizador</button>}
-              {timerState === "done" && <button className="primary" type="button" onClick={advance}>{index < exercises.length - 1 ? "Próximo exercício" : "Concluir treino"}</button>}
+              {timerState === "done" && <button className="primary" type="button" onClick={circuit ? onExit : advance}>{circuit ? "Concluir circuito" : index < exercises.length - 1 ? "Próximo exercício" : "Concluir treino"}</button>}
             </>
           ) : (
-            <button className="primary" type="button" onClick={completeSet}>
-              {setNumber < totalSets
-                ? "Concluir série " + setNumber
-                : index < exercises.length - 1
-                  ? "Concluir e próximo exercício"
-                  : "Concluir treino"}
-            </button>
+            <button className="primary" type="button" onClick={completeSet}>{setNumber < totalSets ? "Concluir série " + setNumber : index < exercises.length - 1 ? "Concluir e próximo exercício" : "Concluir treino"}</button>
           )}
-          <small>{timed ? "O temporizador conta o tempo de execução contínua." : "Avanço automático após completar as séries deste exercício."}</small>
+          <small>{circuit ? "O temporizador avança sozinho: exercício, descanso, próximo exercício e nova volta." : timed ? "O temporizador conta o tempo de execução contínua." : "Avanço após completar as séries deste exercício."}</small>
         </div>
       </div>
     </div>
@@ -388,7 +419,7 @@ export function Workouts({ plan }) {
   );
   const substituteExercise = (exercise) => {
     const used = new Set(exercises.map((item) => item.id));
-    const replacement = allExercises.find(
+    const candidates = allExercises.filter(
       (item) =>
         !used.has(item.id) &&
         samePrimaryMuscle(exercise, item) &&
@@ -396,6 +427,14 @@ export function Workouts({ plan }) {
         (selectedEquipmentMode === "all" ||
           exerciseEquipmentMode(item) === selectedEquipmentMode),
     );
+    const corePreference = ["dead bug", "reverse crunch", "knee touch crunch", "crunch (hands overhead)", "tuck crunch", "bodyweight incline side plank"];
+    const replacement = candidates.sort((a, b) => {
+      const aName = String(a.name || "").toLowerCase();
+      const bName = String(b.name || "").toLowerCase();
+      const aRank = corePreference.findIndex((name) => aName.includes(name));
+      const bRank = corePreference.findIndex((name) => bName.includes(name));
+      return (aRank < 0 ? 99 : aRank) - (bRank < 0 ? 99 : bRank);
+    })[0];
     if (replacement)
       setSubstitutions((current) => ({
         ...current,
@@ -425,13 +464,20 @@ export function Workouts({ plan }) {
   );
   const modalityName = String(profile.modality || "").toLowerCase();
   const modalityDefaultSets = 3;
+  const isCircuitDay = today?.sessionType === "circuit";
+  const circuitRounds = Number(today?.circuit_rounds) || 3;
+  const circuitWorkSeconds = Number(today?.circuit_work_seconds) || 45;
+  const circuitRestSeconds = Number(today?.circuit_rest_seconds) || 15;
+  const circuitRoundRestSeconds = Number(today?.round_rest_seconds) || 45;
   const setsFor = (exercise) => {
+    if (isCircuitDay) return Number(exercise.circuit_rounds) || circuitRounds;
     if (isTimedExercise(exercise)) return 1;
     const base = Number(exercise.sets) || modalityDefaultSets;
     return age >= 60 ? Math.min(2, base) : base;
   };
   const durationFor = (exercise) =>
-    Number(exercise.duration_seconds || exerciseDurationSeconds(exercise, profile, intensity)) || 60;
+    Number(exercise.duration_seconds || (isCircuitDay ? circuitWorkSeconds : exerciseDurationSeconds(exercise, profile, intensity))) || 60;
+  const isTimedFor = (exercise) => isCircuitDay || isTimedExercise(exercise);
   const durationLabelFor = (exercise) => formatExerciseDuration(durationFor(exercise));
   const repsFor = (exercise) => {
     if (exercise.reps) return exercise.reps;
@@ -595,6 +641,7 @@ export function Workouts({ plan }) {
                   <b>{translateExerciseName(exercise.name, language)}</b>
                   <small>
                     {muscleLabel(exercise)} · {equipmentLabel(exercise)}
+                    {isCircuitDay ? ` · ${formatExerciseDuration(durationFor(exercise))} trabalho · ${circuitRestSeconds}s pausa · ${circuitRounds} voltas` : ""}
                   </small>
                   <button
                     type="button"
@@ -632,7 +679,11 @@ export function Workouts({ plan }) {
           setsFor={setsFor}
           repsFor={repsFor}
           durationFor={durationFor}
-          isTimedFor={isTimedExercise}
+          isTimedFor={isTimedFor}
+          circuit={isCircuitDay}
+          rounds={circuitRounds}
+          restSeconds={circuitRestSeconds}
+          roundRestSeconds={circuitRoundRestSeconds}
           language={language}
           onSeriesComplete={(exercise) =>
             setCompleted((current) => ({
@@ -721,8 +772,8 @@ export function Workouts({ plan }) {
               </p>
               <small>
                 {equipmentLabel(exercise)} · trabalha: {muscleLabel(exercise)} ·{" "}
-                {isTimedExercise(exercise)
-                  ? durationLabelFor(exercise) + " contínuos, sem séries"
+                {isTimedFor(exercise)
+                  ? isCircuitDay ? durationLabelFor(exercise) + " trabalho · " + circuitRestSeconds + "s pausa · " + circuitRounds + " voltas" : durationLabelFor(exercise) + " contínuos, sem séries"
                   : loadRecommendation(profile, exercise) + " · " + setsFor(exercise) + " séries de " + repsFor(exercise) + " · pausa " + (exercise.rest_seconds || 60) + "s"}
               </small>
             </div>
@@ -747,13 +798,13 @@ export function Workouts({ plan }) {
                   ...current,
                   [exercise.id]: Math.min((current[exercise.id] || 0) + 1, setsFor(exercise)),
                 }));
-                if (!isTimedExercise(exercise)) {
+                if (!isTimedFor(exercise)) {
                   setTimer(exercise.rest_seconds || 60);
                   setTimerNonce((value) => value + 1);
                 }
               }}
             >
-              {completed[exercise.id] || 0}/{setsFor(exercise)} · {isTimedExercise(exercise) ? "Concluir exercício" : "Concluir série"}
+              {completed[exercise.id] || 0}/{setsFor(exercise)} · {isCircuitDay ? "Concluir volta" : isTimedFor(exercise) ? "Concluir exercício" : "Concluir série"}
             </button>
           </div>
         </article>
