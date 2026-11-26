@@ -1966,3 +1966,24 @@ body.theme-blue .auth-box input {
   object-fit: contain;
   object-position: center;
 }
+
+
+/* Interval circuit timer: clear work/rest states without changing the selected theme. */
+.guided-workout-circuit .interval-display {
+  border-width: 2px;
+  text-align: center;
+}
+.guided-workout-circuit .interval-display strong {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .03em;
+}
+.guided-workout-circuit .interval-display.circuit-phase-rest,
+.guided-workout-circuit .interval-display.circuit-phase-round-rest {
+  background: color-mix(in srgb, var(--panel2) 86%, var(--gold) 14%);
+}
+.guided-workout-circuit .guided-meta .pill {
+  font-weight: 700;
+}
+.guided-workout-circuit .guided-actions small {
+  line-height: 1.5;
+}

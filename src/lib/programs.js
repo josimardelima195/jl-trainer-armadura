@@ -786,7 +786,7 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
 
     return {
       day,
-      title: "Dia " + day + " · " + (rest ? "Recuperação" : block.title),
+      title: "Dia " + day + " · " + (rest ? "Recuperação" : isCircuitDay ? "Cardio e abdômen" : block.title),
       focus: rest ? "Mobilidade e recuperação" : isCircuitDay ? "Cardio e abdômen" : block.focus,
       focus_key: rest ? "recovery" : isCircuitDay ? "cardio_core" : "full_body",
       level,

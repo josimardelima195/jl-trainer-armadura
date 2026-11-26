@@ -366,7 +366,7 @@ export function Workouts({ plan }) {
         )
         .filter((exercise) => !isRemovedModalityExercise(exercise))
         .filter((exercise) => suitableForProfile(exercise, profile)),
-    [exerciseLibrary, data.exercises, profile.age, profile.birth_date, profile.training_level, profile.goal],
+    [exerciseLibrary, data.exercises, profile.age, profile.birth_date, profile.training_level, profile.goal, profile.current_weight, profile.height],
   );
   const bmi =
     profile.current_weight && profile.height
@@ -406,6 +406,8 @@ export function Workouts({ plan }) {
       profile.training_location,
       profile.training_days_count,
       profile.training_frequency,
+      profile.current_weight,
+      profile.height,
       modalityKey,
       profile.goal,
     ],
