@@ -317,7 +317,7 @@ const higherSkillWords = [
   "drop jump",
 ];
 const excludedExercisePattern = /\b(?:swing\s*360|full maltese|maltese|suspended abdominal fallout|suspended inverso abdominal|suspended inverse abdominal|suspended reverse crunch|abdominal fallout|iron cross|dragon flag|front lever|back lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\b|(?:suspended|suspension).{0,36}\b(?:abdominal|abs|crunch|fallout)\b/;
-const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|drop jump|burpee|sprint|wind sprint|run|running|jog|jogging|corrida|correr|mountain climbers?|bear crawl|jumping jacks?|jack jump|high knees|skater hops|jump rope|pular corda|polichinelos?)\b/;
+const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|drop jump|burpee|sprint|wind sprint|run|running|jog|jogging|corrida|correr|mountain climbers?|bear crawl|jumping jacks?|jack jump|high knees?|skater hops|jump rope|pular corda|polichinelos?)\b/;
 
 
 export function ageFromProfile(profile = {}) {
@@ -779,7 +779,7 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
         duration_seconds: durationSeconds,
         rest_seconds: isCircuitDay ? 15 : timed ? 0 : exercise.rest_seconds,
         circuit_rounds: isCircuitDay ? circuitRounds : undefined,
-        round_rest_seconds: isCircuitDay ? 45 : undefined,
+        round_rest_seconds: isCircuitDay ? 60 : undefined,
       };
     });
     const timedCount = exercises.filter((exercise) => isTimedExercise(exercise)).length;
@@ -798,7 +798,7 @@ export function buildCalisthenics30DayPlan(profile = {}, exercises = [], goalKey
       circuit_rounds: isCircuitDay ? circuitRounds : null,
       circuit_work_seconds: isCircuitDay ? circuitWorkSeconds : null,
       circuit_rest_seconds: isCircuitDay ? 15 : null,
-      round_rest_seconds: isCircuitDay ? 45 : null,
+      round_rest_seconds: isCircuitDay ? 60 : null,
       progressionNote: week === 0
         ? "Aprenda a técnica e encontre uma variante controlada."
         : week === 1
@@ -1078,7 +1078,7 @@ export function build30DayPlan(
     const circuitRounds = safeIntensity === "hard" && !beginnerOrOlder ? 4 : 3;
     const circuitWorkSeconds = beginnerOrOlder || safeIntensity === "easy" ? 30 : safeIntensity === "hard" ? 60 : 45;
     const circuitRestSeconds = 15;
-    const roundRestSeconds = 45;
+    const roundRestSeconds = 60;
 
     const plannedExercises = exercisesForDay.map((exercise, order) => {
       const timed = isCircuitDay || isTimedExercise(exercise);

@@ -421,14 +421,18 @@ export function Workouts({ plan }) {
   );
   const substituteExercise = (exercise) => {
     const used = new Set(exercises.map((item) => item.id));
-    const candidates = allExercises.filter(
+    const sameMuscleCandidates = allExercises.filter(
       (item) =>
         !used.has(item.id) &&
         samePrimaryMuscle(exercise, item) &&
-        suitableForProfile(item, profile) &&
-        (selectedEquipmentMode === "all" ||
-          exerciseEquipmentMode(item) === selectedEquipmentMode),
+        suitableForProfile(item, profile),
     );
+    const modeCandidates = selectedEquipmentMode === "all"
+      ? sameMuscleCandidates
+      : sameMuscleCandidates.filter((item) => exerciseEquipmentMode(item) === selectedEquipmentMode);
+    const candidates = modeCandidates.length
+      ? modeCandidates
+      : sameMuscleCandidates.filter((item) => exerciseEquipmentMode(item) === "bodyweight");
     const corePreference = ["dead bug", "reverse crunch", "knee touch crunch", "crunch (hands overhead)", "tuck crunch", "bodyweight incline side plank"];
     const replacement = candidates.sort((a, b) => {
       const aName = String(a.name || "").toLowerCase();
