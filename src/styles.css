@@ -2139,3 +2139,100 @@ body.theme-blue .auth-box input {
 @keyframes bird-dog-leg { from { transform: rotate(2deg); } to { transform: rotate(-3deg); } }
 @keyframes plank-breathe { from { transform: translateY(0); } to { transform: translateY(2px); } }
 @keyframes mobility-arms { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+
+
+/* Local exercise demonstrations: a visual fallback when an external GIF is missing. */
+.exercise-gif-demo .demo-stroke {
+  fill: none;
+  stroke: #42594b;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.squat-demo .squat-body {
+  transform-box: view-box;
+  transform-origin: 110px 91px;
+  animation: squat-cycle 1.45s ease-in-out infinite alternate;
+}
+.pushup-demo .pushup-body {
+  transform-box: view-box;
+  transform-origin: 112px 91px;
+  animation: pushup-cycle 1.35s ease-in-out infinite alternate;
+}
+.bridge-demo .bridge-hips {
+  transform-box: view-box;
+  transform-origin: 112px 132px;
+  animation: bridge-cycle 1.55s ease-in-out infinite alternate;
+}
+.dead-bug-demo .deadbug-arm {
+  transform-box: view-box;
+  transform-origin: 73px 119px;
+  animation: deadbug-arm-cycle 1.7s ease-in-out infinite alternate;
+}
+.dead-bug-demo .deadbug-leg {
+  transform-box: view-box;
+  transform-origin: 125px 120px;
+  animation: deadbug-leg-cycle 1.7s ease-in-out infinite alternate;
+}
+.calf-demo .calf-lift {
+  transform-box: view-box;
+  transform-origin: 110px 154px;
+  animation: calf-cycle 1.1s ease-in-out infinite alternate;
+}
+.march-demo .march-arm,
+.march-demo .march-leg {
+  transform-box: view-box;
+}
+.march-demo .march-arm-left {
+  transform-origin: 110px 57px;
+  animation: march-arm-left .72s ease-in-out infinite alternate;
+}
+.march-demo .march-arm-right {
+  transform-origin: 110px 57px;
+  animation: march-arm-right .72s ease-in-out infinite alternate;
+}
+.march-demo .march-leg-left {
+  transform-origin: 110px 94px;
+  animation: march-leg-left .72s ease-in-out infinite alternate;
+}
+.march-demo .march-leg-right {
+  transform-origin: 110px 94px;
+  animation: march-leg-right .72s ease-in-out infinite alternate;
+}
+.bird-dog-demo .bird-extend-arm {
+  transform-box: view-box;
+  transform-origin: 82px 77px;
+  animation: bird-dog-arm 1.8s ease-in-out infinite alternate;
+}
+.bird-dog-demo .bird-extend-leg {
+  transform-box: view-box;
+  transform-origin: 134px 87px;
+  animation: bird-dog-leg 1.8s ease-in-out infinite alternate;
+}
+.plank-demo .plank-body {
+  transform-box: view-box;
+  transform-origin: 110px 95px;
+  animation: plank-breathe 2.2s ease-in-out infinite alternate;
+}
+.mobility-demo .mobility-arms {
+  transform-box: view-box;
+  transform-origin: 110px 58px;
+  animation: mobility-arms 2.4s ease-in-out infinite alternate;
+}
+@keyframes squat-cycle { from { transform: translateY(0) scaleY(1); } to { transform: translateY(9px) scaleY(.94); } }
+@keyframes pushup-cycle { from { transform: translateY(0); } to { transform: translateY(5px); } }
+@keyframes bridge-cycle { from { transform: translateY(5px); } to { transform: translateY(-8px); } }
+@keyframes deadbug-arm-cycle { from { transform: rotate(-8deg); } to { transform: rotate(22deg); } }
+@keyframes deadbug-leg-cycle { from { transform: rotate(15deg); } to { transform: rotate(-14deg); } }
+@keyframes calf-cycle { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+@keyframes march-arm-left { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+@keyframes march-arm-right { from { transform: rotate(16deg); } to { transform: rotate(-16deg); } }
+@keyframes march-leg-left { from { transform: rotate(18deg); } to { transform: rotate(-18deg); } }
+@keyframes march-leg-right { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
+@keyframes bird-dog-arm { from { transform: rotate(-2deg); } to { transform: rotate(3deg); } }
+@keyframes bird-dog-leg { from { transform: rotate(2deg); } to { transform: rotate(-3deg); } }
+@keyframes plank-breathe { from { transform: translateY(0); } to { transform: translateY(2px); } }
+@keyframes mobility-arms { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
+@media(prefers-reduced-motion: reduce) {
+  .exercise-gif-demo * { animation: none !important; }
+}

@@ -120,7 +120,7 @@ export const foodLibrary = [
     fiber: 0,
     group: "Proteína",
     emoji: "🥩",
-    image: "/assets/food/user-provided/carne-magra-peso-cru.webp",
+    image: "/assets/food/recipes/beef-stew-rice.webp",
   },
   {
     id: "tuna",
@@ -590,7 +590,7 @@ export const foodLibrary = [
     fiber: 2,
     group: "Carboidrato local",
     emoji: "🥣",
-    image: "/assets/food/recipes/banana-oatmeal.webp",
+    image: "/assets/food/recipes/fish-with-xima.webp",
   },
   {
     id: "pineapple",
