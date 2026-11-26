@@ -29,7 +29,7 @@ import {
 import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 const exerciseGifFallbacks = [
-  { match: /marcha no lugar|caminhada leve|marching in place|march in place/, url: "https://static.exercisedb.dev/media/ealLwvX.gif" },
+  { match: /marcha no lugar|marching in place|march in place/, url: "https://static.exercisedb.dev/media/ealLwvX.gif" },
   { match: /agachamento|sentar e levantar da cadeira/, url: "https://static.exercisedb.dev/media/6YUfHPL.gif" },
   { match: /flexao na parede|flexao inclinada/, url: "https://static.exercisedb.dev/media/B1EVP9F.gif" },
   { match: /ponte de gluteos/, url: "https://static.exercisedb.dev/media/u0cNiij.gif" },
@@ -57,17 +57,75 @@ function MarchingExerciseDemo() {
   );
 }
 
+function BirdDogExerciseDemo() {
+  return (
+    <div className="exercise-gif-demo bird-dog-demo" role="img" aria-label="Demonstração animada de bird dog">
+      <svg viewBox="0 0 220 180" aria-hidden="true">
+        <path d="M20 139 H200" stroke="#d5dfd4" strokeWidth="4" strokeLinecap="round" />
+        <ellipse cx="112" cy="151" rx="54" ry="5" fill="#d9e2d8" />
+        <circle cx="52" cy="61" r="13" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
+        <path className="demo-stroke demo-body" d="M66 74 L134 87" />
+        <path className="demo-stroke" d="M82 77 L76 133" />
+        <path className="demo-stroke" d="M134 87 L143 133" />
+        <g className="bird-extend-arm"><path className="demo-stroke" d="M82 77 L25 69" /></g>
+        <g className="bird-extend-leg"><path className="demo-stroke" d="M134 87 L194 64" /></g>
+      </svg>
+      <span>Braço e perna opostos</span>
+    </div>
+  );
+}
+
+function InclinePlankExerciseDemo() {
+  return (
+    <div className="exercise-gif-demo plank-demo" role="img" aria-label="Demonstração animada de prancha inclinada">
+      <svg viewBox="0 0 220 180" aria-hidden="true">
+        <path d="M132 128 H204" stroke="#9da99b" strokeWidth="8" strokeLinecap="round" />
+        <path d="M146 128 V151 M194 128 V151" stroke="#9da99b" strokeWidth="5" strokeLinecap="round" />
+        <ellipse cx="112" cy="160" rx="62" ry="5" fill="#d9e2d8" />
+        <circle cx="43" cy="58" r="12" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
+        <g className="plank-body">
+          <path className="demo-stroke" d="M55 66 L113 91 L179 116" />
+          <path className="demo-stroke" d="M58 67 L91 102 L146 123" />
+          <path className="demo-stroke" d="M113 91 L141 104 L179 116" />
+        </g>
+      </svg>
+      <span>Corpo alinhado</span>
+    </div>
+  );
+}
+
+function MobilityExerciseDemo() {
+  return (
+    <div className="exercise-gif-demo mobility-demo" role="img" aria-label="Demonstração animada de mobilidade de ombros e quadril">
+      <svg viewBox="0 0 220 180" aria-hidden="true">
+        <ellipse cx="110" cy="164" rx="43" ry="6" fill="#d9e2d8" />
+        <circle cx="110" cy="28" r="14" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
+        <path className="demo-stroke" d="M110 47 L110 99 M110 99 L91 153 M110 99 L129 153" />
+        <g className="mobility-arms">
+          <path className="demo-stroke" d="M110 58 L78 44 L61 62 M110 58 L142 44 L159 62" />
+        </g>
+      </svg>
+      <span>Movimentos suaves</span>
+    </div>
+  );
+}
+
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [failed, setFailed] = useState(false);
   const [language] = useLanguage();
   const exerciseName = translateExerciseName(exercise?.name, language);
   const normalizedName = String(exercise?.name || "")
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\\u0300-\\u036f]/g, "")
     .toLowerCase();
   const matchedFallback = exerciseGifFallbacks.find((item) => item.match.test(normalizedName));
   const source = exercise?.image_path || exercise?.gifUrl || matchedFallback?.url || null;
-  const isMarchDemo = /marcha no lugar|caminhada leve|marching in place|march in place/.test(normalizedName);
+  const localFallbackKind =
+    /marcha no lugar|marching in place|march in place/.test(normalizedName) ? "march" :
+    /bird dog/.test(normalizedName) ? "bird-dog" :
+    /prancha inclinada/.test(normalizedName) ? "plank" :
+    /caminhada leve|mobilidade de ombros e quadril/.test(normalizedName) ? "mobility" :
+    null;
 
   useEffect(() => {
     setFailed(false);
@@ -79,6 +137,12 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
     : /karate|karatê/i.test(exerciseLabel)
       ? "🥋 Karatê"
       : "Demonstração não disponível";
+
+  let localDemo = null;
+  if (localFallbackKind === "march") localDemo = <MarchingExerciseDemo />;
+  else if (localFallbackKind === "bird-dog") localDemo = <BirdDogExerciseDemo />;
+  else if (localFallbackKind === "plank") localDemo = <InclinePlankExerciseDemo />;
+  else if (localFallbackKind === "mobility") localDemo = <MobilityExerciseDemo />;
 
   return (
     <div className={`exercise-gif exercise-gif-${variant}`}>
@@ -92,8 +156,8 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
           decoding="async"
           onError={() => setFailed(true)}
         />
-      ) : isMarchDemo ? (
-        <MarchingExerciseDemo />
+      ) : localDemo ? (
+        localDemo
       ) : (
         <span className="exercise-gif-fallback">{fallbackLabel}</span>
       )}

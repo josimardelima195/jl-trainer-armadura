@@ -2105,3 +2105,37 @@ body.theme-blue .auth-box input {
 @keyframes march-arm-right { from { transform: rotate(16deg); } to { transform: rotate(-16deg); } }
 @keyframes march-leg-left { from { transform: rotate(18deg); } to { transform: rotate(-18deg); } }
 @keyframes march-leg-right { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
+
+
+/* Animated local demonstrations for custom exercises without an ExerciseDB GIF. */
+.exercise-gif-demo .demo-stroke {
+  fill: none;
+  stroke: #42594b;
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bird-dog-demo .bird-extend-arm {
+  transform-box: view-box;
+  transform-origin: 82px 77px;
+  animation: bird-dog-arm 1.8s ease-in-out infinite alternate;
+}
+.bird-dog-demo .bird-extend-leg {
+  transform-box: view-box;
+  transform-origin: 134px 87px;
+  animation: bird-dog-leg 1.8s ease-in-out infinite alternate;
+}
+.plank-demo .plank-body {
+  transform-box: view-box;
+  transform-origin: 110px 95px;
+  animation: plank-breathe 2.2s ease-in-out infinite alternate;
+}
+.mobility-demo .mobility-arms {
+  transform-box: view-box;
+  transform-origin: 110px 58px;
+  animation: mobility-arms 2.4s ease-in-out infinite alternate;
+}
+@keyframes bird-dog-arm { from { transform: rotate(-2deg); } to { transform: rotate(3deg); } }
+@keyframes bird-dog-leg { from { transform: rotate(2deg); } to { transform: rotate(-3deg); } }
+@keyframes plank-breathe { from { transform: translateY(0); } to { transform: translateY(2px); } }
+@keyframes mobility-arms { from { transform: rotate(-9deg); } to { transform: rotate(9deg); } }
