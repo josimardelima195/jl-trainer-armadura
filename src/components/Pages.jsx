@@ -63,7 +63,7 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
   const exerciseName = translateExerciseName(exercise?.name, language);
   const normalizedName = String(exercise?.name || "")
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
   const matchedFallback = exerciseGifFallbacks.find((item) => item.match.test(normalizedName));
   const source = exercise?.image_path || exercise?.gifUrl || matchedFallback?.url || null;
