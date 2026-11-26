@@ -2915,6 +2915,13 @@ export function Nutrition({ plan, whatsapp }) {
             <div className="nutrition-safety-note">{n.ageNote}</div>
           )}
         </div>
+        <div className="nutrition-hero-art">
+          <img
+            src="/assets/food/user-provided/plano-alimentar.webp"
+            alt="Plano alimentar"
+            loading="lazy"
+          />
+        </div>
         <div className="nutrition-kcal">
           <strong>{n.calories ?? "—"}</strong>
           <span>
