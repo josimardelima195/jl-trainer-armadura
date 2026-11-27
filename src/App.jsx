@@ -33,6 +33,7 @@ import {
   Challenges,
   CommunityAvatar,
 } from "./components/Pages";
+import { Running } from "./components/Running";
 import Admin from "./components/Admin";
 import { useLanguage, uiText, onboardingText, translateUiText } from "./lib/i18n";
 import { foodLibrary, nutritionPlan } from "./lib/nutrition";
@@ -577,6 +578,7 @@ export default function App() {
   const nav = [
       ["inicio", t.home, Home],
       ["treinos", t.workouts, Dumbbell],
+      ["corridas", ({pt:"Corridas",en:"Runs",fr:"Courses",es:"Carreras",zh:"跑步",hi:"दौड़"}[language] || "Corridas"), Activity],
       ["nutricao", t.nutrition, Utensils],
       ["progresso", t.progress, TrendingUp],
       ["perfil", t.profile, UserRound],
@@ -949,6 +951,7 @@ export default function App() {
                   </>
                 )}
                 {tab === "treinos" && <Workouts {...common} />}
+                {tab === "corridas" && <Running />}
                 {tab === "nutricao" && <Nutrition {...common} />}
                 {tab === "progresso" && <Progress {...common} />}
                 {tab === "perfil" && <Profile {...common} />}
