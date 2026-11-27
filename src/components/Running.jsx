@@ -3,7 +3,7 @@ import {Activity,MapPin,Play,Pause,Square,Share2,Trophy,Route,Gauge,LocateFixed,
 import {supabase} from "../lib/supabase";
 import {useStore} from "../lib/store";
 import {useLanguage} from "../lib/i18n";
-import {upload} from "../lib/storage";
+import {upload,openMedia} from "../lib/storage";
 import "./Running.css";
 
 const words={
@@ -52,10 +52,16 @@ export function Running(){
    setSessions(own.data||[]);setRedeemed((rewards.data||[]).reduce((s,r)=>s+Number(r.distance_spent_m||0),0));
    const rows=feed.data||[],ids=rows.map(r=>r.id);let likeRows=[],commentRows=[];
    if(ids.length){const [l,c]=await Promise.all([supabase.from("run_post_likes").select("post_id,user_id").in("post_id",ids),supabase.from("run_post_comments").select("id,post_id,user_id,display_name,body,created_at").in("post_id",ids).order("created_at",{ascending:true}).limit(120)]);if(l.error)throw l.error;if(c.error)throw c.error;likeRows=l.data||[];commentRows=c.data||[];}
-   const signed=await Promise.all(rows.map(async r=>{let url="";if(r.photo_path){const x=await supabase.storage.from("run-photos").createSignedUrl(r.photo_path,3600);if(!x.error)url=x.data?.signedUrl||"";}return{...r,photo_url:url};}));
+   const signed=await Promise.all(rows.map(async r=>{
+    let photoUrl="",avatarUrl="";
+    if(r.photo_path){const x=await supabase.storage.from("run-photos").createSignedUrl(r.photo_path,3600);if(!x.error)photoUrl=x.data?.signedUrl||"";}
+    if(r.avatar_url){if(/^https?:\\/\\//i.test(r.avatar_url))avatarUrl=r.avatar_url;else{try{avatarUrl=await openMedia("profile-photos",r.avatar_url,3600)||"";}catch{avatarUrl="";}}}
+    return{...r,photo_url:photoUrl,avatar_url:avatarUrl};
+   }));
    setPosts(signed);setLikes(likeRows);setComments(commentRows);
-   const board=new Map();for(const r of week.data||[]){const a=board.get(r.user_id)||{user_id:r.user_id,display_name:r.display_name||t.athlete,avatar_url:r.avatar_url||"",total_distance_m:0,total_runs:0};a.total_distance_m+=Number(r.distance_m||0);a.total_runs++;board.set(r.user_id,a);}
-   setRanking([...board.values()].sort((a,b)=>b.total_distance_m-a.total_distance_m||b.total_runs-a.total_runs));
+   const board=new Map();for(const r of week.data||[]){const a=board.get(r.user_id)||{user_id:r.user_id,display_name:r.display_name||t.athlete,avatar_path:r.avatar_url||"",total_distance_m:0,total_runs:0};a.total_distance_m+=Number(r.distance_m||0);a.total_runs++;board.set(r.user_id,a);}
+   const ranked=await Promise.all([...board.values()].map(async a=>{let avatarUrl="";if(a.avatar_path){if(/^https?:\\/\\//i.test(a.avatar_path))avatarUrl=a.avatar_path;else{try{avatarUrl=await openMedia("profile-photos",a.avatar_path,3600)||"";}catch{avatarUrl="";}}}return{...a,avatar_url:avatarUrl};}));
+   setRanking(ranked.sort((a,b)=>b.total_distance_m-a.total_distance_m||b.total_runs-a.total_runs));
   }catch(e){setNotice(e.message||t.saveError);}finally{setLoading(false);}
  },[userId,t.athlete,t.saveError]);
  useEffect(()=>{load();return stop;},[load,stop]);
