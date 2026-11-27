@@ -29,6 +29,7 @@ import {
 import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName, translateExerciseDescription } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 const exerciseGifFallbacks = [
+  { match: /corrida parada|marcha no lugar|marcha acelerada no lugar/, url: "https://static.exercisedb.dev/media/oLrKqDH.gif" },
   { match: /agachamento livre|agachamento controlado|agachamento$/, url: "https://static.exercisedb.dev/media/6YUfHPL.gif" },
   { match: /flexao inclinada/, url: "https://static.exercisedb.dev/media/B1EVP9F.gif" },
   { match: /ponte de gluteos/, url: "https://static.exercisedb.dev/media/u0cNiij.gif" },
