@@ -942,7 +942,7 @@ const exerciseNameExact = {
   "flexão inclinada":{pt:"Flexão inclinada",fr:"Pompe inclinée",es:"Flexión inclinada",zh:"上斜俯卧撑",hi:"इनक्लाइन पुश-अप"},
   "ponte de glúteos":{pt:"Ponte de glúteos",fr:"Pont fessier",es:"Puente de glúteos",zh:"臀桥",hi:"ग्लूट ब्रिज"},
   "abdominal no solo":{pt:"Abdominal no solo",fr:"Crunch au sol",es:"Abdominal en el suelo",zh:"地面卷腹",hi:"फ्लोर क्रंच"},
-  "dead bug":{pt:"Dead bug",fr:"Dead bug",es:"Dead bug",zh:"死虫式",hi:"डेड बग"},
+  "dead bug":{pt:"Estabilização abdominal alternada",fr:"Gainage alterné bras-jambes",es:"Estabilización abdominal alterna",zh:"死虫式",hi:"डेड बग"},
   "elevação de gémeos":{pt:"Elevação de gémeos",fr:"Élévation des mollets",es:"Elevación de gemelos",zh:"提踵",hi:"काफ रेज़"},
   "marcha no lugar":{pt:"Marcha no lugar",fr:"Marche sur place",es:"Marcha en el sitio",zh:"原地踏步",hi:"जगह पर मार्च"},
   "prancha lateral":{pt:"Prancha lateral",fr:"Gainage latéral",es:"Plancha lateral",zh:"侧平板支撑",hi:"साइड प्लैंक"},
@@ -956,6 +956,21 @@ const exerciseNameExact = {
   "high knee against wall":{pt:"Elevação alternada dos joelhos com apoio na parede",fr:"Montées de genoux avec appui au mur",es:"Elevación alterna de rodillas con apoyo en la pared",zh:"扶墙交替抬膝",hi:"दीवार के सहारे बारी-बारी घुटने उठाना"},
   "short stride run":{pt:"Corrida em passos curtos",fr:"Course à petits pas",es:"Carrera con pasos cortos",zh:"小步跑",hi:"छोटे कदमों से दौड़"},
   "kneeling push-up":{pt:"Flexão de joelhos",fr:"Pompe sur les genoux",es:"Flexión con rodillas apoyadas",zh:"跪姿俯卧撑",hi:"नी-पुश-अप"}
+
+  "bodyweight squat":{pt:"Agachamento livre",fr:"Squat au poids du corps",es:"Sentadilla libre",zh:"徒手深蹲",hi:"बॉडीवेट स्क्वाट"},
+  "standing calf raise":{pt:"Elevação de gémeos em pé",fr:"Élévation des mollets debout",es:"Elevación de gemelos de pie",zh:"站姿提踵",hi:"स्टैंडिंग काफ रेज़"},
+  "glute bridge march":{pt:"Ponte de glúteos com marcha",fr:"Pont fessier avec marche alternée",es:"Puente de glúteos con marcha",zh:"交替抬腿臀桥",hi:"मार्चिंग ग्लूट ब्रिज"},
+  "push-up":{pt:"Flexão de braços",fr:"Pompe",es:"Flexión de brazos",zh:"俯卧撑",hi:"पुश-अप"},
+  "push up":{pt:"Flexão de braços",fr:"Pompe",es:"Flexión de brazos",zh:"俯卧撑",hi:"पुश-अप"},
+  "front plank":{pt:"Prancha frontal",fr:"Gainage frontal",es:"Plancha frontal",zh:"平板支撑",hi:"फ्रंट प्लैंक"},
+  "side plank":{pt:"Prancha lateral",fr:"Gainage latéral",es:"Plancha lateral",zh:"侧平板支撑",hi:"साइड प्लैंक"},
+  "wall sit":{pt:"Agachamento isométrico na parede",fr:"Chaise contre le mur",es:"Sentadilla isométrica en la pared",zh:"靠墙静蹲",hi:"वॉल सिट"},
+  "bird dog":{pt:"Extensão alternada de braço e perna",fr:"Extension alternée bras-jambe",es:"Extensión alterna de brazo y pierna",zh:"鸟狗式",hi:"बर्ड डॉग"},
+  "reverse crunch":{pt:"Abdominal reverso",fr:"Crunch inversé",es:"Abdominal inverso",zh:"反向卷腹",hi:"रिवर्स क्रंच"},
+  "high knees":{pt:"Elevação alternada dos joelhos",fr:"Montées de genoux",es:"Elevación alterna de rodillas",zh:"高抬腿",hi:"हाई नीज़"},
+  "mountain climbers":{pt:"Escalador",fr:"Grimpeur",es:"Escaladores",zh:"登山跑",hi:"माउंटेन क्लाइंबर"},
+  "walking lunge":{pt:"Avanço caminhando",fr:"Fentes en marchant",es:"Zancadas caminando",zh:"行走弓步",hi:"वॉकिंग लंज"},
+
 
 };
 
