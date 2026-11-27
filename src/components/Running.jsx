@@ -33,7 +33,11 @@ function mapData(points,follow,location,layer,zoomOffset=0){
  const la=coords.map(p=>p.latitude),lo=coords.map(p=>p.longitude);
  const minLa=Math.min(...la),maxLa=Math.max(...la),minLo=Math.min(...lo),maxLo=Math.max(...lo);
  const mid=(minLa+maxLa)/2,span=Math.max(.00004,maxLa-minLa,(maxLo-minLo)*Math.cos(rad(mid)));
- const baseZoom=follow?16:Math.floor(Math.log2(520*360/(256*span)));
+ const accuracy=Number(current?.accuracy||0);
+ const latitude=Math.max(-85,Math.min(85,Number(current?.latitude??mid)));
+ const cosLatitude=Math.max(.05,Math.cos(rad(latitude)));
+ const accuracyZoom=accuracy>45?Math.floor(Math.log2((140*40075016.686*cosLatitude)/(256*accuracy))):16;
+ const baseZoom=follow?Math.max(11,Math.min(16,accuracyZoom)):Math.floor(Math.log2(520*360/(256*span)));
  const z=Math.max(11,Math.min(19,baseZoom+zoomOffset));
  const center=follow&&current?current:{latitude:mid,longitude:(minLo+maxLo)/2};
  const cp=project(center.latitude,center.longitude,z),n=2**z,tx=Math.floor(cp.x/256),ty=Math.floor(cp.y/256),tiles=[];
@@ -48,10 +52,8 @@ function mapData(points,follow,location,layer,zoomOffset=0){
  }
  const xy=p=>{const q=project(p.latitude,p.longitude,z);return{x:q.x-cp.x+300,y:q.y-cp.y+170};};
  const line=pts.map(p=>{const q=xy(p);return q.x+","+q.y;}).join(" ");
- const accuracy=Number(current?.accuracy||0);
- const latitude=Math.max(-85,Math.min(85,Number(current?.latitude||center.latitude)));
- const pixelsPerMetre=(256*2**z)/(40075016.686*Math.max(.05,Math.cos(rad(latitude))));
- const accuracyRadius=accuracy>0?Math.min(170,Math.max(7,accuracy*pixelsPerMetre)):0;
+ const pixelsPerMetre=(256*2**z)/(40075016.686*cosLatitude);
+ const accuracyRadius=accuracy>0?Math.min(600,Math.max(7,accuracy*pixelsPerMetre)):0;
  return{tiles,line,start:pts.length>1?xy(pts[0]):null,end:current?xy(current):null,zoom:z,accuracy,accuracyRadius};
 }
 function locationStatus(location,t){
