@@ -43,6 +43,31 @@ export const onboardingText = {
   hi:{header:"आपकी योजना तैयार करें",intro:"एक बार में एक प्रश्न। आप वापस जाकर उत्तर बदल सकते हैं और वैकल्पिक जानकारी खाली छोड़ सकते हैं।",basics:"आपकी बुनियादी जानकारी",basicsDesc:"इनसे उम्र और शरीर के माप के अनुसार अनुमान तैयार किए जाते हैं।",birth:"जन्म तिथि",sex:"ऊर्जा अनुमान के लिए लिंग",preferNot:"बताना नहीं चाहते",female:"महिला",male:"पुरुष",weight:"वज़न (kg)",height:"लंबाई (cm)",ageCalculated:"उम्र अपने आप गणना की गई",goal:"आपका लक्ष्य क्या है?",goalDesc:"मुख्य लक्ष्य और पसंदीदा प्रशिक्षण तरीका चुनें।",mainGoal:"मुख्य लक्ष्य",lose:"वसा घटाना",loseDesc:"धीरे-धीरे वज़न घटाना और टिकाऊ आदतें बनाना।",gain:"मांसपेशियाँ बढ़ाना",gainDesc:"धीरे-धीरे ताकत और मांसपेशियाँ बढ़ाना।",cut:"कटिंग / परिभाषा",cutDesc:"शरीर की चर्बी घटाते हुए ताकत बनाए रखना।",conditioning:"फिटनेस",conditioningDesc:"सहनशक्ति, गतिशीलता और ऊर्जा बेहतर करना।",maintenance:"वज़न बनाए रखना",maintenanceDesc:"नियमितता बनाए रखना और फिटनेस सुधारना।",modality:"प्रशिक्षण तरीका",bodybuilding:"वेट ट्रेनिंग",calisthenics:"कैलिस्थेनिक्स",routine:"आपकी प्रशिक्षण दिनचर्या",routineDesc:"योजना स्थान, दिनों और उपलब्ध समय के अनुसार बनेगी।",where:"आप कहाँ प्रशिक्षण करेंगे?",gym:"जिम",home:"घर पर",equipment:"उपकरण के साथ",experience:"अनुभव",beginner:"मैं शुरू कर रहा/रही हूँ",intermediate:"मैं पहले से प्रशिक्षण करता/करती हूँ",advanced:"उन्नत",days:"प्रति सप्ताह दिन",duration:"अवधि (मिनट)",time:"सामान्य समय",activity:"दैनिक गतिविधि",sedentary:"कम सक्रिय",light:"हल्की",moderate:"मध्यम",active:"बहुत सक्रिय",veryActive:"अत्यधिक सक्रिय",intensity:"पसंदीदा तीव्रता",easy:"हल्की",hard:"उच्च",nutrition:"आपका भोजन",nutritionDesc:"एलर्जी, बजट और पसंदीदा भोजन शैली बताएँ।",budget:"भोजन बजट",economical:"कम बजट",flexible:"लचीला",allergies:"एलर्जी या असहिष्णुता",avoid:"जिन खाद्य पदार्थों से बचना चाहते हैं",cuisine:"आप किस प्रकार का भोजन पसंद करते हैं?",mozambican:"मोज़ाम्बिक का भोजन",mozambicanDesc:"Xima, Matapa, करी, बीन्स और पारंपरिक व्यंजन।",international:"अंतरराष्ट्रीय भोजन",internationalDesc:"अलग-अलग देशों के सरल और आम भोजन।",mixed:"दोनों का मिश्रण",mixedDesc:"मोज़ाम्बिक और अंतरराष्ट्रीय व्यंजनों को बारी-बारी शामिल करें।",foods:"रोज़मर्रा के खाद्य पदार्थ",foodsDesc:"वैकल्पिक: वे खाद्य पदार्थ चुनें जो आमतौर पर उपलब्ध होते हैं।",available:"आपके घर में आमतौर पर क्या उपलब्ध है?",preferences:"व्यंजन या पसंद (वैकल्पिक)",optional:"वैकल्पिक",blank:"इसे खाली छोड़ सकते हैं और बाद में प्रोफ़ाइल में योजना बदल सकते हैं।",photos:"प्रगति के लिए तस्वीरें",photosDesc:"30-दिन की योजना शुरू होने से पहले शुरुआती तस्वीरें जोड़ें। दोनों वैकल्पिक हैं।",profilePhoto:"प्रोफ़ाइल फ़ोटो",bodyPhoto:"शरीर की फ़ोटो · दिन 0",day30:"शरीर की फ़ोटो · दिन 30",addPhoto:"फ़ोटो जोड़ें",upload:"अपलोड करें",locked:"30 दिन पूरे होने के बाद उपलब्ध",photosProgress:"शुरुआती तस्वीरें प्रगति अनुभाग में दिखेंगी।",photoPrivacy:"शरीर की तस्वीर निजी रहती है। प्रोफ़ाइल फ़ोटो समुदाय में दिखाई दे सकती है।",skip:"अभी छोड़ें",step:"चरण",of:"में से",back:"वापस",continue:"जारी रखें",create:"मेरी योजना बनाएँ",saving:"सहेजा जा रहा है…",ageError:"मान्य जन्म तिथि दर्ज करें।",weightError:"25 से 300 किलोग्राम के बीच वज़न दर्ज करें।",heightError:"120 से 230 सेंटीमीटर के बीच लंबाई दर्ज करें।",goalError:"लक्ष्य और प्रशिक्षण तरीका चुनें।",daysError:"प्रति सप्ताह 2 से 6 दिन चुनें।",durationError:"10 से 180 मिनट की अवधि चुनें।",saveError:"जानकारी सहेजी नहीं जा सकी। कनेक्शन जाँचकर फिर प्रयास करें।"}
 };
 
+Object.assign(uiText.pt, {
+  "Como executar":"Como executar","Músculo principal":"Músculo principal","Equipamento":"Equipamento","GIF indisponível":"GIF indisponível",
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.":"Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional."
+});
+Object.assign(uiText.en, {
+  "Como executar":"How to perform","Músculo principal":"Main muscle","Equipamento":"Equipment","GIF indisponível":"GIF unavailable",
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.":"If you feel sharp pain, dizziness, or unusual shortness of breath, stop and seek professional guidance."
+});
+Object.assign(uiText.fr, {
+  "Como executar":"Comment réaliser","Músculo principal":"Muscle principal","Equipamento":"Équipement","GIF indisponível":"GIF indisponible",
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação professionnelle."
+});
+Object.assign(uiText.es, {
+  "Como executar":"Cómo realizarlo","Músculo principal":"Músculo principal","Equipamento":"Equipo","GIF indisponível":"GIF no disponible",
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.":"Si sientes dolor agudo, mareos o falta de aire inusual, detente y consulta a un profesional."
+});
+Object.assign(uiText.zh, {
+  "Como executar":"动作说明","Músculo principal":"主要肌肉","Equipamento":"器材","GIF indisponível":"GIF 暂不可用",
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.":"如出现剧烈疼痛、头晕或异常气短，请停止并寻求专业指导。"
+});
+Object.assign(uiText.hi, {
+  "Como executar":"कैसे करें","Músculo principal":"मुख्य मांसपेशी","Equipamento":"उपकरण","GIF indisponível":"GIF उपलब्ध नहीं है",
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.":"तेज़ दर्द, चक्कर या असामान्य सांस फूलने पर रुकें और पेशेवर सलाह लें।"
+});
+
 export function getLanguage() { return localStorage.getItem("jl-language") || "pt"; }
 export function setLanguage(value) {
   const supported = languageOptions.some(([code]) => code === value) ? value : "pt";
@@ -912,6 +937,26 @@ const exerciseNameExact = {
   "barbell rollout":{pt:"Roda abdominal com barra",fr:"Déroulé abdominal à la barre",es:"Despliegue abdominal con barra",zh:"杠铃腹部滚动",hi:"बारबेल रोलआउट"},
   "bent knee lying twist":{pt:"Rotação deitada com joelhos flexionados",fr:"Rotation allongée genoux fléchis",es:"Giro tumbado con rodillas flexionadas",zh:"屈膝仰卧转体",hi:"बेंट-नी लाइंग ट्विस्ट"},
   "box jump down with single-leg stabilization":{pt:"Salto da caixa com estabilização unilateral",fr:"Saut depuis une box avec stabilisation sur une jambe",es:"Salto desde cajón con estabilización a una pierna",zh:"跳箱落地单腿稳定",hi:"सिंगल-लेग स्टेबलाइज़ेशन बॉक्स जंप"},
+
+  "agachamento livre":{pt:"Agachamento livre",fr:"Squat au poids du corps",es:"Sentadilla libre",zh:"徒手深蹲",hi:"बॉडीवेट स्क्वाट"},
+  "flexão inclinada":{pt:"Flexão inclinada",fr:"Pompe inclinée",es:"Flexión inclinada",zh:"上斜俯卧撑",hi:"इनक्लाइन पुश-अप"},
+  "ponte de glúteos":{pt:"Ponte de glúteos",fr:"Pont fessier",es:"Puente de glúteos",zh:"臀桥",hi:"ग्लूट ब्रिज"},
+  "abdominal no solo":{pt:"Abdominal no solo",fr:"Crunch au sol",es:"Abdominal en el suelo",zh:"地面卷腹",hi:"फ्लोर क्रंच"},
+  "dead bug":{pt:"Dead bug",fr:"Dead bug",es:"Dead bug",zh:"死虫式",hi:"डेड बग"},
+  "elevação de gémeos":{pt:"Elevação de gémeos",fr:"Élévation des mollets",es:"Elevación de gemelos",zh:"提踵",hi:"काफ रेज़"},
+  "marcha no lugar":{pt:"Marcha no lugar",fr:"Marche sur place",es:"Marcha en el sitio",zh:"原地踏步",hi:"जगह पर मार्च"},
+  "prancha lateral":{pt:"Prancha lateral",fr:"Gainage latéral",es:"Plancha lateral",zh:"侧平板支撑",hi:"साइड प्लैंक"},
+  "mobilidade de ombros e quadril":{pt:"Mobilidade de ombros e quadril",fr:"Mobilité des épaules et des hanches",es:"Movilidad de hombros y caderas",zh:"肩部和髋部活动",hi:"कंधे और कूल्हे की गतिशीलता"},
+  "quads (bodyweight squat)":{pt:"Agachamento livre",fr:"Squat au poids du corps",es:"Sentadilla con peso corporal",zh:"徒手深蹲",hi:"बॉडीवेट स्क्वाट"},
+  "low glute bridge on floor":{pt:"Ponte de glúteos no solo",fr:"Pont fessier au sol",es:"Puente de glúteos en el suelo",zh:"地面臀桥",hi:"फ्लोर ग्लूट ब्रिज"},
+  "bodyweight standing calf raise":{pt:"Elevação de gémeos em pé",fr:"Élévation des mollets debout",es:"Elevación de gemelos de pie",zh:"站姿提踵",hi:"स्टैंडिंग काफ रेज़"},
+  "incline push-up":{pt:"Flexão inclinada",fr:"Pompe inclinée",es:"Flexión inclinada",zh:"上斜俯卧撑",hi:"इनक्लाइन पुश-अप"},
+  "crunch floor":{pt:"Abdominal no solo",fr:"Crunch au sol",es:"Abdominal en el suelo",zh:"地面卷腹",hi:"फ्लोर क्रंच"},
+  "bodyweight incline side plank":{pt:"Prancha lateral",fr:"Gainage latéral",es:"Plancha lateral",zh:"侧平板支撑",hi:"साइड प्लैंक"},
+  "high knee against wall":{pt:"Elevação alternada dos joelhos com apoio na parede",fr:"Montées de genoux avec appui au mur",es:"Elevación alterna de rodillas con apoyo en la pared",zh:"扶墙交替抬膝",hi:"दीवार के सहारे बारी-बारी घुटने उठाना"},
+  "short stride run":{pt:"Corrida em passos curtos",fr:"Course à petits pas",es:"Carrera con pasos cortos",zh:"小步跑",hi:"छोटे कदमों से दौड़"},
+  "kneeling push-up":{pt:"Flexão de joelhos",fr:"Pompe sur les genoux",es:"Flexión con rodillas apoyadas",zh:"跪姿俯卧撑",hi:"नी-पुश-अप"}
+
 };
 
 const exerciseTermTranslations = {
@@ -1107,33 +1152,227 @@ const ptRules=[[/\bjust beyond\b/gi,'um pouco além de'],[/\bpalms?\b/gi,'palmas
  [/\bwith your feet\b/gi,'com os pés'],[/\bshoulder width\b/gi,'afastados na largura dos ombros'],[/\bon\b/gi,'no'],[/\band\b/gi,'e'],[/\bthe\b/gi,'o'],[/\bwithout\b/gi,'sem'],[/\bwhile\b/gi,'enquanto'],[/\bslowly\b/gi,'devagar'],[/\bcontrolled\b/gi,'controlado'],[/\bcontrol\b/gi,'controle'],[/\bground\b/gi,'chão'],[/\bfloor\b/gi,'chão'],[/\bbench\b/gi,'banco'],[/\bweight\b/gi,'carga'],[/\bbody\b/gi,'corpo'],[/\bhands\b/gi,'mãos'],[/\bhand\b/gi,'mão'],[/\bfeet\b/gi,'pés'],[/\bfoot\b/gi,'pé'],[/\bshoulders\b/gi,'ombros'],[/\bshoulder\b/gi,'ombro'],[/\bhips\b/gi,'quadris'],[/\bhip\b/gi,'quadril'],[/\bankles\b/gi,'tornozelos'],[/\barms\b/gi,'braços'],[/\barm\b/gi,'braço'],[/\blegs\b/gi,'pernas'],[/\bleg\b/gi,'perna'],[/\bback\b/gi,'costas'],[/\bchest\b/gi,'peito'],[/\bhead\b/gi,'cabeça'],[/\bneck\b/gi,'pescoço'],[/\belbows\b/gi,'cotovelos'],[/\belbow\b/gi,'cotovelo'],[/\bknees\b/gi,'joelhos'],[/\bknee\b/gi,'joelho'],[/\bstraight\b/gi,'reto'],[/\bbent\b/gi,'dobrado'],[/\bwide\b/gi,'amplo'],[/\bclose\b/gi,'fechado'],[/\bleft\b/gi,'esquerdo'],[/\bright\b/gi,'direito'],[/\bforward\b/gi,'para frente'],[/\bbackward\b/gi,'para trás'],[/\bup\b/gi,'para cima'],[/\bdown\b/gi,'para baixo'],[/\bside\b/gi,'lado'],[/\bplace\b/gi,'coloque'],[/\bkeep\b/gi,'mantenha'],[/\bhold\b/gi,'segure'],[/\braise\b/gi,'eleve'],[/\blower\b/gi,'desça'],[/\bpress\b/gi,'empurre'],[/\breturn\b/gi,'retorne'],[/\bextend\b/gi,'estenda'],[/\bbend\b/gi,'dobre'],[/\brotate\b/gi,'gire'],[/\bslowly\b/gi,'devagar'],[/\bbreath(?:e)?\b/gi,'respire'],[/\binhale\b/gi,'inspire'],[/\bexhale\b/gi,'expire'],[/\brepeat\b/gi,'repita'],[/\bstarting\b/gi,'inicial'],[/\bstand\b/gi,'fique em pé'],[/\bsit\b/gi,'sente-se'],[/\blie\b/gi,'deite-se'],[/\bavoid\b/gi,'evite'],[/\bpain\b/gi,'dor'],[/\bmovement\b/gi,'movimento'],[/\bparallel\b/gi,'paralelo'],[/\btouch\b/gi,'toque'],[/\bpush\b/gi,'empurre'],[/\bpull\b/gi,'puxe'],[/\bgrip\b/gi,'pegada'],[/\bwidth\b/gi,'largura'],[/\bslightly\b/gi,'levemente'],[/\buntil\b/gi,'até'],[/\bthen\b/gi,'depois'],[/\bbefore\b/gi,'antes'],[/\bafter\b/gi,'depois'],[/\bwith\b/gi,'com']
 ];
 const frRules=[[/^Step:\d+\s*/i,''],[/^Begin by /i,'Commencez par '],[/^Keep /i,'Gardez '],[/^Bend /i,'Pliez '],[/^Lower /i,'Descendez '],[/^Raise /i,'Levez '],[/^Press /i,'Poussez '],[/^Hold /i,'Maintenez '],[/^Return /i,'Revenez '],[/\bshoulder width\b/gi,'largeur des épaules'],[/\bslowly\b/gi,'lentement'],[/\bwithout\b/gi,'sans'],[/\bbody\b/gi,'corps'],[/\bweight\b/gi,'charge']];
-export function translateInstruction(text, language) {
+export const genericExerciseInstructionSteps = {
+  pt: [
+    "Assuma a posição inicial indicada para o exercício e apoie os pés ou as mãos conforme a demonstração.",
+    "Ative o abdómen e mantenha a coluna numa posição natural, sem prender a respiração.",
+    "Inicie o movimento devagar, sem balanço ou impulso.",
+    "Concentre o esforço no músculo trabalhado e mantenha as articulações alinhadas.",
+    "Controle a amplitude e respire normalmente durante todo o movimento.",
+    "Regresse lentamente à posição inicial e pare se sentir dor."
+  ],
+  en: [
+    "Set up in the position shown and place your feet or hands as demonstrated.",
+    "Brace your abdomen and keep your spine in a natural position; do not hold your breath.",
+    "Begin the movement slowly without swinging or using momentum.",
+    "Focus the effort on the intended muscle and keep your joints aligned.",
+    "Control the range of motion and breathe normally throughout.",
+    "Return slowly to the starting position and stop if you feel pain."
+  ],
+  fr: [
+    "Placez-vous dans la position de départ montrée et appuyez les pieds ou les mains comme indiqué.",
+    "Contractez légèrement les abdominaux et gardez la colonne dans une position naturelle, sans bloquer la respiration.",
+    "Commencez lentement, sans balancement ni élan.",
+    "Concentrez l’effort sur le muscle ciblé et gardez les articulations alignées.",
+    "Contrôlez l’amplitude et respirez normalement pendant tout le mouvement.",
+    "Revenez lentement à la position de départ et arrêtez en cas de douleur."
+  ],
+  es: [
+    "Colócate en la posición inicial indicada y apoya los pies o las manos según la demostración.",
+    "Activa el abdomen y mantén la columna en una posición natural, sin contener la respiración.",
+    "Inicia el movimiento lentamente, sin balanceos ni impulso.",
+    "Concentra el esfuerzo en el músculo trabajado y mantén las articulaciones alineadas.",
+    "Controla el recorrido y respira con normalidad durante todo el movimiento.",
+    "Vuelve lentamente a la posición inicial y detente si sientes dolor."
+  ],
+  zh: [
+    "按照演示摆好起始姿势，并按要求稳稳支撑双脚或双手。",
+    "收紧腹部，保持脊柱自然稳定，不要屏住呼吸。",
+    "缓慢开始动作，不要摆动身体或借助惯性。",
+    "将发力集中在目标肌肉上，并保持关节对齐。",
+    "控制动作幅度，整个过程中保持自然呼吸。",
+    "缓慢回到起始姿势，如感到疼痛请停止。"
+  ],
+  hi: [
+    "दिखाई गई शुरुआती स्थिति अपनाएँ और बताए अनुसार पैरों या हाथों को टिकाएँ।",
+    "पेट की मांसपेशियों को सक्रिय रखें और रीढ़ को प्राकृतिक स्थिति में रखें; सांस न रोकें।",
+    "बिना झटके या गति का सहारा लिए धीरे-धीरे शुरू करें।",
+    "लक्षित मांसपेशी पर ध्यान दें और जोड़ों को सही संरेखण में रखें।",
+    "गति की सीमा नियंत्रित रखें और पूरे समय सामान्य रूप से सांस लें।",
+    "धीरे-धीरे शुरुआती स्थिति में लौटें और दर्द होने पर रुक जाएँ।"
+  ]
+};
+
+const exerciseInstructionTemplatesPt = {
+  squat: [
+    "Fique em pé com os pés afastados aproximadamente na largura dos ombros.",
+    "Leve o quadril para trás e dobre os joelhos como se fosse sentar, sem tirar os calcanhares do chão.",
+    "Mantenha o peito aberto, o abdómen ativo e os joelhos alinhados com os pés.",
+    "Desça apenas até onde conseguir manter a postura confortável.",
+    "Empurre o chão com os pés para voltar a ficar em pé, sem dar impulso.",
+    "Repita com controlo e pare se sentir dor nos joelhos ou nas costas."
+  ],
+  pushup: [
+    "Apoie as mãos numa superfície firme e elevada, um pouco além da largura dos ombros.",
+    "Afaste os pés até formar uma linha reta entre a cabeça, o tronco e as pernas.",
+    "Ative o abdómen e mantenha os cotovelos apontados ligeiramente para trás.",
+    "Aproxime o peito do apoio dobrando os cotovelos, sem deixar o quadril cair.",
+    "Empurre o apoio para estender os braços, sem travar os cotovelos.",
+    "Repita devagar e escolha uma altura que permita manter a técnica."
+  ],
+  glute: [
+    "Deite-se de costas, dobre os joelhos e mantenha os pés apoiados no chão.",
+    "Deixe os braços ao lado do corpo, com as palmas das mãos voltadas para baixo.",
+    "Ative os glúteos e mantenha as costelas baixas, sem arquear a lombar.",
+    "Empurre o chão com os pés e eleve a bacia até alinhar o tronco com as coxas.",
+    "Faça uma pausa curta no alto, sem elevar a bacia além do alinhamento.",
+    "Desça devagar, mantendo os pés apoiados, e repita."
+  ],
+  deadBug: [
+    "Deite-se de costas e estenda os braços em direção ao teto.",
+    "Eleve as pernas e dobre os joelhos até formar ângulos de aproximadamente 90 graus.",
+    "Mantenha a lombar apoiada no chão e ative o abdómen.",
+    "Estenda lentamente um braço e a perna oposta, sem deixar a lombar levantar.",
+    "Volte ao centro e alterne os lados, mantendo a respiração regular.",
+    "Faça cada repetição com controlo e reduza a amplitude se perder a postura."
+  ],
+  calf: [
+    "Fique em pé com os pés afastados na largura do quadril e use uma parede como apoio.",
+    "Distribua o peso igualmente pelos dois pés e mantenha os joelhos estendidos sem travar.",
+    "Eleve os calcanhares e apoie o peso na parte da frente dos pés.",
+    "Suba até onde conseguir sem balançar o corpo.",
+    "Faça uma pausa curta no alto, mantendo o equilíbrio.",
+    "Desça lentamente até apoiar os calcanhares e repita."
+  ],
+  crunch: [
+    "Deite-se de costas com os joelhos dobrados e os pés apoiados no chão.",
+    "Cruze os braços sobre o peito ou coloque as mãos suavemente ao lado da cabeça.",
+    "Ative o abdómen e mantenha o pescoço relaxado.",
+    "Eleve ligeiramente os ombros em direção à bacia, sem puxar a cabeça.",
+    "Faça uma pausa curta quando sentir o abdómen contrair.",
+    "Desça devagar até apoiar os ombros e repita sem impulso."
+  ],
+  plank: [
+    "Deite-se de lado e apoie o antebraço no chão, mantendo o cotovelo abaixo do ombro.",
+    "Estenda as pernas e alinhe os pés; se necessário, apoie os joelhos para facilitar.",
+    "Eleve o quadril até alinhar ombro, quadril e tornozelo.",
+    "Mantenha o abdómen ativo e respire normalmente.",
+    "Evite deixar o quadril cair ou rodar o tronco.",
+    "Desça com controlo e repita do outro lado."
+  ],
+  cardio: [
+    "Fique em pé, com o tronco ereto e os pés afastados na largura do quadril.",
+    "Comece a alternar os joelhos e mova os braços de forma natural.",
+    "Pouse os pés suavemente e mantenha um ritmo que consiga sustentar.",
+    "Respire de forma regular e mantenha os ombros relaxados.",
+    "Aumente o ritmo apenas se conseguir manter o controlo e a postura.",
+    "Reduza a velocidade gradualmente antes de terminar."
+  ]
+};
+
+function exerciseMovementKey(exercise) {
+  const sourceId = String(exercise?.source_id || exercise?.id || "");
+  const name = String(exercise?.name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  if (sourceId.includes("u0cNiij") || /ponte de gluteos|glute bridge/.test(name)) return "glute";
+  if (sourceId.includes("iny3m5y") || /dead bug/.test(name)) return "deadBug";
+  if (sourceId.includes("bJYHBIN") || /elevacao de gemeos|calf raise/.test(name)) return "calf";
+  if (sourceId.includes("TFqbd8t") || /abdominal no solo|crunch floor/.test(name)) return "crunch";
+  if (sourceId.includes("5VXmnV5") || /prancha lateral|side plank/.test(name)) return "plank";
+  if (sourceId.includes("CcWEoWV") || sourceId.includes("ealLwvX") || /marcha no lugar|corrida parada|short stride run|high knee/.test(name)) return "cardio";
+  if (sourceId.includes("6YUfHPL") || /agachamento|bodyweight squat|squat/.test(name)) return "squat";
+  if (sourceId.includes("B1EVP9F") || /flexao inclinada|incline push.?up/.test(name)) return "pushup";
+  return "generic";
+}
+
+function localizedExerciseInstruction(exercise, language, index) {
+  const movementKey = exerciseMovementKey(exercise);
+  if (language === "pt" && movementKey !== "generic") return exerciseInstructionTemplatesPt[movementKey][index % 6];
+  const steps = genericExerciseInstructionSteps[language] || genericExerciseInstructionSteps.pt;
+  return steps[index % steps.length];
+}
+
+function translateInstruction(text, language, index, exercise) {
   const source = String(text || "").replace(/^Step:\d+\s*/i, "").trim();
   if (!source) return "";
   if (language === "en") return source;
-  if (language === "pt") {
-    let value = ptRules.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), source);
-    value = value.replace(/\s+/g, " ").trim();
-    if (/\b(begin|place|hands|floor|facing|keep|press|load|activate|your|the|while|away|height|under|control|repeat|step)\b/i.test(value))
-      return "Execute o movimento devagar, mantenha a postura alinhada e a respiração controlada, sem dor.";
-    return value.replace(/\.$/, "").trim() + ".";
-  }
-  if (language === "fr") {
-    let value = frRules.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), source);
-    if (/\b(begin|place|hands|floor|facing|keep|press|load|activate|your|the|while|away|height|under|control|repeat|step)\b/i.test(value))
-      return "Effectuez le mouvement lentement, gardez le dos aligné et le tronc engagé. Respirez régulièrement et arrêtez en cas de douleur.";
-    return value.replace(/\.$/, "").trim() + ".";
-  }
-  if (language === "es")
-    return "Realiza el movimiento lentamente, mantén la espalda alineada y el abdomen activo. Controla la respiración y detente si aparece dolor.";
-  if (language === "zh")
-    return "缓慢完成动作，保持背部稳定并收紧核心。保持均匀呼吸，如出现疼痛请停止。";
-  if (language === "hi")
-    return "व्यायाम धीरे-धीरे करें, पीठ को सीधा रखें और पेट की मांसपेशियों को सक्रिय रखें। सांस नियंत्रित रखें और दर्द होने पर रुकें।";
-  return source;
+  // ExerciseDB instructions can be partly translated; use a complete localized version instead of mixed English.
+  return localizedExerciseInstruction(exercise, language, index);
 }
 export function translatedInstructions(exercise, language) {
-  return (exercise?.instructions || []).slice(0, 6).map((step) => translateInstruction(step, language));
+  const source = Array.isArray(exercise?.instructions) ? exercise.instructions.slice(0, 6) : [];
+  if (!source.length) return Array.from({ length: 6 }, (_, index) => localizedExerciseInstruction(exercise, language, index));
+  return source.map((step, index) => translateInstruction(step, language, index, exercise));
+}
+
+export function translateExerciseDescription(exercise, language) {
+  const key = String(exercise?.name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const descriptions = {
+    "agachamento livre": {
+      pt:"Desça até uma amplitude confortável, mantenha os joelhos alinhados com os pés e suba sem impulso.",
+      en:"Lower to a comfortable depth, keep your knees aligned with your feet, and stand without bouncing.",
+      fr:"Descendez à une amplitude confortable, gardez les genoux alignés avec les pieds et remontez sans élan.",
+      es:"Baja hasta una amplitud cómoda, mantén las rodillas alineadas con los pies y sube sin impulso.",
+      zh:"下蹲至舒适幅度，保持膝盖与脚尖方向一致，然后平稳站起。",
+      hi:"आरामदायक गहराई तक बैठें, घुटनों को पैरों की दिशा में रखें और बिना झटके के खड़े हों。"
+    },
+    "flexao inclinada": {
+      pt:"Apoie as mãos numa superfície firme e elevada, mantenha o corpo alinhado e aproxime o peito do apoio.",
+      en:"Place your hands on a stable raised surface, keep your body aligned, and bring your chest toward the support.",
+      fr:"Posez les mains sur une surface stable et surélevée, gardez le corps aligné et rapprochez la poitrine du support.",
+      es:"Apoya las manos en una superficie firme y elevada, mantén el cuerpo alineado y acerca el pecho al apoyo.",
+      zh:"双手撑在稳固且较高的平面上，身体保持一条直线，胸部缓慢靠近支撑面。",
+      hi:"हाथों को मजबूत ऊँची सतह पर रखें, शरीर सीधा रखें और छाती को सहारे की ओर लाएँ।"
+    },
+    "ponte de gluteos": {
+      pt:"Eleve a bacia contraindo os glúteos, sem arquear a lombar; desça devagar.",
+      en:"Lift your hips by squeezing your glutes without arching your lower back; lower slowly.",
+      fr:"Soulevez le bassin en contractant les fessiers sans cambrer le bas du dos, puis redescendez lentement.",
+      es:"Eleva la pelvis contrayendo los glúteos sin arquear la zona lumbar y baja lentamente.",
+      zh:"收紧臀部抬起髋部，不要过度挺腰，然后缓慢放下。",
+      hi:"ग्लूट्स को कसकर कूल्हों को ऊपर उठाएँ, कमर को अधिक न मोड़ें और धीरे-धीरे नीचे आएँ。"
+    },
+    "abdominal no solo": {
+      pt:"Eleve ligeiramente os ombros contraindo o abdómen e desça com controlo, sem puxar o pescoço.",
+      en:"Lift your shoulders slightly by contracting your abdomen, then lower with control without pulling your neck.",
+      fr:"Soulevez légèrement les épaules en contractant les abdominaux, puis redescendez sans tirer sur le cou.",
+      es:"Eleva ligeramente los hombros contrayendo el abdomen y baja con control, sin tirar del cuello.",
+      zh:"收紧腹部，轻轻抬起肩部，再控制着放下，不要拉扯颈部。",
+      hi:"पेट को कसकर कंधों को थोड़ा उठाएँ और गर्दन पर जोर दिए बिना नियंत्रित ढंग से नीचे आएँ。"
+    },
+    "dead bug": {
+      pt:"Mantenha a lombar apoiada e estenda braço e perna opostos sem perder o controlo do tronco.",
+      en:"Keep your lower back supported and extend the opposite arm and leg without losing trunk control.",
+      fr:"Gardez le bas du dos en appui et tendez le bras et la jambe opposés sans perdre le contrôle du tronc.",
+      es:"Mantén la zona lumbar apoyada y extiende el brazo y la pierna contrarios sin perder el control del tronco.",
+      zh:"保持下背部贴地，交替伸展对侧手臂和腿，同时稳定躯干。",
+      hi:"कमर को जमीन से टिकाकर विपरीत हाथ और पैर फैलाएँ तथा धड़ को स्थिर रखें।"
+    },
+    "elevacao de gemeos": {
+      pt:"Suba na ponta dos pés, faça uma pausa breve e desça lentamente; use apoio para equilíbrio.",
+      en:"Rise onto your toes, pause briefly, and lower slowly; use support for balance.",
+      fr:"Montez sur la pointe des pieds, faites une courte pause et redescendez lentement en vous tenant si nécessaire.",
+      es:"Ponte de puntillas, haz una breve pausa y baja lentamente; usa apoyo para mantener el equilibrio.",
+      zh:"踮起脚尖，短暂停留后缓慢放下；需要时扶住支撑物保持平衡。",
+      hi:"पंजों पर उठें, थोड़ी देर रुकें और धीरे-धीरे नीचे आएँ; संतुलन के लिए सहारा लें।"
+    },
+    "marcha no lugar": {
+      pt:"Alterne os joelhos e mova os braços num ritmo confortável, mantendo a postura ereta.",
+      en:"Alternate your knees and move your arms at a comfortable pace while keeping an upright posture.",
+      fr:"Levez les genoux alternativement et accompagnez le mouvement des bras à un rythme confortable, en restant droit.",
+      es:"Alterna las rodillas y mueve los brazos a un ritmo cómodo, manteniendo el tronco erguido.",
+      zh:"交替抬膝并自然摆动双臂，保持身体直立和舒适节奏。",
+      hi:"सीधे खड़े रहकर आरामदायक गति से बारी-बारी घुटने उठाएँ और हाथों को चलाएँ।"
+    },
+    "prancha lateral": {
+      pt:"Apoie o antebraço, mantenha ombro, quadril e tornozelo alinhados e respire normalmente.",
+      en:"Support yourself on your forearm, align your shoulder, hip, and ankle, and breathe normally.",
+      fr:"Appuyez-vous sur l’avant-bras, alignez l’épaule, la hanche et la cheville, puis respirez normalement.",
+      es:"Apóyate en el antebrazo, alinea hombro, cadera y tobillo y respira con normalidad.",
+      zh:"以前臂支撑身体，使肩、髋和脚踝保持一线，并自然呼吸。",
+      hi:"अग्रबाहु पर सहारा लें, कंधे, कूल्हे और टखने को एक सीध में रखें और सामान्य सांस लें।"
+    }
+  };
+  return descriptions[key]?.[language] || genericExerciseInstructionSteps[language]?.[0] || genericExerciseInstructionSteps.pt[0];
 }
 
 
