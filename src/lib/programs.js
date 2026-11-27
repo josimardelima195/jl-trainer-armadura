@@ -316,6 +316,7 @@ const higherSkillWords = [
   "depth jump",
   "drop jump",
 ];
+const advancedBodyweightPattern = /\\b(?:single[- ]leg|one[- ]leg|pistol|jump|clap|plyometric|explosive|inside leg kick|burpee|bear crawl|mountain climber|handstand|planche|lever|turkish get up|sissy squat|depth jump|drop jump|box jump|windmill|jackknife|dragon flag|human flag)\\b/;
 const excludedExercisePattern = /\b(?:swing\s*360|full maltese|maltese|suspended abdominal fallout|suspended inverso abdominal|suspended inverse abdominal|suspended reverse crunch|abdominal fallout|iron cross|dragon flag|front lever|back lever|muscle up|handstand|clap|pistol|human flag|planche|frog stand|l sit|suspend row|bar spin|release catch|backflip|frontflip|kip up|aerial|snatch|clean and jerk|power clean|one rep max|1rm|maximal lift|maximum load)\b|(?:suspended|suspension).{0,36}\b(?:abdominal|abs|crunch|fallout)\b/;
 const highImpactExercisePattern = /\b(?:jump squat|box jump|depth jump|drop jump|burpee|sprint|wind sprint|run|running|jog|jogging|corrida|correr|mountain climbers?|bear crawl|jumping jacks?|jack jump|high knees?|skater hops|jump rope|pular corda|polichinelos?)\b/;
 
@@ -510,6 +511,7 @@ export function suitableForProfile(exercise, profile = {}) {
   const bmi = weight > 0 && height > 0 ? weight / (height * height) : null;
   const needsLowImpact = weightLossGoal || beginnerOrOlder || (Number.isFinite(bmi) && bmi >= 30);
   if (isRemovedModalityExercise(exercise)) return false;
+  if (exerciseEquipmentMode(exercise) === "bodyweight" && advancedBodyweightPattern.test(text)) return false;
   if (needsLowImpact && highImpactExercisePattern.test(text)) return false;
   if (beginnerOrOlder && higherSkillWords.some((word) => text.includes(clean(word))))
     return false;
