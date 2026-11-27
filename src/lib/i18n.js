@@ -1075,8 +1075,9 @@ const exerciseTermTranslations = {
   pushdown:{pt:"tríceps na polia",fr:"extension à la poulie",es:"extensión en polea",zh:"绳索下压",hi:"पुशडाउन"},
 };
 
-export function translateExerciseName(name, language) {
-  const source = String(name || "").trim();
+export function translateExerciseName(value, language) {
+  const exercise = value && typeof value === "object" ? value : null;
+  const source = String(exercise?.name || value || "").trim();
   if (!source || language === "en") return source;
   const key = source.toLowerCase().replace(/[’']/g, "").replace(/\s+/g, " ").trim();
   const exact = exerciseNameExact[key]?.[language];
@@ -1086,6 +1087,43 @@ export function translateExerciseName(name, language) {
     const term = part.toLowerCase().replace(/[’']/g, "");
     return exerciseTermTranslations[term]?.[language] || part;
   }).join("");
+  const connectorWords = new Set(["on","with","and","the","to","from","at","for","of","by","a","an","in","up","down","over","under","left","right","alternate","alternating","two","one","three","four","five","six","floor","bodyweight","weight","exercise","machine","bar","bench","cable","resistance","band","standing","seated","lying","kneeling","incline","decline","single","double","wide","close","front","back","side","rear"]);
+  const knownPortuguese = /\b(agachamento|flex[aã]o|ponte|abdominal|eleva[cç][aã]o|prancha|marcha|caminhada|corrida|alongamento|mobilidade|remada|rosca|supino|desenvolvimento|avan[cç]o|panturrilha|g[eé]meos|gl[uú]teos|pernas|costas|peito|ombros|bra[cç]os|quadril|lombar)\b/i.test(source);
+  const unknown = (source.match(/[A-Za-zÀ-ÿ]+/g) || []).filter((word) => {
+    const token = word.toLowerCase().replace(/[’']/g, "");
+    return !exerciseTermTranslations[token] && !connectorWords.has(token);
+  });
+  if (unknown.length && !(language === "pt" && knownPortuguese)) {
+    const rawMuscle = exercise?.primary_muscles?.[0] || exercise?.targetMuscles?.[0] || exercise?.body_parts?.[0] || exercise?.bodyParts?.[0] || "";
+    const muscleKey = String(rawMuscle).toLowerCase();
+    const localized = {
+      back:{pt:"costas",fr:"dos",es:"espalda",zh:"背部",hi:"पीठ"},
+      chest:{pt:"peito",fr:"poitrine",es:"pecho",zh:"胸部",hi:"छाती"},
+      pectorals:{pt:"peito",fr:"poitrine",es:"pecho",zh:"胸部",hi:"छाती"},
+      triceps:{pt:"tríceps",fr:"triceps",es:"tríceps",zh:"肱三头肌",hi:"ट्राइसेप्स"},
+      biceps:{pt:"bíceps",fr:"biceps",es:"bíceps",zh:"肱二头肌",hi:"बाइसेप्स"},
+      quadriceps:{pt:"quadríceps",fr:"quadriceps",es:"cuádriceps",zh:"股四头肌",hi:"क्वाड्रिसेप्स"},
+      hamstrings:{pt:"posterior das coxas",fr:"ischio-jambiers",es:"isquiotibiales",zh:"腘绳肌",hi:"हैमस्ट्रिंग"},
+      glutes:{pt:"glúteos",fr:"fessiers",es:"glúteos",zh:"臀肌",hi:"ग्लूट्स"},
+      abdominals:{pt:"abdômen",fr:"abdominaux",es:"abdomen",zh:"腹部",hi:"पेट"},
+      shoulders:{pt:"ombros",fr:"épaules",es:"hombros",zh:"肩部",hi:"कंधे"},
+      deltoids:{pt:"ombros",fr:"épaules",es:"hombros",zh:"肩部",hi:"कंधे"},
+      "upper arms":{pt:"braços",fr:"bras",es:"brazos",zh:"手臂",hi:"बाहें"},
+      "lower legs":{pt:"panturrilhas",fr:"mollets",es:"gemelos",zh:"小腿",hi:"पिंडलियाँ"},
+      "upper legs":{pt:"pernas",fr:"jambes",es:"piernas",zh:"腿部",hi:"पैर"},
+      "cardiovascular system":{pt:"condicionamento cardiovascular",fr:"cardio",es:"cardio",zh:"心肺功能",hi:"हृदय-संबंधी फिटनेस"},
+      waist:{pt:"abdômen",fr:"abdominaux",es:"abdomen",zh:"腰腹",hi:"कमर"}
+    };
+    const muscle = localized[muscleKey]?.[language];
+    const fallback = {
+      pt: muscle ? "Exercício para " + muscle : "Movimento de treino",
+      fr: muscle ? "Exercice pour les " + muscle : "Mouvement d’entraînement",
+      es: muscle ? "Ejercicio para " + muscle : "Movimiento de entrenamiento",
+      zh: muscle ? muscle + "训练动作" : "训练动作",
+      hi: muscle ? muscle + " के लिए व्यायाम" : "व्यायाम"
+    };
+    return fallback[language] || fallback.pt;
+  }
   return language === "zh" ? translated.replace(/\s+/g, "") : translated;
 }
 
