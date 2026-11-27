@@ -42,7 +42,7 @@ const exerciseGifFallbacks = [
 function ExerciseGif({ exercise, variant = "thumb" }) {
   const [sourceIndex, setSourceIndex] = useState(0);
   const [language] = useLanguage();
-  const exerciseName = translateExerciseName(exercise?.name, language);
+  const exerciseName = translateExerciseName(exercise, language);
   const normalizedName = String(exercise?.name || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -236,7 +236,7 @@ function GuidedWorkout({
         <div className="guided-head">
           <div>
             <span className="eyebrow">{circuit ? `CIRCUITO · VOLTA ${roundNumber}/${rounds} · ${index + 1}/${exercises.length}` : `TREINO GUIADO · ${index + 1}/${exercises.length}`}</span>
-            <h2>{translateExerciseName(exercise.name, language)}</h2>
+            <h2>{translateExerciseName(exercise, language)}</h2>
           </div>
           <button className="outline" type="button" onClick={onExit}>Sair ×</button>
         </div>
@@ -936,7 +936,7 @@ export function Workouts({ plan }) {
           className="exercise-preview-backdrop"
           role="dialog"
           aria-modal="true"
-          aria-label={`${translateUiText("Pré-visualização de", language)} ${translateExerciseName(previewExercise.name, language)}`}
+          aria-label={`${translateUiText("Pré-visualização de", language)} ${translateExerciseName(previewExercise, language)}`}
         >
           <div className="exercise-preview-card">
             <div className="exercise-preview-head">
