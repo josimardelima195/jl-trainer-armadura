@@ -656,29 +656,29 @@ function rotatePick(list, count, day) {
 
 const calisthenicsBlocks = [
   {title:"Fundamentos e controlo",focus:"Força básica e postura",items:[
-    ["Agachamento até à cadeira","2–3 × 8–10",60,"Use uma cadeira firme como referência. Sente-se e levante-se com os pés bem apoiados."],
-    ["Flexão na parede","2–3 × 8–10",60,"Mantenha o corpo alinhado e aproxime o peito da parede sem forçar os ombros."],
-    ["Ponte de glúteos","2–3 × 10–12",45,"Eleve a bacia sem arquear a lombar e desça devagar."],
-    ["Bird dog","2 × 6/lado",45,"Estenda braço e perna opostos sem rodar a bacia."],
-    ["Marcha no lugar","3–5 min",30,"Mantenha um ritmo confortável e contínuo."]
+    ["Agachamento livre","2–3 × 8–10",60,"Desça até uma amplitude confortável, mantenha os joelhos alinhados com os pés e suba sem impulso."],
+    ["Flexão inclinada","2–3 × 8–10",60,"Apoie as mãos numa superfície firme e elevada, mantenha o corpo alinhado e aproxime o peito do apoio."],
+    ["Ponte de glúteos","2–3 × 10–12",45,"Eleve a bacia contraindo os glúteos, sem arquear a lombar; desça devagar."],
+    ["Abdominal no solo","2 × 8–10",45,"Eleve ligeiramente os ombros contraindo o abdómen e desça com controlo, sem puxar o pescoço."],
+    ["Marcha no lugar","3–5 min",30,"Alterne os joelhos e mova os braços num ritmo confortável, mantendo a postura ereta."]
   ]},
   {title:"Força fundamental",focus:"Pernas, empurrar e estabilidade",items:[
-    ["Agachamento livre controlado","3 × 8–12",60,"Desça apenas até uma amplitude confortável, mantendo os joelhos alinhados."],
-    ["Flexão inclinada","3 × 6–10",60,"Apoie as mãos numa bancada firme ou parede e mantenha o tronco alinhado."],
+    ["Agachamento livre","3 × 8–12",60,"Desça apenas até uma amplitude confortável, mantendo os joelhos alinhados."],
+    ["Flexão inclinada","3 × 6–10",60,"Apoie as mãos numa superfície firme e elevada e mantenha o tronco alinhado."],
     ["Ponte de glúteos","3 × 10–15",45,"Faça uma pausa curta no topo sem arquear a lombar."],
     ["Dead bug","2 × 8/lado",45,"Mantenha a lombar apoiada e mova braços e pernas de forma alternada."],
     ["Elevação de gémeos","3 × 12–15",45,"Use uma parede como apoio e suba e desça sem balanço."]
   ]},
   {title:"Resistência e coordenação",focus:"Movimentos contínuos de baixo impacto",items:[
-    ["Sentar e levantar da cadeira","3 × 10–12",60,"Controle a descida e use uma cadeira estável."],
+    ["Agachamento livre","3 × 10–12",60,"Controle a descida e suba empurrando o chão com os pés."],
     ["Flexão inclinada","3 × 8–12",60,"Escolha uma altura que permita completar as repetições com boa técnica."],
     ["Marcha no lugar","3–5 min",30,"Aumente o ritmo apenas se conseguir falar e respirar normalmente."],
-    ["Bird dog","2 × 8/lado",45,"Evite rodar o tronco e mantenha o movimento controlado."],
-    ["Prancha inclinada","2 × 15–25 s",45,"Apoie as mãos numa superfície firme e mantenha o abdómen ativo."]
+    ["Abdominal no solo","2 × 10–12",45,"Mantenha o pescoço relaxado e faça cada repetição sem impulso."],
+    ["Prancha lateral","2 × 15–20 s/lado",45,"Apoie o antebraço, mantenha o tronco alinhado e respire normalmente."]
   ]},
   {title:"Consolidação e descarga",focus:"Revisão técnica e recuperação",items:[
-    ["Agachamento até à cadeira","2 × 8–10",60,"Repita com amplitude confortável e sem impulso."],
-    ["Flexão na parede","2 × 8–10",60,"Priorize alinhamento e movimento suave."],
+    ["Agachamento livre","2 × 8–10",60,"Repita com amplitude confortável e sem impulso."],
+    ["Flexão inclinada","2 × 8–10",60,"Priorize alinhamento e movimento suave."],
     ["Ponte de glúteos","2 × 10–12",45,"Suba e desça com controlo."],
     ["Dead bug","2 × 6/lado",45,"Mantenha a lombar apoiada e respire normalmente."],
     ["Mobilidade de ombros e quadril","5–7 min",30,"Faça movimentos suaves, sem forçar as articulações."]

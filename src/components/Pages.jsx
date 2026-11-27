@@ -26,178 +26,21 @@ import {
   supplementCatalog,
   foodSubstitutions,
 } from "../lib/nutrition";
-import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName } from "../lib/i18n";
+import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName, translateExerciseDescription } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 const exerciseGifFallbacks = [
-  { match: /marcha no lugar|marcha acelerada no lugar|marching in place|march in place/, url: "https://static.exercisedb.dev/media/ealLwvX.gif" },
-  { match: /agachamento|sentar e levantar da cadeira/, url: "https://static.exercisedb.dev/media/6YUfHPL.gif" },
-  { match: /flexao na parede|flexao inclinada/, url: "https://static.exercisedb.dev/media/B1EVP9F.gif" },
+  { match: /corrida parada|marcha no lugar|marcha acelerada no lugar/, url: "/assets/exercises/corrida-parada.gif" },
+  { match: /agachamento livre|agachamento controlado|agachamento$/, url: "/assets/exercises/agachamento.gif" },
+  { match: /flexao inclinada/, url: "https://static.exercisedb.dev/media/B1EVP9F.gif" },
   { match: /ponte de gluteos/, url: "https://static.exercisedb.dev/media/u0cNiij.gif" },
   { match: /dead bug/, url: "https://static.exercisedb.dev/media/iny3m5y.gif" },
   { match: /elevacao de gemeos/, url: "https://static.exercisedb.dev/media/bJYHBIN.gif" },
+  { match: /abdominal no solo/, url: "https://static.exercisedb.dev/media/TFqbd8t.gif" },
+  { match: /prancha lateral/, url: "https://static.exercisedb.dev/media/5VXmnV5.gif" },
 ];
 
-function MarchingExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo march-demo" role="img" aria-label="Demonstração animada de marcha no lugar">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <ellipse cx="110" cy="164" rx="43" ry="6" fill="#d9e2d8" />
-        <circle cx="110" cy="28" r="14" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <path className="demo-stroke" d="M110 47 L110 94" />
-        <g className="march-arm march-arm-left"><path className="demo-stroke" d="M110 57 L86 76 L91 96" /></g>
-        <g className="march-arm march-arm-right"><path className="demo-stroke" d="M110 57 L134 76 L129 96" /></g>
-        <g className="march-leg march-leg-left"><path className="demo-stroke" d="M110 94 L93 120 L108 137 L104 156" /></g>
-        <g className="march-leg march-leg-right"><path className="demo-stroke" d="M110 94 L128 120 L127 156" /></g>
-        <path className="demo-stroke" d="M104 156 L92 159 M127 156 L140 159" />
-      </svg>
-      <span>Marcha alternada</span>
-    </div>
-  );
-}
-
-function SquatExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo squat-demo" role="img" aria-label="Demonstração animada de agachamento">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <ellipse cx="110" cy="164" rx="43" ry="6" fill="#d9e2d8" />
-        <circle cx="110" cy="28" r="14" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <g className="squat-body">
-          <path className="demo-stroke" d="M110 47 L110 91 M110 58 L82 78 L76 95 M110 58 L138 78 L144 95" />
-          <path className="demo-stroke" d="M110 91 L84 122 L88 155 M110 91 L136 122 L132 155" />
-          <path className="demo-stroke" d="M88 155 L73 158 M132 155 L147 158" />
-        </g>
-      </svg>
-      <span>Desce e sobe com controlo</span>
-    </div>
-  );
-}
-
-function PushupExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo pushup-demo" role="img" aria-label="Demonstração animada de flexão inclinada">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <path d="M177 37 V145 M165 145 H194" stroke="#9da99b" strokeWidth="7" strokeLinecap="round" />
-        <ellipse cx="103" cy="159" rx="69" ry="5" fill="#d9e2d8" />
-        <circle cx="42" cy="65" r="12" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <g className="pushup-body">
-          <path className="demo-stroke" d="M55 70 L112 91 L161 116" />
-          <path className="demo-stroke" d="M111 91 L142 68 L177 68" />
-          <path className="demo-stroke" d="M161 116 L128 137 L89 144" />
-          <path className="demo-stroke" d="M89 144 L67 144" />
-        </g>
-      </svg>
-      <span>Flexiona e estende os braços</span>
-    </div>
-  );
-}
-
-function GluteBridgeExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo bridge-demo" role="img" aria-label="Demonstração animada de ponte de glúteos">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <path d="M18 145 H202" stroke="#d5dfd4" strokeWidth="4" strokeLinecap="round" />
-        <ellipse cx="112" cy="155" rx="65" ry="5" fill="#d9e2d8" />
-        <circle cx="39" cy="120" r="12" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <path className="demo-stroke" d="M52 123 L83 132" />
-        <g className="bridge-hips">
-          <path className="demo-stroke" d="M82 132 L117 104 L147 132 L179 132" />
-          <path className="demo-stroke" d="M147 132 L160 98 L177 98" />
-        </g>
-        <path className="demo-stroke" d="M82 132 L73 145 M179 132 L190 145" />
-      </svg>
-      <span>Eleva a bacia e desce devagar</span>
-    </div>
-  );
-}
-
-function BirdDogExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo bird-dog-demo" role="img" aria-label="Demonstração animada de bird dog">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <path d="M20 139 H200" stroke="#d5dfd4" strokeWidth="4" strokeLinecap="round" />
-        <ellipse cx="112" cy="151" rx="54" ry="5" fill="#d9e2d8" />
-        <circle cx="52" cy="61" r="13" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <path className="demo-stroke" d="M66 74 L134 87 M82 77 L76 133 M134 87 L143 133" />
-        <g className="bird-extend-arm"><path className="demo-stroke" d="M82 77 L25 69" /></g>
-        <g className="bird-extend-leg"><path className="demo-stroke" d="M134 87 L194 64" /></g>
-      </svg>
-      <span>Braço e perna opostos</span>
-    </div>
-  );
-}
-
-function DeadBugExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo dead-bug-demo" role="img" aria-label="Demonstração animada de dead bug">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <path d="M18 143 H202" stroke="#d5dfd4" strokeWidth="4" strokeLinecap="round" />
-        <ellipse cx="111" cy="153" rx="62" ry="5" fill="#d9e2d8" />
-        <circle cx="45" cy="119" r="12" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <path className="demo-stroke" d="M58 120 L125 120" />
-        <g className="deadbug-arm"><path className="demo-stroke" d="M73 119 L61 75" /></g>
-        <g className="deadbug-leg"><path className="demo-stroke" d="M125 120 L150 88 L178 90" /></g>
-        <path className="demo-stroke" d="M91 120 L90 84 L104 70" />
-        <path className="demo-stroke" d="M125 120 L143 142" />
-      </svg>
-      <span>Movimento alternado com lombar apoiada</span>
-    </div>
-  );
-}
-
-function CalfRaiseExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo calf-demo" role="img" aria-label="Demonstração animada de elevação de gémeos">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <ellipse cx="110" cy="164" rx="43" ry="6" fill="#d9e2d8" />
-        <circle cx="110" cy="28" r="14" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <path className="demo-stroke" d="M110 47 L110 96 M110 58 L81 83 L75 109 M110 58 L139 83 L145 109" />
-        <g className="calf-lift">
-          <path className="demo-stroke" d="M110 96 L91 132 L91 154 M110 96 L129 132 L129 154" />
-          <path className="demo-stroke" d="M91 154 L77 158 M129 154 L143 158" />
-        </g>
-      </svg>
-      <span>Sobe na ponta dos pés</span>
-    </div>
-  );
-}
-
-function InclinePlankExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo plank-demo" role="img" aria-label="Demonstração animada de prancha inclinada">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <path d="M132 128 H204" stroke="#9da99b" strokeWidth="8" strokeLinecap="round" />
-        <path d="M146 128 V151 M194 128 V151" stroke="#9da99b" strokeWidth="5" strokeLinecap="round" />
-        <ellipse cx="112" cy="160" rx="62" ry="5" fill="#d9e2d8" />
-        <circle cx="43" cy="58" r="12" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <g className="plank-body">
-          <path className="demo-stroke" d="M55 66 L113 91 L179 116" />
-          <path className="demo-stroke" d="M58 67 L91 102 L146 123" />
-          <path className="demo-stroke" d="M113 91 L141 104 L179 116" />
-        </g>
-      </svg>
-      <span>Corpo alinhado</span>
-    </div>
-  );
-}
-
-function MobilityExerciseDemo() {
-  return (
-    <div className="exercise-gif-demo mobility-demo" role="img" aria-label="Demonstração animada de mobilidade de ombros e quadril">
-      <svg viewBox="0 0 220 180" aria-hidden="true">
-        <ellipse cx="110" cy="164" rx="43" ry="6" fill="#d9e2d8" />
-        <circle cx="110" cy="28" r="14" fill="#e9bd98" stroke="#52665a" strokeWidth="3" />
-        <path className="demo-stroke" d="M110 47 L110 99 M110 99 L91 153 M110 99 L129 153" />
-        <g className="mobility-arms">
-          <path className="demo-stroke" d="M110 58 L78 44 L61 62 M110 58 L142 44 L159 62" />
-        </g>
-      </svg>
-      <span>Movimentos suaves</span>
-    </div>
-  );
-}
-
 function ExerciseGif({ exercise, variant = "thumb" }) {
-  const [failed, setFailed] = useState(false);
+  const [sourceIndex, setSourceIndex] = useState(0);
   const [language] = useLanguage();
   const exerciseName = translateExerciseName(exercise?.name, language);
   const normalizedName = String(exercise?.name || "")
@@ -205,44 +48,17 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();
   const matchedFallback = exerciseGifFallbacks.find((item) => item.match.test(normalizedName));
-  const source = exercise?.image_path || exercise?.gifUrl || matchedFallback?.url || null;
-  const localFallbackKind =
-    /marcha no lugar|marcha acelerada no lugar|marching in place|march in place/.test(normalizedName) ? "march" :
-    /agachamento|sentar e levantar da cadeira/.test(normalizedName) ? "squat" :
-    /flexao na parede|flexao inclinada/.test(normalizedName) ? "pushup" :
-    /ponte de gluteos/.test(normalizedName) ? "bridge" :
-    /bird dog/.test(normalizedName) ? "bird-dog" :
-    /dead bug/.test(normalizedName) ? "dead-bug" :
-    /elevacao de gemeos/.test(normalizedName) ? "calves" :
-    /prancha inclinada/.test(normalizedName) ? "plank" :
-    /caminhada leve|mobilidade de ombros e quadril/.test(normalizedName) ? "mobility" :
-    null;
+  const sources = [...new Set([exercise?.image_path, exercise?.gifUrl, matchedFallback?.url].filter(Boolean))];
+  const sourceKey = sources.join("|");
 
   useEffect(() => {
-    setFailed(false);
-  }, [exercise?.id, exercise?.name, exercise?.image_path, exercise?.gifUrl, source]);
+    setSourceIndex(0);
+  }, [exercise?.id, exercise?.name, sourceKey]);
 
-  const exerciseLabel = String(exercise?.name || "") + " " + String(exercise?.category || "");
-  const fallbackLabel = /boxe|boxing/i.test(exerciseLabel)
-    ? "🥊 Boxe"
-    : /karate|karatê/i.test(exerciseLabel)
-      ? "🥋 Karatê"
-      : "Demonstração não disponível";
-
-  let localDemo = null;
-  if (localFallbackKind === "march") localDemo = <MarchingExerciseDemo />;
-  else if (localFallbackKind === "squat") localDemo = <SquatExerciseDemo />;
-  else if (localFallbackKind === "pushup") localDemo = <PushupExerciseDemo />;
-  else if (localFallbackKind === "bridge") localDemo = <GluteBridgeExerciseDemo />;
-  else if (localFallbackKind === "bird-dog") localDemo = <BirdDogExerciseDemo />;
-  else if (localFallbackKind === "dead-bug") localDemo = <DeadBugExerciseDemo />;
-  else if (localFallbackKind === "calves") localDemo = <CalfRaiseExerciseDemo />;
-  else if (localFallbackKind === "plank") localDemo = <InclinePlankExerciseDemo />;
-  else if (localFallbackKind === "mobility") localDemo = <MobilityExerciseDemo />;
-
+  const source = sources[sourceIndex];
   return (
     <div className={"exercise-gif exercise-gif-" + variant}>
-      {source && !failed ? (
+      {source ? (
         <img
           key={source}
           src={source}
@@ -250,12 +66,10 @@ function ExerciseGif({ exercise, variant = "thumb" }) {
           loading={variant === "guided" ? "eager" : "lazy"}
           fetchPriority={variant === "guided" ? "high" : "low"}
           decoding="async"
-          onError={() => setFailed(true)}
+          onError={() => setSourceIndex((current) => current + 1)}
         />
-      ) : localDemo ? (
-        localDemo
       ) : (
-        <span className="exercise-gif-fallback">{fallbackLabel}</span>
+        <span className="exercise-gif-fallback">{translateUiText("GIF indisponível", language)}</span>
       )}
     </div>
   );
@@ -1135,12 +949,11 @@ export function Workouts({ plan }) {
             <ExerciseGif exercise={previewExercise} variant="preview" />
             <div className="exercise-preview-info">
               <p>
-                <b>Como executar:</b> Faça este movimento devagar, com postura
-                controlada, amplitude confortável e sem dor.
+                <b>{translateUiText("Como executar", language)}:</b> {translateExerciseDescription(previewExercise, language)}
               </p>
               <p>
-                <b>Músculo principal:</b> {muscleLabel(previewExercise)} ·{" "}
-                <b>Equipamento:</b> {equipmentLabel(previewExercise)}
+                <b>{translateUiText("Músculo principal", language)}:</b> {muscleLabel(previewExercise)} ·{" "}
+                <b>{translateUiText("Equipamento", language)}:</b> {equipmentLabel(previewExercise)}
               </p>
               {Array.isArray(previewExercise.instructions) && (
                 <ol>
@@ -1152,8 +965,7 @@ export function Workouts({ plan }) {
                 </ol>
               )}
               <small>
-                Se sentir dor aguda, tontura ou falta de ar incomum, pare e
-                procure orientação profissional.
+                {translateUiText("Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.", language)}
               </small>
             </div>
           </div>
