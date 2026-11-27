@@ -170,3 +170,6 @@
 .run-story-background{position:absolute;z-index:0;inset:0;width:100%;height:100%;object-fit:cover}
 .run-story-preview-content{z-index:1;background:linear-gradient(180deg,rgba(0,8,16,.42),rgba(0,8,16,.08) 42%,rgba(0,8,16,.78))}
 @media(max-width:560px){.run-map-toolbar{top:7px;right:7px;gap:4px}.run-map-layer-switch button{padding:6px 7px;font-size:9px}.run-map-zoom button{width:27px;min-height:28px}.run-map-label{left:7px;top:7px;font-size:9px;max-width:42%}.run-map-attribution{font-size:8px}.run-media-preview>img,.run-media-video-preview{height:190px}.run-photo-actions button{flex:1}}
+
+
+.run-story-preview-content>.run-story-distance-label{font-size:10px;font-weight:900;letter-spacing:1.8px;color:#e7eeee;margin-bottom:-6px}
