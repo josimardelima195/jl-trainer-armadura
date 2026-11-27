@@ -1,4 +1,4 @@
-const CACHE = "jl-trainer-v13";
+const CACHE = "jl-trainer-v14";
 const PRECACHE = ["/manifest.json"];
 
 self.addEventListener("install", (event) => {
