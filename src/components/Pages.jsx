@@ -29,8 +29,7 @@ import {
 import { useLanguage, translatedInstructions, languageOptions, translateUiText, translateFoodName, translateIngredientString, translateMealLabel, translateExerciseName, translateExerciseDescription } from "../lib/i18n";
 import { accountDateForDay, accountDayNumber, accountDayStatuses, localDateKey } from "../lib/dailyTracking";
 const exerciseGifFallbacks = [
-  { match: /corrida parada|marcha no lugar|marcha acelerada no lugar/, url: "/assets/exercises/corrida-parada.gif" },
-  { match: /agachamento livre|agachamento controlado|agachamento$/, url: "/assets/exercises/agachamento.gif" },
+  { match: /agachamento livre|agachamento controlado|agachamento$/, url: "https://static.exercisedb.dev/media/6YUfHPL.gif" },
   { match: /flexao inclinada/, url: "https://static.exercisedb.dev/media/B1EVP9F.gif" },
   { match: /ponte de gluteos/, url: "https://static.exercisedb.dev/media/u0cNiij.gif" },
   { match: /dead bug/, url: "https://static.exercisedb.dev/media/iny3m5y.gif" },
@@ -81,15 +80,21 @@ const muscleLabel = (exercise) => {
     pectorals: "peito",
     triceps: "tríceps",
     biceps: "bíceps",
+    brachialis: "braquial",
     "upper back": "costas",
     "latissimus dorsi": "costas",
     "erector spinae": "lombar",
     deltoids: "ombros",
+    trapezius: "trapézio",
     quadriceps: "quadríceps",
-    hamstrings: "posterior",
+    hamstrings: "posterior das coxas",
     glutes: "glúteos",
     calves: "panturrilhas",
+    soleus: "sóleo",
     abdominals: "abdômen",
+    obliques: "oblíquos",
+    hip: "quadril",
+    "hip flexors": "flexores do quadril",
     "cardiovascular system": "cardio",
   };
   const values = exercise?.primary_muscles || [];
