@@ -114,10 +114,10 @@ export function Running(){
    id=navigator.geolocation.watchPosition(pos=>{
     if(!active)return;const c=pos.coords;
     if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude))return;
-    if(c.accuracy>100){setPreviewStatus(t.gpsWeak);return;}
+    if(c.accuracy>100){setPreviewLocation(null);setPreviewStatus(t.gpsWeak);return;}
     setPreviewLocation({latitude:c.latitude,longitude:c.longitude,at:pos.timestamp||Date.now(),accuracy:c.accuracy||0});
     setPreviewStatus(t.gps);
-   },err=>{if(!active)return;setPreviewStatus(err.code===1?t.gpsPermission:t.gpsError);},{enableHighAccuracy:true,maximumAge:5000,timeout:20000});
+   },err=>{if(!active)return;if(err.code===1)setPreviewLocation(null);setPreviewStatus(err.code===1?t.gpsPermission:t.gpsError);},{enableHighAccuracy:true,maximumAge:5000,timeout:20000});
   }catch{setPreviewStatus(t.gpsError);}
   return()=>{active=false;if(id!==null)navigator.geolocation.clearWatch(id);};
  },[recording,completed,t.gps,t.gpsError,t.gpsPermission,t.gpsUnsupported,t.gpsWeak,t.locating]);
