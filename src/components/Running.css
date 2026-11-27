@@ -173,3 +173,10 @@
 
 
 .run-story-preview-content>.run-story-distance-label{font-size:10px;font-weight:900;letter-spacing:1.8px;color:#e7eeee;margin-bottom:-6px}
+
+
+/* GPS accuracy is visible even when the device only has an indoor/network fix. */
+.run-map-label{z-index:3;max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums}
+.run-map svg circle[stroke="#38bdf8"]{vector-effect:non-scaling-stroke}
+.run-map-loading{gap:10px}
+@media(max-width:560px){.run-map-label{max-width:48%;font-size:9px;padding:6px 8px}.run-map-toolbar{max-width:72%}.run-map-layer-switch button{font-size:9px;padding:6px 6px}}
