@@ -165,8 +165,8 @@ export function Running(){
  const storyVideoBlob=async()=>{
   if(!video||!completed)return null;
   if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream)throw new Error(t.videoUnavailable);
-  const sourceUrl=URL.createObjectURL(video),source=document.createElement("video");source.src=sourceUrl;source.muted=true;source.playsInline=true;source.preload="auto";
-  try{await new Promise((resolve,reject)=>{source.onloadedmetadata=resolve;source.onerror=()=>reject(new Error(t.videoUnavailable));});}
+  const sourceUrl=URL.createObjectURL(video),source=document.createElement("video");source.muted=true;source.playsInline=true;source.preload="auto";
+  try{await new Promise((resolve,reject)=>{source.onloadedmetadata=resolve;source.onerror=()=>reject(new Error(t.videoUnavailable));source.src=sourceUrl;source.load();});}
   catch(e){URL.revokeObjectURL(sourceUrl);throw e;}
   const canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1920;const ctx=canvas.getContext("2d");if(!ctx){URL.revokeObjectURL(sourceUrl);throw new Error(t.videoUnavailable);}
   const stream=canvas.captureStream(24),types=["video/mp4;codecs=avc1.42E01E","video/mp4","video/webm;codecs=vp9","video/webm"],mime=types.find(type=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(type));
