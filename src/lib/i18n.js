@@ -53,7 +53,7 @@ Object.assign(uiText.en, {
 });
 Object.assign(uiText.fr, {
   "Como executar":"Comment réaliser","Músculo principal":"Muscle principal","Equipamento":"Équipement","GIF indisponível":"GIF indisponible",
-  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação professionnelle."
+  "Se sentir dor aguda, tontura ou falta de ar incomum, pare e procure orientação profissional.":"En cas de douleur aiguë, de vertiges ou d’essoufflement inhabituel, arrêtez et demandez conseil à un professionnel."
 });
 Object.assign(uiText.es, {
   "Como executar":"Cómo realizarlo","Músculo principal":"Músculo principal","Equipamento":"Equipo","GIF indisponível":"GIF no disponible",
