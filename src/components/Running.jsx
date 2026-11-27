@@ -62,25 +62,25 @@ export function Running(){
  useEffect(()=>{if(!photo){setPhotoUrl("");return;}const u=URL.createObjectURL(photo);setPhotoUrl(u);return()=>URL.revokeObjectURL(u);},[photo]);
  const updateClock=()=>setElapsed(Math.max(0,Math.floor((Date.now()-startAt.current-pausedMs.current)/1000)));
  const attachGps=()=>{
-  if(!navigator.geolocation){setGpsMessage(t.gpsUnsupported);setRecording(false);return;}
+  if(!navigator.geolocation){setGpsMessage(t.gpsUnsupported);setNotice(t.gpsUnsupported);setRecording(false);return;}
   watch.current=navigator.geolocation.watchPosition(pos=>{
    const c=pos.coords;setAccuracy(c.accuracy);
    if(!Number.isFinite(c.latitude)||!Number.isFinite(c.longitude))return;
    if(c.accuracy>45){setGpsMessage(t.gpsWeak);return;}
    const next={latitude:c.latitude,longitude:c.longitude,at:pos.timestamp||Date.now(),accuracy:c.accuracy||0},old=route.current;
-   if(old.length){const last=old[old.length-1],m=between(last,next),s=Math.max(.5,(next.at-last.at)/1000),minMove=Math.max(2,Math.min(next.accuracy||10,last.accuracy||10)*.12);if(m<minMove)return;const v=Number.isFinite(c.speed)&&c.speed>=0?c.speed*3.6:m/s*3.6;if(v>30){setGpsMessage(t.gpsWeak);return;}speedSamples.current=[...speedSamples.current.slice(-4),v];setSpeed(speedSamples.current.reduce((a,b)=>a+b,0)/speedSamples.current.length);}
+   if(old.length){const last=old[old.length-1],m=between(last,next),s=Math.max(.5,(next.at-last.at)/1000),minMove=Math.max(2,Math.min(next.accuracy||10,last.accuracy||10)*.12);if(m<minMove)return;const v=Number.isFinite(c.speed)&&c.speed>.25?c.speed*3.6:m/s*3.6;if(v>30){setGpsMessage(t.gpsWeak);return;}speedSamples.current=[...speedSamples.current.slice(-4),v];setSpeed(speedSamples.current.reduce((a,b)=>a+b,0)/speedSamples.current.length);}
    route.current=old.concat(next);setPoints(route.current);setGpsMessage(t.gps);
   },err=>{if(watch.current!==null)navigator.geolocation.clearWatch(watch.current);watch.current=null;setGpsMessage(err.code===1?t.gpsPermission:t.gpsError);},{enableHighAccuracy:true,maximumAge:1000,timeout:20000});
  };
- const startRun=()=>{if(!supabase||!userId||userId==="demo"){setNotice(t.gpsPermission);return;}if(!navigator.geolocation){setGpsMessage(t.gpsUnsupported);return;}route.current=[];speedSamples.current=[];setPoints([]);setElapsed(0);setSpeed(0);setAccuracy(null);pausedMs.current=0;pausedAt.current=0;startAt.current=Date.now();setGpsMessage(t.locating);setRecording(true);setPaused(false);timer.current=setInterval(updateClock,1000);attachGps();};
+ const startRun=()=>{if(!supabase||!userId||userId==="demo"){setNotice(t.gpsPermission);return;}if(!navigator.geolocation){setGpsMessage(t.gpsUnsupported);setNotice(t.gpsUnsupported);return;}route.current=[];speedSamples.current=[];setPoints([]);setElapsed(0);setSpeed(0);setAccuracy(null);pausedMs.current=0;pausedAt.current=0;startAt.current=Date.now();setGpsMessage(t.locating);setRecording(true);setPaused(false);timer.current=setInterval(updateClock,1000);attachGps();};
  const pauseRun=()=>{updateClock();pausedAt.current=Date.now();setPaused(true);stop();};
  const resumeRun=()=>{if(pausedAt.current)pausedMs.current+=Date.now()-pausedAt.current;pausedAt.current=0;setPaused(false);setGpsMessage(t.locating);timer.current=setInterval(updateClock,1000);attachGps();};
  const finishRun=async()=>{
   stop();setRecording(false);setPaused(false);const pts=route.current.slice(),metres=distanceOf(pts),seconds=pausedAt.current?elapsed:Math.max(0,Math.floor((Date.now()-startAt.current-pausedMs.current)/1000));pausedAt.current=0;
-  if(metres<30||seconds<10||pts.length<2){setGpsMessage(t.tooShort);return;}
+  if(metres<30||seconds<10||pts.length<2){setGpsMessage(t.tooShort);setNotice(t.tooShort);return;}
   setSaving(true);setGpsMessage(t.saving);
   const res=await supabase.from("cardio_sessions").insert({user_id:userId,kind:"corrida",started_at:new Date(startAt.current).toISOString(),ended_at:new Date().toISOString(),duration_seconds:seconds,distance_m:Math.round(metres),avg_speed_kmh:Number((metres/seconds*3.6).toFixed(2)),route:pts.map(p=>({lat:Number(p.latitude.toFixed(6)),lng:Number(p.longitude.toFixed(6)),at:p.at,accuracy:Math.round(p.accuracy||0)}))}).select("id,kind,started_at,ended_at,duration_seconds,distance_m,avg_speed_kmh,route").single();
-  setSaving(false);if(res.error){setGpsMessage(t.saveError);return;}
+  setSaving(false);if(res.error){setGpsMessage(t.saveError);setNotice(res.error.message||t.saveError);return;}
   setElapsed(seconds);setPoints(pts);setCompleted({...res.data,points:pts});setPhoto(null);setCaption("");setGpsMessage(t.saved);await load();
  };
  const storyText=completed?"JL Trainer | "+t.title+": "+(Number(completed.distance_m)/1000).toFixed(2)+" km · "+t.pace+" "+pace(completed.duration_seconds,completed.distance_m)+"/km · "+t.duration+" "+clock(completed.duration_seconds):"";
