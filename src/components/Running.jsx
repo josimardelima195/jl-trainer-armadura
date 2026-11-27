@@ -55,12 +55,12 @@ export function Running(){
    const signed=await Promise.all(rows.map(async r=>{
     let photoUrl="",avatarUrl="";
     if(r.photo_path){const x=await supabase.storage.from("run-photos").createSignedUrl(r.photo_path,3600);if(!x.error)photoUrl=x.data?.signedUrl||"";}
-    if(r.avatar_url){if(/^https?:\\/\\//i.test(r.avatar_url))avatarUrl=r.avatar_url;else{try{avatarUrl=await openMedia("profile-photos",r.avatar_url,3600)||"";}catch{avatarUrl="";}}}
+    if(r.avatar_url){if((r.avatar_url.startsWith("http://")||r.avatar_url.startsWith("https://")))avatarUrl=r.avatar_url;else{try{avatarUrl=await openMedia("profile-photos",r.avatar_url,3600)||"";}catch{avatarUrl="";}}}
     return{...r,photo_url:photoUrl,avatar_url:avatarUrl};
    }));
    setPosts(signed);setLikes(likeRows);setComments(commentRows);
    const board=new Map();for(const r of week.data||[]){const a=board.get(r.user_id)||{user_id:r.user_id,display_name:r.display_name||t.athlete,avatar_path:r.avatar_url||"",total_distance_m:0,total_runs:0};a.total_distance_m+=Number(r.distance_m||0);a.total_runs++;board.set(r.user_id,a);}
-   const ranked=await Promise.all([...board.values()].map(async a=>{let avatarUrl="";if(a.avatar_path){if(/^https?:\\/\\//i.test(a.avatar_path))avatarUrl=a.avatar_path;else{try{avatarUrl=await openMedia("profile-photos",a.avatar_path,3600)||"";}catch{avatarUrl="";}}}return{...a,avatar_url:avatarUrl};}));
+   const ranked=await Promise.all([...board.values()].map(async a=>{let avatarUrl="";if(a.avatar_path){if((a.avatar_path.startsWith("http://")||a.avatar_path.startsWith("https://")))avatarUrl=a.avatar_path;else{try{avatarUrl=await openMedia("profile-photos",a.avatar_path,3600)||"";}catch{avatarUrl="";}}}return{...a,avatar_url:avatarUrl};}));
    setRanking(ranked.sort((a,b)=>b.total_distance_m-a.total_distance_m||b.total_runs-a.total_runs));
   }catch(e){setNotice(e.message||t.saveError);}finally{setLoading(false);}
  },[userId,t.athlete,t.saveError]);
