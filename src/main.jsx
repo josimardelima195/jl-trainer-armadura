@@ -49,7 +49,7 @@ createRoot(document.getElementById("root")).render(
 );
 
 if ("serviceWorker" in navigator && import.meta.env.PROD) {
-  navigator.serviceWorker.register("/sw.js?v=13", { updateViaCache: "none" })
+  navigator.serviceWorker.register("/sw.js?v=14", { updateViaCache: "none" })
     .then((registration) => registration.update())
     .catch((error) => console.warn("JL Trainer service worker registration failed:", error));
 }
