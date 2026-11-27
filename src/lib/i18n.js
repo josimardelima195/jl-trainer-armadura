@@ -955,8 +955,7 @@ const exerciseNameExact = {
   "bodyweight incline side plank":{pt:"Prancha lateral",fr:"Gainage latéral",es:"Plancha lateral",zh:"侧平板支撑",hi:"साइड प्लैंक"},
   "high knee against wall":{pt:"Elevação alternada dos joelhos com apoio na parede",fr:"Montées de genoux avec appui au mur",es:"Elevación alterna de rodillas con apoyo en la pared",zh:"扶墙交替抬膝",hi:"दीवार के सहारे बारी-बारी घुटने उठाना"},
   "short stride run":{pt:"Corrida em passos curtos",fr:"Course à petits pas",es:"Carrera con pasos cortos",zh:"小步跑",hi:"छोटे कदमों से दौड़"},
-  "kneeling push-up":{pt:"Flexão de joelhos",fr:"Pompe sur les genoux",es:"Flexión con rodillas apoyadas",zh:"跪姿俯卧撑",hi:"नी-पुश-अप"}
-
+  "kneeling push-up":{pt:"Flexão de joelhos",fr:"Pompe sur les genoux",es:"Flexión con rodillas apoyadas",zh:"跪姿俯卧撑",hi:"नी-पुश-अप"},
   "bodyweight squat":{pt:"Agachamento livre",fr:"Squat au poids du corps",es:"Sentadilla libre",zh:"徒手深蹲",hi:"बॉडीवेट स्क्वाट"},
   "standing calf raise":{pt:"Elevação de gémeos em pé",fr:"Élévation des mollets debout",es:"Elevación de gemelos de pie",zh:"站姿提踵",hi:"स्टैंडिंग काफ रेज़"},
   "glute bridge march":{pt:"Ponte de glúteos com marcha",fr:"Pont fessier avec marche alternée",es:"Puente de glúteos con marcha",zh:"交替抬腿臀桥",hi:"मार्चिंग ग्लूट ब्रिज"},
